@@ -48,16 +48,16 @@ export default function Home() {
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a 
-                href="/shop/"
+                href="/tools/planting-calendar/"
                 className="inline-flex items-center justify-center gap-2 border-2 border-theme-main px-8 py-3 font-bold uppercase hover:bg-[var(--accent)] hover:text-white hover:border-[var(--accent)] transition-all"
               >
-                Browse Hardware
+                Try Free Tools
               </a>
               <a 
-                href="/archive/"
+                href="/shop/"
                 className="inline-flex items-center justify-center gap-2 border-2 border-theme-main px-8 py-3 font-bold uppercase bg-theme-sub hover:brightness-110 transition-all"
               >
-                Read Field Notes
+                Browse Hardware
               </a>
             </div>
           </div>

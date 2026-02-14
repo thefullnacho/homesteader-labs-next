@@ -43,6 +43,14 @@ export default function WeatherPage() {
     showWeeklyCapture
   } = useWeatherEmailCapture(locations.length);
 
+  // Handle loading state when no location is set
+  useEffect(() => {
+    if (isLoaded && !activeLocation) {
+      // No location set, stop loading
+      setLoading(false);
+    }
+  }, [isLoaded, activeLocation]);
+
   // Fetch weather data when active location changes
   useEffect(() => {
     if (!isLoaded || !activeLocation) return;
