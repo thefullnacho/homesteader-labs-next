@@ -1,0 +1,284 @@
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg-primary: #2d3336;
+  --bg-secondary: #373e42;
+  --text-primary: #E8D3BE;
+  --text-secondary: #E8D3BE;
+  --border-primary: #d35400;
+  --shadow-color: rgba(0, 0, 0, 0.6);
+  --accent: #d35400;
+  --terminal-glow: rgba(163, 193, 173, 0.15);
+}
+
+.dark {
+  --bg-primary: #1c1917;
+  --bg-secondary: #292524;
+  --text-primary: #e8e6e1;
+  --text-secondary: #a8a29e;
+  --border-primary: #d35400;
+  --shadow-color: rgba(0,0,0,0.5);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Courier New', Courier, monospace;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  transition: background-color 0.2s ease, color 0.2s ease;
+  line-height: 1.6;
+  position: relative;
+  image-rendering: crisp-edges;
+  text-shadow: 0.5px 0.5px 1px rgba(0,0,0,0.4);
+}
+
+/* Global Grit Overlay (Subtle Wear Layer) */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: url('/textures/subtle-concrete-mildew.jpg') repeat;
+  opacity: 0.04;
+  mix-blend-mode: multiply;
+  z-index: -1;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.05;
+  pointer-events: none;
+  z-index: 9999;
+  background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+}
+
+/* Custom Theme Utilities */
+.text-theme-main { color: var(--text-primary); }
+.text-theme-sub { color: var(--text-secondary); }
+.text-contrast { color: #333333; }
+.bg-theme-main { background-color: var(--bg-primary); }
+.bg-theme-sub { background-color: var(--bg-secondary); }
+.border-theme-main { border-color: var(--text-primary); }
+
+/* Brutalist Block (Weathered Field Manual Style) */
+.brutalist-block {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  border: var(--border-weight, 2px) solid var(--border-primary);
+  box-shadow: 4px 4px 0px 0px var(--shadow-color);
+  transition: all 0.2s ease;
+}
+
+.brutalist-block:hover {
+  box-shadow: 6px 6px 0px var(--shadow-color);
+}
+
+.dark .brutalist-block {
+  background-color: #000000;
+  border-color: var(--border-primary);
+}
+
+/* Shadows */
+.shadow-brutalist-lg {
+  box-shadow: 8px 8px 0px 0px var(--shadow-color);
+}
+
+/* Backdrop blur */
+.backdrop-blur-sm {
+  backdrop-filter: blur(2px);
+}
+
+/* Animations */
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: .5; }
+}
+
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Smooth transitions */
+.transition-smooth {
+  transition: all 0.15s ease-in-out;
+}
+
+/* Lucide icons */
+svg {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+/* Canvas overlay - scoped to avoid breaking STL viewer */
+canvas:not(.interactive) {
+  pointer-events: none;
+}
+
+/* Focus-visible styles for accessibility */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Respect reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Selection */
+::selection {
+  background-color: var(--accent);
+  color: #ffffff;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--accent);
+  border: 2px solid var(--bg-primary);
+}
+
+/* Tactile Dymo Label Effect */
+.dymo-label {
+  background: #111;
+  color: #eee;
+  padding: 4px 12px;
+  border-radius: 2px;
+  text-transform: uppercase;
+  font-weight: bold;
+  letter-spacing: 2px;
+  box-shadow: inset 1px 1px 1px rgba(255,255,255,0.1), 2px 2px 4px rgba(0,0,0,0.5);
+  border: 1px solid #333;
+  display: inline-block;
+  font-size: 0.75rem;
+  transition: transform 0.1s ease;
+}
+
+.dymo-label:hover {
+  transform: translate(1px, 1px);
+  box-shadow: inset 1px 1px 1px rgba(255,255,255,0.1), 1px 1px 2px rgba(0,0,0,0.5);
+}
+
+.dymo-label:active {
+  transform: translateY(1px);
+  box-shadow: inset 1px 1px 1px rgba(255,255,255,0.05), 1px 1px 2px rgba(0,0,0,0.5);
+}
+
+/* Heavy "Concrete" Border */
+.field-station-box {
+  padding: 2rem;
+  position: relative;
+  background: rgba(0,0,0,0.2);
+}
+
+.field-station-box::after {
+  content: "REF_07G";
+  position: absolute;
+  bottom: -10px;
+  right: 20px;
+  background: var(--bg-secondary);
+  padding: 0 8px;
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+  border: 1px solid var(--border-primary);
+  z-index: 30;
+}
+
+/* Marginalia Styling */
+.marginalia {
+  font-family: 'Caveat', cursive;
+  color: var(--accent);
+  font-size: 1.1rem;
+  position: absolute;
+  opacity: 0.9;
+  pointer-events: none;
+  line-height: 1.1;
+  transform: rotate(-2deg);
+  max-width: 150px;
+  text-shadow: 1px 1px 0px rgba(0,0,0,0.1);
+  z-index: 50;
+}
+
+/* The 'Condensation Sizzle' Glitch */
+@keyframes condensation-glitch {
+  0%, 100% { transform: translate(0); filter: blur(0) contrast(1); opacity: 1; }
+  1.5% { transform: translate(-3px, 2px); filter: blur(1.2px) contrast(1.6) hue-rotate(8deg); }
+  3%   { transform: translate(4px, -3px); filter: blur(0.8px); }
+  4.5% { transform: translate(-1px, 1px); filter: contrast(1.3); }
+  6%   { transform: translate(0); opacity: 0.92; }
+}
+
+@keyframes scan-flash {
+  0% { opacity: 0; top: 0; }
+  1% { opacity: 0.3; top: 50%; }
+  2% { opacity: 0; top: 100%; }
+  100% { opacity: 0; top: 100%; }
+}
+
+@keyframes drip {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(200%); }
+}
+
+.terminal-container {
+  animation: condensation-glitch 28s infinite ease-in-out;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Add dripping condensation effect */
+.terminal-container::after {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 100%;
+  background: linear-gradient(transparent, rgba(163,193,173,0.08) 20%, transparent 40%);
+  animation: drip 18s linear infinite;
+  pointer-events: none;
+}
+
+/* Horizontal 'Short-Circuit' line */
+.terminal-container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--accent);
+  opacity: 0;
+  z-index: 20;
+  pointer-events: none;
+  animation: scan-flash 35s infinite;
+}
