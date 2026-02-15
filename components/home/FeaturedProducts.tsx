@@ -1,4 +1,4 @@
-import { getAllProducts } from "../../lib/products";
+import { getAllProducts } from "@/app/lib/products";
 import Link from "next/link";
 import { Cpu, ChevronRight } from "lucide-react";
 

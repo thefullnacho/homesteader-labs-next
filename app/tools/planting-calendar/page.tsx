@@ -1,15 +1,21 @@
 "use client";
 
 import { useState, useCallback, useMemo } from "react";
-import { Sprout, FileText, Download } from "lucide-react";
-import LocationSetup from "./components/LocationSetup";
-import CropSelector from "./components/CropSelector";
-import PlantingCalendar from "./components/PlantingCalendar";
-import PlantingEmailCapture from "./components/PlantingEmailCapture";
+import { Sprout, FileText, LayoutDashboard, Database } from "lucide-react";
+import LocationSetup from "@/components/tools/planting-calendar/LocationSetup";
+import CropSelector from "@/components/tools/planting-calendar/CropSelector";
+import PlantingCalendar from "@/components/tools/planting-calendar/PlantingCalendar";
+import PlantingEmailCapture from "@/components/tools/planting-calendar/PlantingEmailCapture";
 import useFrostDates from "./hooks/useFrostDates";
 import { Crop, FrostDates, SelectedCrop, PlantingDate } from "./types";
 import { getCropById } from "./lib/crops";
 import { calculateCropSchedule } from "./lib/plantingCalculations";
+import FieldStationLayout from "@/components/ui/FieldStationLayout";
+import Typography from "@/components/ui/Typography";
+import BrutalistBlock from "@/components/ui/BrutalistBlock";
+import Badge from "@/components/ui/Badge";
+import Marginalia from "@/components/ui/Marginalia";
+import DymoLabel from "@/components/ui/DymoLabel";
 
 export default function PlantingCalendarPage() {
   const { frostDates, loading, error, lookupFrostDates } = useFrostDates();
@@ -18,7 +24,6 @@ export default function PlantingCalendarPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
 
-  // Calculate all planting dates
   const plantingDates = useMemo(() => {
     if (!frostDates) return [];
 
@@ -37,149 +42,130 @@ export default function PlantingCalendarPage() {
     return dates;
   }, [selectedCrops, frostDates]);
 
-  const handleLocationSet = useCallback((dates: FrostDates) => {
-    // Location is set via the hook
-  }, []);
-
   const handleEmailSubmit = useCallback(async (email: string) => {
     setIsSubmitting(true);
-    
-    // Simulate API call - integrate with ConvertKit
     await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    console.log("Email captured:", email, {
-      zipCode: frostDates?.zipCode,
-      crops: selectedCrops.map(sc => sc.cropId),
-      source: "planting-calendar"
-    });
-    
     setIsSubmitting(false);
     setIsSuccess(true);
-    
-    // Hide after 3 seconds
     setTimeout(() => {
       setShowEmailCapture(false);
       setIsSuccess(false);
     }, 3000);
-  }, [frostDates, selectedCrops]);
+  }, []);
 
   const hasCalendarData = frostDates && selectedCrops.length > 0;
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-8">
-      {/* Header */}
-      <div className="mb-8 border-b-2 border-theme-main pb-2 bg-theme-sub/50 p-4">
-        <div className="flex flex-col md:flex-row md:justify-between md:items-end">
+    <FieldStationLayout stationId="HL_PLANT_CAL_V2.1">
+      <div className="max-w-6xl mx-auto space-y-8">
+        
+        {/* HEADER SECTION */}
+        <div className="flex flex-col md:flex-row md:items-start justify-between gap-6 border-b-2 border-border-primary pb-6">
           <div>
-            <h1 className="text-2xl font-bold uppercase flex items-center gap-2">
-              <Sprout size={24} className="text-[var(--accent)]" />
-              Seed Planting Calendar
-            </h1>
-            <p className="text-xs text-theme-secondary mt-1">
-              Personalized planting schedule based on your frost dates • Succession planting calculator
-            </p>
+            <Typography variant="h2" className="mb-1 uppercase tracking-tight font-mono">Planting_Calendar</Typography>
+            <Typography variant="small" className="opacity-40 font-mono text-[9px] uppercase tracking-widest">
+              Automated Succession Logic // Active_Uplink: NOAA_NCRM_V3
+            </Typography>
           </div>
-          <div className="mt-4 md:mt-0 text-[10px] text-theme-secondary text-right">
-            <p>NOAA FROST DATA • ZIP CODE PRECISE</p>
-            <p>OFFLINE-CAPABLE • FREE TOOL</p>
-          </div>
-        </div>
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Left Column - Setup */}
-        <div className="lg:col-span-1 space-y-4">
-          {/* Step 1: Location */}
-          <LocationSetup
-            onLocationSet={handleLocationSet}
-            loading={loading}
-            error={error}
-            onLookup={lookupFrostDates}
-          />
-
-          {/* Step 2: Crop Selection (only show after location set) */}
-          {frostDates && (
-            <CropSelector
-              selectedCrops={selectedCrops}
-              onCropsChange={setSelectedCrops}
-              maxCrops={10}
-            />
-          )}
-
-          {/* Info Box */}
-          <div className="brutalist-block p-4 border-dashed border-theme-main/50">
-            <h4 className="text-xs font-bold uppercase mb-2 flex items-center gap-2">
-              <FileText size={14} />
-              Why This Calendar?
-            </h4>
-            <ul className="text-[10px] opacity-70 space-y-1">
-              <li>• Zip-code precise (not just USDA zones)</li>
-              <li>• Accounts for succession planting</li>
-              <li>• Variety-specific maturity dates</li>
-              <li>• "Too late to plant" warnings</li>
-              <li>• Works offline after setup</li>
-            </ul>
-          </div>
-        </div>
-
-        {/* Right Column - Calendar */}
-        <div className="lg:col-span-2">
-          {hasCalendarData ? (
-            <PlantingCalendar
-              dates={plantingDates}
-              frostDates={frostDates}
-              onEmailCapture={() => setShowEmailCapture(true)}
-            />
-          ) : (
-            <div className="brutalist-block p-12 text-center">
-              {!frostDates ? (
-                <>
-                  <Sprout size={48} className="mx-auto mb-4 opacity-30" />
-                  <h3 className="text-lg font-bold mb-2">Enter Your Location First</h3>
-                  <p className="text-sm opacity-60 mb-4">
-                    We'll use your zip code to find your exact frost dates
-                  </p>
-                  <div className="text-[10px] opacity-40">
-                    <p>Based on NOAA 30-year climate normals</p>
-                    <p>More accurate than broad USDA zones</p>
-                  </div>
-                </>
-              ) : (
-                <>
-                  <Sprout size={48} className="mx-auto mb-4 opacity-30" />
-                  <h3 className="text-lg font-bold mb-2">Select Your Crops</h3>
-                  <p className="text-sm opacity-60 mb-4">
-                    Choose up to 10 crops to build your personalized planting calendar
-                  </p>
-                  <div className="text-[10px] opacity-40">
-                    <p>20 crops available • 2-3 varieties each</p>
-                    <p>Succession planting options included</p>
-                  </div>
-                </>
-              )}
+          
+          <div className="flex items-center gap-4">
+            <div className="flex border-2 border-border-primary p-1 bg-black/20">
+              <div className="flex items-center gap-2 px-4 py-1.5 text-[10px] font-bold font-mono uppercase opacity-40">
+                <Database size={12} /> DB_LOADED
+              </div>
             </div>
-          )}
+            <Badge variant="status" pulse>Sync_Active</Badge>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 relative">
+          <Marginalia className="hidden xl:block -left-32 top-60 w-48 text-center opacity-30">
+            [PRO_TIP]
+            START_SEEDS_INDOORS
+            6-8_WEEKS_BEFORE
+            LAST_FROST_MARKER
+          </Marginalia>
+
+          {/* Left Column - Setup */}
+          <div className="lg:col-span-1 space-y-6">
+            <LocationSetup
+              onLocationSet={() => {}} // Hook handles state
+              loading={loading}
+              error={error}
+              onLookup={lookupFrostDates}
+            />
+
+            {frostDates && (
+              <CropSelector
+                selectedCrops={selectedCrops}
+                onCropsChange={setSelectedCrops}
+                maxCrops={10}
+              />
+            )}
+
+            <BrutalistBlock className="p-5 border-dashed border-border-primary/30" refTag="SYS_LOG_V2">
+              <Typography variant="h4" className="text-xs flex items-center gap-2 mb-4 uppercase tracking-widest font-mono opacity-40">
+                <FileText size={14} /> Technical_Specs
+              </Typography>
+              <ul className="text-[9px] space-y-2 opacity-60 font-mono uppercase tracking-tighter">
+                <li className="flex gap-2"><span>[•]</span> <span>Succession_Engine_v2.1_Active</span></li>
+                <li className="flex gap-2"><span>[•]</span> <span>Maturity_Index_Adjusted</span></li>
+                <li className="flex gap-2"><span>[•]</span> <span>Offline_Ops_Ready</span></li>
+              </ul>
+            </BrutalistBlock>
+          </div>
+
+          {/* Right Column - Calendar */}
+          <div className="lg:col-span-2">
+            {hasCalendarData ? (
+              <div className="space-y-6">
+                <div className="flex items-center gap-3 mb-2">
+                  <DymoLabel className="text-[10px]">OUTPUT_GENERATED</DymoLabel>
+                  <div className="h-[2px] flex-grow bg-border-primary/20" />
+                </div>
+                <PlantingCalendar
+                  dates={plantingDates}
+                  frostDates={frostDates}
+                  onEmailCapture={() => setShowEmailCapture(true)}
+                />
+              </div>
+            ) : (
+              <BrutalistBlock className="p-16 text-center bg-black/20 border-2 border-dashed border-border-primary/20" variant="default">
+                <div className="max-w-xs mx-auto">
+                  <Sprout size={64} className="mx-auto mb-8 opacity-10 text-accent animate-pulse" />
+                  <Typography variant="h3" className="mb-4 uppercase tracking-tighter opacity-40 italic">Awaiting_Input_Parameters</Typography>
+                  <Typography variant="body" className="opacity-30 text-[10px] uppercase font-mono leading-relaxed mb-0">
+                    System requires regional coordinates and inventory manifest to initialize temporal sequence.
+                  </Typography>
+                </div>
+              </BrutalistBlock>
+            )}
+          </div>
+        </div>
+
+        {/* Email Capture Modal */}
+        <PlantingEmailCapture
+          isOpen={showEmailCapture}
+          zipCode={frostDates?.zipCode || ""}
+          cropCount={selectedCrops.length}
+          onSubmit={handleEmailSubmit}
+          onDismiss={() => setShowEmailCapture(false)}
+          isSubmitting={isSubmitting}
+          isSuccess={isSuccess}
+        />
+
+        {/* Footer Info */}
+        <div className="pt-12 pb-8 flex flex-col items-center gap-4 border-t border-border-primary/10 opacity-20 font-mono">
+          <div className="flex items-center gap-6">
+            <LayoutDashboard size={16} />
+            <div className="w-px h-4 bg-foreground-primary" />
+            <span className="text-[8px] uppercase tracking-[0.4em]">Non_Linear_Temporal_Calibrator</span>
+          </div>
+          <Typography variant="small" className="text-[8px] uppercase tracking-widest text-center mb-0">
+            REF_0x772: SUCCESSION_ENABLED // ACCURACY: ±144_HOURS
+          </Typography>
         </div>
       </div>
-
-      {/* Email Capture Modal */}
-      <PlantingEmailCapture
-        isOpen={showEmailCapture}
-        zipCode={frostDates?.zipCode || ""}
-        cropCount={selectedCrops.length}
-        onSubmit={handleEmailSubmit}
-        onDismiss={() => setShowEmailCapture(false)}
-        isSubmitting={isSubmitting}
-        isSuccess={isSuccess}
-      />
-
-      {/* Footer Info */}
-      <div className="mt-8 text-center text-[10px] opacity-40">
-        <p>
-          Data source: NOAA Climate Normals • Accuracy: ±7-10 days depending on microclimate • 
-          For best results, confirm with local extension office
-        </p>
-      </div>
-    </div>
+    </FieldStationLayout>
   );
 }

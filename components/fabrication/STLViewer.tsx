@@ -25,21 +25,22 @@ export default function STLViewer({ file, onVolumeCalculated, onError }: STLView
 
     // Scene setup
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x1c1917);
+    scene.background = new THREE.Color(0x0c0a09); // Near black
 
     // Camera - wider FOV for better viewing
     const camera = new THREE.PerspectiveCamera(
-      60,
+      45, // Slightly more clinical FOV
       containerRef.current.clientWidth / containerRef.current.clientHeight,
       0.1,
       5000
     );
-    camera.position.set(100, 100, 100);
+    camera.position.set(150, 150, 150);
 
     // Renderer with optimized settings
     const renderer = new THREE.WebGLRenderer({ 
       antialias: true,
-      powerPreference: "high-performance"
+      powerPreference: "high-performance",
+      alpha: true
     });
     renderer.setSize(containerRef.current.clientWidth, containerRef.current.clientHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
@@ -49,24 +50,27 @@ export default function STLViewer({ file, onVolumeCalculated, onError }: STLView
     // Controls with damping for smooth interaction
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
-    controls.dampingFactor = 0.1;
+    controls.dampingFactor = 0.05;
     controls.minDistance = 10;
-    controls.maxDistance = 1000;
+    controls.maxDistance = 2000;
 
-    // Lights
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
+    // Lights - High contrast, clinical
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
     scene.add(ambientLight);
 
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
-    directionalLight.position.set(100, 200, 100);
-    scene.add(directionalLight);
+    const mainLight = new THREE.DirectionalLight(0xffffff, 1.2);
+    mainLight.position.set(1, 1, 1);
+    scene.add(mainLight);
 
-    const directionalLight2 = new THREE.DirectionalLight(0xffffff, 0.5);
-    directionalLight2.position.set(-100, -100, -100);
-    scene.add(directionalLight2);
+    const fillLight = new THREE.DirectionalLight(0xffffff, 0.5);
+    fillLight.position.set(-1, -0.5, -1);
+    scene.add(fillLight);
 
-    // Grid
-    const gridHelper = new THREE.GridHelper(200, 20, 0x44403c, 0x333333);
+    // Grid - Subtle schematic grid
+    const gridHelper = new THREE.GridHelper(400, 40, 0xff6600, 0x1c1917);
+    gridHelper.position.y = -0.5;
+    (gridHelper.material as any).transparent = true;
+    (gridHelper.material as any).opacity = 0.1;
     scene.add(gridHelper);
 
     // Store refs
@@ -228,20 +232,46 @@ export default function STLViewer({ file, onVolumeCalculated, onError }: STLView
       // Volume is in mm³, convert to cm³
       const volumeCm3 = volume / 1000;
 
-      // Material - bright color for visibility
-      const material = new THREE.MeshStandardMaterial({
-        color: 0xff6600,
+      // --- SCHEMATIC RENDERING ENGINE ---
+      
+      // 1. Primary Mesh (Semi-transparent dark faces)
+      const material = new THREE.MeshPhongMaterial({
+        color: 0x292524, // Stone-900
         flatShading: true,
-        metalness: 0.3,
-        roughness: 0.7,
+        transparent: true,
+        opacity: 0.8,
+        shininess: 0,
       });
 
       const mesh = new THREE.Mesh(geometry, material);
+      mesh.name = "stl-model-mesh";
+      
+      // 2. Wireframe Overlay (Technical structure)
+      const wireframeMaterial = new THREE.MeshBasicMaterial({
+        color: 0xff6600, // Accent color
+        wireframe: true,
+        transparent: true,
+        opacity: 0.2,
+      });
+      const wireframe = new THREE.Mesh(geometry, wireframeMaterial);
+      mesh.add(wireframe);
+
+      // 3. Edge Outlines (Sharp schematic lines)
+      const edges = new THREE.EdgesGeometry(geometry, 25); // 25 degree threshold for sharp edges
+      const lineMaterial = new THREE.LineBasicMaterial({ 
+        color: 0xff6600, 
+        linewidth: 2,
+        transparent: true,
+        opacity: 0.8 
+      });
+      const lineSegments = new THREE.LineSegments(edges, lineMaterial);
+      mesh.add(lineSegments);
+
       mesh.name = "stl-model";
       mesh.rotation.x = -Math.PI / 2; // Lay flat
 
       scene.add(mesh);
-      console.log("Mesh added to scene");
+      console.log("Schematic mesh added to scene");
 
       // Fit camera to model
       const box = new THREE.Box3().setFromObject(mesh);

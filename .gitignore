@@ -13,10 +13,16 @@ build/
 # Misc
 .DS_Store
 *.pem
+*.bak
+*.log
+
 # Debug
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# Tooling
+.eslintcache
 # Local env files
 .env*.local
 .env

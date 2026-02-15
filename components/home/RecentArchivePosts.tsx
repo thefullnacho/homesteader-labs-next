@@ -1,4 +1,4 @@
-import { getAllPosts } from "../../lib/posts";
+import { getAllPosts } from "@/app/lib/posts";
 import Link from "next/link";
 import { Calendar, ArrowRight, FileText } from "lucide-react";
 

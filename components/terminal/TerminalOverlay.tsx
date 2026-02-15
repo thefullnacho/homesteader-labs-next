@@ -3,6 +3,10 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { X, Terminal, ChevronRight } from "lucide-react";
 import Link from "next/link";
+import BrutalistBlock from "@/components/ui/BrutalistBlock";
+import Button from "@/components/ui/Button";
+import Typography from "@/components/ui/Typography";
+import Badge from "@/components/ui/Badge";
 
 interface Command {
   input: string;
@@ -214,24 +218,27 @@ export default function TerminalOverlay() {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-2 sm:p-4 bg-black/80 backdrop-blur-sm">
       {/* Terminal Container */}
-      <div className="w-full max-w-3xl h-[80vh] brutalist-block bg-theme-bg border-[var(--accent)] flex flex-col terminal-container">
+      <BrutalistBlock 
+        variant="terminal" 
+        className="w-full max-w-4xl h-[90vh] sm:h-[80vh] flex flex-col p-0 shadow-accent/50 overflow-hidden"
+      >
         {/* Header */}
-        <div className="flex justify-between items-center p-3 border-b-2 border-[var(--accent)] bg-theme-sub">
+        <div className="flex justify-between items-center p-3 border-b-2 border-accent bg-background-secondary/50">
           <div className="flex items-center gap-2">
-            <Terminal size={16} className="text-[var(--accent)]" />
-            <span className="text-xs font-bold uppercase tracking-wider">
-              {isEditorMode ? `EDITOR: ${editorFile}` : "TERMINAL v2.0"}
-            </span>
+            <Terminal size={16} className="text-accent" />
+            <Typography variant="small" className="font-bold mb-0">
+              {isEditorMode ? `EDITOR: ${editorFile}` : "TERMINAL v2.1"}
+            </Typography>
           </div>
-          <div className="flex items-center gap-2">
-            <span className="text-[10px] text-theme-secondary font-mono">
+          <div className="flex items-center gap-4">
+            <span className="hidden sm:inline text-[10px] text-foreground-secondary font-mono">
               {isEditorMode ? "ESC to cancel" : "ALT+T to toggle"}
             </span>
             <button
               onClick={() => setIsOpen(false)}
-              className="p-1 hover:bg-[var(--accent)] hover:text-white transition-colors"
+              className="p-1 hover:bg-accent hover:text-white transition-colors"
               aria-label="Close terminal"
             >
               <X size={16} />
@@ -241,31 +248,33 @@ export default function TerminalOverlay() {
 
         {/* Content */}
         {isEditorMode ? (
-          <div className="flex-grow flex flex-col">
+          <div className="flex-grow flex flex-col bg-black">
             <textarea
               value={editorContent}
               onChange={(e) => setEditorContent(e.target.value)}
-              className="flex-grow p-4 bg-theme-bg text-theme-main font-mono text-sm resize-none focus:outline-none"
+              className="flex-grow p-4 bg-transparent text-accent font-mono text-sm resize-none focus:outline-none"
               placeholder="Type your content here..."
               spellCheck={false}
             />
-            <div className="p-3 border-t-2 border-[var(--accent)] bg-theme-sub flex justify-between items-center">
-              <span className="text-xs text-theme-secondary font-mono">
+            <div className="p-3 border-t-2 border-accent bg-background-secondary/50 flex justify-between items-center">
+              <span className="text-[10px] text-foreground-secondary font-mono">
                 {editorContent.length} chars | {editorContent.split("\n").length} lines
               </span>
               <div className="flex gap-2">
-                <button
+                <Button
                   onClick={() => setIsEditorMode(false)}
-                  className="px-4 py-1 border border-theme-main text-xs uppercase hover:bg-[var(--accent)] hover:text-white transition-colors"
+                  variant="outline"
+                  size="sm"
                 >
                   Cancel
-                </button>
-                <button
+                </Button>
+                <Button
                   onClick={saveEditorContent}
-                  className="px-4 py-1 bg-[var(--accent)] text-white text-xs uppercase hover:brightness-110 transition-all"
+                  variant="primary"
+                  size="sm"
                 >
                   Save
-                </button>
+                </Button>
               </div>
             </div>
           </div>
@@ -274,20 +283,20 @@ export default function TerminalOverlay() {
             {/* Terminal Output */}
             <div
               ref={terminalRef}
-              className="flex-grow p-4 overflow-y-auto font-mono text-sm space-y-1"
+              className="flex-grow p-4 overflow-y-auto font-mono text-sm space-y-1 bg-black/40 scrollbar-thin scrollbar-thumb-accent"
             >
               {commands.map((cmd, index) => (
-                <div key={index}>
+                <div key={index} className="mb-2">
                   {cmd.input && (
-                    <div className="flex items-start gap-2">
-                      <ChevronRight size={14} className="mt-0.5 text-[var(--accent)] shrink-0" />
-                      <span className="break-all">{cmd.input}</span>
+                    <div className="flex items-start gap-2 text-foreground-primary">
+                      <ChevronRight size={14} className="mt-1 text-accent shrink-0" />
+                      <span className="break-all font-bold">{cmd.input}</span>
                     </div>
                   )}
                   {cmd.output.map((line, lineIndex) => (
                     <div
                       key={lineIndex}
-                      className={`pl-6 ${cmd.isError ? "text-[var(--accent)]" : ""}`}
+                      className={`pl-6 ${cmd.isError ? "text-red-500" : "text-accent"}`}
                     >
                       {line}
                     </div>
@@ -295,23 +304,23 @@ export default function TerminalOverlay() {
                 </div>
               ))}
               {isBooting && (
-                <div className="flex items-center gap-2 text-[var(--accent)]">
+                <div className="flex items-center gap-2 text-accent">
                   <span className="animate-pulse">_</span>
-                  <span>Booting...</span>
+                  <Badge variant="status" pulse>Booting...</Badge>
                 </div>
               )}
             </div>
 
             {/* Command Input */}
-            <form onSubmit={handleSubmit} className="p-3 border-t-2 border-[var(--accent)] bg-theme-sub">
+            <form onSubmit={handleSubmit} className="p-3 border-t-2 border-accent bg-background-secondary/50">
               <div className="flex items-center gap-2">
-                <ChevronRight size={14} className="text-[var(--accent)]" />
+                <ChevronRight size={14} className="text-accent" />
                 <input
                   ref={inputRef}
                   type="text"
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
-                  className="flex-grow bg-transparent border-none outline-none font-mono text-sm"
+                  className="flex-grow bg-transparent border-none outline-none font-mono text-sm text-accent placeholder:opacity-30"
                   placeholder="Enter command..."
                   spellCheck={false}
                   autoComplete="off"
@@ -320,23 +329,23 @@ export default function TerminalOverlay() {
             </form>
 
             {/* Quick Links */}
-            <div className="px-3 py-2 border-t border-theme-main/30 bg-theme-sub/50 flex gap-4 text-[10px]">
-              <Link href="/shop/" className="text-theme-secondary hover:text-[var(--accent)] transition-colors">
-                /shop
+            <div className="px-3 py-2 border-t border-accent/30 bg-black/20 flex flex-wrap gap-x-4 gap-y-1 text-[10px] uppercase font-bold">
+              <Link href="/shop/" className="text-foreground-secondary hover:text-accent transition-colors">
+                [shop]
               </Link>
-              <Link href="/archive/" className="text-theme-secondary hover:text-[var(--accent)] transition-colors">
-                /archive
+              <Link href="/archive/" className="text-foreground-secondary hover:text-accent transition-colors">
+                [archive]
               </Link>
-              <Link href="/tools/fabrication/" className="text-theme-secondary hover:text-[var(--accent)] transition-colors">
-                /tools/fabrication
+              <Link href="/tools/fabrication/" className="text-foreground-secondary hover:text-accent transition-colors">
+                [fabrication]
               </Link>
-              <Link href="/tools/weather/" className="text-theme-secondary hover:text-[var(--accent)] transition-colors">
-                /tools/weather
+              <Link href="/tools/weather/" className="text-foreground-secondary hover:text-accent transition-colors">
+                [weather]
               </Link>
             </div>
           </>
         )}
-      </div>
+      </BrutalistBlock>
     </div>
   );
 }

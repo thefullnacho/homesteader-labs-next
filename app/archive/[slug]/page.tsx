@@ -1,12 +1,18 @@
 import { getAllSlugs, getPostBySlug } from "../../lib/posts";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, Calendar, User, Tag } from "lucide-react";
+import { ChevronLeft, Calendar, User, Tag } from "lucide-react";
+import FieldStationLayout from "@/components/ui/FieldStationLayout";
+import BrutalistBlock from "@/components/ui/BrutalistBlock";
+import Typography from "@/components/ui/Typography";
+import Button from "@/components/ui/Button";
+import Badge from "@/components/ui/Badge";
+import DymoLabel from "@/components/ui/DymoLabel";
 
 interface PageProps {
-  params: Promise<{
+  params: {
     slug: string;
-  }>;
+  };
 }
 
 export async function generateStaticParams() {
@@ -17,7 +23,7 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: PageProps) {
-  const { slug } = await params;
+  const { slug } = params;
   const post = getPostBySlug(slug);
 
   if (!post) {
@@ -41,7 +47,7 @@ export async function generateMetadata({ params }: PageProps) {
 }
 
 export default async function ArchivePostPage({ params }: PageProps) {
-  const { slug } = await params;
+  const { slug } = params;
   const post = getPostBySlug(slug);
 
   if (!post) {
@@ -52,80 +58,97 @@ export default async function ArchivePostPage({ params }: PageProps) {
   const { default: MDXContent } = await import(`../../../content/archive/${slug}.mdx`);
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8">
-      {/* Back Link */}
-      <Link 
-        href="/archive/"
-        className="inline-flex items-center gap-2 text-sm mb-6 hover:text-[var(--accent)] transition-colors"
-      >
-        <ArrowLeft size={16} />
-        <span>Back to Archive</span>
-      </Link>
+    <FieldStationLayout stationId={`HL_DOC_${post.slug.toUpperCase().replace(/-/g, '_')}`}>
+      <div className="max-w-4xl mx-auto">
+        {/* Back Link */}
+        <div className="mb-6">
+          <Link 
+            href="/archive/"
+            className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-tighter hover:text-accent transition-colors"
+          >
+            <ChevronLeft size={14} />
+            <span>Back_to_Archive</span>
+          </Link>
+        </div>
 
-      {/* Article */}
-      <article className="brutalist-block bg-secondary">
-        {/* Header */}
-        <div className="border-b-2 border-theme-main p-8">
-          {/* Meta */}
-          <div className="flex flex-wrap items-center gap-4 mb-4 text-xs text-theme-secondary">
-            <span className="uppercase dymo-label">{post.category}</span>
-            <span className="flex items-center gap-1">
-              <Calendar size={12} />
-              {post.date}
-            </span>
-            <span className="flex items-center gap-1">
-              <User size={12} />
-              {post.author}
-            </span>
-          </div>
-
-          {/* Title */}
-          <h1 className="text-3xl md:text-4xl font-bold uppercase tracking-tight mb-4">
-            {post.title}
-          </h1>
-
-          {/* Description */}
-          <p className="text-theme-secondary text-lg">
-            {post.description}
-          </p>
-
-          {/* Tags */}
-          {post.tags.length > 0 && (
-            <div className="flex flex-wrap gap-2 mt-6">
-              {post.tags.map((tag) => (
-                <span 
-                  key={tag}
-                  className="text-[10px] border border-theme-main px-2 py-1 flex items-center gap-1"
-                >
-                  <Tag size={10} />
-                  {tag}
+        {/* Article */}
+        <BrutalistBlock className="p-0 overflow-hidden" variant="default" refTag={`DOC_REF_${post.date.replace(/-/g, '')}`}>
+          {/* Header */}
+          <div className="border-b-2 border-border-primary p-6 md:p-10 bg-background-primary/30">
+            {/* Meta */}
+            <div className="flex flex-wrap items-center gap-4 mb-6">
+              <DymoLabel>{post.category}</DymoLabel>
+              <div className="flex items-center gap-4 text-[10px] font-mono opacity-50 uppercase">
+                <span className="flex items-center gap-1.5">
+                  <Calendar size={12} className="text-accent" />
+                  {post.date}
                 </span>
-              ))}
+                <span className="flex items-center gap-1.5">
+                  <User size={12} className="text-accent" />
+                  {post.author}
+                </span>
+              </div>
             </div>
-          )}
-        </div>
 
-        {/* Content */}
-        <div className="p-8 prose prose-invert max-w-none">
-          <MDXContent />
-        </div>
+            {/* Title */}
+            <Typography variant="h1" className="mb-4 text-3xl md:text-5xl leading-tight">
+              {post.title}
+            </Typography>
 
-        {/* Footer */}
-        <div className="border-t-2 border-theme-main p-8 bg-theme-sub/30">
-          <div className="flex justify-between items-center">
-            <div className="text-xs text-theme-secondary">
-              <p>DOCUMENT_ID: {post.slug.toUpperCase().replace(/-/g, '_')}</p>
-              <p>AUTHOR: {post.author}</p>
-            </div>
-            <Link 
-              href="/archive/"
-              className="text-xs border-2 border-theme-main px-4 py-2 hover:bg-[var(--accent)] hover:text-white hover:border-[var(--accent)] transition-all"
-            >
-              Return to Archive
-            </Link>
+            {/* Description */}
+            <Typography variant="body" className="opacity-70 text-lg md:text-xl leading-relaxed italic border-l-2 border-accent pl-4">
+              {post.description}
+            </Typography>
+
+            {/* Tags */}
+            {post.tags.length > 0 && (
+              <div className="flex flex-wrap gap-2 mt-8">
+                {post.tags.map((tag) => (
+                  <Badge 
+                    key={tag}
+                    variant="status"
+                    className="text-[10px]"
+                  >
+                    <Tag size={10} className="mr-1 text-accent" />
+                    {tag}
+                  </Badge>
+                ))}
+              </div>
+            )}
           </div>
+
+          {/* Content */}
+          <div className="p-6 md:p-10 prose prose-invert max-w-none prose-headings:uppercase prose-headings:tracking-tight prose-headings:font-bold prose-p:leading-relaxed prose-a:text-accent hover:prose-a:brightness-110 prose-code:text-accent prose-code:bg-background-secondary prose-code:px-1 prose-code:rounded-sm">
+            <MDXContent />
+          </div>
+
+          {/* Footer */}
+          <div className="border-t-2 border-border-primary p-6 md:p-10 bg-background-secondary/50">
+            <div className="flex flex-col sm:flex-row justify-between items-center gap-6">
+              <div className="text-[10px] font-mono opacity-40 uppercase tracking-tighter">
+                <p>DOCUMENT_ID: {post.slug.toUpperCase().replace(/-/g, '_')}</p>
+                <p>OPERATOR: {post.author}</p>
+                <p>STATUS: FIELD_VERIFIED</p>
+              </div>
+              <Button 
+                href="/archive/"
+                variant="secondary"
+                size="sm"
+              >
+                Return_to_Archive
+              </Button>
+            </div>
+          </div>
+        </BrutalistBlock>
+
+        {/* Technical Notice */}
+        <div className="mt-8 text-center px-4">
+          <Typography variant="small" className="opacity-20 font-mono text-[9px] uppercase tracking-[0.2em] leading-loose">
+            Warning: The information contained in this field manual is for educational purposes only. 
+            Homesteader Labs assumes no responsibility for actions taken based on this documentation.
+          </Typography>
         </div>
-      </article>
-    </div>
+      </div>
+    </FieldStationLayout>
   );
 }

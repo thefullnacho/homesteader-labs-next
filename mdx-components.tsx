@@ -62,13 +62,13 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
       </blockquote>
     ),
     img: ({ src, alt }) => (
-      <div className="my-6">
+      <div className="my-6 text-center">
         <img 
           src={src} 
           alt={alt} 
-          className="w-full border-2 border-theme-main"
+          className="w-full border-2 border-theme-main inline-block"
         />
-        {alt && <p className="text-xs mt-2 opacity-60 text-center">{alt}</p>}
+        {alt && <p className="text-[10px] mt-2 opacity-40 font-mono uppercase tracking-widest">{alt}</p>}
       </div>
     ),
     hr: () => (
