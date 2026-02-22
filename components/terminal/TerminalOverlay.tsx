@@ -22,6 +22,7 @@ const COMMANDS: Record<string, (args: string[]) => string[]> = {
     "  shop          - Navigate to hardware shop",
     "  archive       - Navigate to field archive",
     "  tools         - List available tools",
+    "  fx            - Toggle visual effects (Low-FX mode)",
     "  about         - About Homesteader Labs",
     "  status        - System status report",
     "  date          - Current date and time",
@@ -49,6 +50,16 @@ const COMMANDS: Record<string, (args: string[]) => string[]> = {
     "",
     "Usage: navigate to /tools/[name]",
   ],
+  fx: () => {
+    const current = localStorage.getItem("hl_ui_low_fx") === "true";
+    const newState = !current;
+    localStorage.setItem("hl_ui_low_fx", String(newState));
+    window.dispatchEvent(new CustomEvent("hl-toggle-fx"));
+    return [
+      `VISUAL EFFECTS: ${newState ? "DISABLED (LOW-FX)" : "ENABLED"}`,
+      "System environment updated.",
+    ];
+  },
   about: () => [
     "HOMESTEADER LABS v2.0",
     "Tools for those who build their own world.",
@@ -105,38 +116,6 @@ export default function TerminalOverlay() {
   const terminalRef = useRef<HTMLDivElement>(null);
   const hasBooted = useRef(false);
 
-  // Handle keyboard shortcut
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      // Alt+T to toggle
-      if (e.altKey && e.key.toLowerCase() === "t") {
-        e.preventDefault();
-        toggleTerminal();
-      }
-      // ESC to close
-      if (e.key === "Escape" && isOpen) {
-        setIsOpen(false);
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [isOpen]);
-
-  // Focus input when terminal opens
-  useEffect(() => {
-    if (isOpen && inputRef.current && !isEditorMode) {
-      inputRef.current.focus();
-    }
-  }, [isOpen, isEditorMode]);
-
-  // Auto-scroll to bottom
-  useEffect(() => {
-    if (terminalRef.current) {
-      terminalRef.current.scrollTop = terminalRef.current.scrollHeight;
-    }
-  }, [commands]);
-
   const toggleTerminal = useCallback(() => {
     setIsOpen((prev) => !prev);
     if (!hasBooted.current && !isOpen) {
@@ -158,6 +137,38 @@ export default function TerminalOverlay() {
       });
     }
   }, [isOpen]);
+
+  // Handle keyboard shortcut
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Alt+T to toggle
+      if (e.altKey && e.key.toLowerCase() === "t") {
+        e.preventDefault();
+        toggleTerminal();
+      }
+      // ESC to close
+      if (e.key === "Escape" && isOpen) {
+        setIsOpen(false);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isOpen, toggleTerminal]);
+
+  // Focus input when terminal opens
+  useEffect(() => {
+    if (isOpen && inputRef.current && !isEditorMode) {
+      inputRef.current.focus();
+    }
+  }, [isOpen, isEditorMode]);
+
+  // Auto-scroll to bottom
+  useEffect(() => {
+    if (terminalRef.current) {
+      terminalRef.current.scrollTop = terminalRef.current.scrollHeight;
+    }
+  }, [commands]);
 
   const executeCommand = (cmd: string) => {
     const trimmed = cmd.trim().toLowerCase();

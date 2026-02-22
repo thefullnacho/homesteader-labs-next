@@ -11,8 +11,14 @@ interface STLViewerProps {
 
 export default function STLViewer({ file, onVolumeCalculated, onError }: STLViewerProps) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const sceneRef = useRef<any>(null);
-  const rendererRef = useRef<any>(null);
+  const sceneRef = useRef<{
+    scene: THREE.Scene;
+    camera: THREE.PerspectiveCamera;
+    controls: { update: () => void; target: THREE.Vector3 };
+    renderer: THREE.WebGLRenderer;
+    THREE: typeof import("three");
+  } | null>(null);
+  const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
   const animationRef = useRef<number | null>(null);
   const loadedFileRef = useRef<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -69,8 +75,10 @@ export default function STLViewer({ file, onVolumeCalculated, onError }: STLView
     // Grid - Subtle schematic grid
     const gridHelper = new THREE.GridHelper(400, 40, 0xff6600, 0x1c1917);
     gridHelper.position.y = -0.5;
-    (gridHelper.material as any).transparent = true;
-    (gridHelper.material as any).opacity = 0.1;
+    if (gridHelper.material instanceof THREE.Material) {
+      gridHelper.material.transparent = true;
+      gridHelper.material.opacity = 0.1;
+    }
     scene.add(gridHelper);
 
     // Store refs
@@ -103,7 +111,7 @@ export default function STLViewer({ file, onVolumeCalculated, onError }: STLView
   }, []);
 
   // Simplify geometry by merging close vertices
-  const simplifyGeometry = (geometry: any, THREE: any, targetVertexCount: number = 10000) => {
+  const simplifyGeometry = useCallback((geometry: THREE.BufferGeometry, THREE_LIB: typeof import("three"), targetVertexCount: number = 10000) => {
     const positionAttribute = geometry.attributes.position;
     const currentCount = positionAttribute.count;
     
@@ -126,13 +134,13 @@ export default function STLViewer({ file, onVolumeCalculated, onError }: STLView
       }
     }
     
-    const simplifiedGeometry = new THREE.BufferGeometry();
-    simplifiedGeometry.setAttribute('position', new THREE.Float32BufferAttribute(newPositions, 3));
+    const simplifiedGeometry = new THREE_LIB.BufferGeometry();
+    simplifiedGeometry.setAttribute('position', new THREE_LIB.Float32BufferAttribute(newPositions, 3));
     simplifiedGeometry.computeVertexNormals();
     
     console.log(`Simplified geometry: ${currentCount} -> ${newPositions.length / 3} vertices`);
     return simplifiedGeometry;
-  };
+  }, []);
 
   const loadSTL = useCallback(async (stlFile: File) => {
     if (!sceneRef.current) return;
@@ -150,18 +158,20 @@ export default function STLViewer({ file, onVolumeCalculated, onError }: STLView
     try {
       console.log("Loading STL file:", stlFile.name, "Size:", stlFile.size);
       
-      const { scene, camera, controls, renderer, THREE } = sceneRef.current;
+      const { scene, camera, controls, renderer, THREE: THREE_LIB } = sceneRef.current;
 
       // Remove previous model
       const existingModel = scene.getObjectByName("stl-model");
       if (existingModel) {
         scene.remove(existingModel);
-        if (existingModel.geometry) existingModel.geometry.dispose();
-        if (existingModel.material) {
-          if (Array.isArray(existingModel.material)) {
-            existingModel.material.forEach((m: THREE.Material) => m.dispose());
-          } else {
-            existingModel.material.dispose();
+        if (existingModel instanceof THREE_LIB.Mesh) {
+          if (existingModel.geometry) existingModel.geometry.dispose();
+          if (existingModel.material) {
+            if (Array.isArray(existingModel.material)) {
+              existingModel.material.forEach((m: THREE.Material) => m.dispose());
+            } else {
+              existingModel.material.dispose();
+            }
           }
         }
       }
@@ -183,7 +193,7 @@ export default function STLViewer({ file, onVolumeCalculated, onError }: STLView
 
       // Simplify geometry if too many vertices (>50k)
       if (originalVertexCount > 50000) {
-        geometry = simplifyGeometry(geometry, THREE, 30000);
+        geometry = simplifyGeometry(geometry, THREE_LIB, 30000);
       }
 
       // Compute bounding box BEFORE any transformations
@@ -207,17 +217,17 @@ export default function STLViewer({ file, onVolumeCalculated, onError }: STLView
       const positionAttribute = geometry.attributes.position;
       
       for (let i = 0; i < positionAttribute.count; i += 3) {
-        const v1 = new THREE.Vector3(
+        const v1 = new THREE_LIB.Vector3(
           positionAttribute.getX(i),
           positionAttribute.getY(i),
           positionAttribute.getZ(i)
         );
-        const v2 = new THREE.Vector3(
+        const v2 = new THREE_LIB.Vector3(
           positionAttribute.getX(i + 1),
           positionAttribute.getY(i + 1),
           positionAttribute.getZ(i + 1)
         );
-        const v3 = new THREE.Vector3(
+        const v3 = new THREE_LIB.Vector3(
           positionAttribute.getX(i + 2),
           positionAttribute.getY(i + 2),
           positionAttribute.getZ(i + 2)
@@ -235,7 +245,7 @@ export default function STLViewer({ file, onVolumeCalculated, onError }: STLView
       // --- SCHEMATIC RENDERING ENGINE ---
       
       // 1. Primary Mesh (Semi-transparent dark faces)
-      const material = new THREE.MeshPhongMaterial({
+      const material = new THREE_LIB.MeshPhongMaterial({
         color: 0x292524, // Stone-900
         flatShading: true,
         transparent: true,
@@ -243,28 +253,28 @@ export default function STLViewer({ file, onVolumeCalculated, onError }: STLView
         shininess: 0,
       });
 
-      const mesh = new THREE.Mesh(geometry, material);
+      const mesh = new THREE_LIB.Mesh(geometry, material);
       mesh.name = "stl-model-mesh";
       
       // 2. Wireframe Overlay (Technical structure)
-      const wireframeMaterial = new THREE.MeshBasicMaterial({
+      const wireframeMaterial = new THREE_LIB.MeshBasicMaterial({
         color: 0xff6600, // Accent color
         wireframe: true,
         transparent: true,
         opacity: 0.2,
       });
-      const wireframe = new THREE.Mesh(geometry, wireframeMaterial);
+      const wireframe = new THREE_LIB.Mesh(geometry, wireframeMaterial);
       mesh.add(wireframe);
 
       // 3. Edge Outlines (Sharp schematic lines)
-      const edges = new THREE.EdgesGeometry(geometry, 25); // 25 degree threshold for sharp edges
-      const lineMaterial = new THREE.LineBasicMaterial({ 
+      const edges = new THREE_LIB.EdgesGeometry(geometry, 25); // 25 degree threshold for sharp edges
+      const lineMaterial = new THREE_LIB.LineBasicMaterial({ 
         color: 0xff6600, 
         linewidth: 2,
         transparent: true,
         opacity: 0.8 
       });
-      const lineSegments = new THREE.LineSegments(edges, lineMaterial);
+      const lineSegments = new THREE_LIB.LineSegments(edges, lineMaterial);
       mesh.add(lineSegments);
 
       mesh.name = "stl-model";
@@ -274,10 +284,10 @@ export default function STLViewer({ file, onVolumeCalculated, onError }: STLView
       console.log("Schematic mesh added to scene");
 
       // Fit camera to model
-      const box = new THREE.Box3().setFromObject(mesh);
-      const size = box.getSize(new THREE.Vector3());
+      const box = new THREE_LIB.Box3().setFromObject(mesh);
+      const size = box.getSize(new THREE_LIB.Vector3());
       const maxDim = Math.max(size.x, size.y, size.z);
-      const center = box.getCenter(new THREE.Vector3());
+      const center = box.getCenter(new THREE_LIB.Vector3());
       
       console.log("Bounding box size:", size, "Max dimension:", maxDim);
       
@@ -301,10 +311,10 @@ export default function STLViewer({ file, onVolumeCalculated, onError }: STLView
     } finally {
       setIsLoading(false);
     }
-  }, [onVolumeCalculated, onError]);
+  }, [onVolumeCalculated, onError, simplifyGeometry]);
 
   // Signed volume of triangle for mesh volume calculation
-  function signedVolumeOfTriangle(p1: any, p2: any, p3: any): number {
+  function signedVolumeOfTriangle(p1: THREE.Vector3, p2: THREE.Vector3, p3: THREE.Vector3): number {
     return p1.dot(p2.cross(p3)) / 6.0;
   }
 
@@ -325,7 +335,7 @@ export default function STLViewer({ file, onVolumeCalculated, onError }: STLView
       // Clear loaded file ref when file is cleared
       loadedFileRef.current = null;
     }
-  }, [file]); // Removed loadSTL from deps to prevent re-loading
+  }, [file, loadSTL]);
 
   return (
     <div 

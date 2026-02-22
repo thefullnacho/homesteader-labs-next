@@ -4,10 +4,10 @@ import { useState, useEffect, useMemo } from "react";
 import { AlertCircle, Terminal, Activity, ShieldAlert, Sprout } from "lucide-react";
 import { useWeatherLocations } from "../../hooks/useWeatherLocations";
 import { useWeatherEmailCapture } from "../../hooks/useWeatherEmailCapture";
-import { fetchWeatherData } from "../../lib/weatherApi";
-import { calculateSurvivalIndex } from "../../lib/survivalIndex";
-import { calculatePlantingIndex } from "../../lib/plantingIndex";
-import type { WeatherData, SurvivalIndex, PlantingIndex } from "../../lib/weatherTypes";
+import { fetchWeatherData } from "@/lib/weatherApi";
+import { calculateSurvivalIndex } from "@/lib/survivalIndex";
+import { calculatePlantingIndex } from "@/lib/plantingIndex";
+import type { WeatherData } from "@/lib/weatherTypes";
 
 import FieldStationLayout from "@/components/ui/FieldStationLayout";
 import BrutalistBlock from "@/components/ui/BrutalistBlock";
@@ -18,6 +18,7 @@ import EmailCapture from "@/components/weather/EmailCapture";
 
 // Modular Components
 import TelemetryHeader from "@/components/tools/weather/TelemetryHeader";
+import RadarView from "@/components/tools/weather/RadarView";
 import LocationManager from "@/components/tools/weather/LocationManager";
 import SurvivalDashboard from "@/components/tools/weather/SurvivalDashboard";
 import PlantingDashboard from "@/components/tools/weather/PlantingDashboard";
@@ -55,7 +56,7 @@ export default function WeatherPage() {
       try {
         const data = await fetchWeatherData(activeLocation!.lat, activeLocation!.lon);
         setWeather(data);
-      } catch (err) {
+      } catch {
         setError("TELEMETRY_LINK_SEVERED");
       } finally {
         setLoading(false);
@@ -72,7 +73,7 @@ export default function WeatherPage() {
           <div className="text-center">
             <div className="w-12 h-12 border-4 border-accent border-t-transparent rounded-full animate-spin mx-auto mb-6" />
             <Typography variant="small" className="font-mono uppercase tracking-widest opacity-40">
-              Initializing_Stream_ID: {activeLocation?.id || "NULL"}...
+              Initializing Stream ID: {activeLocation?.id || "NULL"}...
             </Typography>
           </div>
         </div>
@@ -87,9 +88,9 @@ export default function WeatherPage() {
         {/* TOP_NAV & NODE_MGMT */}
         <div className="flex flex-col md:flex-row md:items-start justify-between gap-6 border-b-2 border-border-primary pb-6">
           <div>
-            <Typography variant="h2" className="mb-1 uppercase tracking-tight font-mono">Weather_Station</Typography>
+            <Typography variant="h2" className="mb-1 uppercase tracking-tight font-mono">Weather Station</Typography>
             <Typography variant="small" className="opacity-40 font-mono text-[9px] uppercase tracking-widest">
-              Multi-Source Ensemble Telemetry // Active_Link: OPEN_METEO_V4
+              Multi-Source Ensemble Telemetry // Active Link: OPEN_METEO_V4
             </Typography>
           </div>
           
@@ -101,7 +102,7 @@ export default function WeatherPage() {
                   mode === "SURVIVAL" ? "bg-accent text-white" : "opacity-40 hover:opacity-100"
                 }`}
               >
-                <ShieldAlert size={12} /> Survival_Ops
+                <ShieldAlert size={12} /> Survival Ops
               </button>
               <button 
                 onClick={() => setMode("PLANTING")}
@@ -109,10 +110,10 @@ export default function WeatherPage() {
                   mode === "PLANTING" ? "bg-accent text-white" : "opacity-40 hover:opacity-100"
                 }`}
               >
-                <Sprout size={12} /> Planting_Log
+                <Sprout size={12} /> Planting Log
               </button>
             </div>
-            <Badge variant="status" pulse>Link_Stable</Badge>
+            <Badge variant="status" pulse>Link Stable</Badge>
           </div>
         </div>
 
@@ -138,9 +139,16 @@ export default function WeatherPage() {
           <div className="animate-in fade-in zoom-in-95 duration-500">
             <TelemetryHeader weather={weather} />
             
+            {activeLocation && (
+              <RadarView 
+                lat={activeLocation.lat} 
+                lon={activeLocation.lon} 
+              />
+            )}
+
             <div className="mb-12">
               <div className="flex items-center gap-3 mb-6">
-                <DymoLabel className="text-[10px]">{mode}_DASHBOARD_V.2</DymoLabel>
+                <DymoLabel className="text-[10px]">{mode} DASHBOARD V.2</DymoLabel>
                 <div className="h-[2px] flex-grow bg-border-primary/20" />
               </div>
 
@@ -155,13 +163,14 @@ export default function WeatherPage() {
 
             <div className="space-y-4">
               <div className="flex items-center gap-3 mb-2">
-                <Typography variant="small" className="font-mono font-bold uppercase text-[10px] mb-0 opacity-40">Ensemble_7D_Outlook</Typography>
+                <Typography variant="small" className="font-mono font-bold uppercase text-[10px] mb-0 opacity-40">Ensemble 7D Outlook</Typography>
                 <div className="h-[1px] flex-grow bg-border-primary/10" />
               </div>
               <ForecastGrid forecast={weather.forecast} />
             </div>
           </div>
         )}
+
 
         {error && (
           <BrutalistBlock className="p-12 text-center border-red-500 bg-red-500/5">
@@ -173,14 +182,14 @@ export default function WeatherPage() {
 
         {/* Technical Footer */}
         <div className="pt-12 pb-8 flex flex-col items-center gap-4 border-t border-border-primary/10">
-          <div className="flex items-center gap-6 opacity-20">
+          <div className="flex items-center gap-6 opacity-40">
             <Terminal size={16} />
             <Activity size={16} />
             <div className="w-px h-4 bg-foreground-primary" />
-            <span className="text-[8px] font-mono uppercase tracking-[0.4em]">Non_Custodial_Data_Stream</span>
+            <span className="text-[8px] font-mono uppercase tracking-[0.4em]">Non Custodial Data Stream</span>
           </div>
-          <Typography variant="small" className="opacity-20 font-mono text-[8px] uppercase tracking-widest text-center">
-            Transmission_Cycle: {weather ? new Date(weather.lastUpdated).toLocaleTimeString() : "PENDING"} // Buffer_0x442
+          <Typography variant="small" className="opacity-40 font-mono text-[8px] uppercase tracking-widest text-center">
+            Transmission Cycle: {weather ? new Date(weather.lastUpdated).toLocaleTimeString() : "PENDING"} {"// Buffer 0x442"}
           </Typography>
         </div>
 

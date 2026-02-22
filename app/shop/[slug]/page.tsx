@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { getProductBySlug, getAllProducts } from "../../lib/products";
+import { getProductBySlug, getAllProducts } from "@/lib/products";
 import { Metadata } from "next";
 import ProductDetail from "./ProductDetail";
 

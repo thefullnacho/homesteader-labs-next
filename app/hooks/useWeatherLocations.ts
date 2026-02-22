@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import type { SavedLocation } from "../lib/weatherTypes";
+import type { SavedLocation } from "@/lib/weatherTypes";
 
 const STORAGE_KEY = "homesteader-locations";
 

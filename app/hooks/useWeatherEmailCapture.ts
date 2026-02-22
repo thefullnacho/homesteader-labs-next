@@ -88,7 +88,7 @@ export function useWeatherEmailCapture(locationCount: number) {
   }, []);
 
   // Emergency alert trigger
-  const showEmergencyCapture = useCallback((condition: string) => {
+  const showEmergencyCapture = useCallback(() => {
     const saved = localStorage.getItem(STORAGE_KEY);
     const state: EmailCaptureState = saved ? JSON.parse(saved) : {
       email: "",

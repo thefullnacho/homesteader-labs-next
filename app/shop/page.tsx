@@ -1,4 +1,4 @@
-import { products, getAllProducts } from "../lib/products";
+import { getAllProducts } from "@/lib/products";
 import ProductCard from "@/components/shop/ProductCard";
 import FieldStationLayout from "@/components/ui/FieldStationLayout";
 import BrutalistBlock from "@/components/ui/BrutalistBlock";

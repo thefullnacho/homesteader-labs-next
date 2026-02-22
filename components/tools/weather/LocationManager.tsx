@@ -5,8 +5,8 @@ import { MapPin, Plus, X, Trash2, AlertTriangle } from 'lucide-react';
 import Typography from "@/components/ui/Typography";
 import BrutalistBlock from "@/components/ui/BrutalistBlock";
 import Button from "@/components/ui/Button";
-import type { SavedLocation } from "@/app/lib/weatherTypes";
-import { geocodeLocation, geocodeZipCode, parseCoordinates } from "@/app/lib/weatherApi";
+import type { SavedLocation } from "@/lib/weatherTypes";
+import { geocodeLocation, geocodeZipCode, parseCoordinates } from "@/lib/weatherApi";
 
 interface LocationManagerProps {
   locations: SavedLocation[];
@@ -45,7 +45,7 @@ const LocationManager = ({ locations, activeLocation, onSwitch, onAdd, onRemove 
       } else {
         setError("NODE_NOT_FOUND");
       }
-    } catch (err) {
+    } catch {
       setError("COMM_LINK_FAILURE");
     } finally {
       setLoading(false);
@@ -88,7 +88,7 @@ const LocationManager = ({ locations, activeLocation, onSwitch, onAdd, onRemove 
           onClick={() => setShowAdd(true)}
           className="h-9 px-4 border-2 border-dashed border-border-primary/40 hover:border-accent hover:text-accent transition-all text-[9px] font-bold font-mono uppercase flex items-center gap-2"
         >
-          <Plus size={14} /> ADD_NODE
+          <Plus size={14} /> ADD NODE
         </button>
       </div>
 
@@ -96,16 +96,16 @@ const LocationManager = ({ locations, activeLocation, onSwitch, onAdd, onRemove 
         <div className="fixed inset-0 bg-black/90 backdrop-blur-md flex items-center justify-center p-4 z-[100] animate-in fade-in duration-300">
           <BrutalistBlock className="w-full max-w-md p-0 overflow-hidden" variant="default" refTag="SYS_NODE_MGMT">
             <div className="flex justify-between items-center p-4 border-b-2 border-border-primary bg-background-primary/30">
-              <Typography variant="h4" className="mb-0 uppercase text-xs font-mono tracking-widest">Initialization_Protocol</Typography>
+              <Typography variant="h4" className="mb-0 uppercase text-xs font-mono tracking-widest opacity-80">Initialization Protocol</Typography>
               <button onClick={() => setShowAdd(false)} className="hover:text-accent"><X size={20} /></button>
             </div>
 
             <div className="p-6">
               <div className="flex gap-2 mb-6 border-b-2 border-border-primary pb-4">
-                {["city", "zip", "coords"].map((m) => (
+                {(["city", "zip", "coords"] as const).map((m) => (
                   <button
                     key={m}
-                    onClick={() => setMode(m as any)}
+                    onClick={() => setMode(m)}
                     className={`flex-1 py-1.5 text-[9px] font-bold font-mono uppercase border-2 transition-all ${
                       mode === m ? "bg-accent border-accent text-white" : "border-border-primary/20 opacity-40"
                     }`}

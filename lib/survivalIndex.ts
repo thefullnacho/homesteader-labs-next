@@ -1,4 +1,4 @@
-import type { WeatherData, SurvivalIndex, PlantingIndex, ForecastDay } from "./weatherTypes";
+import type { WeatherData, SurvivalIndex, ForecastDay } from "./weatherTypes";
 
 export function calculateSurvivalIndex(data: WeatherData): SurvivalIndex {
   const current = data.current;
@@ -133,7 +133,7 @@ function calculateSprayConditions(current: WeatherData["current"]): SurvivalInde
   const windOk = current.windSpeed >= 3 && current.windSpeed <= 10;
   const humidityOk = current.humidity >= 40 && current.humidity <= 90;
 
-  let reasons: string[] = [];
+  const reasons: string[] = [];
   if (!tempOk) reasons.push(current.temperature < 50 ? "Too cold" : "Too hot");
   if (!windOk) reasons.push(current.windSpeed < 3 ? "Too calm" : "Too windy");
   if (!humidityOk) reasons.push(current.humidity < 40 ? "Too dry" : "Too humid");
@@ -173,7 +173,6 @@ function calculateSolarEfficiency(forecast: ForecastDay[]): SurvivalIndex["solar
 function calculateLivestockStress(current: WeatherData["current"]): SurvivalIndex["livestockStress"] {
   // Calculate heat index or wind chill
   const temp = current.temperature;
-  const humidity = current.humidity;
   const windSpeed = current.windSpeed;
 
   // Heat Index (simplified)

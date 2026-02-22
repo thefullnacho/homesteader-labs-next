@@ -1,4 +1,4 @@
-import { getAllPosts, getAllTags, getAllCategories } from "../lib/posts";
+import { getAllPosts, getAllTags, getAllCategories } from "@/lib/posts";
 import Link from "next/link";
 import FieldStationLayout from "@/components/ui/FieldStationLayout";
 import BrutalistBlock from "@/components/ui/BrutalistBlock";
@@ -67,7 +67,7 @@ export default function ArchivePage() {
                   {/* Meta */}
                   <div className="flex items-center gap-3 mb-3">
                     <Typography variant="small" className="font-mono opacity-40 uppercase mb-0 tracking-tighter">
-                      {post.date} // {post.author}
+                      {post.date} {"//"} {post.author}
                     </Typography>
                   </div>
 

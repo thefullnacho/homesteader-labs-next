@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useCart } from "../../context/CartContext";
 import { Plus, ExternalLink, Check, ChevronLeft } from "lucide-react";
 import Link from "next/link";
-import type { Product } from "../../lib/products";
+import type { Product } from "@/lib/products";
 import FieldStationLayout from "@/components/ui/FieldStationLayout";
 import BrutalistBlock from "@/components/ui/BrutalistBlock";
 import Typography from "@/components/ui/Typography";

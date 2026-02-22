@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import { FrostDates } from "../types";
+import { FrostDates } from "@/lib/tools/planting-calendar/types";
 
 interface FrostDateAPIResponse {
   zip_code: string;

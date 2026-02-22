@@ -7,9 +7,9 @@ import CropSelector from "@/components/tools/planting-calendar/CropSelector";
 import PlantingCalendar from "@/components/tools/planting-calendar/PlantingCalendar";
 import PlantingEmailCapture from "@/components/tools/planting-calendar/PlantingEmailCapture";
 import useFrostDates from "./hooks/useFrostDates";
-import { Crop, FrostDates, SelectedCrop, PlantingDate } from "./types";
-import { getCropById } from "./lib/crops";
-import { calculateCropSchedule } from "./lib/plantingCalculations";
+import { SelectedCrop, PlantingDate } from "@/lib/tools/planting-calendar/types";
+import { getCropById } from "@/lib/tools/planting-calendar/crops";
+import { calculateCropSchedule } from "@/lib/tools/planting-calendar/plantingCalculations";
 import FieldStationLayout from "@/components/ui/FieldStationLayout";
 import Typography from "@/components/ui/Typography";
 import BrutalistBlock from "@/components/ui/BrutalistBlock";
@@ -42,7 +42,7 @@ export default function PlantingCalendarPage() {
     return dates;
   }, [selectedCrops, frostDates]);
 
-  const handleEmailSubmit = useCallback(async (email: string) => {
+  const handleEmailSubmit = useCallback(async () => {
     setIsSubmitting(true);
     await new Promise(resolve => setTimeout(resolve, 1000));
     setIsSubmitting(false);

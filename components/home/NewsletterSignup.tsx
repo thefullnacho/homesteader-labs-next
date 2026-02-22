@@ -2,6 +2,9 @@
 
 import { useState } from "react";
 import { Send, Terminal } from "lucide-react";
+import BrutalistBlock from "@/components/ui/BrutalistBlock";
+import Typography from "@/components/ui/Typography";
+import Button from "@/components/ui/Button";
 
 export default function NewsletterSignup() {
   const [email, setEmail] = useState("");
@@ -21,19 +24,19 @@ export default function NewsletterSignup() {
 
   return (
     <section className="mb-12">
-      <div className="brutalist-block bg-[var(--accent)]/10 border-[var(--accent)]">
+      <BrutalistBlock className="bg-[var(--accent)]/10 border-[var(--accent)] p-0">
         <div className="p-6 md:p-8">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
             {/* Text */}
             <div className="flex-grow">
               <div className="flex items-center gap-2 mb-2">
                 <Terminal size={20} className="text-[var(--accent)]" />
-                <h2 className="text-xl font-bold uppercase">Stay_In_The_Loop</h2>
+                <Typography variant="h3" className="mb-0">Stay_In_The_Loop</Typography>
               </div>
-              <p className="text-sm text-theme-secondary">
+              <Typography variant="small" className="text-theme-secondary mb-0">
                 Get field reports, new hardware drops, and survival tips. 
                 No spam. No tracking. Just signal.
-              </p>
+              </Typography>
             </div>
 
             {/* Form */}
@@ -46,13 +49,14 @@ export default function NewsletterSignup() {
                   placeholder="your@email.com"
                   className="flex-grow md:w-64 px-3 py-2 bg-theme-sub border-2 border-theme-main text-theme-main placeholder:text-theme-secondary/50 focus:outline-none focus:border-[var(--accent)] font-mono text-sm"
                 />
-                <button
+                <Button
                   type="submit"
-                  className="px-4 py-2 bg-[var(--accent)] text-white font-bold text-sm uppercase hover:brightness-110 transition-all flex items-center gap-2"
+                  size="sm"
+                  className="px-4 py-2"
                 >
-                  <Send size={14} />
+                  <Send size={14} className="mr-2" />
                   <span className="hidden sm:inline">Join</span>
-                </button>
+                </Button>
               </div>
 
               {status === "success" && (
@@ -75,7 +79,7 @@ export default function NewsletterSignup() {
             ENCRYPTION: NONE | FREQUENCY: MONTHLY | UNSUBSCRIBE: ANYTIME
           </p>
         </div>
-      </div>
+      </BrutalistBlock>
     </section>
   );
 }

@@ -1,4 +1,4 @@
-import { getAllSlugs, getPostBySlug } from "../../lib/posts";
+import { getAllSlugs, getPostBySlug } from "@/lib/posts";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ChevronLeft, Calendar, User, Tag } from "lucide-react";

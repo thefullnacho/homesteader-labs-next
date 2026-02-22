@@ -1,4 +1,4 @@
-import { Crop, Variety, FrostDates, PlantingDate, SelectedCrop } from '../types';
+import { Crop, Variety, FrostDates, PlantingDate, SelectedCrop } from './types';
 
 /**
  * Calculate all planting dates for a selected crop

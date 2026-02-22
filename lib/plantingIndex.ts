@@ -11,7 +11,7 @@ export function calculatePlantingIndex(data: WeatherData): PlantingIndex {
   const soilWorkability = calculateSoilWorkability(current, forecast);
 
   // Calculate planting window
-  const plantingWindow = calculatePlantingWindow(forecast, frostRisk);
+  const plantingWindow = calculatePlantingWindow(forecast);
 
   // Calculate growing degree days (simplified - base 50°F)
   const growingDegreeDays = calculateGDD(forecast);
@@ -106,8 +106,7 @@ function calculateSoilWorkability(
 }
 
 function calculatePlantingWindow(
-  forecast: ForecastDay[],
-  frostRisk: PlantingIndex["frostRisk"]
+  forecast: ForecastDay[]
 ): PlantingIndex["plantingWindow"] {
   // Find first day with low frost risk and workable soil
   const safeDays = forecast.filter((day) => day.minTemp > 35 && day.precipitation < 1);

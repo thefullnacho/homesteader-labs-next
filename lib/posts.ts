@@ -83,7 +83,7 @@ export function getPostBySlug(slug: string): Post | null {
       excerpt: data.excerpt || '',
       content,
     };
-  } catch (error) {
+  } catch {
     return null;
   }
 }

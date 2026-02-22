@@ -1,15 +1,28 @@
 "use client";
 
 import { useState, useCallback, useRef } from "react";
-import { Upload, Box, Clock, Weight, DollarSign, Settings, AlertCircle } from "lucide-react";
-import STLViewer from "@/components/fabrication/STLViewer";
+import { Upload, Box, Clock, Weight, AlertCircle } from "lucide-react";
+import dynamic from "next/dynamic";
+
+const STLViewer = dynamic(() => import("@/components/fabrication/STLViewer"), {
+  ssr: false,
+  loading: () => (
+    <div className="h-[400px] w-full flex items-center justify-center bg-black/20 border-2 border-border-primary border-dashed">
+      <div className="text-center">
+        <Box className="w-12 h-12 text-accent animate-pulse mx-auto mb-4" />
+        <p className="font-mono text-xs text-accent uppercase tracking-widest">Initializing_3D_Engine...</p>
+      </div>
+    </div>
+  ),
+});
+
 import {
   FILAMENT_TYPES,
   DEFAULT_SETTINGS,
   calculatePrintEstimate,
   formatPrintTime,
-} from "../../lib/fabricationTypes";
-import type { FilamentType, PrintSettings, PrintEstimate } from "../../lib/fabricationTypes";
+} from "@/lib/fabricationTypes";
+import type { FilamentType, PrintSettings, PrintEstimate } from "@/lib/fabricationTypes";
 import FieldStationLayout from "@/components/ui/FieldStationLayout";
 import BrutalistBlock from "@/components/ui/BrutalistBlock";
 import Typography from "@/components/ui/Typography";

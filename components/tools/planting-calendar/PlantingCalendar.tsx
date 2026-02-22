@@ -1,15 +1,13 @@
 "use client";
 
 import React from 'react';
-import { PlantingDate, FrostDates } from "@/app/tools/planting-calendar/types";
+import { PlantingDate, FrostDates } from "@/lib/tools/planting-calendar/types";
 import { 
-  formatPlantingDate, 
-  getActionColor,
   groupDatesByMonth,
   sortDatesByDate 
-} from "@/app/tools/planting-calendar/lib/plantingCalculations";
-import { getCropById } from "@/app/tools/planting-calendar/lib/crops";
-import { Calendar, MapPin, ClipboardList, TrendingUp } from "lucide-react";
+} from "@/lib/tools/planting-calendar/plantingCalculations";
+import { getCropById } from "@/lib/tools/planting-calendar/crops";
+import { Calendar, MapPin, TrendingUp } from "lucide-react";
 import Typography from "@/components/ui/Typography";
 import BrutalistBlock from "@/components/ui/BrutalistBlock";
 import Badge from "@/components/ui/Badge";
@@ -60,7 +58,7 @@ export default function PlantingCalendar({
               <Typography variant="h3" className="mb-1 tracking-tighter">PLANTING_TIMELINE_V2</Typography>
               <div className="flex items-center gap-3 text-[10px] font-mono opacity-50 uppercase tracking-widest">
                 <span className="flex items-center gap-1"><MapPin size={10} className="text-accent" /> {frostDates.zipCode}</span>
-                <span>//</span>
+                <span>{"//"}</span>
                 <span>ZONE_{frostDates.growingZone}</span>
               </div>
             </div>
@@ -128,7 +126,7 @@ export default function PlantingCalendar({
                           )}
                         </div>
                         <div className="text-[9px] font-mono opacity-40 uppercase truncate">
-                          {date.varietyName} // {crop?.category}
+                          {date.varietyName} {"//"} {crop?.category}
                         </div>
                       </div>
                     </div>

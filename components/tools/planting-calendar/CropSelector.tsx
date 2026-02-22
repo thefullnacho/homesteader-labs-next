@@ -1,12 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { Check, Box, ChevronDown, ChevronUp, Settings2 } from "lucide-react";
-import { Crop, SelectedCrop } from "@/app/tools/planting-calendar/types";
-import { getAllCrops } from "@/app/tools/planting-calendar/lib/crops";
+import { Check, Box, Settings2 } from "lucide-react";
+import { Crop, SelectedCrop } from "@/lib/tools/planting-calendar/types";
+import { getAllCrops } from "@/lib/tools/planting-calendar/crops";
 import Typography from "@/components/ui/Typography";
 import BrutalistBlock from "@/components/ui/BrutalistBlock";
-import Badge from "@/components/ui/Badge";
 
 interface CropSelectorProps {
   selectedCrops: SelectedCrop[];

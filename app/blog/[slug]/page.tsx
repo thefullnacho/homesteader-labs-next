@@ -5,7 +5,7 @@ import BrutalistBlock from "@/components/ui/BrutalistBlock";
 import Typography from "@/components/ui/Typography";
 import Badge from "@/components/ui/Badge";
 import DymoLabel from "@/components/ui/DymoLabel";
-import { ChevronLeft, Tag } from "lucide-react";
+import { ChevronLeft } from "lucide-react";
 
 interface BlogPostPageProps {
   params: {
@@ -68,7 +68,7 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
             
             <div className="bg-background-secondary p-6 my-8 border-l-4 border-accent relative">
               <Typography variant="body" className="italic opacity-80 mb-0">
-                "Always verify identification with multiple sources before consuming wild plants."
+                &quot;Always verify identification with multiple sources before consuming wild plants.&quot;
               </Typography>
               <div className="absolute -bottom-2 -right-2 text-[8px] opacity-20 font-mono">SAFETY_PROTOCOL_V.1</div>
             </div>

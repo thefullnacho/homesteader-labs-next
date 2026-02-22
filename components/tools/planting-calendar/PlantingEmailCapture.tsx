@@ -43,12 +43,12 @@ export default function PlantingEmailCapture({
               <CheckCircle size={32} className="text-white" />
             </div>
           </div>
-          <h3 className="text-xl font-bold mb-2">You're All Set!</h3>
+          <h3 className="text-xl font-bold mb-2">You&apos;re All Set!</h3>
           <p className="text-sm opacity-70 mb-4">
             Check your inbox for a confirmation email with your planting calendar attached.
           </p>
           <div className="text-xs opacity-50">
-            <p>Your first reminder: "What to plant this week"</p>
+            <p>Your first reminder: &quot;What to plant this week&quot;</p>
             <p>Customized for {zipCode} • {cropCount} crops</p>
           </div>
         </div>
@@ -83,15 +83,15 @@ export default function PlantingEmailCapture({
         <div className="bg-theme-sub/50 p-3 mb-4 text-xs space-y-1">
           <div className="flex items-center gap-2">
             <span>✓</span>
-            <span>"Time to start your tomatoes indoors"</span>
+            <span>&quot;Time to start your tomatoes indoors&quot;</span>
           </div>
           <div className="flex items-center gap-2">
             <span>✓</span>
-            <span>"Direct sow lettuce this week"</span>
+            <span>&quot;Direct sow lettuce this week&quot;</span>
           </div>
           <div className="flex items-center gap-2">
             <span>✓</span>
-            <span>"Last chance to plant fall crops"</span>
+            <span>&quot;Last chance to plant fall crops&quot;</span>
           </div>
           <div className="mt-2 pt-2 border-t border-theme-main/30 text-[10px] opacity-60">
             Customized for: {zipCode} • {cropCount} crops • Based on your frost dates

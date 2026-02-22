@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { MapPin, Search, Loader2, Satellite } from "lucide-react";
-import { FrostDates } from "@/app/tools/planting-calendar/types";
+import { Loader2, Satellite } from "lucide-react";
+import { FrostDates } from "@/lib/tools/planting-calendar/types";
 import Typography from "@/components/ui/Typography";
 import BrutalistBlock from "@/components/ui/BrutalistBlock";
 import Button from "@/components/ui/Button";

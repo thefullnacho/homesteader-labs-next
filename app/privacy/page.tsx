@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import BrutalistBlock from "@/components/ui/BrutalistBlock";
+import Typography from "@/components/ui/Typography";
 
 export const metadata: Metadata = {
   title: "Privacy Hash | Homesteader Labs",
@@ -8,11 +10,11 @@ export const metadata: Metadata = {
 export default function PrivacyPage() {
   return (
     <div className="max-w-4xl mx-auto px-4 py-12">
-      <div className="brutalist-block bg-secondary p-8 md:p-12">
+      <BrutalistBlock variant="default" className="bg-secondary p-8 md:p-12">
         <div className="border-b-2 border-theme-main pb-4 mb-8">
-          <h1 className="text-3xl md:text-4xl font-bold uppercase tracking-tight">
+          <Typography variant="h2" className="mb-0">
             Privacy Hash
-          </h1>
+          </Typography>
           <p className="text-theme-secondary mt-2 font-mono text-sm">
             &gt;&gt; PRIVACY PROTOCOL
           </p>
@@ -55,7 +57,7 @@ export default function PrivacyPage() {
             REF: PRIVACY_HASH_V1
           </p>
         </div>
-      </div>
+      </BrutalistBlock>
     </div>
   );
 }

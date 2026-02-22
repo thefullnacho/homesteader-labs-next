@@ -41,7 +41,7 @@ export default function WarrantyPage() {
               The Protocol
             </h2>
             <p className="leading-relaxed text-theme-secondary">
-              If it breaks, fix it. If it doesn't work, iterate.
+              If it breaks, fix it. If it doesn&apos;t work, iterate.
             </p>
           </section>
         </div>

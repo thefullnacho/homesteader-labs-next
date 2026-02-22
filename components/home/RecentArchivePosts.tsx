@@ -1,4 +1,4 @@
-import { getAllPosts } from "@/app/lib/posts";
+import { getAllPosts } from "@/lib/posts";
 import Link from "next/link";
 import { Calendar, ArrowRight, FileText } from "lucide-react";
 
@@ -34,7 +34,7 @@ export default function RecentArchivePosts() {
               {/* Meta */}
               <div className="flex items-center gap-3 mb-1 text-[10px] text-theme-secondary">
                 <span className="uppercase">{post.category}</span>
-                <span>//</span>
+                <span>{"//"}</span>
                 <span className="flex items-center gap-1">
                   <Calendar size={10} />
                   {post.date}

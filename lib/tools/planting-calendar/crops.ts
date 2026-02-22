@@ -1,4 +1,4 @@
-import { Crop, Variety } from '../types';
+import { Crop, Variety } from './types';
 
 export const crops: Crop[] = [
   {
