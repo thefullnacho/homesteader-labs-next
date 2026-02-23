@@ -8,7 +8,7 @@ export interface WeatherData {
     windSpeed: number;
     windDirection: number;
     uvIndex: number;
-    visibility: number;
+    visibility: number | null;
     cloudCover: number;
     precipitation: number;
     soilTemperature?: number;
@@ -132,10 +132,4 @@ export interface SavedLocation {
   elevation?: number;
   notes?: string;
   isDefault?: boolean;
-}
-
-export interface WeatherProvider {
-  name: string;
-  getCurrentWeather(lat: number, lon: number): Promise<WeatherData>;
-  getForecast(lat: number, lon: number): Promise<ForecastDay[]>;
 }

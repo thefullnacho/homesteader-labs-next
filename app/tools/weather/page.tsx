@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
-import { AlertCircle, Terminal, Activity, ShieldAlert, Sprout } from "lucide-react";
+import { useState, useEffect, useMemo, useCallback } from "react";
+import { AlertCircle, Terminal, Activity, ShieldAlert, Sprout, Download } from "lucide-react";
 import { useWeatherLocations } from "../../hooks/useWeatherLocations";
 import { useWeatherEmailCapture } from "../../hooks/useWeatherEmailCapture";
 import { fetchWeatherData } from "@/lib/weatherApi";
@@ -23,8 +23,48 @@ import LocationManager from "@/components/tools/weather/LocationManager";
 import SurvivalDashboard from "@/components/tools/weather/SurvivalDashboard";
 import PlantingDashboard from "@/components/tools/weather/PlantingDashboard";
 import ForecastGrid from "@/components/tools/weather/ForecastGrid";
+import WeatherChart from "@/components/tools/weather/WeatherChart";
+import MoonPhaseDisplay from "@/components/tools/weather/MoonPhaseDisplay";
+import GrowingSeasonTracker from "@/components/tools/weather/GrowingSeasonTracker";
 
 type DashboardMode = "SURVIVAL" | "PLANTING";
+
+function exportWeatherData(weather: WeatherData, format: 'json' | 'csv') {
+  const locationName = weather.location.name.replace(/[^a-zA-Z0-9]/g, '_');
+  const timestamp = new Date().toISOString().split('T')[0];
+  
+  if (format === 'json') {
+    const blob = new Blob([JSON.stringify(weather, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `weather_${locationName}_${timestamp}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  } else {
+    // CSV format
+    const headers = ['Date', 'High°F', 'Low°F', 'Precip(in)', 'Precip%', 'Wind(mph)', 'UV', 'Cloud%'];
+    const rows = weather.forecast.map(day => [
+      day.date,
+      day.maxTemp,
+      day.minTemp,
+      day.precipitation,
+      day.precipitationProbability,
+      day.windSpeed,
+      day.uvIndex,
+      day.cloudCover
+    ]);
+    
+    const csv = [headers, ...rows].map(row => row.join(',')).join('\n');
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `weather_${locationName}_${timestamp}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+}
 
 export default function WeatherPage() {
   const { locations, activeLocation, switchLocation, addLocation, removeLocation, isLoaded } = useWeatherLocations();
@@ -32,6 +72,8 @@ export default function WeatherPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [mode, setMode] = useState<DashboardMode>("SURVIVAL");
+  const [retryCount, setRetryCount] = useState(0);
+  const MAX_RETRIES = 3;
 
   const {
     showCapture,
@@ -47,24 +89,36 @@ export default function WeatherPage() {
   const survivalIndex = useMemo(() => weather ? calculateSurvivalIndex(weather) : null, [weather]);
   const plantingIndex = useMemo(() => weather ? calculatePlantingIndex(weather) : null, [weather]);
 
+  const loadWeather = useCallback(async () => {
+    if (!activeLocation) return;
+    
+    setLoading(true);
+    setError(null);
+    try {
+      const data = await fetchWeatherData(activeLocation.lat, activeLocation.lon);
+      setWeather(data);
+      setRetryCount(0);
+    } catch {
+      setError("TELEMETRY_LINK_SEVERED");
+    } finally {
+      setLoading(false);
+    }
+  }, [activeLocation]);
+
+  const handleRetry = useCallback(() => {
+    if (retryCount < MAX_RETRIES) {
+      const delay = Math.pow(2, retryCount) * 1000; // Exponential backoff
+      setTimeout(() => {
+        setRetryCount(prev => prev + 1);
+        loadWeather();
+      }, delay);
+    }
+  }, [retryCount, loadWeather]);
+
   useEffect(() => {
     if (!isLoaded || !activeLocation) return;
-
-    async function loadWeather() {
-      setLoading(true);
-      setError(null);
-      try {
-        const data = await fetchWeatherData(activeLocation!.lat, activeLocation!.lon);
-        setWeather(data);
-      } catch {
-        setError("TELEMETRY_LINK_SEVERED");
-      } finally {
-        setLoading(false);
-      }
-    }
-
     loadWeather();
-  }, [activeLocation, isLoaded]);
+  }, [activeLocation, isLoaded, loadWeather, retryCount]);
 
   if (!isLoaded || (loading && activeLocation)) {
     return (
@@ -146,6 +200,10 @@ export default function WeatherPage() {
               />
             )}
 
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+              <MoonPhaseDisplay />
+            </div>
+
             <div className="mb-12">
               <div className="flex items-center gap-3 mb-6">
                 <DymoLabel className="text-[10px]">{mode} DASHBOARD V.2</DymoLabel>
@@ -159,6 +217,15 @@ export default function WeatherPage() {
               {mode === "PLANTING" && plantingIndex && (
                 <PlantingDashboard index={plantingIndex} />
               )}
+
+              {mode === "PLANTING" && weather && (
+                <div className="mt-8">
+                  <GrowingSeasonTracker 
+                    forecast={weather.forecast} 
+                    locationName={activeLocation?.name || 'default'} 
+                  />
+                </div>
+              )}
             </div>
 
             <div className="space-y-4">
@@ -167,6 +234,10 @@ export default function WeatherPage() {
                 <div className="h-[1px] flex-grow bg-border-primary/10" />
               </div>
               <ForecastGrid forecast={weather.forecast} />
+            </div>
+
+            <div className="mt-8 p-6 bg-black/20 border-2 border-border-primary">
+              <WeatherChart forecast={weather.forecast} />
             </div>
           </div>
         )}
@@ -177,6 +248,19 @@ export default function WeatherPage() {
             <AlertCircle size={48} className="text-red-500 mx-auto mb-4 opacity-40" />
             <Typography variant="h3" className="text-red-500 uppercase font-mono">{error}</Typography>
             <Typography variant="body" className="opacity-60 text-xs mt-2 uppercase font-mono">Attempting to re-establish uplink...</Typography>
+            {retryCount < MAX_RETRIES && (
+              <button 
+                onClick={handleRetry}
+                className="mt-4 px-6 py-2 bg-red-500/20 border border-red-500 text-red-400 font-mono text-xs uppercase hover:bg-red-500/30 transition-colors"
+              >
+                Retry Connection ({MAX_RETRIES - retryCount} attempts remaining)
+              </button>
+            )}
+            {retryCount >= MAX_RETRIES && (
+              <Typography variant="body" className="opacity-60 text-xs mt-4 uppercase font-mono text-red-400">
+                Maximum retries exceeded. Please check your connection and refresh.
+              </Typography>
+            )}
           </BrutalistBlock>
         )}
 
@@ -191,6 +275,25 @@ export default function WeatherPage() {
           <Typography variant="small" className="opacity-40 font-mono text-[8px] uppercase tracking-widest text-center">
             Transmission Cycle: {weather ? new Date(weather.lastUpdated).toLocaleTimeString() : "PENDING"} {"// Buffer 0x442"}
           </Typography>
+          
+          {/* Data Export */}
+          {weather && (
+            <div className="flex items-center gap-3 mt-4">
+              <span className="text-[8px] font-mono opacity-40 uppercase tracking-widest">Export:</span>
+              <button
+                onClick={() => exportWeatherData(weather, 'json')}
+                className="flex items-center gap-1.5 px-3 py-1 border border-border-primary text-[8px] font-mono uppercase hover:bg-accent hover:text-white transition-colors"
+              >
+                <Download size={10} /> JSON
+              </button>
+              <button
+                onClick={() => exportWeatherData(weather, 'csv')}
+                className="flex items-center gap-1.5 px-3 py-1 border border-border-primary text-[8px] font-mono uppercase hover:bg-accent hover:text-white transition-colors"
+              >
+                <Download size={10} /> CSV
+              </button>
+            </div>
+          )}
         </div>
 
         <EmailCapture

@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { Box, Sun, Moon, ShoppingCart, Menu, X } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Box, Sun, Moon, ShoppingCart, Menu, X, Zap, ZapOff } from "lucide-react";
 import { useCart } from "@/app/context/CartContext";
 import Link from "next/link";
 import Badge from "@/components/ui/Badge";
@@ -9,12 +9,36 @@ import DymoLabel from "@/components/ui/DymoLabel";
 
 export default function Navigation() {
   const [isDark, setIsDark] = useState(false);
+  const [lowFX, setLowFX] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { totalItems, isRequisitionSubmitted } = useCart();
 
+  useEffect(() => {
+    // Load preferences from localStorage
+    const savedDark = localStorage.getItem("hl_dark_mode");
+    if (savedDark) {
+      const dark = JSON.parse(savedDark);
+      setIsDark(dark);
+      if (dark) document.documentElement.classList.add("dark");
+    }
+    
+    const savedLowFX = localStorage.getItem("hl_ui_low_fx");
+    if (savedLowFX === "true") setLowFX(true);
+  }, []);
+
   const toggleDarkMode = () => {
-    setIsDark(!isDark);
-    document.documentElement.classList.toggle("dark");
+    const newValue = !isDark;
+    setIsDark(newValue);
+    document.documentElement.classList.toggle("dark", newValue);
+    localStorage.setItem("hl_dark_mode", JSON.stringify(newValue));
+  };
+
+  const toggleLowFX = () => {
+    const newValue = !lowFX;
+    setLowFX(newValue);
+    localStorage.setItem("hl_ui_low_fx", String(newValue));
+    // Trigger event for VisualEffects component
+    window.dispatchEvent(new Event("hl-toggle-fx"));
   };
 
   const requisitionStatus = isRequisitionSubmitted ? "SUBMITTED" : "PENDING";
@@ -51,10 +75,19 @@ export default function Navigation() {
 
           <button
             onClick={toggleDarkMode}
-            className="p-2 border border-border-primary hover:bg-accent hover:text-white transition-all ml-4"
+            className="p-2 border border-border-primary hover:bg-accent hover:text-white transition-all"
             aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
           >
             {isDark ? <Sun size={16} /> : <Moon size={16} />}
+          </button>
+          
+          <button
+            onClick={toggleLowFX}
+            className={`p-2 border transition-all ${lowFX ? 'bg-accent/20 text-accent' : 'border-border-primary hover:bg-accent hover:text-white'}`}
+            aria-label={lowFX ? "Enable visual effects" : "Disable visual effects (Low FX mode)"}
+            title={lowFX ? "Low FX Mode: ON" : "Low FX Mode: OFF"}
+          >
+            {lowFX ? <ZapOff size={16} /> : <Zap size={16} />}
           </button>
         </div>
 
@@ -105,14 +138,25 @@ export default function Navigation() {
               <DymoLabel className="w-full text-center">WEATHER</DymoLabel>
             </Link>
           </div>
-          <div className="flex justify-between items-center pt-2 border-t border-border-primary/20">
-            <span className="text-xs font-mono opacity-50 uppercase">System_Theme:</span>
-            <button
-              onClick={toggleDarkMode}
-              className="flex items-center gap-2 px-4 py-1 border border-border-primary text-xs"
-            >
-              {isDark ? <><Sun size={14} /> LIGHT</> : <><Moon size={14} /> DARK</>}
-            </button>
+          <div className="flex justify-between items-center pt-2 border-t border-border-primary/20 gap-4">
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-mono opacity-50 uppercase">Theme:</span>
+              <button
+                onClick={toggleDarkMode}
+                className="flex items-center gap-2 px-4 py-1 border border-border-primary text-xs"
+              >
+                {isDark ? <><Sun size={14} /> LIGHT</> : <><Moon size={14} /> DARK</>}
+              </button>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-mono opacity-50 uppercase">FX:</span>
+              <button
+                onClick={toggleLowFX}
+                className={`flex items-center gap-2 px-4 py-1 border text-xs ${lowFX ? 'border-accent text-accent' : 'border-border-primary'}`}
+              >
+                {lowFX ? <><ZapOff size={14} /> ON</> : <><Zap size={14} /> OFF</>}
+              </button>
+            </div>
           </div>
         </div>
       )}
