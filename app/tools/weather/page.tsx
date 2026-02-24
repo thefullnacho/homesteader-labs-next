@@ -24,6 +24,7 @@ import SurvivalDashboard from "@/components/tools/weather/SurvivalDashboard";
 import PlantingDashboard from "@/components/tools/weather/PlantingDashboard";
 import ForecastGrid from "@/components/tools/weather/ForecastGrid";
 import WeatherChart from "@/components/tools/weather/WeatherChart";
+import HourlyChart from "@/components/tools/weather/HourlyChart";
 import MoonPhaseDisplay from "@/components/tools/weather/MoonPhaseDisplay";
 import GrowingSeasonTracker from "@/components/tools/weather/GrowingSeasonTracker";
 
@@ -171,20 +172,20 @@ export default function WeatherPage() {
           </div>
         </div>
 
-        {activeLocation ? (
-          <LocationManager 
-            locations={locations}
-            activeLocation={activeLocation}
-            onSwitch={switchLocation}
-            onAdd={(loc) => {
-              const previousCount = locations.length;
-              addLocation(loc);
-              if (previousCount === 1) setTimeout(() => showWeeklyCapture(), 500);
-            }}
-            onRemove={removeLocation}
-          />
-        ) : (
-          <BrutalistBlock className="p-12 text-center border-dashed border-border-primary/40">
+        <LocationManager 
+          locations={locations}
+          activeLocation={activeLocation}
+          onSwitch={switchLocation}
+          onAdd={(loc) => {
+            const previousCount = locations.length;
+            addLocation(loc);
+            if (previousCount === 1) setTimeout(() => showWeeklyCapture(), 500);
+          }}
+          onRemove={removeLocation}
+        />
+
+        {!activeLocation && (
+          <BrutalistBlock className="p-12 text-center border-dashed border-border-primary/40 mb-8">
             <Typography variant="body" className="opacity-40 font-mono uppercase text-sm">Waiting for coordinate input to initialize node...</Typography>
           </BrutalistBlock>
         )}
@@ -226,6 +227,10 @@ export default function WeatherPage() {
                   />
                 </div>
               )}
+            </div>
+
+            <div className="mb-8 p-6 bg-black/20 border-2 border-border-primary overflow-hidden">
+              <HourlyChart hourly={weather.forecast[0]?.hourly || []} />
             </div>
 
             <div className="space-y-4">

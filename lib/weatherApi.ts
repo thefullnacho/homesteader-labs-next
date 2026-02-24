@@ -17,6 +17,7 @@ interface OpenMeteoDaily {
   apparent_temperature_max: number[];
   apparent_temperature_min: number[];
   precipitation_sum: number[];
+  snowfall_sum: number[];
   precipitation_probability_max: number[];
   wind_speed_10m_max: number[];
   uv_index_max: number[];
@@ -32,6 +33,8 @@ interface OpenMeteoHourly {
   apparent_temperature: number[];
   relative_humidity_2m: number[];
   precipitation: number[];
+  snowfall: number[];
+  snow_depth: number[];
   precipitation_probability: number[];
   wind_speed_10m: number[];
   cloud_cover: number[];
@@ -109,6 +112,8 @@ export async function fetchWeatherData(
       "relative_humidity_2m",
       "apparent_temperature",
       "precipitation",
+      "snowfall",
+      "snow_depth",
       "precipitation_probability",
       "wind_speed_10m",
       "cloud_cover",
@@ -119,6 +124,7 @@ export async function fetchWeatherData(
       "apparent_temperature_max",
       "apparent_temperature_min",
       "precipitation_sum",
+      "snowfall_sum",
       "precipitation_probability_max",
       "wind_speed_10m_max",
       "uv_index_max",
@@ -169,6 +175,8 @@ function transformWeatherData(data: OpenMeteoResponse): WeatherData {
       feelsLike: hourly.apparent_temperature[index],
       humidity: hourly.relative_humidity_2m[index],
       precipitation: hourly.precipitation[index],
+      snowfall: hourly.snowfall ? hourly.snowfall[index] : 0,
+      snowDepth: hourly.snow_depth ? hourly.snow_depth[index] : 0,
       precipitationProbability: hourly.precipitation_probability[index],
       windSpeed: hourly.wind_speed_10m[index],
       cloudCover: hourly.cloud_cover[index],
@@ -189,6 +197,7 @@ function transformWeatherData(data: OpenMeteoResponse): WeatherData {
       minTemp: daily.temperature_2m_min[index],
       avgHumidity,
       precipitation: daily.precipitation_sum[index],
+      snowfall: daily.snowfall_sum ? daily.snowfall_sum[index] : 0,
       precipitationProbability: daily.precipitation_probability_max[index],
       windSpeed: daily.wind_speed_10m_max[index],
       uvIndex: daily.uv_index_max[index],

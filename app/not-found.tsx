@@ -11,7 +11,7 @@ export default function NotFoundPage() {
         <h1 className="text-2xl font-bold mb-2">
           &gt;&gt; NODE NOT FOUND
         </h1>
-        <p className="text-theme-secondary">
+        <p className="text-foreground-secondary">
           The requested sector does not exist in the archive.
           <br />
           The data may have been moved, corrupted, or never existed.

@@ -7,7 +7,7 @@ export default function RecentArchivePosts() {
 
   return (
     <section className="mb-12">
-      <div className="flex justify-between items-end mb-6 border-b-2 border-theme-main pb-2">
+      <div className="flex justify-between items-end mb-6 border-b-2 border-border-primary pb-2">
         <h2 className="text-xl font-bold uppercase">Latest_Field_Notes</h2>
         <Link 
           href="/archive/"
@@ -25,14 +25,14 @@ export default function RecentArchivePosts() {
             className="brutalist-block p-4 hover:shadow-brutalist-lg transition-all group flex gap-4 items-start"
           >
             {/* Icon */}
-            <div className="shrink-0 w-12 h-12 border border-theme-main flex items-center justify-center">
-              <FileText size={20} className="text-theme-main opacity-60" />
+            <div className="shrink-0 w-12 h-12 border border-border-primary flex items-center justify-center">
+              <FileText size={20} className="text-foreground-primary opacity-60" />
             </div>
 
             {/* Content */}
             <div className="flex-grow min-w-0">
               {/* Meta */}
-              <div className="flex items-center gap-3 mb-1 text-[10px] text-theme-secondary">
+              <div className="flex items-center gap-3 mb-1 text-[10px] text-foreground-secondary">
                 <span className="uppercase">{post.category}</span>
                 <span>{"//"}</span>
                 <span className="flex items-center gap-1">
@@ -47,7 +47,7 @@ export default function RecentArchivePosts() {
               </h3>
 
               {/* Excerpt */}
-              <p className="text-xs text-theme-secondary line-clamp-2">
+              <p className="text-xs text-foreground-secondary line-clamp-2">
                 {post.excerpt || post.description}
               </p>
 
@@ -57,7 +57,7 @@ export default function RecentArchivePosts() {
                   {post.tags.slice(0, 3).map((tag) => (
                     <span 
                       key={tag}
-                      className="text-[9px] border border-theme-main opacity-40 px-1"
+                      className="text-[9px] border border-border-primary opacity-40 px-1"
                     >
                       {tag}
                     </span>
@@ -76,7 +76,7 @@ export default function RecentArchivePosts() {
 
       {posts.length === 0 && (
         <div className="brutalist-block p-8 text-center">
-          <p className="text-theme-secondary">No field notes available.</p>
+          <p className="text-foreground-secondary">No field notes available.</p>
         </div>
       )}
     </section>

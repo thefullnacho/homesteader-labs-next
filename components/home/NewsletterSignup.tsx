@@ -33,7 +33,7 @@ export default function NewsletterSignup() {
                 <Terminal size={20} className="text-[var(--accent)]" />
                 <Typography variant="h3" className="mb-0">Stay_In_The_Loop</Typography>
               </div>
-              <Typography variant="small" className="text-theme-secondary mb-0">
+              <Typography variant="small" className="text-foreground-secondary mb-0">
                 Get field reports, new hardware drops, and survival tips. 
                 No spam. No tracking. Just signal.
               </Typography>
@@ -47,7 +47,7 @@ export default function NewsletterSignup() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="your@email.com"
-                  className="flex-grow md:w-64 px-3 py-2 bg-theme-sub border-2 border-theme-main text-theme-main placeholder:text-theme-secondary/50 focus:outline-none focus:border-[var(--accent)] font-mono text-sm"
+                  className="flex-grow md:w-64 px-3 py-2 bg-background-secondary border-2 border-border-primary text-foreground-primary placeholder:text-foreground-secondary/50 focus:outline-none focus:border-[var(--accent)] font-mono text-sm"
                 />
                 <Button
                   type="submit"
@@ -74,8 +74,8 @@ export default function NewsletterSignup() {
         </div>
 
         {/* Decorative terminal footer */}
-        <div className="border-t-2 border-[var(--accent)]/30 px-6 py-2 bg-theme-sub/30">
-          <p className="text-[10px] font-mono text-theme-secondary">
+        <div className="border-t-2 border-[var(--accent)]/30 px-6 py-2 bg-background-secondary/30">
+          <p className="text-[10px] font-mono text-foreground-secondary">
             ENCRYPTION: NONE | FREQUENCY: MONTHLY | UNSUBSCRIBE: ANYTIME
           </p>
         </div>

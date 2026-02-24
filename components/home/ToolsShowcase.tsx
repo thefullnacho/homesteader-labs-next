@@ -30,9 +30,9 @@ const IconMap = {
 export default function ToolsShowcase() {
   return (
     <section className="mb-12">
-      <div className="flex justify-between items-end mb-6 border-b-2 border-theme-main pb-2">
+      <div className="flex justify-between items-end mb-6 border-b-2 border-border-primary pb-2">
         <Typography variant="h3" className="mb-0">Field_Tools</Typography>
-        <span className="text-[10px] text-theme-secondary font-mono">
+        <span className="text-[10px] text-foreground-secondary font-mono">
           STATUS: OPERATIONAL
         </span>
       </div>
@@ -49,8 +49,8 @@ export default function ToolsShowcase() {
               <BrutalistBlock className="h-full">
                 <div className="flex items-start gap-4 h-full">
                   {/* Icon */}
-                  <div className="shrink-0 w-16 h-16 bg-theme-sub border-2 border-theme-main flex items-center justify-center">
-                    <ToolIcon size={32} className="text-theme-main" />
+                  <div className="shrink-0 w-16 h-16 bg-background-secondary border-2 border-border-primary flex items-center justify-center">
+                    <ToolIcon size={32} className="text-foreground-primary" />
                   </div>
 
                   {/* Content */}
@@ -64,7 +64,7 @@ export default function ToolsShowcase() {
                       </span>
                     </div>
 
-                    <Typography variant="small" className="text-theme-secondary mb-4 block">
+                    <Typography variant="small" className="text-foreground-secondary mb-4 block">
                       {tool.description}
                     </Typography>
 

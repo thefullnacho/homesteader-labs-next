@@ -3,6 +3,7 @@ import { Crop, Variety } from './types';
 export const crops: Crop[] = [
   {
     id: 'tomato',
+    lunarAffinity: 'waxing',
     name: 'Tomatoes',
     category: 'vegetable',
     icon: '🍅',
@@ -24,6 +25,7 @@ export const crops: Crop[] = [
   },
   {
     id: 'pepper-bell',
+    lunarAffinity: 'waxing',
     name: 'Bell Peppers',
     category: 'vegetable',
     icon: '🫑',
@@ -44,6 +46,7 @@ export const crops: Crop[] = [
   },
   {
     id: 'pepper-hot',
+    lunarAffinity: 'waxing',
     name: 'Hot Peppers',
     category: 'vegetable',
     icon: '🌶️',
@@ -64,6 +67,7 @@ export const crops: Crop[] = [
   },
   {
     id: 'cucumber',
+    lunarAffinity: 'waxing',
     name: 'Cucumbers',
     category: 'vegetable',
     icon: '🥒',
@@ -84,6 +88,7 @@ export const crops: Crop[] = [
   },
   {
     id: 'lettuce',
+    lunarAffinity: 'waxing',
     name: 'Lettuce',
     category: 'vegetable',
     icon: '🥬',
@@ -104,6 +109,7 @@ export const crops: Crop[] = [
   },
   {
     id: 'beans-bush',
+    lunarAffinity: 'waxing',
     name: 'Bush Beans',
     category: 'vegetable',
     icon: '🫘',
@@ -124,6 +130,7 @@ export const crops: Crop[] = [
   },
   {
     id: 'beans-pole',
+    lunarAffinity: 'waxing',
     name: 'Pole Beans',
     category: 'vegetable',
     icon: '🫘',
@@ -143,6 +150,7 @@ export const crops: Crop[] = [
   },
   {
     id: 'squash-summer',
+    lunarAffinity: 'waxing',
     name: 'Summer Squash',
     category: 'vegetable',
     icon: '🥒',
@@ -163,6 +171,7 @@ export const crops: Crop[] = [
   },
   {
     id: 'squash-winter',
+    lunarAffinity: 'waxing',
     name: 'Winter Squash',
     category: 'vegetable',
     icon: '🎃',
@@ -183,6 +192,7 @@ export const crops: Crop[] = [
   },
   {
     id: 'carrot',
+    lunarAffinity: 'waning',
     name: 'Carrots',
     category: 'vegetable',
     icon: '🥕',
@@ -203,6 +213,7 @@ export const crops: Crop[] = [
   },
   {
     id: 'radish',
+    lunarAffinity: 'waning',
     name: 'Radishes',
     category: 'vegetable',
     icon: '🥗',
@@ -223,6 +234,7 @@ export const crops: Crop[] = [
   },
   {
     id: 'spinach',
+    lunarAffinity: 'waxing',
     name: 'Spinach',
     category: 'vegetable',
     icon: '🍃',
@@ -242,6 +254,7 @@ export const crops: Crop[] = [
   },
   {
     id: 'kale',
+    lunarAffinity: 'waxing',
     name: 'Kale',
     category: 'vegetable',
     icon: '🥬',
@@ -262,6 +275,7 @@ export const crops: Crop[] = [
   },
   {
     id: 'broccoli',
+    lunarAffinity: 'waxing',
     name: 'Broccoli',
     category: 'vegetable',
     icon: '🥦',
@@ -282,6 +296,7 @@ export const crops: Crop[] = [
   },
   {
     id: 'onion',
+    lunarAffinity: 'waning',
     name: 'Onions',
     category: 'vegetable',
     icon: '🧅',
@@ -302,6 +317,7 @@ export const crops: Crop[] = [
   },
   {
     id: 'garlic',
+    lunarAffinity: 'waning',
     name: 'Garlic',
     category: 'vegetable',
     icon: '🧄',
@@ -322,6 +338,7 @@ export const crops: Crop[] = [
   },
   {
     id: 'potato',
+    lunarAffinity: 'waning',
     name: 'Potatoes',
     category: 'vegetable',
     icon: '🥔',
@@ -342,6 +359,7 @@ export const crops: Crop[] = [
   },
   {
     id: 'corn',
+    lunarAffinity: 'waxing',
     name: 'Corn',
     category: 'vegetable',
     icon: '🌽',
@@ -361,6 +379,7 @@ export const crops: Crop[] = [
   },
   {
     id: 'peas',
+    lunarAffinity: 'waxing',
     name: 'Peas',
     category: 'vegetable',
     icon: '🫛',
@@ -381,6 +400,7 @@ export const crops: Crop[] = [
   },
   {
     id: 'beets',
+    lunarAffinity: 'waning',
     name: 'Beets',
     category: 'vegetable',
     icon: '🟣',
@@ -401,6 +421,7 @@ export const crops: Crop[] = [
   },
   {
     id: 'chard',
+    lunarAffinity: 'waxing',
     name: 'Swiss Chard',
     category: 'vegetable',
     icon: '🥬',

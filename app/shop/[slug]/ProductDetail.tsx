@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useCart } from "../../context/CartContext";
 import { Plus, ExternalLink, Check, ChevronLeft } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import type { Product } from "@/lib/products";
 import FieldStationLayout from "@/components/ui/FieldStationLayout";
 import BrutalistBlock from "@/components/ui/BrutalistBlock";
@@ -50,11 +51,14 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                 ></div>
 
                 {product.image ? (
-                  <img 
-                    src={product.image} 
-                    alt={product.name}
-                    className="w-full h-full object-contain p-8 z-10"
-                  />
+                  <div className="relative w-full h-full p-8 z-10">
+                    <Image 
+                      src={product.image} 
+                      alt={product.name}
+                      fill
+                      className="object-contain"
+                    />
+                  </div>
                 ) : (
                   <div className="text-8xl opacity-10 grayscale z-10">📦</div>
                 )}

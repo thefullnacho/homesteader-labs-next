@@ -4,7 +4,7 @@ import Image from 'next/image';
 export function useMDXComponents(components: MDXComponents): MDXComponents {
   return {
     h1: ({ children }) => (
-      <h1 className="text-3xl md:text-4xl font-bold uppercase tracking-tight mb-6 border-b-2 border-theme-main pb-4">
+      <h1 className="text-3xl md:text-4xl font-bold uppercase tracking-tight mb-6 border-b-2 border-border-primary pb-4">
         {children}
       </h1>
     ),
@@ -19,17 +19,17 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
       </h3>
     ),
     p: ({ children }) => (
-      <p className="leading-relaxed mb-4 text-theme-secondary">
+      <p className="leading-relaxed mb-4 text-foreground-secondary">
         {children}
       </p>
     ),
     ul: ({ children }) => (
-      <ul className="list-disc list-inside mb-4 space-y-2 text-theme-secondary">
+      <ul className="list-disc list-inside mb-4 space-y-2 text-foreground-secondary">
         {children}
       </ul>
     ),
     ol: ({ children }) => (
-      <ol className="list-decimal list-inside mb-4 space-y-2 text-theme-secondary">
+      <ol className="list-decimal list-inside mb-4 space-y-2 text-foreground-secondary">
         {children}
       </ol>
     ),
@@ -39,12 +39,12 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
       </li>
     ),
     code: ({ children }) => (
-      <code className="bg-theme-sub px-1 py-0.5 text-sm font-mono border border-theme-main/30">
+      <code className="bg-background-secondary px-1 py-0.5 text-sm font-mono border border-border-primary/30">
         {children}
       </code>
     ),
     pre: ({ children }) => (
-      <pre className="bg-theme-sub p-4 overflow-x-auto mb-4 border border-theme-main font-mono text-sm">
+      <pre className="bg-background-secondary p-4 overflow-x-auto mb-4 border border-border-primary font-mono text-sm">
         {children}
       </pre>
     ),
@@ -57,7 +57,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
       </a>
     ),
     blockquote: ({ children }) => (
-      <blockquote className="border-l-4 border-[var(--accent)] pl-4 italic my-6 text-theme-secondary">
+      <blockquote className="border-l-4 border-[var(--accent)] pl-4 italic my-6 text-foreground-secondary">
         {children}
       </blockquote>
     ),
@@ -66,13 +66,13 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
         <img 
           src={src} 
           alt={alt} 
-          className="w-full border-2 border-theme-main inline-block"
+          className="w-full border-2 border-border-primary inline-block"
         />
         {alt && <p className="text-[10px] mt-2 opacity-40 font-mono uppercase tracking-widest">{alt}</p>}
       </div>
     ),
     hr: () => (
-      <hr className="border-theme-main my-8" />
+      <hr className="border-border-primary my-8" />
     ),
     ...components,
   };

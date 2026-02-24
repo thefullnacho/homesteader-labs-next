@@ -36,6 +36,7 @@ export interface ForecastDay {
   minTemp: number;
   avgHumidity: number;
   precipitation: number;
+  snowfall: number;
   precipitationProbability: number;
   windSpeed: number;
   uvIndex: number;
@@ -52,6 +53,8 @@ export interface HourlyForecast {
   feelsLike: number;
   humidity: number;
   precipitation: number;
+  snowfall: number;
+  snowDepth: number;
   precipitationProbability: number;
   windSpeed: number;
   cloudCover: number;
@@ -132,4 +135,5 @@ export interface SavedLocation {
   elevation?: number;
   notes?: string;
   isDefault?: boolean;
+  zipCode?: string;
 }

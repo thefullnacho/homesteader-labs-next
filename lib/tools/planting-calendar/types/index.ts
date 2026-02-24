@@ -14,6 +14,7 @@ export interface Crop {
   spacing: string;
   notes: string[];
   icon: string;
+  lunarAffinity?: 'waxing' | 'waning';
 }
 
 export interface Variety {
@@ -58,6 +59,8 @@ export interface PlantingDate {
   date: Date;
   successionNumber?: number;  // 1, 2, 3, etc. for succession plantings
   notes?: string[];
+  lunarPhase?: string;
+  lunarAligned?: boolean;
 }
 
 export interface CropSchedule {

@@ -105,22 +105,6 @@ const PlantingDashboard = ({ index }: PlantingDashboardProps) => {
               <Typography variant="small" className="opacity-30 italic mb-0 uppercase text-[10px] font-mono">No Sustainable Growth Detected</Typography>
             )}
           </BrutalistBlock>
-
-          <BrutalistBlock className="p-5 border-green-900/30" refTag="THERMAL_ACCUM">
-            <div className="flex justify-between items-center mb-4 opacity-80">
-              <Typography variant="small" className="uppercase font-bold text-[10px] mb-0 tracking-widest font-mono">Heat Unit Summation</Typography>
-              <Typography variant="small" className="font-mono text-[9px] mb-0 uppercase">{index.growingDegreeDays.current} {"/"} {index.growingDegreeDays.target} GDD</Typography>
-            </div>
-            <div className="w-full h-4 bg-background-secondary border-2 border-border-primary/20 overflow-hidden relative">
-              <div 
-                className="h-full bg-green-600 transition-all duration-1000 ease-out"
-                style={{ width: `${index.growingDegreeDays.percentage}%` }}
-              />
-              <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                <span className="text-[7px] font-bold font-mono text-white mix-blend-difference uppercase tracking-[0.2em]">Growing Degree Days Sum</span>
-              </div>
-            </div>
-          </BrutalistBlock>
         </div>
       </div>
 

@@ -8,10 +8,10 @@
   --bg-primary: #2d3336;
   --bg-secondary: #373e42;
   --text-primary: #E8D3BE;
-  --text-secondary: #E8D3BE;
+  --text-secondary: #b5a595;
   --border-primary: #d35400;
   --shadow-color: rgba(0, 0, 0, 0.6);
-  --accent: #d35400;
+  --accent: #ff7300;
   --terminal-glow: rgba(163, 193, 173, 0.15);
   
   --font-mono: 'Courier New', Courier, monospace;
@@ -25,6 +25,7 @@
   --text-secondary: #a8a29e;
   --border-primary: #d35400;
   --shadow-color: rgba(0,0,0,0.5);
+  --accent: #ff7300;
 }
 
 * {
@@ -48,14 +49,6 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
-
-/* Custom Theme Utilities */
-.text-theme-main { color: var(--text-primary); }
-.text-theme-sub { color: var(--text-secondary); }
-.text-contrast { color: #333333; }
-.bg-theme-main { background-color: var(--bg-primary); }
-.bg-theme-sub { background-color: var(--bg-secondary); }
-.border-theme-main { border-color: var(--text-primary); }
 
 /* Brutalist Block (Weathered Field Manual Style) */
 .brutalist-block {
@@ -259,4 +252,15 @@ canvas:not(.interactive) {
   z-index: 20;
   pointer-events: none;
   animation: scan-flash 35s infinite;
+}
+
+/* Global Print Styles */
+@media print {
+  body {
+    background: white !important;
+    color: black !important;
+  }
+  * {
+    box-shadow: none !important;
+  }
 }

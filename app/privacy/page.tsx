@@ -11,11 +11,11 @@ export default function PrivacyPage() {
   return (
     <div className="max-w-4xl mx-auto px-4 py-12">
       <BrutalistBlock variant="default" className="bg-secondary p-8 md:p-12">
-        <div className="border-b-2 border-theme-main pb-4 mb-8">
+        <div className="border-b-2 border-border-primary pb-4 mb-8">
           <Typography variant="h2" className="mb-0">
             Privacy Hash
           </Typography>
-          <p className="text-theme-secondary mt-2 font-mono text-sm">
+          <p className="text-foreground-secondary mt-2 font-mono text-sm">
             &gt;&gt; PRIVACY PROTOCOL
           </p>
         </div>
@@ -34,7 +34,7 @@ export default function PrivacyPage() {
             <h2 className="text-xl font-bold mb-4 uppercase border-l-4 border-[var(--accent)] pl-4">
               Data Collection
             </h2>
-            <p className="leading-relaxed text-theme-secondary">
+            <p className="leading-relaxed text-foreground-secondary">
               Homesteader Labs stores no cookies other than essential session data 
               (cart, boot state). We do not sell your data because we do not collect it.
             </p>
@@ -44,13 +44,13 @@ export default function PrivacyPage() {
             <h2 className="text-xl font-bold mb-4 uppercase border-l-4 border-[var(--accent)] pl-4">
               Stay Safe
             </h2>
-            <p className="leading-relaxed text-theme-secondary">
+            <p className="leading-relaxed text-foreground-secondary">
               Stay safe out there.
             </p>
           </section>
         </div>
 
-        <div className="mt-12 pt-6 border-t border-theme-main/30">
+        <div className="mt-12 pt-6 border-t border-border-primary/30">
           <p className="text-xs opacity-60 font-mono">
             ENCRYPTION: NULL<br />
             TRACKING: DISABLED<br />

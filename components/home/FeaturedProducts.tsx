@@ -7,7 +7,7 @@ export default function FeaturedProducts() {
 
   return (
     <section className="mb-12">
-      <div className="flex justify-between items-end mb-6 border-b-2 border-theme-main pb-2">
+      <div className="flex justify-between items-end mb-6 border-b-2 border-border-primary pb-2">
         <h2 className="text-xl font-bold uppercase">Featured_Hardware</h2>
         <Link 
           href="/shop/"
@@ -25,12 +25,12 @@ export default function FeaturedProducts() {
             className="brutalist-block p-4 hover:shadow-brutalist-lg transition-all group"
           >
             {/* Product Image Placeholder */}
-            <div className="h-32 bg-theme-sub border-b border-theme-main mb-4 flex items-center justify-center relative overflow-hidden">
+            <div className="h-32 bg-background-secondary border-b border-border-primary mb-4 flex items-center justify-center relative overflow-hidden">
               <div className="absolute top-2 left-2 text-[10px] font-bold opacity-50">
                 {product.id}
               </div>
-              <div className="w-16 h-16 border border-dashed border-theme-main rounded-full flex items-center justify-center">
-                <Cpu size={32} className="text-theme-main opacity-50" />
+              <div className="w-16 h-16 border border-dashed border-border-primary rounded-full flex items-center justify-center">
+                <Cpu size={32} className="text-foreground-primary opacity-50" />
               </div>
             </div>
 
@@ -44,12 +44,12 @@ export default function FeaturedProducts() {
               </span>
             </div>
 
-            <p className="text-xs text-theme-secondary mb-3 line-clamp-2">
+            <p className="text-xs text-foreground-secondary mb-3 line-clamp-2">
               {product.description}
             </p>
 
             <div className="flex items-center justify-between">
-              <span className="text-[9px] border border-theme-main opacity-40 px-1">
+              <span className="text-[9px] border border-border-primary opacity-40 px-1">
                 {product.category}
               </span>
               <span className="text-xs flex items-center gap-1 text-[var(--accent)] opacity-0 group-hover:opacity-100 transition-opacity">

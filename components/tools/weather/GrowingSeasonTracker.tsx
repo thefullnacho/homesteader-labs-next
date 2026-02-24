@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { TrendingUp, Leaf, ThermometerSun } from "lucide-react";
 import Typography from "@/components/ui/Typography";
+import BrutalistBlock from "@/components/ui/BrutalistBlock";
 import type { ForecastDay } from "@/lib/weatherTypes";
 
 interface GrowingSeasonProps {
@@ -86,66 +87,84 @@ export default function GrowingSeasonTracker({ forecast, locationName }: Growing
     : 100;
   
   return (
-    <div className="space-y-4">
-      <div className="flex items-center gap-2 mb-4">
-        <Leaf size={16} className="text-green-500" />
-        <Typography variant="small" className="font-mono font-bold uppercase text-[10px]">
-          Growing Season Tracker
-        </Typography>
-      </div>
-      
-      <div className="grid grid-cols-3 gap-4">
-        <div className="text-center p-3 bg-black/20 border border-border-primary">
-          <ThermometerSun size={20} className="mx-auto mb-2 text-orange-400" />
-          <Typography variant="h3" className="font-mono text-xl">{totalGDD}</Typography>
-          <Typography variant="small" className="font-mono text-[8px] opacity-60">CUMULATIVE GDD</Typography>
+    <BrutalistBlock className="p-6 border-green-900/40 bg-green-900/5" title="GROWING SEASON TRACKER" refTag="GDD_TRACKER_V1">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-4">
+        {/* Cumulative GDD */}
+        <div className="flex flex-col gap-2 border-l-2 border-border-primary/20 pl-4">
+          <div className="flex items-center gap-2 opacity-60">
+            <ThermometerSun size={14} className="text-orange-400" />
+            <Typography variant="small" className="font-mono text-[9px] uppercase tracking-widest mb-0">
+              Cumulative GDD
+            </Typography>
+          </div>
+          <div className="flex items-end gap-2">
+            <Typography variant="h3" className="font-mono text-3xl text-foreground-primary mb-0 leading-none">
+              {totalGDD}
+            </Typography>
+            <span className="text-[10px] font-mono opacity-40 uppercase mb-1">Base 50°F</span>
+          </div>
         </div>
         
-        <div className="text-center p-3 bg-black/20 border border-border-primary">
-          <TrendingUp size={20} className="mx-auto mb-2 text-green-500" />
-          <Typography variant="h3" className="font-mono text-xl">{daysSinceStart}</Typography>
-          <Typography variant="small" className="font-mono text-[8px] opacity-60">DAYS SINCE SPRING</Typography>
+        {/* Days Since Spring */}
+        <div className="flex flex-col gap-2 border-l-2 border-border-primary/20 pl-4">
+          <div className="flex items-center gap-2 opacity-60">
+            <TrendingUp size={14} className="text-green-500" />
+            <Typography variant="small" className="font-mono text-[9px] uppercase tracking-widest mb-0">
+              Days Since Spring
+            </Typography>
+          </div>
+          <div className="flex items-end gap-2">
+            <Typography variant="h3" className="font-mono text-3xl text-foreground-primary mb-0 leading-none">
+              {daysSinceStart}
+            </Typography>
+            <span className="text-[10px] font-mono opacity-40 uppercase mb-1">Days</span>
+          </div>
         </div>
         
-        <div className="text-center p-3 bg-black/20 border border-border-primary">
-          <Leaf size={20} className="mx-auto mb-2 text-accent" />
-          <Typography variant="h3" className="font-mono text-sm">{currentMilestone?.name || 'Peak'}</Typography>
-          <Typography variant="small" className="font-mono text-[8px] opacity-60">CURRENT STAGE</Typography>
+        {/* Current Stage */}
+        <div className="flex flex-col gap-2 border-l-2 border-border-primary/20 pl-4">
+          <div className="flex items-center gap-2 opacity-60">
+            <Leaf size={14} className="text-accent" />
+            <Typography variant="small" className="font-mono text-[9px] uppercase tracking-widest mb-0">
+              Current Stage
+            </Typography>
+          </div>
+          <div>
+            <Typography variant="h3" className="font-mono text-lg text-accent uppercase mb-1 tracking-tighter">
+              {currentMilestone?.name || 'Peak'}
+            </Typography>
+            <div className="flex gap-1 mt-1">
+              {currentMilestone?.crops.map((emoji, i) => (
+                <span key={i} className="text-sm bg-black/20 border border-border-primary/30 p-1 rounded-sm">{emoji}</span>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
       
       {/* Progress bar to next milestone */}
       {nextMilestone && (
-        <div className="mt-4">
-          <div className="flex justify-between text-[8px] font-mono opacity-60 mb-1">
-            <span>{currentMilestone?.name}</span>
-            <span>{nextMilestone.name} ({nextMilestone.gdd} GDD)</span>
+        <div className="mt-8 pt-6 border-t border-border-primary/10">
+          <div className="flex justify-between items-end mb-2">
+            <Typography variant="small" className="font-mono text-[9px] uppercase opacity-60 mb-0">
+              Progress to {nextMilestone.name}
+            </Typography>
+            <span className="text-[9px] font-mono font-bold text-accent">
+              {nextMilestone.gdd - totalGDD} GDD REMAINING
+            </span>
           </div>
-          <div className="h-2 bg-black/40 border border-border-primary overflow-hidden">
+          <div className="w-full h-2 bg-background-secondary border border-border-primary/20 overflow-hidden">
             <div 
-              className="h-full bg-gradient-to-r from-green-600 to-accent transition-all duration-500"
+              className="h-full bg-accent transition-all duration-1000 ease-in-out"
               style={{ width: `${Math.min(progressToNext, 100)}%` }}
             />
           </div>
-          <Typography variant="small" className="font-mono text-[8px] opacity-40 mt-1">
-            {nextMilestone.gdd - totalGDD} GDD until {nextMilestone.name}
-          </Typography>
-        </div>
-      )}
-      
-      {/* Current stage crops */}
-      {currentMilestone && (
-        <div className="mt-3 p-3 bg-black/20 border border-border-primary">
-          <Typography variant="small" className="font-mono text-[8px] opacity-60 mb-2">
-            RECOMMENDED PLANTING:
-          </Typography>
-          <div className="flex gap-2">
-            {currentMilestone.crops.map((emoji, i) => (
-              <span key={i} className="text-xl">{emoji}</span>
-            ))}
+          <div className="flex justify-between text-[8px] font-mono uppercase opacity-30 mt-1">
+            <span>{currentMilestone?.name} ({currentMilestone?.gdd || 0})</span>
+            <span>{nextMilestone.name} ({nextMilestone.gdd})</span>
           </div>
         </div>
       )}
-    </div>
+    </BrutalistBlock>
   );
 }

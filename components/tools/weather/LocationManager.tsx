@@ -10,7 +10,7 @@ import { geocodeLocation, geocodeZipCode, parseCoordinates } from "@/lib/weather
 
 interface LocationManagerProps {
   locations: SavedLocation[];
-  activeLocation: SavedLocation;
+  activeLocation?: SavedLocation | null;
   onSwitch: (id: string) => void;
   onAdd: (loc: Omit<SavedLocation, 'id'>) => void;
   onRemove: (id: string) => void;
@@ -55,18 +55,20 @@ const LocationManager = ({ locations, activeLocation, onSwitch, onAdd, onRemove 
   return (
     <div className="mb-8">
       <div className="flex flex-wrap gap-2 items-center">
-        <div className="flex items-center gap-3 bg-black/40 border-2 border-border-primary p-2 px-4 mr-2">
-          <MapPin size={14} className="text-accent" />
-          <Typography variant="h4" className="mb-0 text-xs font-mono tracking-tighter uppercase">{activeLocation.name}</Typography>
-          <span className="text-[9px] font-mono opacity-30">[{activeLocation.lat.toFixed(2)}, {activeLocation.lon.toFixed(2)}]</span>
-        </div>
+        {activeLocation && (
+          <div className="flex items-center gap-3 bg-black/40 border-2 border-border-primary p-2 px-4 mr-2">
+            <MapPin size={14} className="text-accent" />
+            <Typography variant="h4" className="mb-0 text-xs font-mono tracking-tighter uppercase">{activeLocation.name}</Typography>
+            <span className="text-[9px] font-mono opacity-30">[{activeLocation.lat.toFixed(2)}, {activeLocation.lon.toFixed(2)}]</span>
+          </div>
+        )}
 
         {locations.map((loc) => (
           <div key={loc.id} className="relative group">
             <button
               onClick={() => onSwitch(loc.id)}
               className={`h-9 px-4 text-[9px] font-bold font-mono uppercase border-2 transition-all ${
-                activeLocation.id === loc.id
+                activeLocation?.id === loc.id
                   ? "bg-accent text-white border-accent"
                   : "border-border-primary/30 hover:border-border-primary bg-background-secondary/50"
               } ${locations.length > 1 ? "pr-8" : ""}`}

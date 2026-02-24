@@ -24,7 +24,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="min-h-screen bg-theme-bg text-theme-main font-mono flex flex-col relative overflow-x-hidden transition-colors duration-300">
+      <body className="min-h-screen bg-background-primary text-foreground-primary font-mono flex flex-col relative overflow-x-hidden transition-colors duration-300">
         <Providers>
           <VisualEffects />
           <Navigation />

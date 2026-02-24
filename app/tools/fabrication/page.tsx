@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import { Upload, Box, Clock, Weight, AlertCircle } from "lucide-react";
 import dynamic from "next/dynamic";
 
@@ -23,6 +23,7 @@ import {
   formatPrintTime,
 } from "@/lib/fabricationTypes";
 import type { FilamentType, PrintSettings, PrintEstimate } from "@/lib/fabricationTypes";
+import { getStoredFile, setStoredFile, clearStoredFile } from "@/lib/indexedDB";
 import FieldStationLayout from "@/components/ui/FieldStationLayout";
 import BrutalistBlock from "@/components/ui/BrutalistBlock";
 import Typography from "@/components/ui/Typography";
@@ -40,6 +41,14 @@ export default function FabricationPage() {
   const [error, setError] = useState<string | null>(null);
   const [hasVolume, setHasVolume] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    getStoredFile().then(storedFile => {
+      if (storedFile) {
+        setFile(storedFile);
+      }
+    });
+  }, []);
 
   const handleVolumeCalculated = useCallback((volumeCm3: number, dims: { x: number; y: number; z: number }) => {
     setHasVolume(true);
@@ -62,6 +71,7 @@ export default function FabricationPage() {
     const droppedFile = e.dataTransfer.files[0];
     if (droppedFile && droppedFile.name.toLowerCase().endsWith(".stl")) {
       setFile(droppedFile);
+      setStoredFile(droppedFile);
       setError(null);
     } else {
       setError("Please upload a valid STL file");
@@ -72,6 +82,7 @@ export default function FabricationPage() {
     const selectedFile = e.target.files?.[0];
     if (selectedFile && selectedFile.name.toLowerCase().endsWith(".stl")) {
       setFile(selectedFile);
+      setStoredFile(selectedFile);
       setError(null);
     } else {
       setError("Please upload a valid STL file");
@@ -107,6 +118,7 @@ export default function FabricationPage() {
     setDimensions(null);
     setError(null);
     setHasVolume(false);
+    clearStoredFile();
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
