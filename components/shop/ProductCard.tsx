@@ -2,6 +2,7 @@
 
 import { FileText, Unlock, Cpu, ChevronRight, Plus } from "lucide-react";
 import { useCart } from "@/app/context/CartContext";
+import Image from "next/image";
 import BrutalistBlock from "@/components/ui/BrutalistBlock";
 import Button from "@/components/ui/Button";
 import Typography from "@/components/ui/Typography";
@@ -62,13 +63,15 @@ export default function ProductCard({ product }: ProductCardProps) {
         ></div>
 
         {product.image && product.image.startsWith('/') ? (
-          <img 
-            src={product.image} 
-            alt={product.name}
-            loading="lazy"
-            decoding="async"
-            className="w-32 h-32 object-contain z-10 group-hover:scale-110 transition-transform duration-500"
-          />
+          <div className="relative w-32 h-32 z-10 group-hover:scale-110 transition-transform duration-500">
+            <Image 
+              src={product.image} 
+              alt={product.name}
+              fill
+              sizes="(max-width: 768px) 100vw, 128px"
+              className="object-contain"
+            />
+          </div>
         ) : (
           <div 
             className="w-24 h-24 border-2 border-dashed border-border-primary/50 rounded-full flex items-center justify-center bg-background-primary/50 z-10 group-hover:scale-110 transition-transform duration-500" 

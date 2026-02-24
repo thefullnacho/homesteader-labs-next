@@ -340,7 +340,7 @@ export default function STLViewer({ file, onVolumeCalculated, onError }: STLView
   return (
     <div 
       ref={containerRef} 
-      className="w-full h-full min-h-[400px] border-2 border-theme-main bg-theme-sub relative"
+      className="w-full h-full min-h-[400px] border-2 border-border-primary bg-background-secondary relative"
     >
       {isLoading && (
         <div className="absolute inset-0 flex items-center justify-center bg-black/50 z-10">

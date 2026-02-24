@@ -1,4 +1,5 @@
 import { Crop, Variety, FrostDates, PlantingDate, SelectedCrop } from './types';
+import { getMoonPhase } from '@/lib/weatherApi';
 
 /**
  * Calculate all planting dates for a selected crop
@@ -7,14 +8,15 @@ export function calculateCropSchedule(
   crop: Crop,
   variety: Variety,
   selectedCrop: SelectedCrop,
-  frostDates: FrostDates
+  frostDates: FrostDates,
+  lunarSync: boolean = false
 ): PlantingDate[] {
   const dates: PlantingDate[] = [];
   const lastFrost = new Date(frostDates.lastSpringFrost);
   const firstFrost = new Date(frostDates.firstFallFrost);
 
   // Calculate main planting dates
-  const mainDates = calculateSinglePlanting(crop, variety, lastFrost, firstFrost, 0);
+  const mainDates = calculateSinglePlanting(crop, variety, lastFrost, firstFrost, 0, lunarSync);
   dates.push(...mainDates);
 
   // Calculate succession plantings if enabled
@@ -26,7 +28,7 @@ export function calculateCropSchedule(
 
     for (let i = 1; i < maxPlantings; i++) {
       const successionDates = calculateSinglePlanting(
-        crop, variety, lastFrost, firstFrost, i * interval
+        crop, variety, lastFrost, firstFrost, i * interval, lunarSync
       );
       
       // Add succession number to each date
@@ -49,10 +51,32 @@ function calculateSinglePlanting(
   variety: Variety,
   lastFrost: Date,
   firstFrost: Date,
-  weeksDelay: number
+  weeksDelay: number,
+  lunarSync: boolean = false
 ): PlantingDate[] {
   const dates: PlantingDate[] = [];
   const delayDays = weeksDelay * 7;
+
+  // Calculate harvest date first to check if planting is viable
+  const maturityDays = variety.daysToMaturity || crop.daysToMaturity;
+  const plantingDate = crop.directSow !== null
+    ? addDays(lastFrost, crop.directSow + delayDays)
+    : addDays(lastFrost, crop.transplant! + delayDays);
+  
+  const harvestDate = addDays(plantingDate, maturityDays);
+  
+  // If the crop won't mature before the first frost, do not schedule planting events
+  if (!isDateBefore(harvestDate, firstFrost)) {
+    return [];
+  }
+
+  const evaluateLunar = (date: Date): { lunarPhase?: string, lunarAligned?: boolean } => {
+    if (!lunarSync || !crop.lunarAffinity) return {};
+    const moon = getMoonPhase(date);
+    const isWaxing = ['new', 'waxing_crescent', 'first_quarter', 'waxing_gibbous'].includes(moon.phase);
+    const aligned = crop.lunarAffinity === 'waxing' ? isWaxing : !isWaxing;
+    return { lunarPhase: moon.emoji, lunarAligned: aligned };
+  };
 
   // Calculate start indoors date
   if (crop.startIndoors !== null) {
@@ -64,7 +88,8 @@ function calculateSinglePlanting(
         varietyName: variety.name,
         action: 'start-indoors',
         date: startIndoorsDate,
-        notes: [`Start indoors ${crop.startIndoors} days before last frost`]
+        notes: [`Start indoors ${crop.startIndoors} days before last frost`],
+        ...evaluateLunar(startIndoorsDate)
       });
     }
   }
@@ -96,29 +121,21 @@ function calculateSinglePlanting(
         date: directSowDate,
         notes: crop.directSow < 0 
           ? [`Direct sow ${Math.abs(crop.directSow)} days before last frost`]
-          : [`Direct sow ${crop.directSow} days after last frost`]
+          : [`Direct sow ${crop.directSow} days after last frost`],
+        ...evaluateLunar(directSowDate)
       });
     }
   }
 
-  // Calculate harvest date
-  const maturityDays = variety.daysToMaturity || crop.daysToMaturity;
-  const plantingDate = crop.directSow !== null
-    ? addDays(lastFrost, crop.directSow + delayDays)
-    : addDays(lastFrost, crop.transplant! + delayDays);
-  
-  const harvestDate = addDays(plantingDate, maturityDays);
-  
-  if (isDateBefore(harvestDate, firstFrost)) {
-    dates.push({
-      cropId: crop.id,
-      cropName: crop.name,
-      varietyName: variety.name,
-      action: 'harvest',
-      date: harvestDate,
-      notes: [`Expect harvest in ${maturityDays} days`]
-    });
-  }
+  // Add harvest date
+  dates.push({
+    cropId: crop.id,
+    cropName: crop.name,
+    varietyName: variety.name,
+    action: 'harvest',
+    date: harvestDate,
+    notes: [`Expect harvest in ${maturityDays} days`]
+  });
 
   return dates;
 }
@@ -133,6 +150,8 @@ function calculateMaxSuccessionPlantings(
   firstFrost: Date,
   intervalWeeks: number
 ): number {
+  if (intervalWeeks <= 0) return 1;
+
   const maturityDays = variety.daysToMaturity || crop.daysToMaturity;
   const intervalDays = intervalWeeks * 7;
   
@@ -151,10 +170,12 @@ function calculateMaxSuccessionPlantings(
   
   // Calculate how many intervals fit
   const daysAvailable = getDaysBetween(plantDate, lastPlantDate);
+  if (daysAvailable <= 0) return 1;
+
   const maxIntervals = Math.floor(daysAvailable / intervalDays);
   
-  // Return minimum of calculated max and crop's max
-  return Math.min(maxIntervals + 1, crop.successionMax);
+  // Return minimum of calculated max and crop's max, ensuring at least 1
+  return Math.max(1, Math.min(maxIntervals + 1, crop.successionMax));
 }
 
 /**

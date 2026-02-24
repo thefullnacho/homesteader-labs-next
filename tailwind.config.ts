@@ -25,12 +25,6 @@ const config: Config = {
         terminal: {
           glow: 'var(--terminal-glow)',
         },
-        // Keeping legacy names for compatibility during transition
-        'theme-main': 'var(--text-primary)',
-        'theme-bg': 'var(--bg-primary)',
-        'theme-sub': 'var(--bg-secondary)',
-        'theme-accent': 'var(--accent)',
-        'theme-secondary': 'var(--text-secondary)',
       },
       fontFamily: {
         mono: ['var(--font-mono)', 'Courier New', 'Courier', 'monospace'],

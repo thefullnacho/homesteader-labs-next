@@ -68,7 +68,7 @@ export default function EmailCapture({
   if (isSuccess) {
     return (
       <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-        <div className="brutalist-block bg-theme-bg max-w-md w-full p-6 text-center">
+        <div className="brutalist-block bg-background-primary max-w-md w-full p-6 text-center">
           <div className="flex justify-center mb-4">
             <div className="w-16 h-16 bg-green-600 rounded-full flex items-center justify-center">
               <CheckCircle size={32} className="text-white" />
@@ -85,13 +85,13 @@ export default function EmailCapture({
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className={`brutalist-block bg-theme-bg max-w-md w-full p-6 relative ${
+      <div className={`brutalist-block bg-background-primary max-w-md w-full p-6 relative ${
         currentContent.urgency ? 'border-red-500' : ''
       }`}>
         {/* Close button */}
         <button 
           onClick={onDismiss}
-          className="absolute top-3 right-3 p-1 hover:bg-theme-sub transition-colors"
+          className="absolute top-3 right-3 p-1 hover:bg-background-secondary transition-colors"
           aria-label="Dismiss"
         >
           <X size={18} />
@@ -120,7 +120,7 @@ export default function EmailCapture({
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="homesteader@example.com"
-                className="w-full bg-theme-sub border border-theme-main pl-10 pr-3 py-2 text-sm focus:outline-none focus:border-[var(--accent)]"
+                className="w-full bg-background-secondary border border-border-primary pl-10 pr-3 py-2 text-sm focus:outline-none focus:border-[var(--accent)]"
                 required
               />
             </div>
@@ -162,7 +162,7 @@ export default function EmailCapture({
         </form>
 
         {/* Trust signals */}
-        <div className="mt-4 pt-3 border-t border-theme-main/30 text-[10px] opacity-50 text-center">
+        <div className="mt-4 pt-3 border-t border-border-primary/30 text-[10px] opacity-50 text-center">
           <p>🔒 We never share your email. Powered by Homesteader Labs.</p>
         </div>
       </div>

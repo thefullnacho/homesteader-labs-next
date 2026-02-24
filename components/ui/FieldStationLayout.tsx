@@ -1,4 +1,7 @@
+"use client";
+
 import React from 'react';
+import { useFieldStation } from '@/app/context/FieldStationContext';
 
 interface FieldStationLayoutProps {
   children: React.ReactNode;
@@ -13,6 +16,8 @@ const FieldStationLayout = ({
   stationId = 'HL_GEN_01',
   gridLines = true,
 }: FieldStationLayoutProps) => {
+  const { activeLocation } = useFieldStation();
+
   return (
     <div className={`relative min-h-screen w-full p-4 md:p-8 ${className}`}>
       {/* Background Grid Lines */}
@@ -44,8 +49,8 @@ const FieldStationLayout = ({
           </div>
           <div className="flex gap-4 text-[10px] font-mono opacity-60">
             <div className="flex flex-col items-end">
-              <span>LAT: 45.523062</span>
-              <span>LON: -122.676482</span>
+              <span>LAT: {activeLocation ? activeLocation.lat.toFixed(6) : "45.523062"}</span>
+              <span>LON: {activeLocation ? activeLocation.lon.toFixed(6) : "-122.676482"}</span>
             </div>
             <div className="hidden sm:flex flex-col items-end">
               <span>REF_SYS: WGS84</span>

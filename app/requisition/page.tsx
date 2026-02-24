@@ -3,7 +3,11 @@
 import { useState } from "react";
 import { useCart } from "../context/CartContext";
 import { Trash2, Plus, Minus, FileText, AlertTriangle, CheckCircle, Cpu, ExternalLink } from "lucide-react";
-import Link from "next/link";
+import BrutalistBlock from "@/components/ui/BrutalistBlock";
+import Typography from "@/components/ui/Typography";
+import Button from "@/components/ui/Button";
+import Badge from "@/components/ui/Badge";
+import FieldStationLayout from "@/components/ui/FieldStationLayout";
 
 export default function RequisitionPage() {
   const { 
@@ -55,138 +59,126 @@ export default function RequisitionPage() {
 
   if (isRequisitionSubmitted) {
     return (
-      <div className="max-w-4xl mx-auto px-4 py-8">
-        <div className="brutalist-block border-green-600 p-8 text-center">
-          <div className="flex justify-center mb-4">
-            <div className="w-16 h-16 bg-green-600 rounded-full flex items-center justify-center">
-              <CheckCircle size={32} className="text-white" />
-            </div>
-          </div>
-          <h1 className="text-2xl font-bold uppercase mb-2">Requisition Submitted</h1>
-          <p className="text-sm opacity-70 mb-4">Your request has been logged in the system</p>
-          
-          <div className="bg-theme-sub p-4 mb-6 inline-block">
-            <p className="text-xs uppercase opacity-60">Requisition ID</p>
-            <p className="text-xl font-mono font-bold">{generateReqId()}</p>
-          </div>
-
-          <div className="text-left max-w-md mx-auto mb-6 space-y-2">
-            <p className="text-xs uppercase border-b border-theme-main/30 pb-1">Summary</p>
-            {items.map((item) => (
-              <div key={item.product.id} className="flex justify-between text-sm">
-                <span>{item.product.id} x{item.quantity}</span>
-                <span>${(item.product.price * item.quantity).toFixed(2)}</span>
-              </div>
-            ))}
-            <div className="border-t border-theme-main/30 pt-2 mt-2">
-              <div className="flex justify-between font-bold">
-                <span>TOTAL</span>
-                <span>${totalPrice.toFixed(2)}</span>
+      <FieldStationLayout stationId="HL_REQ_CONFIRM">
+        <div className="max-w-4xl mx-auto space-y-8">
+          <BrutalistBlock className="border-green-600 p-8 text-center" variant="default">
+            <div className="flex justify-center mb-4">
+              <div className="w-16 h-16 bg-green-600 rounded-full flex items-center justify-center">
+                <CheckCircle size={32} className="text-white" />
               </div>
             </div>
-          </div>
+            <Typography variant="h2" className="mb-2">Requisition Submitted</Typography>
+            <Typography variant="small" className="opacity-70 mb-4 block">Your request has been logged in the system</Typography>
+            
+            <div className="bg-background-secondary p-4 mb-6 inline-block">
+              <Typography variant="small" className="opacity-60 mb-0 uppercase">Requisition ID</Typography>
+              <Typography variant="h3" className="font-mono mb-0">{generateReqId()}</Typography>
+            </div>
 
-          <p className="text-xs opacity-60 mb-6">
-            You will receive a confirmation email with payment instructions within 24 hours.
-          </p>
+            <div className="text-left max-w-md mx-auto mb-6 space-y-2">
+              <Typography variant="small" className="border-b border-border-primary/30 pb-1 mb-2 block uppercase">Summary</Typography>
+              {items.map((item) => (
+                <div key={item.product.id} className="flex justify-between text-sm font-mono uppercase">
+                  <span>{item.product.id} x{item.quantity}</span>
+                  <span>${(item.product.price * item.quantity).toFixed(2)}</span>
+                </div>
+              ))}
+              <div className="border-t border-border-primary/30 pt-2 mt-2">
+                <div className="flex justify-between font-bold font-mono">
+                  <span>TOTAL</span>
+                  <span>${totalPrice.toFixed(2)}</span>
+                </div>
+              </div>
+            </div>
 
-          <div className="flex gap-4 justify-center">
-            <Link 
-              href="/shop/"
-              className="border border-theme-main px-6 py-2 text-sm hover:bg-[var(--accent)] hover:text-white transition-colors"
-            >
-              Return to Shop
-            </Link>
-            <button 
-              onClick={clearCart}
-              className="border border-green-600 text-green-600 px-6 py-2 text-sm hover:bg-green-600 hover:text-white transition-colors"
-            >
-              New Requisition
-            </button>
-          </div>
+            <Typography variant="small" className="opacity-60 mb-6 block">
+              You will receive a confirmation email with payment instructions within 24 hours.
+            </Typography>
+
+            <div className="flex gap-4 justify-center">
+              <Button href="/shop/" variant="outline">
+                Return to Shop
+              </Button>
+              <Button onClick={clearCart} variant="primary" className="bg-green-600 hover:bg-green-700 border-green-600 text-white">
+                New Requisition
+              </Button>
+            </div>
+          </BrutalistBlock>
         </div>
-      </div>
+      </FieldStationLayout>
     );
   }
 
   if (items.length === 0) {
     return (
-      <div className="max-w-4xl mx-auto px-4 py-8">
-        <div className="mb-8 border-b-2 border-theme-main pb-2 bg-theme-sub/50 p-4">
-          <h1 className="text-2xl font-bold uppercase">Requisition_Form</h1>
-          <p className="text-xs text-theme-secondary mt-1">
-            Hardware Request Documentation System
-          </p>
+      <FieldStationLayout stationId="HL_REQ_EMPTY">
+        <div className="max-w-4xl mx-auto space-y-8">
+          <BrutalistBlock className="p-12 text-center" variant="default">
+            <FileText size={48} className="mx-auto mb-4 opacity-30" />
+            <Typography variant="h2" className="mb-2 uppercase">No Active Requisitions</Typography>
+            <Typography variant="body" className="opacity-60 mb-6">
+              Your requisition form is empty. Browse the hardware index to add items.
+            </Typography>
+            <Button href="/shop/" variant="primary">
+              Browse Hardware
+            </Button>
+          </BrutalistBlock>
         </div>
-
-        <div className="brutalist-block p-12 text-center">
-          <FileText size={48} className="mx-auto mb-4 opacity-30" />
-          <h2 className="text-xl font-bold uppercase mb-2">No Active Requisitions</h2>
-          <p className="text-sm opacity-60 mb-6">
-            Your requisition form is empty. Browse the hardware index to add items.
-          </p>
-          <Link 
-            href="/shop/"
-            className="inline-block border border-theme-main px-6 py-2 text-sm hover:bg-[var(--accent)] hover:text-white transition-colors"
-          >
-            Browse Hardware
-          </Link>
-        </div>
-      </div>
+      </FieldStationLayout>
     );
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-8">
-      {/* Header */}
-      <div className="mb-8 border-b-2 border-theme-main pb-2 bg-theme-sub/50 p-4">
-        <div className="flex justify-between items-end">
-          <div>
-            <h1 className="text-2xl font-bold uppercase flex items-center gap-2">
-              <FileText size={24} className="text-[var(--accent)]" />
-              Requisition_Form
-            </h1>
-            <p className="text-xs text-theme-secondary mt-1">
-              Hardware Request Documentation System | REV 2.4.1
-            </p>
-          </div>
-          <div className="text-[10px] text-theme-secondary text-right">
-            <p>REQ_ID: {generateReqId()}</p>
-            <p>STATUS: PENDING_APPROVAL</p>
-          </div>
-        </div>
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Left Column - Line Items */}
-        <div className="lg:col-span-2 space-y-4">
-          <div className="brutalist-block p-4">
-            <div className="flex justify-between items-center mb-4 border-b border-theme-main/30 pb-2">
-              <h2 className="text-sm font-bold uppercase">Line Items ({totalItems})</h2>
-              <button
-                onClick={handleClear}
-                className={`text-xs px-3 py-1 transition-colors ${
-                  showConfirmClear 
-                    ? 'bg-red-600 text-white' 
-                    : 'border border-red-600 text-red-600 hover:bg-red-600 hover:text-white'
-                }`}
-              >
-                {showConfirmClear ? 'CONFIRM CLEAR' : 'CLEAR ALL'}
-              </button>
+    <FieldStationLayout stationId="HL_REQ_ACTIVE">
+      <div className="max-w-7xl mx-auto space-y-8">
+        {/* Header */}
+        <BrutalistBlock className="p-6 bg-background-primary/40 border-accent/20" variant="default" refTag="SYS_REQUISITION">
+          <div className="flex justify-between items-end">
+            <div>
+              <Typography variant="h2" className="mb-1 uppercase tracking-tighter flex items-center gap-3">
+                <FileText size={24} className="text-accent" />
+                Requisition_Form
+              </Typography>
+              <Typography variant="small" className="opacity-40 font-mono text-[9px] uppercase tracking-widest">
+                Hardware Request Documentation System | REV 2.4.1
+              </Typography>
             </div>
+            <div className="text-[10px] text-foreground-secondary text-right font-mono uppercase">
+              <p>REQ_ID: {generateReqId()}</p>
+              <Badge variant="status" className="mt-1">PENDING_APPROVAL</Badge>
+            </div>
+          </div>
+        </BrutalistBlock>
 
-            <div className="space-y-3">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Left Column - Line Items */}
+          <div className="lg:col-span-2 space-y-4">
+            <BrutalistBlock className="p-6" title={`Line Items (${totalItems})`}>
+              <div className="flex justify-end mb-4 border-b border-border-primary/30 pb-2 -mt-10">
+                <button
+                  onClick={handleClear}
+                  className={`text-xs px-3 py-1 font-mono uppercase font-bold transition-colors ${
+                    showConfirmClear 
+                      ? 'bg-red-600 text-white' 
+                      : 'border border-red-600 text-red-600 hover:bg-red-600 hover:text-white'
+                  }`}
+                >
+                  {showConfirmClear ? 'CONFIRM CLEAR' : 'CLEAR ALL'}
+                </button>
+              </div>
+
+              <div className="space-y-3">
               {items.map((item) => (
                 <div 
                   key={item.product.id} 
-                  className="border border-theme-main/40 p-3 hover:border-theme-main transition-colors"
+                  className="border border-border-primary/40 p-3 hover:border-border-primary transition-colors"
                 >
                   <div className="flex justify-between items-start mb-2">
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-1">
                         <Cpu size={14} className="text-[var(--accent)]" />
                         <span className="font-bold text-sm">{item.product.id}</span>
-                        <span className="text-[10px] px-1 bg-theme-sub border border-theme-main/30">
+                        <span className="text-[10px] px-1 bg-background-secondary border border-border-primary/30">
                           {item.product.category}
                         </span>
                       </div>
@@ -205,7 +197,7 @@ export default function RequisitionPage() {
                     <div className="flex items-center gap-2">
                       <button
                         onClick={() => updateQuantity(item.product.id, item.quantity - 1)}
-                        className="w-6 h-6 border border-theme-main flex items-center justify-center hover:bg-[var(--accent)] hover:text-white transition-colors"
+                        className="w-6 h-6 border border-border-primary flex items-center justify-center hover:bg-[var(--accent)] hover:text-white transition-colors"
                         aria-label="Decrease quantity"
                       >
                         <Minus size={12} />
@@ -213,7 +205,7 @@ export default function RequisitionPage() {
                       <span className="w-8 text-center font-mono text-sm">{item.quantity}</span>
                       <button
                         onClick={() => updateQuantity(item.product.id, item.quantity + 1)}
-                        className="w-6 h-6 border border-theme-main flex items-center justify-center hover:bg-[var(--accent)] hover:text-white transition-colors"
+                        className="w-6 h-6 border border-border-primary flex items-center justify-center hover:bg-[var(--accent)] hover:text-white transition-colors"
                         aria-label="Increase quantity"
                       >
                         <Plus size={12} />
@@ -234,15 +226,14 @@ export default function RequisitionPage() {
                 </div>
               ))}
             </div>
-          </div>
+          </BrutalistBlock>
         </div>
 
         {/* Right Column - Summary & Submission */}
         <div className="space-y-4">
           {/* Cost Summary */}
-          <div className="brutalist-block p-4">
-            <h2 className="text-sm font-bold uppercase mb-4">Cost Analysis</h2>
-            <div className="space-y-2 text-sm">
+          <BrutalistBlock className="p-4" title="Cost Analysis">
+            <div className="space-y-2 text-sm font-mono uppercase">
               <div className="flex justify-between">
                 <span className="opacity-70">Subtotal</span>
                 <span>${totalPrice.toFixed(2)}</span>
@@ -255,19 +246,17 @@ export default function RequisitionPage() {
                 <span className="opacity-70">Shipping</span>
                 <span>Calculated at fulfillment</span>
               </div>
-              <div className="border-t border-theme-main/30 pt-2 mt-2">
+              <div className="border-t border-border-primary/30 pt-2 mt-2">
                 <div className="flex justify-between font-bold text-lg">
                   <span>ESTIMATED TOTAL</span>
-                  <span>${totalPrice.toFixed(2)}+</span>
+                  <span className="text-accent">${totalPrice.toFixed(2)}+</span>
                 </div>
               </div>
             </div>
-          </div>
+          </BrutalistBlock>
 
           {/* Submission Form */}
-          <div className="brutalist-block p-4">
-            <h2 className="text-sm font-bold uppercase mb-4">Requestor Information</h2>
-            
+          <BrutalistBlock className="p-4" title="Requestor Information">
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <label className="block text-xs uppercase opacity-70 mb-1">Callsign / Identifier *</label>
@@ -276,7 +265,7 @@ export default function RequisitionPage() {
                   required
                   value={formData.callsign}
                   onChange={(e) => setFormData({...formData, callsign: e.target.value})}
-                  className="w-full bg-theme-sub border border-theme-main px-3 py-2 text-sm focus:outline-none focus:border-[var(--accent)]"
+                  className="w-full bg-black/20 border-2 border-border-primary/30 px-3 py-2 text-sm focus:outline-none focus:border-accent font-mono uppercase"
                   placeholder="e.g., KD2ABC or Grid Handle"
                 />
               </div>
@@ -288,7 +277,7 @@ export default function RequisitionPage() {
                   required
                   value={formData.email}
                   onChange={(e) => setFormData({...formData, email: e.target.value})}
-                  className="w-full bg-theme-sub border border-theme-main px-3 py-2 text-sm focus:outline-none focus:border-[var(--accent)]"
+                  className="w-full bg-black/20 border-2 border-border-primary/30 px-3 py-2 text-sm focus:outline-none focus:border-accent font-mono"
                   placeholder="operator@example.com"
                 />
               </div>
@@ -299,7 +288,7 @@ export default function RequisitionPage() {
                   type="text"
                   value={formData.gridSquare}
                   onChange={(e) => setFormData({...formData, gridSquare: e.target.value})}
-                  className="w-full bg-theme-sub border border-theme-main px-3 py-2 text-sm focus:outline-none focus:border-[var(--accent)]"
+                  className="w-full bg-black/20 border-2 border-border-primary/30 px-3 py-2 text-sm focus:outline-none focus:border-accent font-mono uppercase"
                   placeholder="e.g., FN30"
                   maxLength={6}
                 />
@@ -310,23 +299,25 @@ export default function RequisitionPage() {
                 <textarea
                   value={formData.notes}
                   onChange={(e) => setFormData({...formData, notes: e.target.value})}
-                  className="w-full bg-theme-sub border border-theme-main px-3 py-2 text-sm focus:outline-none focus:border-[var(--accent)] h-20 resize-none"
+                  className="w-full bg-black/20 border-2 border-border-primary/30 px-3 py-2 text-sm focus:outline-none focus:border-accent h-20 resize-none font-mono uppercase"
                   placeholder="Deployment timeline, shipping constraints..."
                 />
               </div>
 
-              <div className="p-3 bg-yellow-500/10 border border-yellow-600/30 text-[10px] flex gap-2 items-start">
-                <AlertTriangle size={14} className="flex-shrink-0 mt-0.5" />
-                <p>
+              <div className="p-3 bg-yellow-500/10 border-l-4 border-yellow-600 text-[10px] flex gap-2 items-start font-mono uppercase">
+                <AlertTriangle size={14} className="flex-shrink-0 mt-0.5 text-yellow-600" />
+                <p className="opacity-80 leading-relaxed">
                   By submitting, you confirm hardware compatibility requirements have been reviewed. 
                   Final payment instructions will be sent via email.
                 </p>
               </div>
 
-              <button
+              <Button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full bg-[var(--accent)] text-white py-3 font-bold uppercase text-sm hover:brightness-110 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                variant="primary"
+                className="w-full"
+                size="lg"
               >
                 {isSubmitting ? (
                   <span className="flex items-center justify-center gap-2">
@@ -336,17 +327,18 @@ export default function RequisitionPage() {
                 ) : (
                   'SUBMIT REQUISITION'
                 )}
-              </button>
+              </Button>
             </form>
-          </div>
+          </BrutalistBlock>
 
           {/* Security Notice */}
-          <div className="text-[10px] opacity-50 text-center">
+          <div className="text-[10px] opacity-30 text-center font-mono uppercase tracking-widest">
             <p>All requests encrypted in transit</p>
             <p>Payment processed via secure gateway</p>
           </div>
         </div>
       </div>
-    </div>
+      </div>
+    </FieldStationLayout>
   );
 }

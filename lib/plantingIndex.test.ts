@@ -8,6 +8,7 @@ const mockForecastDay: ForecastDay = {
   minTemp: 45,
   avgHumidity: 50,
   precipitation: 0,
+  snowfall: 0,
   precipitationProbability: 0,
   windSpeed: 5,
   uvIndex: 5,

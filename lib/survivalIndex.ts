@@ -60,10 +60,10 @@ function calculateFireRisk(
   if (current.windSpeed > 25) score += 20;
   else if (current.windSpeed > 15) score += 10;
 
-  // Recent precipitation factor (no rain in 3+ days increases risk)
-  const recentRain = forecast.slice(0, 3).reduce((sum, day) => sum + day.precipitation, 0);
-  if (recentRain === 0) score += 10;
-  else if (recentRain < 0.1) score += 5;
+  // Imminent precipitation factor (no rain forecasted in next 3 days increases risk)
+  const imminentRain = forecast.slice(0, 3).reduce((sum, day) => sum + day.precipitation, 0);
+  if (imminentRain === 0) score += 10;
+  else if (imminentRain < 0.1) score += 5;
 
   // Cap at 100
   score = Math.min(score, 100);
@@ -175,8 +175,12 @@ function calculateLivestockStress(current: WeatherData["current"]): SurvivalInde
   const temp = current.temperature;
   const windSpeed = current.windSpeed;
 
-  // Heat Index (simplified)
-  const heatIndex = temp + 0.5555 * (6.11 * Math.exp(5417.7530 * (1/273.16 - 1/(273.16 + (temp - 32) * 5/9))) - 10);
+  // Heat Index (NOAA Formula)
+  const rh = current.humidity;
+  let heatIndex = temp;
+  if (temp >= 80) {
+    heatIndex = -42.379 + 2.04901523 * temp + 10.14333127 * rh - 0.22475541 * temp * rh - 0.00683783 * temp * temp - 0.05481717 * rh * rh + 0.00122874 * temp * temp * rh + 0.00085282 * temp * rh * rh - 0.00000199 * temp * temp * rh * rh;
+  }
   
   // Wind Chill (simplified)
   const windChill = 35.74 + 0.6215 * temp - 35.75 * Math.pow(windSpeed, 0.16) + 0.4275 * temp * Math.pow(windSpeed, 0.16);

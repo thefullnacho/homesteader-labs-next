@@ -43,12 +43,15 @@ function calculateFrostRisk(forecast: ForecastDay[]): PlantingIndex["frostRisk"]
   const risk14 = calculatePeriodRisk(minTemp14);
   const risk30 = calculatePeriodRisk(minTemp30);
 
-  // Calculate variance for confidence
-  const tempVariance = calculateVariance(next7Days.map((d) => d.minTemp));
+  // Calculate confidence based on proximity to 32°F
+  const tempsNearFreezing = next7Days.filter(d => Math.abs(d.minTemp - 32) <= 5).length;
   let confidence: "high" | "medium" | "low";
-  if (tempVariance < 5) confidence = "high";
-  else if (tempVariance < 10) confidence = "medium";
+  if (tempsNearFreezing === 0) confidence = "high";
+  else if (tempsNearFreezing <= 2) confidence = "medium";
   else confidence = "low";
+
+  // Calculate variance for display purposes
+  const tempVariance = calculateVariance(next7Days.map((d) => d.minTemp));
 
   return {
     next7Days: risk7,
@@ -72,8 +75,8 @@ function calculateSoilWorkability(
   current: WeatherData["current"],
   forecast: ForecastDay[]
 ): PlantingIndex["soilWorkability"] {
-  // Check recent precipitation and soil temp
-  const recentRain = forecast.slice(0, 3).reduce((sum, day) => sum + day.precipitation, 0);
+  // Check imminent precipitation and soil temp
+  const imminentRain = forecast.slice(0, 2).reduce((sum, day) => sum + day.precipitation, 0);
   const soilTemp = current.soilTemperature || current.temperature - 5; // Estimate if not available
 
   let status: "frozen" | "too-wet" | "too-dry" | "workable";
@@ -84,11 +87,11 @@ function calculateSoilWorkability(
     status = "frozen";
     score = 0;
     description = "Soil frozen. Wait for thaw.";
-  } else if (recentRain > 2) {
+  } else if (imminentRain > 1) {
     status = "too-wet";
     score = 20;
-    description = `Too wet (${recentRain.toFixed(1)}" rain in 3 days). Wait 2-3 days.`;
-  } else if (recentRain < 0.1 && soilTemp > 70) {
+    description = `Heavy rain imminent (${imminentRain.toFixed(1)}"). Delay tilling/planting.`;
+  } else if (imminentRain < 0.1 && soilTemp > 70) {
     status = "too-dry";
     score = 40;
     description = "Very dry. Consider irrigation before planting.";
