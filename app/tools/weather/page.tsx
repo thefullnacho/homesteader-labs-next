@@ -172,20 +172,20 @@ export default function WeatherPage() {
           </div>
         </div>
 
-        {activeLocation ? (
-          <LocationManager 
-            locations={locations}
-            activeLocation={activeLocation}
-            onSwitch={switchLocation}
-            onAdd={(loc) => {
-              const previousCount = locations.length;
-              addLocation(loc);
-              if (previousCount === 1) setTimeout(() => showWeeklyCapture(), 500);
-            }}
-            onRemove={removeLocation}
-          />
-        ) : (
-          <BrutalistBlock className="p-12 text-center border-dashed border-border-primary/40">
+        <LocationManager 
+          locations={locations}
+          activeLocation={activeLocation}
+          onSwitch={switchLocation}
+          onAdd={(loc) => {
+            const previousCount = locations.length;
+            addLocation(loc);
+            if (previousCount === 1) setTimeout(() => showWeeklyCapture(), 500);
+          }}
+          onRemove={removeLocation}
+        />
+
+        {!activeLocation && (
+          <BrutalistBlock className="p-12 text-center border-dashed border-border-primary/40 mb-8">
             <Typography variant="body" className="opacity-40 font-mono uppercase text-sm">Waiting for coordinate input to initialize node...</Typography>
           </BrutalistBlock>
         )}
