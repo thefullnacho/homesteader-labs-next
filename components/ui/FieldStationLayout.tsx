@@ -67,7 +67,7 @@ const FieldStationLayout = ({
         {/* Footer Metadata */}
         <div className="mt-8 pt-2 border-t border-border-primary/30 flex justify-between items-center text-[8px] font-mono opacity-40 uppercase">
           <span>Homesteader Labs Technical Documentation</span>
-          <span className="animate-pulse">Active_Transmission_Link...</span>
+          <span className="animate-pulse motion-reduce:animate-none" aria-hidden="true">Active_Transmission_Link...</span>
           <span>©2026_HL_CORP</span>
         </div>
       </div>

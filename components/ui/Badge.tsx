@@ -22,12 +22,12 @@ const Badge = ({
   };
 
   return (
-    <div className={`${baseStyles} ${variants[variant]} ${className}`}>
+    <span className={`${baseStyles} ${variants[variant]} ${className}`}>
       {pulse && (
-        <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+        <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" aria-hidden="true" />
       )}
       <span>{children}</span>
-    </div>
+    </span>
   );
 };
 
