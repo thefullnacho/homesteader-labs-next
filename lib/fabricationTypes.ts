@@ -58,19 +58,30 @@ export function calculatePrintEstimate(
   filament: FilamentType,
   settings: PrintSettings
 ): PrintEstimate {
-  // Adjust volume for infill (walls are always 100%)
-  // Simplified: assume infill affects internal volume
+  // Wall count affects the ratio of solid shell to infill interior
+  // More walls = larger solid shell fraction (each wall ~0.4mm on a 0.4mm nozzle)
+  const wallThicknessFraction = Math.min(settings.wallCount * 0.08, 0.5); // cap at 50% solid shell
+  const shellVolume = volumeCm3 * wallThicknessFraction;
+  const interiorVolume = volumeCm3 * (1 - wallThicknessFraction);
+
+  // Interior is affected by infill percentage
   const infillFactor = settings.infill / 100;
-  const adjustedVolume = volumeCm3 * (0.4 + 0.6 * infillFactor);
+  const adjustedVolume = shellVolume + interiorVolume * infillFactor;
+
+  // Support material adds ~15% extra volume when enabled
+  const supportMultiplier = settings.supportEnabled ? 1.15 : 1.0;
+  const totalVolume = adjustedVolume * supportMultiplier;
 
   // Calculate weight
-  const weight = adjustedVolume * filament.density;
+  const weight = totalVolume * filament.density;
 
-  // Estimate print time (very rough estimate)
+  // Estimate print time
   // Based on: volume, layer height, typical print speeds
   const baseMinutesPerCm3 = 8; // baseline
   const layerHeightFactor = 0.2 / settings.layerHeight; // finer = slower
-  const printTime = adjustedVolume * baseMinutesPerCm3 * layerHeightFactor;
+  // Supports add travel time (~20% extra when enabled)
+  const supportTimeFactor = settings.supportEnabled ? 1.2 : 1.0;
+  const printTime = totalVolume * baseMinutesPerCm3 * layerHeightFactor * supportTimeFactor;
 
   // Material cost
   const materialCost = (weight / 1000) * filament.pricePerKg;
@@ -86,7 +97,7 @@ export function calculatePrintEstimate(
   const totalCost = materialCost + adjustedServiceFee;
 
   return {
-    volume: Math.round(adjustedVolume * 100) / 100,
+    volume: Math.round(totalVolume * 100) / 100,
     weight: Math.round(weight * 10) / 10,
     printTime: Math.round(printTime),
     materialCost: Math.round(materialCost * 100) / 100,

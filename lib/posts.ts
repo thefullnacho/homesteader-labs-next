@@ -4,6 +4,11 @@ import matter from 'gray-matter';
 
 const postsDirectory = path.join(process.cwd(), 'content/archive');
 
+// Simple memoization to avoid re-reading files when getAllTags/getAllCategories call getAllPosts
+let cachedPosts: Post[] | null = null;
+let cacheTimestamp = 0;
+const CACHE_TTL_MS = 5000; // 5 second TTL for dev, effectively permanent during SSG
+
 export interface Post {
   slug: string;
   title: string;
@@ -17,6 +22,12 @@ export interface Post {
 }
 
 export function getAllPosts(): Post[] {
+  // Return cached result if still fresh
+  const now = Date.now();
+  if (cachedPosts && (now - cacheTimestamp) < CACHE_TTL_MS) {
+    return cachedPosts;
+  }
+
   // Check if directory exists
   if (!fs.existsSync(postsDirectory)) {
     return [];
@@ -51,13 +62,19 @@ export function getAllPosts(): Post[] {
     });
 
   // Sort posts by date
-  return allPostsData.sort((a, b) => {
+  const sorted = allPostsData.sort((a, b) => {
     if (a.date < b.date) {
       return 1;
     } else {
       return -1;
     }
   });
+
+  // Cache for subsequent calls (getAllTags, getAllCategories)
+  cachedPosts = sorted;
+  cacheTimestamp = Date.now();
+
+  return sorted;
 }
 
 export function getPostBySlug(slug: string): Post | null {

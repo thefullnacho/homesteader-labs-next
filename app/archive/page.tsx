@@ -11,10 +11,14 @@ export const metadata = {
   description: "Field documentation, foraging guides, and survival knowledge from the community.",
 };
 
-export default function ArchivePage() {
-  const posts = getAllPosts();
+export default function ArchivePage({ searchParams }: { searchParams: { tag?: string } }) {
+  const allPosts = getAllPosts();
   const tags = getAllTags();
   const categories = getAllCategories();
+  const activeTag = searchParams.tag;
+  const posts = activeTag
+    ? allPosts.filter((post) => post.tags.includes(activeTag))
+    : allPosts;
 
   return (
     <FieldStationLayout stationId="HL_FIELD_ARCHIVE">
@@ -41,14 +45,25 @@ export default function ArchivePage() {
           <div className="mb-8">
             <Typography variant="h4" className="text-xs opacity-50 mb-3">Filter_By_Tags:</Typography>
             <div className="flex flex-wrap gap-2">
+              {activeTag && (
+                <Link href="/archive/">
+                  <Badge
+                    variant="solid"
+                    className="cursor-pointer bg-accent border-accent text-white"
+                  >
+                    ✕ Clear
+                  </Badge>
+                </Link>
+              )}
               {tags.map((tag) => (
-                <Badge 
-                  key={tag}
-                  variant="status"
-                  className="cursor-pointer hover:bg-accent hover:text-white transition-colors"
-                >
-                  {tag}
-                </Badge>
+                <Link key={tag} href={`/archive/?tag=${encodeURIComponent(tag)}`}>
+                  <Badge 
+                    variant={activeTag === tag ? "solid" : "status"}
+                    className={`cursor-pointer hover:bg-accent hover:text-white transition-colors ${activeTag === tag ? "bg-accent border-accent text-white" : ""}`}
+                  >
+                    {tag}
+                  </Badge>
+                </Link>
               ))}
             </div>
           </div>
