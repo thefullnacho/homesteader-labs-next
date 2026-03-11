@@ -1,10 +1,18 @@
 import type { Metadata } from "next";
+import { Caveat } from "next/font/google";
 import "./globals.css";
 import Navigation from "@/components/layout/Navigation";
 import Footer from "@/components/layout/Footer";
 import TerminalOverlay from "@/components/terminal/TerminalOverlay";
 import VisualEffects from "@/components/layout/VisualEffects";
 import { Providers } from "@/components/providers";
+
+const caveat = Caveat({
+  subsets: ["latin"],
+  weight: ["400", "700"],
+  variable: "--font-hand",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "Homesteader Labs | Off-Grid Hardware & Fabrication Tools",
@@ -23,7 +31,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className={caveat.variable}>
       <body className="min-h-screen bg-background-primary text-foreground-primary font-mono flex flex-col relative overflow-x-hidden transition-colors duration-300">
         <Providers>
           <VisualEffects />
