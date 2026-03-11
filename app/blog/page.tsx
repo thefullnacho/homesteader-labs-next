@@ -1,3 +1,4 @@
+import { getAllPosts } from "@/lib/posts";
 import Link from "next/link";
 import FieldStationLayout from "@/components/ui/FieldStationLayout";
 import BrutalistBlock from "@/components/ui/BrutalistBlock";
@@ -5,24 +6,13 @@ import Typography from "@/components/ui/Typography";
 import Badge from "@/components/ui/Badge";
 import DymoLabel from "@/components/ui/DymoLabel";
 
+export const metadata = {
+  title: "Blog | Homesteader Labs",
+  description: "Field notes, foraging guides, and survival knowledge from the community.",
+};
+
 export default function BlogIndexPage() {
-  // Placeholder for blog posts
-  const posts = [
-    {
-      slug: "wild-berry-identification",
-      title: "Wild Berry Identification Guide",
-      excerpt: "Learn to identify, harvest, and use wild blackberries safely.",
-      date: "2026-02-10",
-      category: "Foraging"
-    },
-    {
-      slug: "mushroom-foraging-101",
-      title: "Mushroom Foraging 101",
-      excerpt: "Essential safety tips and beginner species for new mycologists.",
-      date: "2026-02-08",
-      category: "Mycology"
-    }
-  ];
+  const posts = getAllPosts();
 
   return (
     <FieldStationLayout stationId="HL_FIELD_NOTES">
@@ -55,7 +45,7 @@ export default function BlogIndexPage() {
                 </Typography>
               </Link>
               <Typography variant="body" className="opacity-70 mb-6 leading-relaxed">
-                {post.excerpt}
+                {post.excerpt || post.description}
               </Typography>
               <Link href={`/blog/${post.slug}/`}>
                 <DymoLabel className="text-[10px] hover:scale-105 transition-transform">
