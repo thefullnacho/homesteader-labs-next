@@ -1,1 +1,165 @@
-[]
+[
+  {
+    "id": "strawberry",
+    "name": "Strawberry",
+    "category": "fruit",
+    "icon": "🍓",
+    "varieties": [
+      { "id": "albion", "name": "Albion", "daysToMaturity": 90, "type": "Everbearing", "special": ["disease-resistant", "large-fruit"] },
+      { "id": "earliglow", "name": "Earliglow", "daysToMaturity": 80, "type": "June-bearing", "special": ["early-harvest", "sweet"] }
+    ],
+    "startIndoors": null,
+    "transplant": -14,
+    "directSow": null,
+    "daysToMaturity": 90,
+    "successionEnabled": false,
+    "successionInterval": 0,
+    "successionMax": 1,
+    "sun": "full",
+    "spacing": "12-18\" apart",
+    "notes": ["Pinch off flowers the first year to encourage strong root systems", "Propagates readily by sending out runners", "Replace plants every 3-4 years as yield declines"],
+    "lunarAffinity": "waxing",
+    "growthHabit": "perennial",
+    "yearsToFirstHarvest": 1,
+    "waterNeedsPerWeek": 1.5,
+    "yield": {
+      "avgPerPlant": 1.5,
+      "unit": "lbs",
+      "caloriesPer100g": 32,
+      "proteinPer100g": 0.7,
+      "carbsPer100g": 7.7,
+      "fatPer100g": 0.3,
+      "storageLifeDays": 5
+    },
+    "preservation": [
+      { "method": "jam", "shelfLifeMonths": 18, "notes": "Water bath can as jam or jelly" },
+      { "method": "freezing", "shelfLifeMonths": 12, "notes": "Freeze whole or sliced on a tray before bagging" },
+      { "method": "dehydrating", "shelfLifeMonths": 12, "notes": "Make fruit leather or dried slices" }
+    ],
+    "uses": ["cooking", "companion"],
+    "companions": ["bush-bean", "spinach", "borage", "thyme"],
+    "antagonists": ["cabbage", "broccoli", "cauliflower"]
+  },
+  {
+    "id": "blueberry",
+    "name": "Blueberry",
+    "category": "fruit",
+    "icon": "🫐",
+    "varieties": [
+      { "id": "bluecrop", "name": "Bluecrop", "daysToMaturity": 365, "type": "Northern Highbush", "special": ["mid-season", "heavy-yield"] },
+      { "id": "sunshine-blue", "name": "Sunshine Blue", "daysToMaturity": 365, "type": "Southern Highbush", "special": ["low-chill", "compact"] }
+    ],
+    "startIndoors": null,
+    "transplant": 28,
+    "directSow": null,
+    "daysToMaturity": 365,
+    "successionEnabled": false,
+    "successionInterval": 0,
+    "successionMax": 1,
+    "sun": "full",
+    "spacing": "4-6' apart",
+    "notes": ["Requires highly acidic soil (pH 4.5-5.5)", "Plant at least two different varieties for cross-pollination to increase yield", "Netting is often required to protect berries from birds"],
+    "lunarAffinity": "waxing",
+    "growthHabit": "perennial",
+    "yearsToFirstHarvest": 2,
+    "waterNeedsPerWeek": 1.0,
+    "yield": {
+      "avgPerPlant": 8,
+      "unit": "lbs",
+      "caloriesPer100g": 57,
+      "proteinPer100g": 0.7,
+      "carbsPer100g": 14.5,
+      "fatPer100g": 0.3,
+      "storageLifeDays": 10
+    },
+    "preservation": [
+      { "method": "freezing", "shelfLifeMonths": 12, "notes": "Freeze unwashed in a single layer, then bag" },
+      { "method": "jam", "shelfLifeMonths": 18, "notes": "Water bath can as preserves" },
+      { "method": "dehydrating", "shelfLifeMonths": 12, "notes": "Pierce skins before dehydrating" }
+    ],
+    "uses": ["cooking", "medicinal"],
+    "companions": ["rhododendron", "azalea", "pine", "oak"],
+    "antagonists": ["tomato", "brassicas"]
+  },
+  {
+    "id": "raspberry",
+    "name": "Raspberry",
+    "category": "fruit",
+    "icon": "🍓",
+    "varieties": [
+      { "id": "heritage", "name": "Heritage", "daysToMaturity": 365, "type": "Everbearing Red", "special": ["fall-crop", "vigorous"] },
+      { "id": "jewel", "name": "Jewel", "daysToMaturity": 365, "type": "Summer-bearing Black", "special": ["disease-resistant", "excellent-flavor"] }
+    ],
+    "startIndoors": null,
+    "transplant": 14,
+    "directSow": null,
+    "daysToMaturity": 365,
+    "successionEnabled": false,
+    "successionInterval": 0,
+    "successionMax": 1,
+    "sun": "full",
+    "spacing": "24-36\" apart",
+    "notes": ["Canes are biennial; primocanes grow the first year, floricanes fruit the second year (except everbearing types)", "Pruning strategy depends heavily on whether they are summer-bearing or everbearing", "Spreads aggressively via underground runners"],
+    "lunarAffinity": "waxing",
+    "growthHabit": "perennial",
+    "yearsToFirstHarvest": 1,
+    "waterNeedsPerWeek": 1.0,
+    "yield": {
+      "avgPerPlant": 4,
+      "unit": "lbs",
+      "caloriesPer100g": 52,
+      "proteinPer100g": 1.2,
+      "carbsPer100g": 11.9,
+      "fatPer100g": 0.6,
+      "storageLifeDays": 3
+    },
+    "preservation": [
+      { "method": "jam", "shelfLifeMonths": 18, "notes": "Water bath can as jam (high natural pectin)" },
+      { "method": "freezing", "shelfLifeMonths": 12, "notes": "Freeze in a single layer on baking sheets" }
+    ],
+    "uses": ["cooking", "tea", "medicinal"],
+    "companions": ["garlic", "chives", "tansy", "yarrow"],
+    "antagonists": ["potato", "tomato", "eggplant", "blackberry"]
+  },
+  {
+    "id": "apple",
+    "name": "Apple",
+    "category": "fruit",
+    "icon": "🍎",
+    "varieties": [
+      { "id": "honeycrisp", "name": "Honeycrisp", "daysToMaturity": 1000, "type": "Dwarf/Semi-Dwarf", "special": ["crisp", "cold-hardy"] },
+      { "id": "fuji", "name": "Fuji", "daysToMaturity": 1000, "type": "Dwarf/Semi-Dwarf", "special": ["sweet", "long-storage"] }
+    ],
+    "startIndoors": null,
+    "transplant": -28,
+    "directSow": null,
+    "daysToMaturity": 1000,
+    "successionEnabled": false,
+    "successionInterval": 0,
+    "successionMax": 1,
+    "sun": "full",
+    "spacing": "12-15' apart",
+    "notes": ["Requires cross-pollination from a different apple variety blooming at the same time", "Pruning is essential during dormancy to shape the tree and maintain airflow", "Dwarf rootstocks fruit sooner than standard rootstocks"],
+    "lunarAffinity": "waxing",
+    "growthHabit": "perennial",
+    "yearsToFirstHarvest": 3,
+    "waterNeedsPerWeek": 2.0,
+    "yield": {
+      "avgPerPlant": 50,
+      "unit": "lbs",
+      "caloriesPer100g": 52,
+      "proteinPer100g": 0.3,
+      "carbsPer100g": 13.8,
+      "fatPer100g": 0.2,
+      "storageLifeDays": 120
+    },
+    "preservation": [
+      { "method": "cold-storage", "shelfLifeMonths": 6, "notes": "Store late-season varieties in a root cellar" },
+      { "method": "canning", "shelfLifeMonths": 18, "notes": "Can as applesauce or pie filling" },
+      { "method": "dehydrating", "shelfLifeMonths": 12, "notes": "Dry sliced rings" }
+    ],
+    "uses": ["cooking", "livestock-feed"],
+    "companions": ["comfrey", "chives", "nasturtium", "daffodil"],
+    "antagonists": ["cedar", "walnut"]
+  }
+]
