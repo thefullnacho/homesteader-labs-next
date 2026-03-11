@@ -137,7 +137,7 @@ export default function FabricationPage() {
             </div>
             <div className="text-right flex flex-col items-end gap-2">
               <Badge variant="status" pulse>System_Operational</Badge>
-              <Typography variant="small" className="font-mono text-[10px] opacity-40 uppercase mb-0">
+              <Typography variant="small" className="font-mono text-xs opacity-40 uppercase mb-0">
                 FILAMENTS_LOADED: {FILAMENT_TYPES.length}
               </Typography>
             </div>
@@ -235,15 +235,15 @@ export default function FabricationPage() {
                 <div className="grid grid-cols-3 gap-6 text-center">
                   <div className="bg-background-primary/30 border border-border-primary/30 p-4">
                     <Typography variant="h3" className="mb-0 text-accent">{dimensions.x.toFixed(1)}</Typography>
-                    <Typography variant="small" className="opacity-40 font-mono mb-0 uppercase text-[9px]">X_Axis (mm)</Typography>
+                    <Typography variant="small" className="opacity-40 font-mono mb-0 uppercase text-[11px]">X_Axis (mm)</Typography>
                   </div>
                   <div className="bg-background-primary/30 border border-border-primary/30 p-4">
                     <Typography variant="h3" className="mb-0 text-accent">{dimensions.y.toFixed(1)}</Typography>
-                    <Typography variant="small" className="opacity-40 font-mono mb-0 uppercase text-[9px]">Y_Axis (mm)</Typography>
+                    <Typography variant="small" className="opacity-40 font-mono mb-0 uppercase text-[11px]">Y_Axis (mm)</Typography>
                   </div>
                   <div className="bg-background-primary/30 border border-border-primary/30 p-4">
                     <Typography variant="h3" className="mb-0 text-accent">{dimensions.z.toFixed(1)}</Typography>
-                    <Typography variant="small" className="opacity-40 font-mono mb-0 uppercase text-[9px]">Z_Axis (mm)</Typography>
+                    <Typography variant="small" className="opacity-40 font-mono mb-0 uppercase text-[11px]">Z_Axis (mm)</Typography>
                   </div>
                 </div>
               </BrutalistBlock>
@@ -269,7 +269,7 @@ export default function FabricationPage() {
                       <Typography variant="h4" className="mb-0 text-sm">{filament.name}</Typography>
                       <Badge variant="solid" className="bg-accent border-accent">${filament.pricePerKg}/kg</Badge>
                     </div>
-                    <Typography variant="small" className="opacity-60 text-[10px] leading-tight mb-0">
+                    <Typography variant="small" className="opacity-60 text-xs leading-tight mb-0">
                       {filament.description}
                     </Typography>
                   </button>
@@ -283,7 +283,7 @@ export default function FabricationPage() {
                 {/* Infill */}
                 <div>
                   <div className="flex justify-between items-end mb-3">
-                    <Typography variant="small" className="mb-0 uppercase font-bold text-[10px]">Infill_Density</Typography>
+                    <Typography variant="small" className="mb-0 uppercase font-bold text-xs">Infill_Density</Typography>
                     <Typography variant="h4" className="mb-0 text-accent">{settings.infill}%</Typography>
                   </div>
                   <input
@@ -303,13 +303,13 @@ export default function FabricationPage() {
 
                 {/* Layer Height */}
                 <div>
-                  <Typography variant="small" className="mb-3 block uppercase font-bold text-[10px]">Layer_Resolution</Typography>
+                  <Typography variant="small" className="mb-3 block uppercase font-bold text-xs">Layer_Resolution</Typography>
                   <div className="flex gap-2">
                     {[0.1, 0.2, 0.3].map((height) => (
                       <button
                         key={height}
                         onClick={() => updateSettings("layerHeight", height)}
-                        className={`flex-1 py-2 text-[10px] font-mono border-2 transition-all ${
+                        className={`flex-1 py-2 text-xs font-mono border-2 transition-all ${
                           settings.layerHeight === height
                             ? "border-accent bg-accent text-white"
                             : "border-border-primary/40 hover:border-border-primary"
@@ -323,7 +323,7 @@ export default function FabricationPage() {
 
                 {/* Supports */}
                 <div className="flex items-center justify-between bg-black/10 p-3 border border-border-primary/20">
-                  <Typography variant="small" className="mb-0 uppercase font-bold text-[10px]">Overhang_Support</Typography>
+                  <Typography variant="small" className="mb-0 uppercase font-bold text-xs">Overhang_Support</Typography>
                   <button
                     onClick={() => updateSettings("supportEnabled", !settings.supportEnabled)}
                     className={`w-12 h-6 border-2 transition-all relative ${
@@ -371,7 +371,7 @@ export default function FabricationPage() {
                 <div className="border-t-2 border-accent pt-6 mb-6">
                   <div className="flex justify-between items-end">
                     <div>
-                      <Typography variant="small" className="opacity-40 mb-0 font-mono uppercase text-[9px]">Total_Requisition_Cost</Typography>
+                      <Typography variant="small" className="opacity-40 mb-0 font-mono uppercase text-[11px]">Total_Requisition_Cost</Typography>
                       <Typography variant="h1" className="mb-0 text-accent text-4xl">${estimate.totalCost.toFixed(2)}</Typography>
                     </div>
                     <Badge variant="status" className="mb-1">ESTIMATE</Badge>

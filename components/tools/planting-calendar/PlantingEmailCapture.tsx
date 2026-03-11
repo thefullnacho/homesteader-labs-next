@@ -93,7 +93,7 @@ export default function PlantingEmailCapture({
             <span>✓</span>
             <span>&quot;Last chance to plant fall crops&quot;</span>
           </div>
-          <div className="mt-2 pt-2 border-t border-border-primary/30 text-[10px] opacity-60">
+          <div className="mt-2 pt-2 border-t border-border-primary/30 text-xs opacity-60">
             Customized for: {zipCode} • {cropCount} crops • Based on your frost dates
           </div>
         </div>
@@ -124,7 +124,7 @@ export default function PlantingEmailCapture({
               className="mt-0.5"
               required
             />
-            <label htmlFor="planting-consent" className="text-[10px] opacity-70 leading-tight">
+            <label htmlFor="planting-consent" className="text-xs opacity-70 leading-tight">
               I want weekly planting reminders customized for my location and crops. 
               Unsubscribe anytime. No spam, ever.
             </label>
@@ -148,7 +148,7 @@ export default function PlantingEmailCapture({
 
         {/* Trust signals */}
         <div className="mt-4 pt-3 border-t border-border-primary/30 text-center">
-          <p className="text-[10px] opacity-50">
+          <p className="text-xs opacity-50">
             🔒 We never share your email • Powered by Homesteader Labs
           </p>
         </div>

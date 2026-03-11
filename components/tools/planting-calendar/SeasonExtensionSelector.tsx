@@ -43,7 +43,7 @@ export default function SeasonExtensionSelector({ extension, onChange }: SeasonE
             }`}
           >
             <div>
-              <div className={`text-[10px] font-bold uppercase tracking-tight ${extension === ext.id ? 'text-accent' : 'opacity-60'}`}>
+              <div className={`text-xs font-bold uppercase tracking-tight ${extension === ext.id ? 'text-accent' : 'opacity-60'}`}>
                 {ext.label}
               </div>
               <div className="text-[8px] font-mono opacity-40 uppercase">{ext.desc}</div>

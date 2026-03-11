@@ -56,7 +56,7 @@ export default function PlantingCalendar({
             </div>
             <div>
               <Typography variant="h3" className="mb-1 tracking-tighter print:text-black">PLANTING_TIMELINE_V2</Typography>
-              <div className="flex items-center gap-3 text-[10px] font-mono opacity-50 uppercase tracking-widest print:text-black print:opacity-100">
+              <div className="flex items-center gap-3 text-xs font-mono opacity-50 uppercase tracking-widest print:text-black print:opacity-100">
                 <span className="flex items-center gap-1"><MapPin size={10} className="text-accent print:text-black" /> {frostDates.zipCode}</span>
                 <span>{"//"}</span>
                 <span>ZONE_{frostDates.growingZone}</span>
@@ -147,9 +147,9 @@ export default function PlantingCalendar({
                     <div className="flex items-center gap-3 sm:justify-end print:gap-2">
                       <div className="text-right hidden md:block">
                         <div className="text-[8px] font-mono opacity-30 uppercase print:text-black print:opacity-100">Protocol</div>
-                        <div className="text-[10px] font-bold font-mono tracking-tighter opacity-60 uppercase print:text-black print:opacity-100">{date.action.replace('-', '_')}</div>
+                        <div className="text-xs font-bold font-mono tracking-tighter opacity-60 uppercase print:text-black print:opacity-100">{date.action.replace('-', '_')}</div>
                       </div>
-                      <div className={`px-3 py-1.5 font-mono text-[10px] font-bold border-2 ${getActionStyle(date.action)} print:bg-transparent print:border-black print:text-black print:px-2 print:py-1`}>
+                      <div className={`px-3 py-1.5 font-mono text-xs font-bold border-2 ${getActionStyle(date.action)} print:bg-transparent print:border-black print:text-black print:px-2 print:py-1`}>
                         {ActionMap[date.action]}
                       </div>
                     </div>

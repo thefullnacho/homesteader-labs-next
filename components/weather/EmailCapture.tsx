@@ -135,7 +135,7 @@ export default function EmailCapture({
               className="mt-0.5"
               required
             />
-            <label htmlFor="consent" className="text-[10px] opacity-70 leading-tight">
+            <label htmlFor="consent" className="text-xs opacity-70 leading-tight">
               I agree to receive weather alerts and homesteading tips. 
               Unsubscribe anytime. No spam.
             </label>
@@ -162,7 +162,7 @@ export default function EmailCapture({
         </form>
 
         {/* Trust signals */}
-        <div className="mt-4 pt-3 border-t border-border-primary/30 text-[10px] opacity-50 text-center">
+        <div className="mt-4 pt-3 border-t border-border-primary/30 text-xs opacity-50 text-center">
           <p>🔒 We never share your email. Powered by Homesteader Labs.</p>
         </div>
       </div>

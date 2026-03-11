@@ -78,7 +78,7 @@ export default async function ArchivePostPage({ params }: PageProps) {
             {/* Meta */}
             <div className="flex flex-wrap items-center gap-4 mb-6">
               <DymoLabel>{post.category}</DymoLabel>
-              <div className="flex items-center gap-4 text-[10px] font-mono opacity-50 uppercase">
+              <div className="flex items-center gap-4 text-xs font-mono opacity-50 uppercase">
                 <span className="flex items-center gap-1.5">
                   <Calendar size={12} className="text-accent" />
                   {post.date}
@@ -107,7 +107,7 @@ export default async function ArchivePostPage({ params }: PageProps) {
                   <Badge 
                     key={tag}
                     variant="status"
-                    className="text-[10px]"
+                    className="text-xs"
                   >
                     <Tag size={10} className="mr-1 text-accent" />
                     {tag}
@@ -125,7 +125,7 @@ export default async function ArchivePostPage({ params }: PageProps) {
           {/* Footer */}
           <div className="border-t-2 border-border-primary p-6 md:p-10 bg-background-secondary/50">
             <div className="flex flex-col sm:flex-row justify-between items-center gap-6">
-              <div className="text-[10px] font-mono opacity-40 uppercase tracking-tighter">
+              <div className="text-xs font-mono opacity-40 uppercase tracking-tighter">
                 <p>DOCUMENT_ID: {post.slug.toUpperCase().replace(/-/g, '_')}</p>
                 <p>OPERATOR: {post.author}</p>
                 <p>STATUS: FIELD_VERIFIED</p>
@@ -143,7 +143,7 @@ export default async function ArchivePostPage({ params }: PageProps) {
 
         {/* Technical Notice */}
         <div className="mt-8 text-center px-4">
-          <Typography variant="small" className="opacity-20 font-mono text-[9px] uppercase tracking-[0.2em] leading-loose">
+          <Typography variant="small" className="opacity-20 font-mono text-[11px] uppercase tracking-[0.2em] leading-loose">
             Warning: The information contained in this field manual is for educational purposes only. 
             Homesteader Labs assumes no responsibility for actions taken based on this documentation.
           </Typography>

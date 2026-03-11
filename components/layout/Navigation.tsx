@@ -70,7 +70,7 @@ export default function Navigation() {
             className="flex items-center gap-2 border-2 border-border-primary px-3 py-1 hover:bg-accent hover:text-white transition-colors bg-background-primary/30"
           >
             <ShoppingCart size={14} />
-            <span className="text-[10px] hidden lg:inline font-mono">REQ_LOG:</span>
+            <span className="text-xs hidden lg:inline font-mono">REQ_LOG:</span>
             <span className="font-bold text-xs">{totalItems.toString().padStart(2, "0")}</span>
             <Badge 
               variant="solid" 

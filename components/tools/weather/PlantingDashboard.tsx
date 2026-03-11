@@ -67,9 +67,9 @@ const PlantingDashboard = ({ index }: PlantingDashboardProps) => {
             <div className="flex justify-between items-start mb-4">
               <div className="flex items-center gap-3 opacity-80">
                 <Droplets size={16} className="text-accent" />
-                <Typography variant="small" className="uppercase font-bold text-[10px] mb-0 tracking-widest font-mono">Soil Workability</Typography>
+                <Typography variant="small" className="uppercase font-bold text-xs mb-0 tracking-widest font-mono">Soil Workability</Typography>
               </div>
-              <span className={`text-[10px] font-bold font-mono uppercase ${getSoilStatusClass(index.soilWorkability.status)}`}>
+              <span className={`text-xs font-bold font-mono uppercase ${getSoilStatusClass(index.soilWorkability.status)}`}>
                 [{index.soilWorkability.status}]
               </span>
             </div>
@@ -82,10 +82,10 @@ const PlantingDashboard = ({ index }: PlantingDashboardProps) => {
             <div className="flex justify-between items-start mb-4">
               <div className="flex items-center gap-3 opacity-80">
                 <Clock size={16} className="text-accent" />
-                <Typography variant="small" className="uppercase font-bold text-[10px] mb-0 tracking-widest font-mono">Sustainable Window</Typography>
+                <Typography variant="small" className="uppercase font-bold text-xs mb-0 tracking-widest font-mono">Sustainable Window</Typography>
               </div>
               {index.plantingWindow.opens && (
-                <span className="text-[10px] font-bold font-mono text-accent uppercase tracking-tighter">
+                <span className="text-xs font-bold font-mono text-accent uppercase tracking-tighter">
                   {index.plantingWindow.confidence}% PROB
                 </span>
               )}
@@ -102,7 +102,7 @@ const PlantingDashboard = ({ index }: PlantingDashboardProps) => {
                 </div>
               </div>
             ) : (
-              <Typography variant="small" className="opacity-30 italic mb-0 uppercase text-[10px] font-mono">No Sustainable Growth Detected</Typography>
+              <Typography variant="small" className="opacity-30 italic mb-0 uppercase text-xs font-mono">No Sustainable Growth Detected</Typography>
             )}
           </BrutalistBlock>
         </div>
@@ -113,7 +113,7 @@ const PlantingDashboard = ({ index }: PlantingDashboardProps) => {
         <div className="grid md:grid-cols-2 gap-x-12 gap-y-4 mt-2">
           {index.recommendations.map((rec, i) => (
             <div key={i} className="flex items-start gap-3 border-l-2 border-accent/30 pl-4 py-1">
-              <span className="font-mono uppercase text-[10px] tracking-tight leading-relaxed opacity-80">{rec}</span>
+              <span className="font-mono uppercase text-xs tracking-tight leading-relaxed opacity-80">{rec}</span>
             </div>
           ))}
         </div>

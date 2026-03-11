@@ -101,7 +101,7 @@ export default function GrowingSeasonTracker({ forecast, locationName }: Growing
             <Typography variant="h3" className="font-mono text-3xl text-foreground-primary mb-0 leading-none">
               {totalGDD}
             </Typography>
-            <span className="text-[10px] font-mono opacity-40 uppercase mb-1">Base 50°F</span>
+            <span className="text-xs font-mono opacity-40 uppercase mb-1">Base 50°F</span>
           </div>
         </div>
         
@@ -117,7 +117,7 @@ export default function GrowingSeasonTracker({ forecast, locationName }: Growing
             <Typography variant="h3" className="font-mono text-3xl text-foreground-primary mb-0 leading-none">
               {daysSinceStart}
             </Typography>
-            <span className="text-[10px] font-mono opacity-40 uppercase mb-1">Days</span>
+            <span className="text-xs font-mono opacity-40 uppercase mb-1">Days</span>
           </div>
         </div>
         

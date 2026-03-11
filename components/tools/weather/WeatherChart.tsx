@@ -31,7 +31,7 @@ export default function WeatherChart({ forecast }: WeatherChartProps) {
   return (
     <div className="w-full">
       <div className="flex items-center gap-3 mb-4">
-        <h4 className="text-[10px] font-mono font-bold uppercase tracking-widest opacity-60">
+        <h4 className="text-xs font-mono font-bold uppercase tracking-widest opacity-60">
           7-Day Temperature Trend
         </h4>
       </div>

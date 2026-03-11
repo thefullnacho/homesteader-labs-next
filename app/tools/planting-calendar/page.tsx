@@ -88,14 +88,14 @@ export default function PlantingCalendarPage() {
         <div className="flex flex-col md:flex-row md:items-start justify-between gap-6 border-b-2 border-border-primary pb-6 print:hidden">
           <div>
             <Typography variant="h2" className="mb-1 uppercase tracking-tight font-mono">Planting_Calendar</Typography>
-            <Typography variant="small" className="opacity-40 font-mono text-[9px] uppercase tracking-widest">
+            <Typography variant="small" className="opacity-40 font-mono text-[11px] uppercase tracking-widest">
               Automated Succession Logic // Active_Uplink: NOAA_NCRM_V3
             </Typography>
           </div>
           
           <div className="flex items-center gap-4">
             <div className="flex border-2 border-border-primary p-1 bg-black/20">
-              <div className="flex items-center gap-2 px-4 py-1.5 text-[10px] font-bold font-mono uppercase opacity-40">
+              <div className="flex items-center gap-2 px-4 py-1.5 text-xs font-bold font-mono uppercase opacity-40">
                 <Database size={12} /> DB_LOADED
               </div>
             </div>
@@ -164,7 +164,7 @@ export default function PlantingCalendarPage() {
               <Typography variant="h4" className="text-xs flex items-center gap-2 mb-4 uppercase tracking-widest font-mono opacity-40">
                 <FileText size={14} /> Technical_Specs
               </Typography>
-              <ul className="text-[9px] space-y-2 opacity-60 font-mono uppercase tracking-tighter">
+              <ul className="text-[11px] space-y-2 opacity-60 font-mono uppercase tracking-tighter">
                 <li className="flex gap-2"><span>[•]</span> <span>Succession_Engine_v2.1_Active</span></li>
                 <li className="flex gap-2"><span>[•]</span> <span>Maturity_Index_Adjusted</span></li>
                 <li className="flex gap-2"><span>[•]</span> <span>Offline_Ops_Ready</span></li>
@@ -191,12 +191,12 @@ export default function PlantingCalendarPage() {
 
                 <div className="flex items-center justify-between mb-2 print:hidden">
                   <div className="flex items-center gap-3 flex-grow">
-                    <DymoLabel className="text-[10px]">OUTPUT_GENERATED</DymoLabel>
+                    <DymoLabel className="text-xs">OUTPUT_GENERATED</DymoLabel>
                     <div className="h-[2px] flex-grow max-w-[200px] bg-border-primary/20" />
                   </div>
                   <button 
                     onClick={() => window.print()}
-                    className="flex items-center gap-2 px-3 py-1.5 border-2 border-border-primary hover:border-accent hover:text-accent transition-colors text-[10px] font-bold font-mono uppercase bg-black/20"
+                    className="flex items-center gap-2 px-3 py-1.5 border-2 border-border-primary hover:border-accent hover:text-accent transition-colors text-xs font-bold font-mono uppercase bg-black/20"
                   >
                     <Printer size={12} />
                     PRINT_MANIFEST
@@ -224,7 +224,7 @@ export default function PlantingCalendarPage() {
                 <div className="max-w-xs mx-auto">
                   <Sprout size={64} className="mx-auto mb-8 opacity-10 text-accent animate-pulse" />
                   <Typography variant="h3" className="mb-4 uppercase tracking-tighter opacity-40 italic">Awaiting_Input_Parameters</Typography>
-                  <Typography variant="body" className="opacity-30 text-[10px] uppercase font-mono leading-relaxed mb-0">
+                  <Typography variant="body" className="opacity-30 text-xs uppercase font-mono leading-relaxed mb-0">
                     System requires regional coordinates and inventory manifest to initialize temporal sequence.
                   </Typography>
                 </div>

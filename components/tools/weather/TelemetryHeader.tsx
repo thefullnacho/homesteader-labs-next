@@ -34,7 +34,7 @@ const TelemetryHeader = ({ weather }: TelemetryHeaderProps) => {
         </div>
         <div className="flex items-baseline gap-2">
           <span className="text-3xl font-bold font-mono tracking-tighter">{Math.round(weather.current.temperature)}°F</span>
-          <span className="text-[10px] font-mono opacity-30 uppercase">Feels: {Math.round(weather.current.feelsLike)}°</span>
+          <span className="text-xs font-mono opacity-30 uppercase">Feels: {Math.round(weather.current.feelsLike)}°</span>
         </div>
         <div className="absolute top-0 right-0 w-8 h-8 opacity-[0.02] pointer-events-none">
           <Thermometer size={32} />
@@ -49,7 +49,7 @@ const TelemetryHeader = ({ weather }: TelemetryHeaderProps) => {
         </div>
         <div className="flex items-baseline gap-2">
           <span className="text-3xl font-bold font-mono tracking-tighter">{weather.current.humidity}%</span>
-          <span className="text-[10px] font-mono opacity-30 uppercase">Dewpoint: {Math.round(weather.current.dewPoint)}°</span>
+          <span className="text-xs font-mono opacity-30 uppercase">Dewpoint: {Math.round(weather.current.dewPoint)}°</span>
         </div>
       </div>
 
@@ -61,7 +61,7 @@ const TelemetryHeader = ({ weather }: TelemetryHeaderProps) => {
         </div>
         <div className="flex items-baseline gap-2">
           <span className="text-3xl font-bold font-mono tracking-tighter">{Math.round(weather.current.windSpeed)}</span>
-          <span className="text-[10px] font-mono opacity-30 uppercase">MPH {getWindDirection(weather.current.windDirection)}</span>
+          <span className="text-xs font-mono opacity-30 uppercase">MPH {getWindDirection(weather.current.windDirection)}</span>
         </div>
       </div>
 
@@ -73,7 +73,7 @@ const TelemetryHeader = ({ weather }: TelemetryHeaderProps) => {
         </div>
         <div className="flex items-baseline gap-2">
           <span className="text-3xl font-bold font-mono tracking-tighter">{weather.current.uvIndex}</span>
-          <span className="text-[10px] font-mono opacity-30 uppercase">UV {getUVDescription(weather.current.uvIndex)}</span>
+          <span className="text-xs font-mono opacity-30 uppercase">UV {getUVDescription(weather.current.uvIndex)}</span>
         </div>
       </div>
     </div>

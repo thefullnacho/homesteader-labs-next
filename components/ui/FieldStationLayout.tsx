@@ -44,10 +44,10 @@ const FieldStationLayout = ({
         {/* Header Metadata */}
         <div className="flex justify-between items-end mb-8 border-b-2 border-border-primary pb-2">
           <div className="flex flex-col">
-            <span className="text-[10px] uppercase tracking-[0.2em] opacity-60">Field Station Layout</span>
+            <span className="text-xs uppercase tracking-[0.2em] opacity-60">Field Station Layout</span>
             <span className="text-sm font-bold font-mono text-accent">{stationId}</span>
           </div>
-          <div className="flex gap-4 text-[10px] font-mono opacity-60">
+          <div className="flex gap-4 text-xs font-mono opacity-60">
             <div className="flex flex-col items-end">
               <span>LAT: {activeLocation ? activeLocation.lat.toFixed(6) : "45.523062"}</span>
               <span>LON: {activeLocation ? activeLocation.lon.toFixed(6) : "-122.676482"}</span>

@@ -33,7 +33,7 @@ export default function ArchivePage({ searchParams }: { searchParams: { tag?: st
             
             <div className="text-right flex flex-col items-end gap-2">
               <Badge variant="outline">RECORDS: {posts.length}</Badge>
-              <Typography variant="small" className="font-mono text-[10px] opacity-40 uppercase mb-0">
+              <Typography variant="small" className="font-mono text-xs opacity-40 uppercase mb-0">
                 CATEGORIES: {categories.length}
               </Typography>
             </div>
@@ -108,7 +108,7 @@ export default function ArchivePage({ searchParams }: { searchParams: { tag?: st
                         <Badge 
                           key={tag}
                           variant="outline"
-                          className="text-[9px] opacity-40 border-foreground-primary/30"
+                          className="text-[11px] opacity-40 border-foreground-primary/30"
                         >
                           {tag}
                         </Badge>

@@ -13,7 +13,7 @@ const Badge = ({
   className = '',
   pulse = false,
 }: BadgeProps) => {
-  const baseStyles = "inline-flex items-center gap-2 px-3 py-1 text-[10px] font-bold uppercase tracking-wider";
+  const baseStyles = "inline-flex items-center gap-2 px-3 py-1 text-xs font-bold uppercase tracking-wider";
   
   const variants = {
     outline: "border border-foreground-primary text-foreground-primary",

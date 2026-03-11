@@ -90,7 +90,7 @@ export default function CropSelector({
                 <div className="flex items-center gap-3 min-w-0">
                   <span className="text-xl shrink-0 opacity-80 group-hover:scale-110 transition-transform">{crop.icon}</span>
                   <div className="text-left min-w-0">
-                    <div className={`text-[10px] font-bold uppercase truncate ${isSelected ? 'text-accent' : 'opacity-60'}`}>
+                    <div className={`text-xs font-bold uppercase truncate ${isSelected ? 'text-accent' : 'opacity-60'}`}>
                       {crop.name}
                     </div>
                     <div className="text-[8px] font-mono opacity-30 uppercase truncate">{crop.category}</div>
@@ -119,7 +119,7 @@ export default function CropSelector({
                     <select
                       value={isSelected.varietyId}
                       onChange={(e) => updateVariety(crop.id, e.target.value)}
-                      className="w-full text-[10px] font-mono bg-black/40 border-2 border-border-primary/30 px-2 py-2 outline-none focus:border-accent uppercase"
+                      className="w-full text-xs font-mono bg-black/40 border-2 border-border-primary/30 px-2 py-2 outline-none focus:border-accent uppercase"
                     >
                       {crop.varieties.map(variety => (
                         <option key={variety.id} value={variety.id} className="bg-background-primary">

@@ -92,7 +92,7 @@ export default function NewsletterSignup() {
 
         {/* Decorative terminal footer */}
         <div className="border-t-2 border-accent/30 px-6 py-2 bg-background-secondary/30">
-          <p className="text-[10px] font-mono text-foreground-secondary">
+          <p className="text-xs font-mono text-foreground-secondary">
             ENCRYPTION: NONE | FREQUENCY: MONTHLY | UNSUBSCRIBE: ANYTIME
           </p>
         </div>

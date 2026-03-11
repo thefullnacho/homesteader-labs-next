@@ -21,7 +21,7 @@ export default function ShopPage() {
             
             <div className="text-right flex flex-col items-end gap-2">
               <Badge variant="outline">DB_V.4.2</Badge>
-              <Typography variant="small" className="font-mono text-[10px] opacity-40 uppercase mb-0">
+              <Typography variant="small" className="font-mono text-xs opacity-40 uppercase mb-0">
                 RECORDS_FOUND: {allProducts.length}
               </Typography>
             </div>
