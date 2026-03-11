@@ -3,9 +3,6 @@ import remarkGfm from 'remark-gfm';
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  images: {
-    unoptimized: true,
-  },
   trailingSlash: true,
   pageExtensions: ['js', 'jsx', 'mdx', 'ts', 'tsx'],
 };
