@@ -1,1 +1,163 @@
-[]
+[
+  {
+    "id": "watermelon",
+    "name": "Watermelon",
+    "category": "fruit",
+    "icon": "🍉",
+    "varieties": [
+      { "id": "sugar-baby", "name": "Sugar Baby", "daysToMaturity": 80, "type": "Icebox", "special": ["compact", "sweet"] },
+      { "id": "crimson-sweet", "name": "Crimson Sweet", "daysToMaturity": 85, "type": "Standard", "special": ["large", "disease-resistant"] }
+    ],
+    "startIndoors": 28,
+    "transplant": 14,
+    "directSow": 14,
+    "daysToMaturity": 85,
+    "successionEnabled": true,
+    "successionInterval": 3,
+    "successionMax": 2,
+    "sun": "full",
+    "spacing": "36-48\" apart",
+    "notes": ["Requires warm soil to germinate and thrive", "Reduce watering as fruit nears maturity to concentrate sugars", "Ready to harvest when the tendril nearest the fruit dries up"],
+    "lunarAffinity": "waxing",
+    "growthHabit": "annual",
+    "yearsToFirstHarvest": 0,
+    "waterNeedsPerWeek": 1.5,
+    "yield": {
+      "avgPerPlant": 20,
+      "unit": "lbs",
+      "caloriesPer100g": 30,
+      "proteinPer100g": 0.6,
+      "carbsPer100g": 7.6,
+      "fatPer100g": 0.2,
+      "storageLifeDays": 14
+    },
+    "preservation": [
+      { "method": "pickling", "shelfLifeMonths": 12, "notes": "Pickle the rinds" },
+      { "method": "freezing", "shelfLifeMonths": 8, "notes": "Freeze cubes for smoothies" }
+    ],
+    "uses": ["cooking"],
+    "companions": ["corn", "radish", "nasturtium", "sunflower"],
+    "antagonists": ["potato", "zucchini"]
+  },
+  {
+    "id": "cantaloupe",
+    "name": "Cantaloupe",
+    "category": "fruit",
+    "icon": "🍈",
+    "varieties": [
+      { "id": "hale-s-best", "name": "Hale's Best Jumbo", "daysToMaturity": 85, "type": "Muskmelon", "special": ["heirloom", "fragrant"] },
+      { "id": "minnesota-midget", "name": "Minnesota Midget", "daysToMaturity": 70, "type": "Compact", "special": ["short-season", "container-friendly"] }
+    ],
+    "startIndoors": 28,
+    "transplant": 14,
+    "directSow": 14,
+    "daysToMaturity": 80,
+    "successionEnabled": true,
+    "successionInterval": 3,
+    "successionMax": 2,
+    "sun": "full",
+    "spacing": "36\" apart",
+    "notes": ["Fruit easily separates from the vine ('full slip') when ripe", "Can be trellised if fruit is supported by slings", "Highly susceptible to powdery mildew"],
+    "lunarAffinity": "waxing",
+    "growthHabit": "annual",
+    "yearsToFirstHarvest": 0,
+    "waterNeedsPerWeek": 1.5,
+    "yield": {
+      "avgPerPlant": 15,
+      "unit": "lbs",
+      "caloriesPer100g": 34,
+      "proteinPer100g": 0.8,
+      "carbsPer100g": 8.2,
+      "fatPer100g": 0.2,
+      "storageLifeDays": 10
+    },
+    "preservation": [
+      { "method": "freezing", "shelfLifeMonths": 6, "notes": "Freeze chunks or puree" },
+      { "method": "dehydrating", "shelfLifeMonths": 12, "notes": "Dehydrate slices for a chewy, sweet snack" }
+    ],
+    "uses": ["cooking"],
+    "companions": ["corn", "radish", "bush-bean"],
+    "antagonists": ["potato"]
+  },
+  {
+    "id": "groundcherry",
+    "name": "Groundcherry",
+    "category": "fruit",
+    "icon": "🍒",
+    "varieties": [
+      { "id": "aunt-mollys", "name": "Aunt Molly's", "daysToMaturity": 70, "type": "Husk Cherry", "special": ["citrus-flavor", "prolific"] },
+      { "id": "pineapple", "name": "Pineapple", "daysToMaturity": 75, "type": "Husk Cherry", "special": ["pineapple-flavor"] }
+    ],
+    "startIndoors": 42,
+    "transplant": 14,
+    "directSow": null,
+    "daysToMaturity": 70,
+    "successionEnabled": false,
+    "successionInterval": 0,
+    "successionMax": 1,
+    "sun": "full",
+    "spacing": "24-36\" apart",
+    "notes": ["Fruits are ripe when their husks turn brown and they fall to the ground", "Related to tomatillos", "Self-seeds readily; can become a welcome weed"],
+    "lunarAffinity": "waxing",
+    "growthHabit": "annual",
+    "yearsToFirstHarvest": 0,
+    "waterNeedsPerWeek": 1.0,
+    "yield": {
+      "avgPerPlant": 3,
+      "unit": "lbs",
+      "caloriesPer100g": 53,
+      "proteinPer100g": 1.9,
+      "carbsPer100g": 11.2,
+      "fatPer100g": 0.7,
+      "storageLifeDays": 21
+    },
+    "preservation": [
+      { "method": "jam", "shelfLifeMonths": 18, "notes": "High pectin content makes excellent jams and preserves" },
+      { "method": "dehydrating", "shelfLifeMonths": 12, "notes": "Dry into 'golden raisins'" }
+    ],
+    "uses": ["cooking"],
+    "companions": ["basil", "onion", "carrot"],
+    "antagonists": ["corn", "fennel"]
+  },
+  {
+    "id": "pumpkin",
+    "name": "Pumpkin",
+    "category": "fruit",
+    "icon": "🎃",
+    "varieties": [
+      { "id": "sugar-pie", "name": "Sugar Pie", "daysToMaturity": 100, "type": "Baking", "special": ["sweet-flesh", "small"] },
+      { "id": "jack-o-lantern", "name": "Jack-O'-Lantern", "daysToMaturity": 110, "type": "Carving", "special": ["large", "sturdy-rind"] }
+    ],
+    "startIndoors": 21,
+    "transplant": 14,
+    "directSow": 14,
+    "daysToMaturity": 105,
+    "successionEnabled": false,
+    "successionInterval": 0,
+    "successionMax": 1,
+    "sun": "full",
+    "spacing": "48-72\" apart",
+    "notes": ["Requires massive amounts of space to sprawl", "Cure in the sun for 1-2 weeks after harvesting to harden the skin for storage", "Leave a few inches of stem attached to prevent rot"],
+    "lunarAffinity": "waxing",
+    "growthHabit": "annual",
+    "yearsToFirstHarvest": 0,
+    "waterNeedsPerWeek": 1.5,
+    "yield": {
+      "avgPerPlant": 25,
+      "unit": "lbs",
+      "caloriesPer100g": 26,
+      "proteinPer100g": 1.0,
+      "carbsPer100g": 6.5,
+      "fatPer100g": 0.1,
+      "storageLifeDays": 90
+    },
+    "preservation": [
+      { "method": "canning", "shelfLifeMonths": 18, "notes": "Must be pressure canned as cubes (do not can puree)" },
+      { "method": "freezing", "shelfLifeMonths": 12, "notes": "Cook and puree, then freeze" },
+      { "method": "cold-storage", "shelfLifeMonths": 4, "notes": "Store whole in a cool, dry basement" }
+    ],
+    "uses": ["cooking", "livestock-feed", "companion"],
+    "companions": ["corn", "bean", "marigold", "nasturtium"],
+    "antagonists": ["potato"]
+  }
+]
