@@ -314,8 +314,10 @@ export default function STLViewer({ file, onVolumeCalculated, onError }: STLView
   }, [onVolumeCalculated, onError, simplifyGeometry]);
 
   // Signed volume of triangle for mesh volume calculation
+  // NOTE: Using crossVectors to avoid mutating input vectors (Vector3.cross() modifies in-place)
   function signedVolumeOfTriangle(p1: THREE.Vector3, p2: THREE.Vector3, p3: THREE.Vector3): number {
-    return p1.dot(p2.cross(p3)) / 6.0;
+    const cross = new sceneRef.current!.THREE.Vector3().crossVectors(p2, p3);
+    return p1.dot(cross) / 6.0;
   }
 
   useEffect(() => {

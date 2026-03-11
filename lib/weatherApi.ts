@@ -605,26 +605,26 @@ export function getMoonPhase(date: Date = new Date()): MoonPhase {
   // Reference new moon: January 6, 2000 at 18:14 UTC
   const knownNewMoon = new Date('2000-01-06T18:14:00Z');
   
-  // Synodic month (lunar cycle) in milliseconds
-  const synodicMonth = 29.530588853 * 24 * 60 * 60 * 1000;
+  // Synodic month (lunar cycle) in days
+  const synodicMonthDays = 29.530588853;
   
   const daysSinceNewMoon = (date.getTime() - knownNewMoon.getTime()) / (24 * 60 * 60 * 1000);
-  const lunarAge = daysSinceNewMoon % synodicMonth;
-  const normalizedAge = (lunarAge / synodicMonth) * 8;
+  const lunarAge = daysSinceNewMoon % synodicMonthDays;
+  const normalizedAge = (lunarAge / synodicMonthDays) * 8;
   
   const phaseIndex = Math.floor(normalizedAge) % 8;
   const phase = MOON_PHASES[phaseIndex];
   
   // Calculate illumination (0-100%)
-  const illumination = Math.round((1 - Math.cos((lunarAge / synodicMonth) * 2 * Math.PI)) * 50);
+  const illumination = Math.round((1 - Math.cos((lunarAge / synodicMonthDays) * 2 * Math.PI)) * 50);
   
   // Days until full moon
-  const daysUntilFull = lunarAge < synodicMonth / 2 
-    ? Math.round((synodicMonth / 2) - lunarAge) / (24 * 60 * 60 * 1000)
-    : Math.round(synodicMonth - lunarAge) / (24 * 60 * 60 * 1000);
+  const daysUntilFull = lunarAge < synodicMonthDays / 2 
+    ? Math.round((synodicMonthDays / 2) - lunarAge)
+    : Math.round(synodicMonthDays - lunarAge);
   
   // Days until new moon
-  const daysUntilNew = Math.round((synodicMonth - lunarAge) / (24 * 60 * 60 * 1000));
+  const daysUntilNew = Math.round(synodicMonthDays - lunarAge);
   
   const labels: Record<MoonPhase['phase'], string> = {
     new: 'New Moon',
