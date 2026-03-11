@@ -229,7 +229,30 @@ export default function TerminalOverlay() {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-2 sm:p-4 bg-black/80 backdrop-blur-sm">
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-label="Terminal overlay"
+      className="fixed inset-0 z-[100] flex items-center justify-center p-2 sm:p-4 bg-black/80 backdrop-blur-sm"
+      onKeyDown={(e) => {
+        // Focus trap: prevent Tab from leaving the dialog
+        if (e.key === "Tab") {
+          const focusable = e.currentTarget.querySelectorAll<HTMLElement>(
+            'input, button, textarea, a[href], [tabindex]:not([tabindex="-1"])'
+          );
+          if (focusable.length === 0) return;
+          const first = focusable[0];
+          const last = focusable[focusable.length - 1];
+          if (e.shiftKey && document.activeElement === first) {
+            e.preventDefault();
+            last.focus();
+          } else if (!e.shiftKey && document.activeElement === last) {
+            e.preventDefault();
+            first.focus();
+          }
+        }
+      }}
+    >
       {/* Terminal Container */}
       <BrutalistBlock 
         variant="terminal" 
@@ -294,6 +317,8 @@ export default function TerminalOverlay() {
             {/* Terminal Output */}
             <div
               ref={terminalRef}
+              aria-live="polite"
+              aria-label="Terminal output"
               className="flex-grow p-4 overflow-y-auto font-mono text-sm space-y-1 bg-black/40 scrollbar-thin scrollbar-thumb-accent"
             >
               {commands.map((cmd, index) => (
@@ -333,6 +358,7 @@ export default function TerminalOverlay() {
                   onChange={(e) => setInput(e.target.value)}
                   className="flex-grow bg-transparent border-none outline-none font-mono text-sm text-accent placeholder:opacity-30"
                   placeholder="Enter command..."
+                  aria-label="Terminal command input"
                   spellCheck={false}
                   autoComplete="off"
                 />

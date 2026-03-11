@@ -42,7 +42,9 @@ export default function NewsletterSignup() {
             {/* Form */}
             <form onSubmit={handleSubmit} className="flex-shrink-0 w-full md:w-auto">
               <div className="flex gap-2">
+                <label htmlFor="newsletter-email" className="sr-only">Email address</label>
                 <input
+                  id="newsletter-email"
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
@@ -59,16 +61,18 @@ export default function NewsletterSignup() {
                 </Button>
               </div>
 
-              {status === "success" && (
-                <p className="text-xs text-green-600 mt-2">
-                  &gt;&gt; SUBSCRIPTION_CONFIRMED
-                </p>
-              )}
-              {status === "error" && (
-                <p className="text-xs text-[var(--accent)] mt-2">
-                  &gt;&gt; ERROR: INVALID_EMAIL_FORMAT
-                </p>
-              )}
+              <div aria-live="polite" aria-atomic="true">
+                {status === "success" && (
+                  <p className="text-xs text-green-600 mt-2">
+                    &gt;&gt; SUBSCRIPTION_CONFIRMED
+                  </p>
+                )}
+                {status === "error" && (
+                  <p className="text-xs text-[var(--accent)] mt-2">
+                    &gt;&gt; ERROR: INVALID_EMAIL_FORMAT
+                  </p>
+                )}
+              </div>
             </form>
           </div>
         </div>

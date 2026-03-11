@@ -15,7 +15,13 @@ const Typography = ({
   variant = 'body',
   style,
 }: TypographyProps) => {
-  const Component = as || (variant.startsWith('h') ? (variant as React.ElementType) : variant === 'body' ? 'p' : 'span');
+  const defaultElementMap: Record<string, React.ElementType> = {
+    h1: 'h1', h2: 'h2', h3: 'h3', h4: 'h4',
+    body: 'p',
+    code: 'code',
+    small: 'span',
+  };
+  const Component = as || defaultElementMap[variant] || 'span';
 
   const variants = {
     h1: "text-4xl md:text-6xl lg:text-7xl font-bold uppercase tracking-tight mb-6",

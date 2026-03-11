@@ -68,7 +68,7 @@ export default function ToolsShowcase() {
                       {tool.description}
                     </Typography>
 
-                    <div className="flex items-center gap-2 text-xs text-[var(--accent)] opacity-0 group-hover:opacity-100 transition-opacity font-bold uppercase">
+                    <div className="flex items-center gap-2 text-xs text-accent opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100 transition-opacity font-bold uppercase">
                       <span>Access Tool</span>
                       <ArrowRight size={14} />
                     </div>
