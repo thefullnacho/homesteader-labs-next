@@ -1,21 +1,113 @@
+// ============================================================
+// Preservation & Use Types
+// ============================================================
+
+export type PreservationMethod =
+  | 'canning'
+  | 'freezing'
+  | 'drying'
+  | 'dehydrating'
+  | 'fermentation'
+  | 'pickling'
+  | 'root-cellar'
+  | 'cold-storage'
+  | 'tincture'
+  | 'infusion'
+  | 'smoking'
+  | 'salt-curing'
+  | 'oil-preserving'
+  | 'jam';
+
+export type CropUse =
+  | 'cooking'
+  | 'medicinal'
+  | 'tea'
+  | 'companion'
+  | 'pollinator'
+  | 'pest-deterrent'
+  | 'dye'
+  | 'fiber'
+  | 'aromatherapy'
+  | 'livestock-feed';
+
+export type GrowthHabit = 'annual' | 'biennial' | 'perennial';
+
+// ============================================================
+// Yield & Nutrition (for Caloric Security)
+// ============================================================
+
+export interface CropYield {
+  avgPerPlant: number;              // average output per plant per season
+  unit: 'lbs' | 'oz' | 'bunches' | 'heads' | 'bulbs' | 'ears';
+  caloriesPer100g: number;
+  proteinPer100g?: number;          // grams
+  carbsPer100g?: number;            // grams
+  fatPer100g?: number;              // grams
+  storageLifeDays: number;          // fresh shelf life before spoilage
+}
+
+// ============================================================
+// Preservation Entry
+// ============================================================
+
+export interface PreservationEntry {
+  method: PreservationMethod;
+  shelfLifeMonths: number;
+  notes: string;
+}
+
+// ============================================================
+// Core Crop Interface
+// ============================================================
+
 export interface Crop {
   id: string;
   name: string;
   category: 'vegetable' | 'herb' | 'fruit';
+  icon: string;
   varieties: Variety[];
-  startIndoors: number | null;      // days before last frost (null if direct sow only)
-  transplant: number | null;        // days after last frost (null if direct sow only)
-  directSow: number | null;         // days after last frost (null if transplant only)
-  daysToMaturity: number;           // average days to harvest
+
+  // Planting timing (days relative to last frost; negative = before)
+  startIndoors: number | null;
+  transplant: number | null;
+  directSow: number | null;
+  daysToMaturity: number;
+
+  // Succession planting
   successionEnabled: boolean;
   successionInterval: number;       // weeks between plantings
   successionMax: number;            // max plantings per season
+
+  // Growing conditions
   sun: 'full' | 'partial' | 'shade';
   spacing: string;
   notes: string[];
-  icon: string;
   lunarAffinity?: 'waxing' | 'waning';
+
+  // Growth lifecycle (NEW)
+  growthHabit?: GrowthHabit;
+  yearsToFirstHarvest?: number;     // 0 for annuals, 2-7 for perennials
+
+  // Water requirements (NEW)
+  waterNeedsPerWeek?: number;       // gallons per plant
+
+  // Yield & nutrition for caloric security (NEW)
+  yield?: CropYield;
+
+  // Preservation methods (NEW)
+  preservation?: PreservationEntry[];
+
+  // Use cases — especially useful for herbs (NEW)
+  uses?: CropUse[];
+
+  // Companion planting (NEW)
+  companions?: string[];            // crop IDs that grow well together
+  antagonists?: string[];           // crop IDs to keep apart
 }
+
+// ============================================================
+// Variety
+// ============================================================
 
 export interface Variety {
   id: string;
@@ -25,14 +117,18 @@ export interface Variety {
   special: string[];
 }
 
+// ============================================================
+// Planting Calendar Types (unchanged)
+// ============================================================
+
 export interface FrostDates {
   zipCode: string;
   city?: string;
   state?: string;
   lastSpringFrost: Date;
-  lastSpringFrostConfidence: number;  // days ±
+  lastSpringFrostConfidence: number;
   firstFallFrost: Date;
-  firstFallFrostConfidence: number;   // days ±
+  firstFallFrostConfidence: number;
   frostFreeDays: number;
   growingZone?: string;
 }
@@ -57,7 +153,7 @@ export interface PlantingDate {
   varietyName: string;
   action: 'start-indoors' | 'transplant' | 'direct-sow' | 'harvest';
   date: Date;
-  successionNumber?: number;  // 1, 2, 3, etc. for succession plantings
+  successionNumber?: number;
   notes?: string[];
   lunarPhase?: string;
   lunarAligned?: boolean;
