@@ -1,36 +1,82 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Homesteader Labs - Project Context
 
-## Getting Started
+## Project Overview
+Homesteader Labs is a Next.js 14 application providing tools, hardware, and field documentation for homesteaders, survivalists, and self-reliant builders. The site features a "Brutalist" aesthetic with a focus on off-grid resilience, fabrication, and survival tech.
 
-First, run the development server:
+### Core Technologies
+- **Framework:** Next.js 14 (App Router)
+- **Language:** TypeScript
+- **Styling:** Tailwind CSS (with Brutalist UI components)
+- **3D Rendering:** Three.js (via `STLViewer` for fabrication tools)
+- **Content:** MDX (for blog and archive posts)
+- **Icons:** Lucide React
+- **Testing:** Vitest with JSDOM
 
+### Key Features
+- **Planting Calendar:** Data-driven tool for managing crop schedules.
+- **Weather Tools:** Survival and planting-focused weather dashboards.
+- **Fabrication:** 3D STL viewer for hardware designs and field tools.
+- **Shop:** Catalog for off-grid hardware and survival gear.
+- **Terminal:** Interactive overlay (`ALT+T`) for command-line style interactions.
+
+---
+
+## Building and Running
+
+### Development
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
+Starts the development server on `http://localhost:3000`.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Production
+```bash
+npm run build
+npm run start
+```
+Builds the application for production and starts the server.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Testing
+```bash
+npm run test
+```
+Runs the Vitest test suite.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Linting
+```bash
+npm run lint
+```
+Runs ESLint to check for code quality and style issues.
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## Development Conventions
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Architecture
+- **App Router:** All routing and layouts are under the `app/` directory.
+- **Modular Components:** Feature-specific components are in `components/<feature>/`, while shared UI elements are in `components/ui/`.
+- **Domain Logic:** All business logic, types, and utility functions are centralized in the `lib/` directory. Use the `@/lib` alias.
+- **Content Management:** MDX files are stored in `content/` and parsed using `lib/posts.ts` and `lib/products.ts`.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### UI & Styling
+- **Brutalist Aesthetic:** Use standard UI components (`BrutalistBlock`, `Typography`, `Button`, `Badge`) to maintain the project's visual identity.
+- **Shadows & Borders:** Use the `shadow-brutalist` and `border-3` classes for consistency.
+- **Color Palette:** Strictly follow the CSS variables defined in `app/globals.css` and mapped in `tailwind.config.ts`.
+- **Dark Mode:** Supports `.dark` class toggling.
 
-## Deploy on Vercel
+### Performance
+- **Lazy Loading:** 3D components like `STLViewer` should be loaded dynamically using `next/dynamic` with `ssr: false` to keep the initial bundle size small.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Testing
+- **Unit Tests:** Place logic tests in `lib/` with a `.test.ts` extension (e.g., `lib/survivalIndex.test.ts`).
+- **UI Tests:** Use `@testing-library/react` for component testing within Vitest.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+## Key Directories
+- `app/`: Next.js pages and API routes.
+- `components/`: React components.
+- `content/`: MDX content files.
+- `docs/`: Project documentation (Audits, MVP specs, Strategies).
+- `lib/`: Shared logic, types, and data fetching.
+- `public/`: Static assets (fonts, images, textures).
