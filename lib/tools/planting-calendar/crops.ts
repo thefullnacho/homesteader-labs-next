@@ -1,4 +1,4 @@
-import { Crop, Variety } from './types';
+import { Crop, Variety, PreservationEntry } from './types';
 
 export const crops: Crop[] = [
   {
@@ -21,7 +21,27 @@ export const crops: Crop[] = [
     successionMax: 1,
     sun: 'full',
     spacing: '24-36" apart',
-    notes: ['Start indoors 6 weeks before last frost', 'Harden off before transplanting', 'Stake or cage for support']
+    notes: ['Start indoors 6 weeks before last frost', 'Harden off before transplanting', 'Stake or cage for support'],
+    growthHabit: 'annual',
+    yearsToFirstHarvest: 0,
+    waterNeedsPerWeek: 1.5,
+    yield: {
+      avgPerPlant: 10,
+      unit: 'lbs',
+      caloriesPer100g: 18,
+      proteinPer100g: 0.9,
+      carbsPer100g: 3.9,
+      fatPer100g: 0.2,
+      storageLifeDays: 7
+    },
+    preservation: [
+      { method: 'canning', shelfLifeMonths: 18, notes: 'Whole, crushed, or as sauce; add lemon juice for safe acidity' },
+      { method: 'freezing', shelfLifeMonths: 12, notes: 'Blanch and peel, or freeze whole for later sauce-making' },
+      { method: 'dehydrating', shelfLifeMonths: 12, notes: 'Sun-dried or dehydrator; store in airtight container or oil' }
+    ],
+    uses: ['cooking'],
+    companions: ['carrot', 'onion', 'garlic', 'pepper-bell', 'pepper-hot'],
+    antagonists: ['broccoli', 'corn', 'potato']
   },
   {
     id: 'pepper-bell',
@@ -42,7 +62,27 @@ export const crops: Crop[] = [
     successionMax: 1,
     sun: 'full',
     spacing: '18-24" apart',
-    notes: ['Needs warm soil (70°F+)', 'Start indoors 8 weeks early', 'Harvest when firm and glossy']
+    notes: ['Needs warm soil (70°F+)', 'Start indoors 8 weeks early', 'Harvest when firm and glossy'],
+    growthHabit: 'annual',
+    yearsToFirstHarvest: 0,
+    waterNeedsPerWeek: 1,
+    yield: {
+      avgPerPlant: 5,
+      unit: 'lbs',
+      caloriesPer100g: 26,
+      proteinPer100g: 1.0,
+      carbsPer100g: 6.0,
+      fatPer100g: 0.3,
+      storageLifeDays: 14
+    },
+    preservation: [
+      { method: 'freezing', shelfLifeMonths: 12, notes: 'Dice or slice; flash freeze on trays then bag' },
+      { method: 'pickling', shelfLifeMonths: 12, notes: 'Pickle strips in vinegar brine with garlic' },
+      { method: 'dehydrating', shelfLifeMonths: 12, notes: 'Dehydrate and grind into pepper flakes or powder' }
+    ],
+    uses: ['cooking'],
+    companions: ['tomato', 'carrot', 'onion'],
+    antagonists: ['beans-bush', 'beans-pole']
   },
   {
     id: 'pepper-hot',
@@ -63,7 +103,27 @@ export const crops: Crop[] = [
     successionMax: 1,
     sun: 'full',
     spacing: '18-24" apart',
-    notes: ['Longer season than bell peppers', 'Harvest at full color for maximum heat', 'Dry excess for winter use']
+    notes: ['Longer season than bell peppers', 'Harvest at full color for maximum heat', 'Dry excess for winter use'],
+    growthHabit: 'annual',
+    yearsToFirstHarvest: 0,
+    waterNeedsPerWeek: 1,
+    yield: {
+      avgPerPlant: 3,
+      unit: 'lbs',
+      caloriesPer100g: 40,
+      proteinPer100g: 1.9,
+      carbsPer100g: 8.8,
+      fatPer100g: 0.4,
+      storageLifeDays: 14
+    },
+    preservation: [
+      { method: 'drying', shelfLifeMonths: 24, notes: 'String dry whole peppers or use dehydrator; grind into powder' },
+      { method: 'pickling', shelfLifeMonths: 12, notes: 'Pickle whole or sliced in vinegar brine' },
+      { method: 'freezing', shelfLifeMonths: 12, notes: 'Freeze whole or diced; no blanching needed' }
+    ],
+    uses: ['cooking', 'pest-deterrent'],
+    companions: ['tomato', 'carrot', 'onion'],
+    antagonists: ['beans-bush', 'beans-pole']
   },
   {
     id: 'cucumber',
@@ -84,7 +144,26 @@ export const crops: Crop[] = [
     successionMax: 3,
     sun: 'full',
     spacing: '36-48" apart (vining)',
-    notes: ['Can direct sow or transplant', 'Succession plant every 3 weeks', 'Pick frequently to encourage production']
+    notes: ['Can direct sow or transplant', 'Succession plant every 3 weeks', 'Pick frequently to encourage production'],
+    growthHabit: 'annual',
+    yearsToFirstHarvest: 0,
+    waterNeedsPerWeek: 2,
+    yield: {
+      avgPerPlant: 5,
+      unit: 'lbs',
+      caloriesPer100g: 15,
+      proteinPer100g: 0.7,
+      carbsPer100g: 3.6,
+      fatPer100g: 0.1,
+      storageLifeDays: 7
+    },
+    preservation: [
+      { method: 'pickling', shelfLifeMonths: 18, notes: 'Classic dill pickles or bread-and-butter; water-bath can' },
+      { method: 'fermentation', shelfLifeMonths: 6, notes: 'Lacto-fermented pickles in salt brine; keep refrigerated' }
+    ],
+    uses: ['cooking'],
+    companions: ['beans-bush', 'beans-pole', 'peas', 'corn', 'lettuce'],
+    antagonists: ['potato']
   },
   {
     id: 'lettuce',
@@ -105,7 +184,26 @@ export const crops: Crop[] = [
     successionMax: 6,
     sun: 'partial',
     spacing: '8-12" apart',
-    notes: ['Direct sow 2 weeks before last frost', 'Succession plant every 2 weeks', 'Shade in hot weather', 'Cut-and-come-again harvesting']
+    notes: ['Direct sow 2 weeks before last frost', 'Succession plant every 2 weeks', 'Shade in hot weather', 'Cut-and-come-again harvesting'],
+    growthHabit: 'annual',
+    yearsToFirstHarvest: 0,
+    waterNeedsPerWeek: 0.5,
+    yield: {
+      avgPerPlant: 0.5,
+      unit: 'lbs',
+      caloriesPer100g: 15,
+      proteinPer100g: 1.4,
+      carbsPer100g: 2.9,
+      fatPer100g: 0.2,
+      storageLifeDays: 7
+    },
+    preservation: [
+      { method: 'dehydrating', shelfLifeMonths: 6, notes: 'Dehydrate leaves for powder to add to smoothies or soups' },
+      { method: 'freezing', shelfLifeMonths: 6, notes: 'Freeze for smoothies only; texture not suitable for salads after thawing' }
+    ],
+    uses: ['cooking'],
+    companions: ['carrot', 'radish', 'onion', 'chard'],
+    antagonists: []
   },
   {
     id: 'beans-bush',
@@ -126,7 +224,27 @@ export const crops: Crop[] = [
     successionMax: 4,
     sun: 'full',
     spacing: '4-6" apart',
-    notes: ['Wait for soil to warm to 60°F', 'Succession plant every 2 weeks', 'Pick daily when producing', 'Do not soak seeds before planting']
+    notes: ['Wait for soil to warm to 60°F', 'Succession plant every 2 weeks', 'Pick daily when producing', 'Do not soak seeds before planting'],
+    growthHabit: 'annual',
+    yearsToFirstHarvest: 0,
+    waterNeedsPerWeek: 1,
+    yield: {
+      avgPerPlant: 0.5,
+      unit: 'lbs',
+      caloriesPer100g: 31,
+      proteinPer100g: 1.8,
+      carbsPer100g: 7.0,
+      fatPer100g: 0.1,
+      storageLifeDays: 7
+    },
+    preservation: [
+      { method: 'canning', shelfLifeMonths: 18, notes: 'Pressure can whole or cut green beans' },
+      { method: 'freezing', shelfLifeMonths: 12, notes: 'Blanch 3 minutes, ice bath, then freeze in bags' },
+      { method: 'drying', shelfLifeMonths: 24, notes: 'Let pods mature on vine for dry shell beans' }
+    ],
+    uses: ['cooking', 'companion'],
+    companions: ['corn', 'cucumber', 'potato', 'carrot'],
+    antagonists: ['onion', 'garlic', 'pepper-bell', 'pepper-hot']
   },
   {
     id: 'beans-pole',
@@ -146,7 +264,27 @@ export const crops: Crop[] = [
     successionMax: 1,
     sun: 'full',
     spacing: '6-8" apart (on trellis)',
-    notes: ['Provide trellis or poles', 'Longer harvest period than bush beans', 'Pick frequently to extend harvest']
+    notes: ['Provide trellis or poles', 'Longer harvest period than bush beans', 'Pick frequently to extend harvest'],
+    growthHabit: 'annual',
+    yearsToFirstHarvest: 0,
+    waterNeedsPerWeek: 1,
+    yield: {
+      avgPerPlant: 1,
+      unit: 'lbs',
+      caloriesPer100g: 31,
+      proteinPer100g: 1.8,
+      carbsPer100g: 7.0,
+      fatPer100g: 0.1,
+      storageLifeDays: 7
+    },
+    preservation: [
+      { method: 'canning', shelfLifeMonths: 18, notes: 'Pressure can whole or cut green beans' },
+      { method: 'freezing', shelfLifeMonths: 12, notes: 'Blanch 3 minutes, ice bath, then freeze in bags' },
+      { method: 'drying', shelfLifeMonths: 24, notes: 'Let pods dry on vine for shell beans; store in jars' }
+    ],
+    uses: ['cooking', 'companion'],
+    companions: ['corn', 'cucumber', 'potato', 'carrot'],
+    antagonists: ['onion', 'garlic', 'pepper-bell', 'pepper-hot']
   },
   {
     id: 'squash-summer',
@@ -167,7 +305,27 @@ export const crops: Crop[] = [
     successionMax: 2,
     sun: 'full',
     spacing: '36-48" apart',
-    notes: ['Very prolific - 2-3 plants per family', 'Pick when small for best flavor', 'Succession plant for continuous harvest']
+    notes: ['Very prolific - 2-3 plants per family', 'Pick when small for best flavor', 'Succession plant for continuous harvest'],
+    growthHabit: 'annual',
+    yearsToFirstHarvest: 0,
+    waterNeedsPerWeek: 1.5,
+    yield: {
+      avgPerPlant: 6,
+      unit: 'lbs',
+      caloriesPer100g: 17,
+      proteinPer100g: 1.2,
+      carbsPer100g: 3.1,
+      fatPer100g: 0.3,
+      storageLifeDays: 7
+    },
+    preservation: [
+      { method: 'freezing', shelfLifeMonths: 12, notes: 'Shred for zucchini bread or slice and blanch before freezing' },
+      { method: 'dehydrating', shelfLifeMonths: 12, notes: 'Slice thin for zucchini chips; rehydrate for soups' },
+      { method: 'canning', shelfLifeMonths: 12, notes: 'Best canned as relish or pickled; not safe to can plain' }
+    ],
+    uses: ['cooking'],
+    companions: ['corn', 'beans-bush', 'beans-pole', 'radish'],
+    antagonists: ['potato']
   },
   {
     id: 'squash-winter',
@@ -188,7 +346,27 @@ export const crops: Crop[] = [
     successionMax: 1,
     sun: 'full',
     spacing: '48-72" apart',
-    notes: ['Needs 90+ frost-free days', 'Vines spread 10-15 feet', 'Cure for 2 weeks before storing']
+    notes: ['Needs 90+ frost-free days', 'Vines spread 10-15 feet', 'Cure for 2 weeks before storing'],
+    growthHabit: 'annual',
+    yearsToFirstHarvest: 0,
+    waterNeedsPerWeek: 1.5,
+    yield: {
+      avgPerPlant: 5,
+      unit: 'lbs',
+      caloriesPer100g: 45,
+      proteinPer100g: 1.0,
+      carbsPer100g: 11.7,
+      fatPer100g: 0.1,
+      storageLifeDays: 90
+    },
+    preservation: [
+      { method: 'root-cellar', shelfLifeMonths: 6, notes: 'Cure 2 weeks in sun then store at 50-55°F; butternut lasts longest' },
+      { method: 'canning', shelfLifeMonths: 18, notes: 'Pressure can cubed (not mashed) for long-term storage' },
+      { method: 'freezing', shelfLifeMonths: 12, notes: 'Cook and puree before freezing; great for soups and pies' }
+    ],
+    uses: ['cooking'],
+    companions: ['corn', 'beans-bush', 'beans-pole'],
+    antagonists: ['potato']
   },
   {
     id: 'carrot',
@@ -209,7 +387,27 @@ export const crops: Crop[] = [
     successionMax: 4,
     sun: 'full',
     spacing: '2-3" apart',
-    notes: ['Direct sow 3 weeks before last frost', 'Succession plant every 3 weeks', 'Thin to proper spacing', 'Keep soil consistently moist']
+    notes: ['Direct sow 3 weeks before last frost', 'Succession plant every 3 weeks', 'Thin to proper spacing', 'Keep soil consistently moist'],
+    growthHabit: 'annual',
+    yearsToFirstHarvest: 0,
+    waterNeedsPerWeek: 0.5,
+    yield: {
+      avgPerPlant: 0.25,
+      unit: 'lbs',
+      caloriesPer100g: 41,
+      proteinPer100g: 0.9,
+      carbsPer100g: 9.6,
+      fatPer100g: 0.2,
+      storageLifeDays: 28
+    },
+    preservation: [
+      { method: 'root-cellar', shelfLifeMonths: 6, notes: 'Pack in damp sand at 32-40°F; trim tops first' },
+      { method: 'freezing', shelfLifeMonths: 12, notes: 'Blanch 3 minutes, ice bath, dice or slice, then freeze' },
+      { method: 'canning', shelfLifeMonths: 18, notes: 'Pressure can sliced or diced carrots' }
+    ],
+    uses: ['cooking'],
+    companions: ['tomato', 'onion', 'lettuce', 'peas'],
+    antagonists: []
   },
   {
     id: 'radish',
@@ -230,7 +428,26 @@ export const crops: Crop[] = [
     successionMax: 8,
     sun: 'full',
     spacing: '2" apart',
-    notes: ['Fastest growing crop', 'Succession plant every week', 'Harvest when small for best flavor', 'Interplant with slower crops']
+    notes: ['Fastest growing crop', 'Succession plant every week', 'Harvest when small for best flavor', 'Interplant with slower crops'],
+    growthHabit: 'annual',
+    yearsToFirstHarvest: 0,
+    waterNeedsPerWeek: 0.5,
+    yield: {
+      avgPerPlant: 1,
+      unit: 'oz',
+      caloriesPer100g: 16,
+      proteinPer100g: 0.7,
+      carbsPer100g: 3.4,
+      fatPer100g: 0.1,
+      storageLifeDays: 14
+    },
+    preservation: [
+      { method: 'pickling', shelfLifeMonths: 6, notes: 'Quick pickle sliced radishes in rice vinegar' },
+      { method: 'fermentation', shelfLifeMonths: 3, notes: 'Lacto-ferment with salt; traditional Korean kkakdugi' }
+    ],
+    uses: ['cooking', 'companion'],
+    companions: ['lettuce', 'peas', 'carrot', 'spinach'],
+    antagonists: []
   },
   {
     id: 'spinach',
@@ -250,7 +467,26 @@ export const crops: Crop[] = [
     successionMax: 4,
     sun: 'partial',
     spacing: '4-6" apart',
-    notes: ['Plant early - bolts in heat', 'Succession plant every 2 weeks', 'Shade in summer', 'Overwinter in mild climates']
+    notes: ['Plant early - bolts in heat', 'Succession plant every 2 weeks', 'Shade in summer', 'Overwinter in mild climates'],
+    growthHabit: 'annual',
+    yearsToFirstHarvest: 0,
+    waterNeedsPerWeek: 0.5,
+    yield: {
+      avgPerPlant: 0.5,
+      unit: 'lbs',
+      caloriesPer100g: 23,
+      proteinPer100g: 2.9,
+      carbsPer100g: 3.6,
+      fatPer100g: 0.4,
+      storageLifeDays: 7
+    },
+    preservation: [
+      { method: 'freezing', shelfLifeMonths: 12, notes: 'Blanch briefly, squeeze dry, freeze in portions for smoothies or cooking' },
+      { method: 'dehydrating', shelfLifeMonths: 12, notes: 'Dehydrate leaves and crumble into powder for soups and smoothies' }
+    ],
+    uses: ['cooking'],
+    companions: ['peas', 'beans-bush', 'beans-pole', 'radish', 'lettuce'],
+    antagonists: []
   },
   {
     id: 'kale',
@@ -271,7 +507,26 @@ export const crops: Crop[] = [
     successionMax: 1,
     sun: 'full',
     spacing: '18-24" apart',
-    notes: ['Very cold-hardy', 'Succession plant optional', 'Harvest leaves from bottom up', 'Sweetens after frost']
+    notes: ['Very cold-hardy', 'Succession plant optional', 'Harvest leaves from bottom up', 'Sweetens after frost'],
+    growthHabit: 'annual',
+    yearsToFirstHarvest: 0,
+    waterNeedsPerWeek: 1,
+    yield: {
+      avgPerPlant: 1.5,
+      unit: 'lbs',
+      caloriesPer100g: 49,
+      proteinPer100g: 4.3,
+      carbsPer100g: 8.8,
+      fatPer100g: 0.9,
+      storageLifeDays: 7
+    },
+    preservation: [
+      { method: 'freezing', shelfLifeMonths: 12, notes: 'Blanch, chop, and freeze in portions; great for smoothies and soups' },
+      { method: 'dehydrating', shelfLifeMonths: 12, notes: 'Make kale chips or powder for nutrient-dense seasoning' }
+    ],
+    uses: ['cooking', 'livestock-feed'],
+    companions: ['onion', 'garlic', 'beets', 'potato'],
+    antagonists: ['tomato']
   },
   {
     id: 'broccoli',
@@ -292,7 +547,27 @@ export const crops: Crop[] = [
     successionMax: 3,
     sun: 'full',
     spacing: '18-24" apart',
-    notes: ['Start indoors 6 weeks early', 'Succession plant for fall harvest', 'Harvest main head promptly', 'Side shoots continue producing']
+    notes: ['Start indoors 6 weeks early', 'Succession plant for fall harvest', 'Harvest main head promptly', 'Side shoots continue producing'],
+    growthHabit: 'annual',
+    yearsToFirstHarvest: 0,
+    waterNeedsPerWeek: 1.5,
+    yield: {
+      avgPerPlant: 1,
+      unit: 'lbs',
+      caloriesPer100g: 34,
+      proteinPer100g: 2.8,
+      carbsPer100g: 6.6,
+      fatPer100g: 0.4,
+      storageLifeDays: 7
+    },
+    preservation: [
+      { method: 'freezing', shelfLifeMonths: 12, notes: 'Cut into florets, blanch 3 minutes, ice bath, freeze on trays' },
+      { method: 'dehydrating', shelfLifeMonths: 12, notes: 'Dehydrate florets for soups and casseroles' },
+      { method: 'pickling', shelfLifeMonths: 6, notes: 'Pickle florets in seasoned vinegar brine' }
+    ],
+    uses: ['cooking'],
+    companions: ['onion', 'garlic', 'beets', 'potato'],
+    antagonists: ['tomato']
   },
   {
     id: 'onion',
@@ -313,7 +588,27 @@ export const crops: Crop[] = [
     successionMax: 1,
     sun: 'full',
     spacing: '4-6" apart',
-    notes: ['Start indoors 10 weeks early!', 'Transplant 4 weeks before last frost', 'Long growing season', 'Harvest when tops fall over']
+    notes: ['Start indoors 10 weeks early!', 'Transplant 4 weeks before last frost', 'Long growing season', 'Harvest when tops fall over'],
+    growthHabit: 'biennial',
+    yearsToFirstHarvest: 0,
+    waterNeedsPerWeek: 0.5,
+    yield: {
+      avgPerPlant: 0.5,
+      unit: 'lbs',
+      caloriesPer100g: 40,
+      proteinPer100g: 1.1,
+      carbsPer100g: 9.3,
+      fatPer100g: 0.1,
+      storageLifeDays: 30
+    },
+    preservation: [
+      { method: 'cold-storage', shelfLifeMonths: 6, notes: 'Cure in dry area 2 weeks then store at 35-50°F; storage varieties last longest' },
+      { method: 'dehydrating', shelfLifeMonths: 12, notes: 'Slice thin and dehydrate; grind into onion powder' },
+      { method: 'pickling', shelfLifeMonths: 12, notes: 'Pickle pearl onions or sliced red onions in vinegar' }
+    ],
+    uses: ['cooking', 'companion', 'pest-deterrent'],
+    companions: ['tomato', 'carrot', 'lettuce', 'beets', 'chard'],
+    antagonists: ['beans-bush', 'beans-pole', 'peas']
   },
   {
     id: 'garlic',
@@ -334,7 +629,27 @@ export const crops: Crop[] = [
     successionMax: 1,
     sun: 'full',
     spacing: '6-8" apart',
-    notes: ['Plant in FALL (Sept-Oct) for summer harvest', 'Cold period required for bulb formation', 'Mulch heavily for winter', 'Harvest when 50% of leaves are brown']
+    notes: ['Plant in FALL (Sept-Oct) for summer harvest', 'Cold period required for bulb formation', 'Mulch heavily for winter', 'Harvest when 50% of leaves are brown'],
+    growthHabit: 'annual',
+    yearsToFirstHarvest: 0,
+    waterNeedsPerWeek: 0.5,
+    yield: {
+      avgPerPlant: 1,
+      unit: 'bulbs',
+      caloriesPer100g: 149,
+      proteinPer100g: 6.4,
+      carbsPer100g: 33.1,
+      fatPer100g: 0.5,
+      storageLifeDays: 180
+    },
+    preservation: [
+      { method: 'cold-storage', shelfLifeMonths: 9, notes: 'Cure 2 weeks then store at 60-65°F; softneck stores longer than hardneck' },
+      { method: 'dehydrating', shelfLifeMonths: 24, notes: 'Slice and dehydrate; grind into garlic powder' },
+      { method: 'oil-preserving', shelfLifeMonths: 4, notes: 'Store peeled cloves in oil in refrigerator only; botulism risk at room temp' }
+    ],
+    uses: ['cooking', 'medicinal', 'pest-deterrent', 'companion'],
+    companions: ['tomato', 'carrot', 'beets', 'kale', 'spinach'],
+    antagonists: ['beans-bush', 'beans-pole', 'peas']
   },
   {
     id: 'potato',
@@ -355,7 +670,27 @@ export const crops: Crop[] = [
     successionMax: 1,
     sun: 'full',
     spacing: '12-15" apart',
-    notes: ['Plant seed potatoes 2 weeks after last frost', 'Hill soil around plants as they grow', 'Harvest new potatoes early, storage potatoes late', 'Cure for 2 weeks before storing']
+    notes: ['Plant seed potatoes 2 weeks after last frost', 'Hill soil around plants as they grow', 'Harvest new potatoes early, storage potatoes late', 'Cure for 2 weeks before storing'],
+    growthHabit: 'annual',
+    yearsToFirstHarvest: 0,
+    waterNeedsPerWeek: 1.5,
+    yield: {
+      avgPerPlant: 3,
+      unit: 'lbs',
+      caloriesPer100g: 77,
+      proteinPer100g: 2.0,
+      carbsPer100g: 17.5,
+      fatPer100g: 0.1,
+      storageLifeDays: 120
+    },
+    preservation: [
+      { method: 'root-cellar', shelfLifeMonths: 6, notes: 'Cure 2 weeks at 60°F then store at 40°F in dark; check for sprouts' },
+      { method: 'freezing', shelfLifeMonths: 12, notes: 'Blanch cubes or mash before freezing; do not freeze raw' },
+      { method: 'canning', shelfLifeMonths: 18, notes: 'Pressure can cubed potatoes; great for quick meals' }
+    ],
+    uses: ['cooking'],
+    companions: ['beans-bush', 'beans-pole', 'corn', 'peas'],
+    antagonists: ['tomato', 'cucumber', 'squash-summer', 'squash-winter']
   },
   {
     id: 'corn',
@@ -375,7 +710,27 @@ export const crops: Crop[] = [
     successionMax: 3,
     sun: 'full',
     spacing: '12" apart (blocks, not rows)',
-    notes: ['Soil must be 60°F+', 'Plant in blocks for pollination', 'Succession plant every 2 weeks', 'Plant multiple varieties with different maturity dates']
+    notes: ['Soil must be 60°F+', 'Plant in blocks for pollination', 'Succession plant every 2 weeks', 'Plant multiple varieties with different maturity dates'],
+    growthHabit: 'annual',
+    yearsToFirstHarvest: 0,
+    waterNeedsPerWeek: 1.5,
+    yield: {
+      avgPerPlant: 2,
+      unit: 'ears',
+      caloriesPer100g: 86,
+      proteinPer100g: 3.3,
+      carbsPer100g: 19.0,
+      fatPer100g: 1.4,
+      storageLifeDays: 5
+    },
+    preservation: [
+      { method: 'freezing', shelfLifeMonths: 12, notes: 'Blanch ears 4 minutes, cut kernels, freeze in bags' },
+      { method: 'canning', shelfLifeMonths: 18, notes: 'Pressure can kernels or cream-style corn' },
+      { method: 'drying', shelfLifeMonths: 24, notes: 'Dry mature kernels for grinding into cornmeal or popcorn' }
+    ],
+    uses: ['cooking', 'livestock-feed'],
+    companions: ['beans-bush', 'beans-pole', 'squash-summer', 'squash-winter', 'cucumber', 'peas'],
+    antagonists: ['tomato']
   },
   {
     id: 'peas',
@@ -396,7 +751,27 @@ export const crops: Crop[] = [
     successionMax: 3,
     sun: 'full',
     spacing: '2-3" apart',
-    notes: ['Plant 6 weeks before last frost', 'Peas love cool weather', 'Succession plant for longer harvest', 'Provide trellis for tall varieties']
+    notes: ['Plant 6 weeks before last frost', 'Peas love cool weather', 'Succession plant for longer harvest', 'Provide trellis for tall varieties'],
+    growthHabit: 'annual',
+    yearsToFirstHarvest: 0,
+    waterNeedsPerWeek: 0.5,
+    yield: {
+      avgPerPlant: 0.5,
+      unit: 'lbs',
+      caloriesPer100g: 81,
+      proteinPer100g: 5.4,
+      carbsPer100g: 14.5,
+      fatPer100g: 0.4,
+      storageLifeDays: 5
+    },
+    preservation: [
+      { method: 'freezing', shelfLifeMonths: 12, notes: 'Blanch shelled peas 2 minutes, ice bath, freeze flat on trays' },
+      { method: 'canning', shelfLifeMonths: 18, notes: 'Pressure can shelled peas; snap peas better frozen' },
+      { method: 'drying', shelfLifeMonths: 24, notes: 'Let pods dry on vine for split pea soup stock' }
+    ],
+    uses: ['cooking', 'companion'],
+    companions: ['carrot', 'corn', 'cucumber', 'beans-bush', 'radish', 'spinach'],
+    antagonists: ['onion', 'garlic']
   },
   {
     id: 'beets',
@@ -417,7 +792,27 @@ export const crops: Crop[] = [
     successionMax: 4,
     sun: 'full',
     spacing: '3-4" apart',
-    notes: ['Direct sow 2 weeks before last frost', 'Thin to proper spacing (eat thinnings!)', 'Succession plant every 3 weeks', 'Harvest when 2-3" diameter']
+    notes: ['Direct sow 2 weeks before last frost', 'Thin to proper spacing (eat thinnings!)', 'Succession plant every 3 weeks', 'Harvest when 2-3" diameter'],
+    growthHabit: 'annual',
+    yearsToFirstHarvest: 0,
+    waterNeedsPerWeek: 0.5,
+    yield: {
+      avgPerPlant: 0.25,
+      unit: 'lbs',
+      caloriesPer100g: 43,
+      proteinPer100g: 1.6,
+      carbsPer100g: 9.6,
+      fatPer100g: 0.2,
+      storageLifeDays: 14
+    },
+    preservation: [
+      { method: 'root-cellar', shelfLifeMonths: 4, notes: 'Trim tops to 1 inch; store in damp sand at 32-40°F' },
+      { method: 'pickling', shelfLifeMonths: 12, notes: 'Classic pickled beets in vinegar and spice brine; water-bath can' },
+      { method: 'canning', shelfLifeMonths: 18, notes: 'Pressure can whole small beets or sliced' }
+    ],
+    uses: ['cooking', 'dye'],
+    companions: ['onion', 'garlic', 'lettuce', 'broccoli', 'kale'],
+    antagonists: ['beans-pole']
   },
   {
     id: 'chard',
@@ -437,7 +832,26 @@ export const crops: Crop[] = [
     successionMax: 3,
     sun: 'partial',
     spacing: '8-12" apart',
-    notes: ['Direct sow 1 week before last frost', 'Harvest outer leaves continuously', 'Heat and cold tolerant', 'Succession plant optional']
+    notes: ['Direct sow 1 week before last frost', 'Harvest outer leaves continuously', 'Heat and cold tolerant', 'Succession plant optional'],
+    growthHabit: 'annual',
+    yearsToFirstHarvest: 0,
+    waterNeedsPerWeek: 1,
+    yield: {
+      avgPerPlant: 1.5,
+      unit: 'lbs',
+      caloriesPer100g: 19,
+      proteinPer100g: 1.8,
+      carbsPer100g: 3.7,
+      fatPer100g: 0.2,
+      storageLifeDays: 7
+    },
+    preservation: [
+      { method: 'freezing', shelfLifeMonths: 12, notes: 'Blanch leaves and stems separately; freeze in portions' },
+      { method: 'dehydrating', shelfLifeMonths: 6, notes: 'Dehydrate leaves for powder; stems do not dehydrate well' }
+    ],
+    uses: ['cooking'],
+    companions: ['onion', 'garlic', 'lettuce', 'beans-bush'],
+    antagonists: []
   }
 ];
 
