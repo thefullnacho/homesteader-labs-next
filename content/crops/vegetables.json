@@ -1,0 +1,1712 @@
+[
+  {
+    "id": "tomato",
+    "lunarAffinity": "waxing",
+    "name": "Tomatoes",
+    "category": "vegetable",
+    "icon": "🍅",
+    "varieties": [
+      {
+        "id": "early-girl",
+        "name": "Early Girl",
+        "daysToMaturity": 52,
+        "type": "Hybrid",
+        "special": [
+          "determinate",
+          "early"
+        ]
+      },
+      {
+        "id": "cherokee-purple",
+        "name": "Cherokee Purple",
+        "daysToMaturity": 80,
+        "type": "Heirloom",
+        "special": [
+          "indeterminate",
+          "beefsteak"
+        ]
+      },
+      {
+        "id": "roma",
+        "name": "Roma",
+        "daysToMaturity": 75,
+        "type": "Paste",
+        "special": [
+          "determinate",
+          "canning"
+        ]
+      }
+    ],
+    "startIndoors": 42,
+    "transplant": 14,
+    "directSow": null,
+    "daysToMaturity": 70,
+    "successionEnabled": false,
+    "successionInterval": 0,
+    "successionMax": 1,
+    "sun": "full",
+    "spacing": "24-36\" apart",
+    "notes": [
+      "Start indoors 6 weeks before last frost",
+      "Harden off before transplanting",
+      "Stake or cage for support"
+    ],
+    "growthHabit": "annual",
+    "yearsToFirstHarvest": 0,
+    "waterNeedsPerWeek": 1.5,
+    "yield": {
+      "avgPerPlant": 10,
+      "unit": "lbs",
+      "caloriesPer100g": 18,
+      "proteinPer100g": 0.9,
+      "carbsPer100g": 3.9,
+      "fatPer100g": 0.2,
+      "storageLifeDays": 7
+    },
+    "preservation": [
+      {
+        "method": "canning",
+        "shelfLifeMonths": 18,
+        "notes": "Whole, crushed, or as sauce; add lemon juice for safe acidity"
+      },
+      {
+        "method": "freezing",
+        "shelfLifeMonths": 12,
+        "notes": "Blanch and peel, or freeze whole for later sauce-making"
+      },
+      {
+        "method": "dehydrating",
+        "shelfLifeMonths": 12,
+        "notes": "Sun-dried or dehydrator; store in airtight container or oil"
+      }
+    ],
+    "uses": [
+      "cooking"
+    ],
+    "companions": [
+      "carrot",
+      "onion",
+      "garlic",
+      "pepper-bell",
+      "pepper-hot"
+    ],
+    "antagonists": [
+      "broccoli",
+      "corn",
+      "potato"
+    ]
+  },
+  {
+    "id": "pepper-bell",
+    "lunarAffinity": "waxing",
+    "name": "Bell Peppers",
+    "category": "vegetable",
+    "icon": "🫑",
+    "varieties": [
+      {
+        "id": "california-wonder",
+        "name": "California Wonder",
+        "daysToMaturity": 75,
+        "type": "Open Pollinated",
+        "special": [
+          "classic"
+        ]
+      },
+      {
+        "id": "king-of-north",
+        "name": "King of the North",
+        "daysToMaturity": 70,
+        "type": "Heirloom",
+        "special": [
+          "cold-tolerant"
+        ]
+      }
+    ],
+    "startIndoors": 56,
+    "transplant": 14,
+    "directSow": null,
+    "daysToMaturity": 72,
+    "successionEnabled": false,
+    "successionInterval": 0,
+    "successionMax": 1,
+    "sun": "full",
+    "spacing": "18-24\" apart",
+    "notes": [
+      "Needs warm soil (70°F+)",
+      "Start indoors 8 weeks early",
+      "Harvest when firm and glossy"
+    ],
+    "growthHabit": "annual",
+    "yearsToFirstHarvest": 0,
+    "waterNeedsPerWeek": 1,
+    "yield": {
+      "avgPerPlant": 5,
+      "unit": "lbs",
+      "caloriesPer100g": 26,
+      "proteinPer100g": 1,
+      "carbsPer100g": 6,
+      "fatPer100g": 0.3,
+      "storageLifeDays": 14
+    },
+    "preservation": [
+      {
+        "method": "freezing",
+        "shelfLifeMonths": 12,
+        "notes": "Dice or slice; flash freeze on trays then bag"
+      },
+      {
+        "method": "pickling",
+        "shelfLifeMonths": 12,
+        "notes": "Pickle strips in vinegar brine with garlic"
+      },
+      {
+        "method": "dehydrating",
+        "shelfLifeMonths": 12,
+        "notes": "Dehydrate and grind into pepper flakes or powder"
+      }
+    ],
+    "uses": [
+      "cooking"
+    ],
+    "companions": [
+      "tomato",
+      "carrot",
+      "onion"
+    ],
+    "antagonists": [
+      "beans-bush",
+      "beans-pole"
+    ]
+  },
+  {
+    "id": "pepper-hot",
+    "lunarAffinity": "waxing",
+    "name": "Hot Peppers",
+    "category": "vegetable",
+    "icon": "🌶️",
+    "varieties": [
+      {
+        "id": "jalapeno",
+        "name": "Jalapeño",
+        "daysToMaturity": 72,
+        "type": "Hot",
+        "special": [
+          "medium-heat"
+        ]
+      },
+      {
+        "id": "habanero",
+        "name": "Habanero",
+        "daysToMaturity": 100,
+        "type": "Very Hot",
+        "special": [
+          "tropical"
+        ]
+      }
+    ],
+    "startIndoors": 56,
+    "transplant": 14,
+    "directSow": null,
+    "daysToMaturity": 85,
+    "successionEnabled": false,
+    "successionInterval": 0,
+    "successionMax": 1,
+    "sun": "full",
+    "spacing": "18-24\" apart",
+    "notes": [
+      "Longer season than bell peppers",
+      "Harvest at full color for maximum heat",
+      "Dry excess for winter use"
+    ],
+    "growthHabit": "annual",
+    "yearsToFirstHarvest": 0,
+    "waterNeedsPerWeek": 1,
+    "yield": {
+      "avgPerPlant": 3,
+      "unit": "lbs",
+      "caloriesPer100g": 40,
+      "proteinPer100g": 1.9,
+      "carbsPer100g": 8.8,
+      "fatPer100g": 0.4,
+      "storageLifeDays": 14
+    },
+    "preservation": [
+      {
+        "method": "drying",
+        "shelfLifeMonths": 24,
+        "notes": "String dry whole peppers or use dehydrator; grind into powder"
+      },
+      {
+        "method": "pickling",
+        "shelfLifeMonths": 12,
+        "notes": "Pickle whole or sliced in vinegar brine"
+      },
+      {
+        "method": "freezing",
+        "shelfLifeMonths": 12,
+        "notes": "Freeze whole or diced; no blanching needed"
+      }
+    ],
+    "uses": [
+      "cooking",
+      "pest-deterrent"
+    ],
+    "companions": [
+      "tomato",
+      "carrot",
+      "onion"
+    ],
+    "antagonists": [
+      "beans-bush",
+      "beans-pole"
+    ]
+  },
+  {
+    "id": "cucumber",
+    "lunarAffinity": "waxing",
+    "name": "Cucumbers",
+    "category": "vegetable",
+    "icon": "🥒",
+    "varieties": [
+      {
+        "id": "marketmore",
+        "name": "Marketmore 76",
+        "daysToMaturity": 68,
+        "type": "Slicing",
+        "special": [
+          "disease-resistant"
+        ]
+      },
+      {
+        "id": "straight-eight",
+        "name": "Straight Eight",
+        "daysToMaturity": 58,
+        "type": "Slicing",
+        "special": [
+          "classic"
+        ]
+      }
+    ],
+    "startIndoors": 21,
+    "transplant": 14,
+    "directSow": 14,
+    "daysToMaturity": 65,
+    "successionEnabled": true,
+    "successionInterval": 3,
+    "successionMax": 3,
+    "sun": "full",
+    "spacing": "36-48\" apart (vining)",
+    "notes": [
+      "Can direct sow or transplant",
+      "Succession plant every 3 weeks",
+      "Pick frequently to encourage production"
+    ],
+    "growthHabit": "annual",
+    "yearsToFirstHarvest": 0,
+    "waterNeedsPerWeek": 2,
+    "yield": {
+      "avgPerPlant": 5,
+      "unit": "lbs",
+      "caloriesPer100g": 15,
+      "proteinPer100g": 0.7,
+      "carbsPer100g": 3.6,
+      "fatPer100g": 0.1,
+      "storageLifeDays": 7
+    },
+    "preservation": [
+      {
+        "method": "pickling",
+        "shelfLifeMonths": 18,
+        "notes": "Classic dill pickles or bread-and-butter; water-bath can"
+      },
+      {
+        "method": "fermentation",
+        "shelfLifeMonths": 6,
+        "notes": "Lacto-fermented pickles in salt brine; keep refrigerated"
+      }
+    ],
+    "uses": [
+      "cooking"
+    ],
+    "companions": [
+      "beans-bush",
+      "beans-pole",
+      "peas",
+      "corn",
+      "lettuce"
+    ],
+    "antagonists": [
+      "potato"
+    ]
+  },
+  {
+    "id": "lettuce",
+    "lunarAffinity": "waxing",
+    "name": "Lettuce",
+    "category": "vegetable",
+    "icon": "🥬",
+    "varieties": [
+      {
+        "id": "black-seeded-simpson",
+        "name": "Black Seeded Simpson",
+        "daysToMaturity": 45,
+        "type": "Leaf",
+        "special": [
+          "heat-tolerant"
+        ]
+      },
+      {
+        "id": "romaine",
+        "name": "Parris Island Cos",
+        "daysToMaturity": 68,
+        "type": "Romaine",
+        "special": [
+          "crisp"
+        ]
+      }
+    ],
+    "startIndoors": null,
+    "transplant": null,
+    "directSow": -14,
+    "daysToMaturity": 50,
+    "successionEnabled": true,
+    "successionInterval": 2,
+    "successionMax": 6,
+    "sun": "partial",
+    "spacing": "8-12\" apart",
+    "notes": [
+      "Direct sow 2 weeks before last frost",
+      "Succession plant every 2 weeks",
+      "Shade in hot weather",
+      "Cut-and-come-again harvesting"
+    ],
+    "growthHabit": "annual",
+    "yearsToFirstHarvest": 0,
+    "waterNeedsPerWeek": 0.5,
+    "yield": {
+      "avgPerPlant": 0.5,
+      "unit": "lbs",
+      "caloriesPer100g": 15,
+      "proteinPer100g": 1.4,
+      "carbsPer100g": 2.9,
+      "fatPer100g": 0.2,
+      "storageLifeDays": 7
+    },
+    "preservation": [
+      {
+        "method": "dehydrating",
+        "shelfLifeMonths": 6,
+        "notes": "Dehydrate leaves for powder to add to smoothies or soups"
+      },
+      {
+        "method": "freezing",
+        "shelfLifeMonths": 6,
+        "notes": "Freeze for smoothies only; texture not suitable for salads after thawing"
+      }
+    ],
+    "uses": [
+      "cooking"
+    ],
+    "companions": [
+      "carrot",
+      "radish",
+      "onion",
+      "chard"
+    ],
+    "antagonists": []
+  },
+  {
+    "id": "beans-bush",
+    "lunarAffinity": "waxing",
+    "name": "Bush Beans",
+    "category": "vegetable",
+    "icon": "🫘",
+    "varieties": [
+      {
+        "id": "contender",
+        "name": "Contender",
+        "daysToMaturity": 50,
+        "type": "Snap Bean",
+        "special": [
+          "early"
+        ]
+      },
+      {
+        "id": "blue-lake",
+        "name": "Blue Lake 274",
+        "daysToMaturity": 58,
+        "type": "Snap Bean",
+        "special": [
+          "stringless"
+        ]
+      }
+    ],
+    "startIndoors": null,
+    "transplant": null,
+    "directSow": 7,
+    "daysToMaturity": 55,
+    "successionEnabled": true,
+    "successionInterval": 2,
+    "successionMax": 4,
+    "sun": "full",
+    "spacing": "4-6\" apart",
+    "notes": [
+      "Wait for soil to warm to 60°F",
+      "Succession plant every 2 weeks",
+      "Pick daily when producing",
+      "Do not soak seeds before planting"
+    ],
+    "growthHabit": "annual",
+    "yearsToFirstHarvest": 0,
+    "waterNeedsPerWeek": 1,
+    "yield": {
+      "avgPerPlant": 0.5,
+      "unit": "lbs",
+      "caloriesPer100g": 31,
+      "proteinPer100g": 1.8,
+      "carbsPer100g": 7,
+      "fatPer100g": 0.1,
+      "storageLifeDays": 7
+    },
+    "preservation": [
+      {
+        "method": "canning",
+        "shelfLifeMonths": 18,
+        "notes": "Pressure can whole or cut green beans"
+      },
+      {
+        "method": "freezing",
+        "shelfLifeMonths": 12,
+        "notes": "Blanch 3 minutes, ice bath, then freeze in bags"
+      },
+      {
+        "method": "drying",
+        "shelfLifeMonths": 24,
+        "notes": "Let pods mature on vine for dry shell beans"
+      }
+    ],
+    "uses": [
+      "cooking",
+      "companion"
+    ],
+    "companions": [
+      "corn",
+      "cucumber",
+      "potato",
+      "carrot"
+    ],
+    "antagonists": [
+      "onion",
+      "garlic",
+      "pepper-bell",
+      "pepper-hot"
+    ]
+  },
+  {
+    "id": "beans-pole",
+    "lunarAffinity": "waxing",
+    "name": "Pole Beans",
+    "category": "vegetable",
+    "icon": "🫘",
+    "varieties": [
+      {
+        "id": "kentucky-wonder",
+        "name": "Kentucky Wonder",
+        "daysToMaturity": 65,
+        "type": "Snap Bean",
+        "special": [
+          "productive"
+        ]
+      }
+    ],
+    "startIndoors": null,
+    "transplant": null,
+    "directSow": 7,
+    "daysToMaturity": 65,
+    "successionEnabled": false,
+    "successionInterval": 0,
+    "successionMax": 1,
+    "sun": "full",
+    "spacing": "6-8\" apart (on trellis)",
+    "notes": [
+      "Provide trellis or poles",
+      "Longer harvest period than bush beans",
+      "Pick frequently to extend harvest"
+    ],
+    "growthHabit": "annual",
+    "yearsToFirstHarvest": 0,
+    "waterNeedsPerWeek": 1,
+    "yield": {
+      "avgPerPlant": 1,
+      "unit": "lbs",
+      "caloriesPer100g": 31,
+      "proteinPer100g": 1.8,
+      "carbsPer100g": 7,
+      "fatPer100g": 0.1,
+      "storageLifeDays": 7
+    },
+    "preservation": [
+      {
+        "method": "canning",
+        "shelfLifeMonths": 18,
+        "notes": "Pressure can whole or cut green beans"
+      },
+      {
+        "method": "freezing",
+        "shelfLifeMonths": 12,
+        "notes": "Blanch 3 minutes, ice bath, then freeze in bags"
+      },
+      {
+        "method": "drying",
+        "shelfLifeMonths": 24,
+        "notes": "Let pods dry on vine for shell beans; store in jars"
+      }
+    ],
+    "uses": [
+      "cooking",
+      "companion"
+    ],
+    "companions": [
+      "corn",
+      "cucumber",
+      "potato",
+      "carrot"
+    ],
+    "antagonists": [
+      "onion",
+      "garlic",
+      "pepper-bell",
+      "pepper-hot"
+    ]
+  },
+  {
+    "id": "squash-summer",
+    "lunarAffinity": "waxing",
+    "name": "Summer Squash",
+    "category": "vegetable",
+    "icon": "🥒",
+    "varieties": [
+      {
+        "id": "black-beauty",
+        "name": "Black Beauty Zucchini",
+        "daysToMaturity": 55,
+        "type": "Zucchini",
+        "special": [
+          "productive"
+        ]
+      },
+      {
+        "id": "early-prolific",
+        "name": "Early Prolific Straightneck",
+        "daysToMaturity": 50,
+        "type": "Yellow",
+        "special": [
+          "early"
+        ]
+      }
+    ],
+    "startIndoors": 21,
+    "transplant": 14,
+    "directSow": 14,
+    "daysToMaturity": 52,
+    "successionEnabled": true,
+    "successionInterval": 3,
+    "successionMax": 2,
+    "sun": "full",
+    "spacing": "36-48\" apart",
+    "notes": [
+      "Very prolific - 2-3 plants per family",
+      "Pick when small for best flavor",
+      "Succession plant for continuous harvest"
+    ],
+    "growthHabit": "annual",
+    "yearsToFirstHarvest": 0,
+    "waterNeedsPerWeek": 1.5,
+    "yield": {
+      "avgPerPlant": 6,
+      "unit": "lbs",
+      "caloriesPer100g": 17,
+      "proteinPer100g": 1.2,
+      "carbsPer100g": 3.1,
+      "fatPer100g": 0.3,
+      "storageLifeDays": 7
+    },
+    "preservation": [
+      {
+        "method": "freezing",
+        "shelfLifeMonths": 12,
+        "notes": "Shred for zucchini bread or slice and blanch before freezing"
+      },
+      {
+        "method": "dehydrating",
+        "shelfLifeMonths": 12,
+        "notes": "Slice thin for zucchini chips; rehydrate for soups"
+      },
+      {
+        "method": "canning",
+        "shelfLifeMonths": 12,
+        "notes": "Best canned as relish or pickled; not safe to can plain"
+      }
+    ],
+    "uses": [
+      "cooking"
+    ],
+    "companions": [
+      "corn",
+      "beans-bush",
+      "beans-pole",
+      "radish"
+    ],
+    "antagonists": [
+      "potato"
+    ]
+  },
+  {
+    "id": "squash-winter",
+    "lunarAffinity": "waxing",
+    "name": "Winter Squash",
+    "category": "vegetable",
+    "icon": "🎃",
+    "varieties": [
+      {
+        "id": "butternut",
+        "name": "Waltham Butternut",
+        "daysToMaturity": 85,
+        "type": "Butternut",
+        "special": [
+          "stores-well"
+        ]
+      },
+      {
+        "id": "acorn",
+        "name": "Table Queen Acorn",
+        "daysToMaturity": 80,
+        "type": "Acorn",
+        "special": [
+          "compact"
+        ]
+      }
+    ],
+    "startIndoors": 21,
+    "transplant": 14,
+    "directSow": 14,
+    "daysToMaturity": 85,
+    "successionEnabled": false,
+    "successionInterval": 0,
+    "successionMax": 1,
+    "sun": "full",
+    "spacing": "48-72\" apart",
+    "notes": [
+      "Needs 90+ frost-free days",
+      "Vines spread 10-15 feet",
+      "Cure for 2 weeks before storing"
+    ],
+    "growthHabit": "annual",
+    "yearsToFirstHarvest": 0,
+    "waterNeedsPerWeek": 1.5,
+    "yield": {
+      "avgPerPlant": 5,
+      "unit": "lbs",
+      "caloriesPer100g": 45,
+      "proteinPer100g": 1,
+      "carbsPer100g": 11.7,
+      "fatPer100g": 0.1,
+      "storageLifeDays": 90
+    },
+    "preservation": [
+      {
+        "method": "root-cellar",
+        "shelfLifeMonths": 6,
+        "notes": "Cure 2 weeks in sun then store at 50-55°F; butternut lasts longest"
+      },
+      {
+        "method": "canning",
+        "shelfLifeMonths": 18,
+        "notes": "Pressure can cubed (not mashed) for long-term storage"
+      },
+      {
+        "method": "freezing",
+        "shelfLifeMonths": 12,
+        "notes": "Cook and puree before freezing; great for soups and pies"
+      }
+    ],
+    "uses": [
+      "cooking"
+    ],
+    "companions": [
+      "corn",
+      "beans-bush",
+      "beans-pole"
+    ],
+    "antagonists": [
+      "potato"
+    ]
+  },
+  {
+    "id": "carrot",
+    "lunarAffinity": "waning",
+    "name": "Carrots",
+    "category": "vegetable",
+    "icon": "🥕",
+    "varieties": [
+      {
+        "id": "scarlet-nantes",
+        "name": "Scarlet Nantes",
+        "daysToMaturity": 65,
+        "type": "Nantes",
+        "special": [
+          "sweet"
+        ]
+      },
+      {
+        "id": "danvers",
+        "name": "Danvers 126",
+        "daysToMaturity": 70,
+        "type": "Danvers",
+        "special": [
+          "heavy-soil"
+        ]
+      }
+    ],
+    "startIndoors": null,
+    "transplant": null,
+    "directSow": -21,
+    "daysToMaturity": 70,
+    "successionEnabled": true,
+    "successionInterval": 3,
+    "successionMax": 4,
+    "sun": "full",
+    "spacing": "2-3\" apart",
+    "notes": [
+      "Direct sow 3 weeks before last frost",
+      "Succession plant every 3 weeks",
+      "Thin to proper spacing",
+      "Keep soil consistently moist"
+    ],
+    "growthHabit": "annual",
+    "yearsToFirstHarvest": 0,
+    "waterNeedsPerWeek": 0.5,
+    "yield": {
+      "avgPerPlant": 0.25,
+      "unit": "lbs",
+      "caloriesPer100g": 41,
+      "proteinPer100g": 0.9,
+      "carbsPer100g": 9.6,
+      "fatPer100g": 0.2,
+      "storageLifeDays": 28
+    },
+    "preservation": [
+      {
+        "method": "root-cellar",
+        "shelfLifeMonths": 6,
+        "notes": "Pack in damp sand at 32-40°F; trim tops first"
+      },
+      {
+        "method": "freezing",
+        "shelfLifeMonths": 12,
+        "notes": "Blanch 3 minutes, ice bath, dice or slice, then freeze"
+      },
+      {
+        "method": "canning",
+        "shelfLifeMonths": 18,
+        "notes": "Pressure can sliced or diced carrots"
+      }
+    ],
+    "uses": [
+      "cooking"
+    ],
+    "companions": [
+      "tomato",
+      "onion",
+      "lettuce",
+      "peas"
+    ],
+    "antagonists": []
+  },
+  {
+    "id": "radish",
+    "lunarAffinity": "waning",
+    "name": "Radishes",
+    "category": "vegetable",
+    "icon": "🥗",
+    "varieties": [
+      {
+        "id": "cherry-belle",
+        "name": "Cherry Belle",
+        "daysToMaturity": 22,
+        "type": "Round",
+        "special": [
+          "fast"
+        ]
+      },
+      {
+        "id": "french-breakfast",
+        "name": "French Breakfast",
+        "daysToMaturity": 25,
+        "type": "Oblong",
+        "special": [
+          "mild"
+        ]
+      }
+    ],
+    "startIndoors": null,
+    "transplant": null,
+    "directSow": -28,
+    "daysToMaturity": 25,
+    "successionEnabled": true,
+    "successionInterval": 1,
+    "successionMax": 8,
+    "sun": "full",
+    "spacing": "2\" apart",
+    "notes": [
+      "Fastest growing crop",
+      "Succession plant every week",
+      "Harvest when small for best flavor",
+      "Interplant with slower crops"
+    ],
+    "growthHabit": "annual",
+    "yearsToFirstHarvest": 0,
+    "waterNeedsPerWeek": 0.5,
+    "yield": {
+      "avgPerPlant": 1,
+      "unit": "oz",
+      "caloriesPer100g": 16,
+      "proteinPer100g": 0.7,
+      "carbsPer100g": 3.4,
+      "fatPer100g": 0.1,
+      "storageLifeDays": 14
+    },
+    "preservation": [
+      {
+        "method": "pickling",
+        "shelfLifeMonths": 6,
+        "notes": "Quick pickle sliced radishes in rice vinegar"
+      },
+      {
+        "method": "fermentation",
+        "shelfLifeMonths": 3,
+        "notes": "Lacto-ferment with salt; traditional Korean kkakdugi"
+      }
+    ],
+    "uses": [
+      "cooking",
+      "companion"
+    ],
+    "companions": [
+      "lettuce",
+      "peas",
+      "carrot",
+      "spinach"
+    ],
+    "antagonists": []
+  },
+  {
+    "id": "spinach",
+    "lunarAffinity": "waxing",
+    "name": "Spinach",
+    "category": "vegetable",
+    "icon": "🍃",
+    "varieties": [
+      {
+        "id": "bloomsdale",
+        "name": "Bloomsdale Long Standing",
+        "daysToMaturity": 45,
+        "type": "Savoy",
+        "special": [
+          "slow-bolt"
+        ]
+      }
+    ],
+    "startIndoors": null,
+    "transplant": null,
+    "directSow": -28,
+    "daysToMaturity": 45,
+    "successionEnabled": true,
+    "successionInterval": 2,
+    "successionMax": 4,
+    "sun": "partial",
+    "spacing": "4-6\" apart",
+    "notes": [
+      "Plant early - bolts in heat",
+      "Succession plant every 2 weeks",
+      "Shade in summer",
+      "Overwinter in mild climates"
+    ],
+    "growthHabit": "annual",
+    "yearsToFirstHarvest": 0,
+    "waterNeedsPerWeek": 0.5,
+    "yield": {
+      "avgPerPlant": 0.5,
+      "unit": "lbs",
+      "caloriesPer100g": 23,
+      "proteinPer100g": 2.9,
+      "carbsPer100g": 3.6,
+      "fatPer100g": 0.4,
+      "storageLifeDays": 7
+    },
+    "preservation": [
+      {
+        "method": "freezing",
+        "shelfLifeMonths": 12,
+        "notes": "Blanch briefly, squeeze dry, freeze in portions for smoothies or cooking"
+      },
+      {
+        "method": "dehydrating",
+        "shelfLifeMonths": 12,
+        "notes": "Dehydrate leaves and crumble into powder for soups and smoothies"
+      }
+    ],
+    "uses": [
+      "cooking"
+    ],
+    "companions": [
+      "peas",
+      "beans-bush",
+      "beans-pole",
+      "radish",
+      "lettuce"
+    ],
+    "antagonists": []
+  },
+  {
+    "id": "kale",
+    "lunarAffinity": "waxing",
+    "name": "Kale",
+    "category": "vegetable",
+    "icon": "🥬",
+    "varieties": [
+      {
+        "id": "lacinato",
+        "name": "Lacinato (Dinosaur)",
+        "daysToMaturity": 60,
+        "type": "Italian",
+        "special": [
+          "cold-hardy"
+        ]
+      },
+      {
+        "id": "winterbor",
+        "name": "Winterbor",
+        "daysToMaturity": 65,
+        "type": "Curly",
+        "special": [
+          "winter"
+        ]
+      }
+    ],
+    "startIndoors": null,
+    "transplant": null,
+    "directSow": -21,
+    "daysToMaturity": 60,
+    "successionEnabled": false,
+    "successionInterval": 0,
+    "successionMax": 1,
+    "sun": "full",
+    "spacing": "18-24\" apart",
+    "notes": [
+      "Very cold-hardy",
+      "Succession plant optional",
+      "Harvest leaves from bottom up",
+      "Sweetens after frost"
+    ],
+    "growthHabit": "annual",
+    "yearsToFirstHarvest": 0,
+    "waterNeedsPerWeek": 1,
+    "yield": {
+      "avgPerPlant": 1.5,
+      "unit": "lbs",
+      "caloriesPer100g": 49,
+      "proteinPer100g": 4.3,
+      "carbsPer100g": 8.8,
+      "fatPer100g": 0.9,
+      "storageLifeDays": 7
+    },
+    "preservation": [
+      {
+        "method": "freezing",
+        "shelfLifeMonths": 12,
+        "notes": "Blanch, chop, and freeze in portions; great for smoothies and soups"
+      },
+      {
+        "method": "dehydrating",
+        "shelfLifeMonths": 12,
+        "notes": "Make kale chips or powder for nutrient-dense seasoning"
+      }
+    ],
+    "uses": [
+      "cooking",
+      "livestock-feed"
+    ],
+    "companions": [
+      "onion",
+      "garlic",
+      "beets",
+      "potato"
+    ],
+    "antagonists": [
+      "tomato"
+    ]
+  },
+  {
+    "id": "broccoli",
+    "lunarAffinity": "waxing",
+    "name": "Broccoli",
+    "category": "vegetable",
+    "icon": "🥦",
+    "varieties": [
+      {
+        "id": "calabrese",
+        "name": "Calabrese",
+        "daysToMaturity": 65,
+        "type": "Heading",
+        "special": [
+          "heat-tolerant"
+        ]
+      },
+      {
+        "id": "waltham",
+        "name": "Waltham 29",
+        "daysToMaturity": 85,
+        "type": "Heading",
+        "special": [
+          "cold-hardy"
+        ]
+      }
+    ],
+    "startIndoors": 42,
+    "transplant": 14,
+    "directSow": null,
+    "daysToMaturity": 70,
+    "successionEnabled": true,
+    "successionInterval": 2,
+    "successionMax": 3,
+    "sun": "full",
+    "spacing": "18-24\" apart",
+    "notes": [
+      "Start indoors 6 weeks early",
+      "Succession plant for fall harvest",
+      "Harvest main head promptly",
+      "Side shoots continue producing"
+    ],
+    "growthHabit": "annual",
+    "yearsToFirstHarvest": 0,
+    "waterNeedsPerWeek": 1.5,
+    "yield": {
+      "avgPerPlant": 1,
+      "unit": "lbs",
+      "caloriesPer100g": 34,
+      "proteinPer100g": 2.8,
+      "carbsPer100g": 6.6,
+      "fatPer100g": 0.4,
+      "storageLifeDays": 7
+    },
+    "preservation": [
+      {
+        "method": "freezing",
+        "shelfLifeMonths": 12,
+        "notes": "Cut into florets, blanch 3 minutes, ice bath, freeze on trays"
+      },
+      {
+        "method": "dehydrating",
+        "shelfLifeMonths": 12,
+        "notes": "Dehydrate florets for soups and casseroles"
+      },
+      {
+        "method": "pickling",
+        "shelfLifeMonths": 6,
+        "notes": "Pickle florets in seasoned vinegar brine"
+      }
+    ],
+    "uses": [
+      "cooking"
+    ],
+    "companions": [
+      "onion",
+      "garlic",
+      "beets",
+      "potato"
+    ],
+    "antagonists": [
+      "tomato"
+    ]
+  },
+  {
+    "id": "onion",
+    "lunarAffinity": "waning",
+    "name": "Onions",
+    "category": "vegetable",
+    "icon": "🧅",
+    "varieties": [
+      {
+        "id": "walla-walla",
+        "name": "Walla Walla",
+        "daysToMaturity": 90,
+        "type": "Sweet",
+        "special": [
+          "mild"
+        ]
+      },
+      {
+        "id": "red-baron",
+        "name": "Red Baron",
+        "daysToMaturity": 110,
+        "type": "Red",
+        "special": [
+          "storage"
+        ]
+      }
+    ],
+    "startIndoors": 70,
+    "transplant": 0,
+    "directSow": null,
+    "daysToMaturity": 100,
+    "successionEnabled": false,
+    "successionInterval": 0,
+    "successionMax": 1,
+    "sun": "full",
+    "spacing": "4-6\" apart",
+    "notes": [
+      "Start indoors 10 weeks early!",
+      "Transplant 4 weeks before last frost",
+      "Long growing season",
+      "Harvest when tops fall over"
+    ],
+    "growthHabit": "biennial",
+    "yearsToFirstHarvest": 0,
+    "waterNeedsPerWeek": 0.5,
+    "yield": {
+      "avgPerPlant": 0.5,
+      "unit": "lbs",
+      "caloriesPer100g": 40,
+      "proteinPer100g": 1.1,
+      "carbsPer100g": 9.3,
+      "fatPer100g": 0.1,
+      "storageLifeDays": 30
+    },
+    "preservation": [
+      {
+        "method": "cold-storage",
+        "shelfLifeMonths": 6,
+        "notes": "Cure in dry area 2 weeks then store at 35-50°F; storage varieties last longest"
+      },
+      {
+        "method": "dehydrating",
+        "shelfLifeMonths": 12,
+        "notes": "Slice thin and dehydrate; grind into onion powder"
+      },
+      {
+        "method": "pickling",
+        "shelfLifeMonths": 12,
+        "notes": "Pickle pearl onions or sliced red onions in vinegar"
+      }
+    ],
+    "uses": [
+      "cooking",
+      "companion",
+      "pest-deterrent"
+    ],
+    "companions": [
+      "tomato",
+      "carrot",
+      "lettuce",
+      "beets",
+      "chard"
+    ],
+    "antagonists": [
+      "beans-bush",
+      "beans-pole",
+      "peas"
+    ]
+  },
+  {
+    "id": "garlic",
+    "lunarAffinity": "waning",
+    "name": "Garlic",
+    "category": "vegetable",
+    "icon": "🧄",
+    "varieties": [
+      {
+        "id": "music",
+        "name": "Music",
+        "daysToMaturity": 240,
+        "type": "Hardneck",
+        "special": [
+          "winter"
+        ]
+      },
+      {
+        "id": "california-softneck",
+        "name": "California Softneck",
+        "daysToMaturity": 210,
+        "type": "Softneck",
+        "special": [
+          "braiding"
+        ]
+      }
+    ],
+    "startIndoors": null,
+    "transplant": null,
+    "directSow": -180,
+    "daysToMaturity": 240,
+    "successionEnabled": false,
+    "successionInterval": 0,
+    "successionMax": 1,
+    "sun": "full",
+    "spacing": "6-8\" apart",
+    "notes": [
+      "Plant in FALL (Sept-Oct) for summer harvest",
+      "Cold period required for bulb formation",
+      "Mulch heavily for winter",
+      "Harvest when 50% of leaves are brown"
+    ],
+    "growthHabit": "annual",
+    "yearsToFirstHarvest": 0,
+    "waterNeedsPerWeek": 0.5,
+    "yield": {
+      "avgPerPlant": 1,
+      "unit": "bulbs",
+      "caloriesPer100g": 149,
+      "proteinPer100g": 6.4,
+      "carbsPer100g": 33.1,
+      "fatPer100g": 0.5,
+      "storageLifeDays": 180
+    },
+    "preservation": [
+      {
+        "method": "cold-storage",
+        "shelfLifeMonths": 9,
+        "notes": "Cure 2 weeks then store at 60-65°F; softneck stores longer than hardneck"
+      },
+      {
+        "method": "dehydrating",
+        "shelfLifeMonths": 24,
+        "notes": "Slice and dehydrate; grind into garlic powder"
+      },
+      {
+        "method": "oil-preserving",
+        "shelfLifeMonths": 4,
+        "notes": "Store peeled cloves in oil in refrigerator only; botulism risk at room temp"
+      }
+    ],
+    "uses": [
+      "cooking",
+      "medicinal",
+      "pest-deterrent",
+      "companion"
+    ],
+    "companions": [
+      "tomato",
+      "carrot",
+      "beets",
+      "kale",
+      "spinach"
+    ],
+    "antagonists": [
+      "beans-bush",
+      "beans-pole",
+      "peas"
+    ]
+  },
+  {
+    "id": "potato",
+    "lunarAffinity": "waning",
+    "name": "Potatoes",
+    "category": "vegetable",
+    "icon": "🥔",
+    "varieties": [
+      {
+        "id": "kennebec",
+        "name": "Kennebec",
+        "daysToMaturity": 80,
+        "type": "White",
+        "special": [
+          "storage"
+        ]
+      },
+      {
+        "id": "red-norland",
+        "name": "Red Norland",
+        "daysToMaturity": 70,
+        "type": "Red",
+        "special": [
+          "early"
+        ]
+      }
+    ],
+    "startIndoors": null,
+    "transplant": null,
+    "directSow": 14,
+    "daysToMaturity": 90,
+    "successionEnabled": false,
+    "successionInterval": 0,
+    "successionMax": 1,
+    "sun": "full",
+    "spacing": "12-15\" apart",
+    "notes": [
+      "Plant seed potatoes 2 weeks after last frost",
+      "Hill soil around plants as they grow",
+      "Harvest new potatoes early, storage potatoes late",
+      "Cure for 2 weeks before storing"
+    ],
+    "growthHabit": "annual",
+    "yearsToFirstHarvest": 0,
+    "waterNeedsPerWeek": 1.5,
+    "yield": {
+      "avgPerPlant": 3,
+      "unit": "lbs",
+      "caloriesPer100g": 77,
+      "proteinPer100g": 2,
+      "carbsPer100g": 17.5,
+      "fatPer100g": 0.1,
+      "storageLifeDays": 120
+    },
+    "preservation": [
+      {
+        "method": "root-cellar",
+        "shelfLifeMonths": 6,
+        "notes": "Cure 2 weeks at 60°F then store at 40°F in dark; check for sprouts"
+      },
+      {
+        "method": "freezing",
+        "shelfLifeMonths": 12,
+        "notes": "Blanch cubes or mash before freezing; do not freeze raw"
+      },
+      {
+        "method": "canning",
+        "shelfLifeMonths": 18,
+        "notes": "Pressure can cubed potatoes; great for quick meals"
+      }
+    ],
+    "uses": [
+      "cooking"
+    ],
+    "companions": [
+      "beans-bush",
+      "beans-pole",
+      "corn",
+      "peas"
+    ],
+    "antagonists": [
+      "tomato",
+      "cucumber",
+      "squash-summer",
+      "squash-winter"
+    ]
+  },
+  {
+    "id": "corn",
+    "lunarAffinity": "waxing",
+    "name": "Corn",
+    "category": "vegetable",
+    "icon": "🌽",
+    "varieties": [
+      {
+        "id": "golden-bantam",
+        "name": "Golden Bantam",
+        "daysToMaturity": 80,
+        "type": "Sweet",
+        "special": [
+          "heirloom"
+        ]
+      }
+    ],
+    "startIndoors": null,
+    "transplant": null,
+    "directSow": 14,
+    "daysToMaturity": 80,
+    "successionEnabled": true,
+    "successionInterval": 2,
+    "successionMax": 3,
+    "sun": "full",
+    "spacing": "12\" apart (blocks, not rows)",
+    "notes": [
+      "Soil must be 60°F+",
+      "Plant in blocks for pollination",
+      "Succession plant every 2 weeks",
+      "Plant multiple varieties with different maturity dates"
+    ],
+    "growthHabit": "annual",
+    "yearsToFirstHarvest": 0,
+    "waterNeedsPerWeek": 1.5,
+    "yield": {
+      "avgPerPlant": 2,
+      "unit": "ears",
+      "caloriesPer100g": 86,
+      "proteinPer100g": 3.3,
+      "carbsPer100g": 19,
+      "fatPer100g": 1.4,
+      "storageLifeDays": 5
+    },
+    "preservation": [
+      {
+        "method": "freezing",
+        "shelfLifeMonths": 12,
+        "notes": "Blanch ears 4 minutes, cut kernels, freeze in bags"
+      },
+      {
+        "method": "canning",
+        "shelfLifeMonths": 18,
+        "notes": "Pressure can kernels or cream-style corn"
+      },
+      {
+        "method": "drying",
+        "shelfLifeMonths": 24,
+        "notes": "Dry mature kernels for grinding into cornmeal or popcorn"
+      }
+    ],
+    "uses": [
+      "cooking",
+      "livestock-feed"
+    ],
+    "companions": [
+      "beans-bush",
+      "beans-pole",
+      "squash-summer",
+      "squash-winter",
+      "cucumber",
+      "peas"
+    ],
+    "antagonists": [
+      "tomato"
+    ]
+  },
+  {
+    "id": "peas",
+    "lunarAffinity": "waxing",
+    "name": "Peas",
+    "category": "vegetable",
+    "icon": "🫛",
+    "varieties": [
+      {
+        "id": "sugar-snap",
+        "name": "Sugar Snap",
+        "daysToMaturity": 62,
+        "type": "Snap",
+        "special": [
+          "edible-pod"
+        ]
+      },
+      {
+        "id": "lincoln",
+        "name": "Lincoln",
+        "daysToMaturity": 65,
+        "type": "Shell",
+        "special": [
+          "heat-tolerant"
+        ]
+      }
+    ],
+    "startIndoors": null,
+    "transplant": null,
+    "directSow": -42,
+    "daysToMaturity": 65,
+    "successionEnabled": true,
+    "successionInterval": 2,
+    "successionMax": 3,
+    "sun": "full",
+    "spacing": "2-3\" apart",
+    "notes": [
+      "Plant 6 weeks before last frost",
+      "Peas love cool weather",
+      "Succession plant for longer harvest",
+      "Provide trellis for tall varieties"
+    ],
+    "growthHabit": "annual",
+    "yearsToFirstHarvest": 0,
+    "waterNeedsPerWeek": 0.5,
+    "yield": {
+      "avgPerPlant": 0.5,
+      "unit": "lbs",
+      "caloriesPer100g": 81,
+      "proteinPer100g": 5.4,
+      "carbsPer100g": 14.5,
+      "fatPer100g": 0.4,
+      "storageLifeDays": 5
+    },
+    "preservation": [
+      {
+        "method": "freezing",
+        "shelfLifeMonths": 12,
+        "notes": "Blanch shelled peas 2 minutes, ice bath, freeze flat on trays"
+      },
+      {
+        "method": "canning",
+        "shelfLifeMonths": 18,
+        "notes": "Pressure can shelled peas; snap peas better frozen"
+      },
+      {
+        "method": "drying",
+        "shelfLifeMonths": 24,
+        "notes": "Let pods dry on vine for split pea soup stock"
+      }
+    ],
+    "uses": [
+      "cooking",
+      "companion"
+    ],
+    "companions": [
+      "carrot",
+      "corn",
+      "cucumber",
+      "beans-bush",
+      "radish",
+      "spinach"
+    ],
+    "antagonists": [
+      "onion",
+      "garlic"
+    ]
+  },
+  {
+    "id": "beets",
+    "lunarAffinity": "waning",
+    "name": "Beets",
+    "category": "vegetable",
+    "icon": "🟣",
+    "varieties": [
+      {
+        "id": "detroit-dark-red",
+        "name": "Detroit Dark Red",
+        "daysToMaturity": 60,
+        "type": "Round",
+        "special": [
+          "classic"
+        ]
+      },
+      {
+        "id": "chioggia",
+        "name": "Chioggia",
+        "daysToMaturity": 55,
+        "type": "Italian",
+        "special": [
+          "striped"
+        ]
+      }
+    ],
+    "startIndoors": null,
+    "transplant": null,
+    "directSow": -14,
+    "daysToMaturity": 58,
+    "successionEnabled": true,
+    "successionInterval": 3,
+    "successionMax": 4,
+    "sun": "full",
+    "spacing": "3-4\" apart",
+    "notes": [
+      "Direct sow 2 weeks before last frost",
+      "Thin to proper spacing (eat thinnings!)",
+      "Succession plant every 3 weeks",
+      "Harvest when 2-3\" diameter"
+    ],
+    "growthHabit": "annual",
+    "yearsToFirstHarvest": 0,
+    "waterNeedsPerWeek": 0.5,
+    "yield": {
+      "avgPerPlant": 0.25,
+      "unit": "lbs",
+      "caloriesPer100g": 43,
+      "proteinPer100g": 1.6,
+      "carbsPer100g": 9.6,
+      "fatPer100g": 0.2,
+      "storageLifeDays": 14
+    },
+    "preservation": [
+      {
+        "method": "root-cellar",
+        "shelfLifeMonths": 4,
+        "notes": "Trim tops to 1 inch; store in damp sand at 32-40°F"
+      },
+      {
+        "method": "pickling",
+        "shelfLifeMonths": 12,
+        "notes": "Classic pickled beets in vinegar and spice brine; water-bath can"
+      },
+      {
+        "method": "canning",
+        "shelfLifeMonths": 18,
+        "notes": "Pressure can whole small beets or sliced"
+      }
+    ],
+    "uses": [
+      "cooking",
+      "dye"
+    ],
+    "companions": [
+      "onion",
+      "garlic",
+      "lettuce",
+      "broccoli",
+      "kale"
+    ],
+    "antagonists": [
+      "beans-pole"
+    ]
+  },
+  {
+    "id": "chard",
+    "lunarAffinity": "waxing",
+    "name": "Swiss Chard",
+    "category": "vegetable",
+    "icon": "🥬",
+    "varieties": [
+      {
+        "id": "bright-lights",
+        "name": "Bright Lights",
+        "daysToMaturity": 60,
+        "type": "Rainbow",
+        "special": [
+          "colorful"
+        ]
+      }
+    ],
+    "startIndoors": null,
+    "transplant": null,
+    "directSow": -7,
+    "daysToMaturity": 60,
+    "successionEnabled": true,
+    "successionInterval": 3,
+    "successionMax": 3,
+    "sun": "partial",
+    "spacing": "8-12\" apart",
+    "notes": [
+      "Direct sow 1 week before last frost",
+      "Harvest outer leaves continuously",
+      "Heat and cold tolerant",
+      "Succession plant optional"
+    ],
+    "growthHabit": "annual",
+    "yearsToFirstHarvest": 0,
+    "waterNeedsPerWeek": 1,
+    "yield": {
+      "avgPerPlant": 1.5,
+      "unit": "lbs",
+      "caloriesPer100g": 19,
+      "proteinPer100g": 1.8,
+      "carbsPer100g": 3.7,
+      "fatPer100g": 0.2,
+      "storageLifeDays": 7
+    },
+    "preservation": [
+      {
+        "method": "freezing",
+        "shelfLifeMonths": 12,
+        "notes": "Blanch leaves and stems separately; freeze in portions"
+      },
+      {
+        "method": "dehydrating",
+        "shelfLifeMonths": 6,
+        "notes": "Dehydrate leaves for powder; stems do not dehydrate well"
+      }
+    ],
+    "uses": [
+      "cooking"
+    ],
+    "companions": [
+      "onion",
+      "garlic",
+      "lettuce",
+      "beans-bush"
+    ],
+    "antagonists": []
+  }
+]
