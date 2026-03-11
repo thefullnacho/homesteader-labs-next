@@ -138,7 +138,6 @@ export default function STLViewer({ file, onVolumeCalculated, onError }: STLView
     simplifiedGeometry.setAttribute('position', new THREE_LIB.Float32BufferAttribute(newPositions, 3));
     simplifiedGeometry.computeVertexNormals();
     
-    console.log(`Simplified geometry: ${currentCount} -> ${newPositions.length / 3} vertices`);
     return simplifiedGeometry;
   }, []);
 
@@ -148,7 +147,6 @@ export default function STLViewer({ file, onVolumeCalculated, onError }: STLView
     // Prevent reloading the same file
     const fileKey = `${stlFile.name}-${stlFile.size}-${stlFile.lastModified}`;
     if (loadedFileRef.current === fileKey) {
-      console.log("File already loaded, skipping");
       return;
     }
     
@@ -156,8 +154,6 @@ export default function STLViewer({ file, onVolumeCalculated, onError }: STLView
     setIsLoading(true);
 
     try {
-      console.log("Loading STL file:", stlFile.name, "Size:", stlFile.size);
-      
       const { scene, camera, controls, renderer, THREE: THREE_LIB } = sceneRef.current;
 
       // Remove previous model
@@ -180,11 +176,8 @@ export default function STLViewer({ file, onVolumeCalculated, onError }: STLView
       const loader = new STLLoader();
       const arrayBuffer = await stlFile.arrayBuffer();
       
-      console.log("Parsing STL, buffer size:", arrayBuffer.byteLength);
-      
       let geometry = loader.parse(arrayBuffer);
       const originalVertexCount = geometry.attributes.position?.count || 0;
-      console.log("Geometry loaded, vertices:", originalVertexCount);
 
       // Ensure geometry has position attribute
       if (!geometry.attributes.position) {
@@ -210,8 +203,6 @@ export default function STLViewer({ file, onVolumeCalculated, onError }: STLView
         z: (bbox.max.z - bbox.min.z),
       };
       
-      console.log("Model dimensions (mm):", dimensions);
-
       // Calculate volume before centering
       let volume = 0;
       const positionAttribute = geometry.attributes.position;
@@ -281,15 +272,12 @@ export default function STLViewer({ file, onVolumeCalculated, onError }: STLView
       mesh.rotation.x = -Math.PI / 2; // Lay flat
 
       scene.add(mesh);
-      console.log("Schematic mesh added to scene");
 
       // Fit camera to model
       const box = new THREE_LIB.Box3().setFromObject(mesh);
       const size = box.getSize(new THREE_LIB.Vector3());
       const maxDim = Math.max(size.x, size.y, size.z);
       const center = box.getCenter(new THREE_LIB.Vector3());
-      
-      console.log("Bounding box size:", size, "Max dimension:", maxDim);
       
       // Calculate optimal camera distance based on FOV
       const fov = camera.fov * (Math.PI / 180);
@@ -301,7 +289,6 @@ export default function STLViewer({ file, onVolumeCalculated, onError }: STLView
 
       // Force a render
       renderer.render(scene, camera);
-      console.log("Render complete");
 
       onVolumeCalculated(volumeCm3, dimensions);
     } catch (err) {
