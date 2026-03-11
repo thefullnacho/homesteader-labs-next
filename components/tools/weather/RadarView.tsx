@@ -28,7 +28,7 @@ const RadarView = ({ lat, lon, zoom = 6 }: RadarViewProps) => {
         <div className="flex items-center gap-3">
           <Layers size={16} className="text-accent animate-pulse" />
           <div>
-            <Typography variant="small" className="font-mono font-bold uppercase text-[10px] mb-0 tracking-widest opacity-80">
+            <Typography variant="small" className="font-mono font-bold uppercase text-xs mb-0 tracking-widest opacity-80">
               Live Atmospheric Telemetry
             </Typography>
             <Typography variant="small" className="font-mono text-[8px] opacity-60 uppercase tracking-tighter mb-0">

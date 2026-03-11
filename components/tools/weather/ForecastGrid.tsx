@@ -32,7 +32,7 @@ const ForecastGrid = ({ forecast }: ForecastGridProps) => {
           
           <div className="text-center mb-3">
             <div className="text-lg font-bold font-mono leading-none mb-1">{Math.round(day.maxTemp)}°</div>
-            <div className="text-[10px] font-mono opacity-30">{Math.round(day.minTemp)}°</div>
+            <div className="text-xs font-mono opacity-30">{Math.round(day.minTemp)}°</div>
           </div>
 
           <div className="h-4 flex items-center justify-center">

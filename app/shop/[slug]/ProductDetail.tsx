@@ -104,7 +104,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                     <Badge 
                       key={spec} 
                       variant="status"
-                      className="text-[10px] opacity-70"
+                      className="text-xs opacity-70"
                     >
                       {spec}
                     </Badge>

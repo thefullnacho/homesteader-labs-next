@@ -25,7 +25,7 @@ export default function BlogIndexPage() {
             </div>
             <div className="text-right flex flex-col items-end gap-2">
               <Badge variant="outline">ARCHIVE_V.1.0</Badge>
-              <Typography variant="small" className="font-mono text-[10px] opacity-40 uppercase mb-0">
+              <Typography variant="small" className="font-mono text-xs opacity-40 uppercase mb-0">
                 ENTRIES: {posts.length}
               </Typography>
             </div>
@@ -48,7 +48,7 @@ export default function BlogIndexPage() {
                 {post.excerpt || post.description}
               </Typography>
               <Link href={`/blog/${post.slug}/`}>
-                <DymoLabel className="text-[10px] hover:scale-105 transition-transform">
+                <DymoLabel className="text-xs hover:scale-105 transition-transform">
                   READ_REPORT →
                 </DymoLabel>
               </Link>

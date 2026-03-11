@@ -139,11 +139,11 @@ export default function RequisitionPage() {
                 <FileText size={24} className="text-accent" />
                 Requisition_Form
               </Typography>
-              <Typography variant="small" className="opacity-40 font-mono text-[9px] uppercase tracking-widest">
+              <Typography variant="small" className="opacity-40 font-mono text-[11px] uppercase tracking-widest">
                 Hardware Request Documentation System | REV 2.4.1
               </Typography>
             </div>
-            <div className="text-[10px] text-foreground-secondary text-right font-mono uppercase">
+            <div className="text-xs text-foreground-secondary text-right font-mono uppercase">
               <p>REQ_ID: {generateReqId()}</p>
               <Badge variant="status" className="mt-1">PENDING_APPROVAL</Badge>
             </div>
@@ -178,7 +178,7 @@ export default function RequisitionPage() {
                       <div className="flex items-center gap-2 mb-1">
                         <Cpu size={14} className="text-[var(--accent)]" />
                         <span className="font-bold text-sm">{item.product.id}</span>
-                        <span className="text-[10px] px-1 bg-background-secondary border border-border-primary/30">
+                        <span className="text-xs px-1 bg-background-secondary border border-border-primary/30">
                           {item.product.category}
                         </span>
                       </div>
@@ -213,12 +213,12 @@ export default function RequisitionPage() {
                     </div>
                     <div className="text-right">
                       <p className="text-sm font-bold">${(item.product.price * item.quantity).toFixed(2)}</p>
-                      <p className="text-[10px] opacity-60">${item.product.price.toFixed(2)} each</p>
+                      <p className="text-xs opacity-60">${item.product.price.toFixed(2)} each</p>
                     </div>
                   </div>
 
                   {item.product.affiliate && (
-                    <div className="mt-2 p-2 bg-yellow-500/10 border border-yellow-600/30 text-[10px] flex items-center gap-1">
+                    <div className="mt-2 p-2 bg-yellow-500/10 border border-yellow-600/30 text-xs flex items-center gap-1">
                       <ExternalLink size={10} />
                       External fulfillment - affiliate link available
                     </div>
@@ -304,7 +304,7 @@ export default function RequisitionPage() {
                 />
               </div>
 
-              <div className="p-3 bg-yellow-500/10 border-l-4 border-yellow-600 text-[10px] flex gap-2 items-start font-mono uppercase">
+              <div className="p-3 bg-yellow-500/10 border-l-4 border-yellow-600 text-xs flex gap-2 items-start font-mono uppercase">
                 <AlertTriangle size={14} className="flex-shrink-0 mt-0.5 text-yellow-600" />
                 <p className="opacity-80 leading-relaxed">
                   By submitting, you confirm hardware compatibility requirements have been reviewed. 
@@ -332,7 +332,7 @@ export default function RequisitionPage() {
           </BrutalistBlock>
 
           {/* Security Notice */}
-          <div className="text-[10px] opacity-30 text-center font-mono uppercase tracking-widest">
+          <div className="text-xs opacity-30 text-center font-mono uppercase tracking-widest">
             <p>All requests encrypted in transit</p>
             <p>Payment processed via secure gateway</p>
           </div>

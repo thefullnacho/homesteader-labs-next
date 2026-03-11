@@ -38,7 +38,7 @@ const BrutalistBlock = ({
       {children}
       
       {refTag && (
-        <div className="absolute -bottom-3 right-4 bg-background-secondary border border-border-primary px-2 py-0.5 text-[10px] font-mono opacity-70 z-20">
+        <div className="absolute -bottom-3 right-4 bg-background-secondary border border-border-primary px-2 py-0.5 text-xs font-mono opacity-70 z-20">
           {refTag}
         </div>
       )}

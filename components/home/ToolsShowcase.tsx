@@ -32,7 +32,7 @@ export default function ToolsShowcase() {
     <section className="mb-12">
       <div className="flex justify-between items-end mb-6 border-b-2 border-border-primary pb-2">
         <Typography variant="h3" className="mb-0">Field_Tools</Typography>
-        <span className="text-[10px] text-foreground-secondary font-mono">
+        <span className="text-xs text-foreground-secondary font-mono">
           STATUS: OPERATIONAL
         </span>
       </div>
@@ -59,7 +59,7 @@ export default function ToolsShowcase() {
                       <Typography variant="h4" className="mb-0 group-hover:text-accent transition-colors">
                         {tool.name}
                       </Typography>
-                      <span className="text-[10px] border border-accent text-accent px-1 font-mono">
+                      <span className="text-xs border border-accent text-accent px-1 font-mono">
                         {tool.status}
                       </span>
                     </div>

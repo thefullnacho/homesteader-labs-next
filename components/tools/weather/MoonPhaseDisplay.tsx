@@ -10,7 +10,7 @@ export default function MoonPhaseDisplay() {
   return (
     <BrutalistBlock className="p-5" refTag="LUNAR_SYNC">
       <div className="flex items-center justify-between mb-4 border-b border-border-primary/20 pb-2">
-        <Typography variant="small" className="font-mono font-bold uppercase text-[10px] mb-0 opacity-80">
+        <Typography variant="small" className="font-mono font-bold uppercase text-xs mb-0 opacity-80">
           Lunar Orbital Phase
         </Typography>
         <div className="w-2 h-2 bg-accent rounded-full animate-pulse" />

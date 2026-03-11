@@ -68,7 +68,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
           alt={alt} 
           className="w-full border-2 border-border-primary inline-block"
         />
-        {alt && <p className="text-[10px] mt-2 opacity-40 font-mono uppercase tracking-widest">{alt}</p>}
+        {alt && <p className="text-xs mt-2 opacity-40 font-mono uppercase tracking-widest">{alt}</p>}
       </div>
     ),
     hr: () => (

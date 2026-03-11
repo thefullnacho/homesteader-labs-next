@@ -29,7 +29,7 @@ const Typography = ({
     h3: "text-xl md:text-2xl font-bold uppercase mb-3",
     h4: "text-lg font-bold uppercase mb-2",
     body: "text-base md:text-lg leading-relaxed mb-4",
-    small: "text-sm text-foreground-secondary",
+    small: "text-[13px] sm:text-sm text-foreground-secondary",
     code: "font-mono bg-background-secondary px-1 py-0.5 rounded-sm text-sm",
   };
 

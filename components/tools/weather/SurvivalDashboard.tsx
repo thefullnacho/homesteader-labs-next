@@ -39,12 +39,12 @@ const SurvivalDashboard = ({ index }: SurvivalDashboardProps) => {
         <BrutalistBlock className="p-5 relative overflow-hidden group" refTag="DEF_CON_FIRE">
           <div className="flex items-center gap-3 mb-4 opacity-80 group-hover:opacity-100 transition-opacity">
             <Flame size={16} className="text-accent" />
-            <Typography variant="small" className="uppercase font-bold text-[10px] mb-0 tracking-widest font-mono">Thermal Threat Level</Typography>
+            <Typography variant="small" className="uppercase font-bold text-xs mb-0 tracking-widest font-mono">Thermal Threat Level</Typography>
           </div>
           <Typography variant="h2" className="mb-1 uppercase font-mono tracking-tighter" style={{ color: getRiskColor(index.fireRisk.level) }}>
             {index.fireRisk.level}
           </Typography>
-          <Typography variant="small" className="opacity-70 text-[10px] leading-tight mb-0 uppercase font-mono">{index.fireRisk.description}</Typography>
+          <Typography variant="small" className="opacity-70 text-xs leading-tight mb-0 uppercase font-mono">{index.fireRisk.description}</Typography>
           <div className="absolute top-2 right-2 w-1 h-8 bg-current opacity-20" style={{ color: getRiskColor(index.fireRisk.level) }} />
         </BrutalistBlock>
 
@@ -52,12 +52,12 @@ const SurvivalDashboard = ({ index }: SurvivalDashboardProps) => {
         <BrutalistBlock className="p-5 relative overflow-hidden group" refTag="H2O_ACQ_POT">
           <div className="flex items-center gap-3 mb-4 opacity-80 group-hover:opacity-100 transition-opacity">
             <Droplet size={16} className="text-accent" />
-            <Typography variant="small" className="uppercase font-bold text-[10px] mb-0 tracking-widest font-mono">Catchment Efficiency</Typography>
+            <Typography variant="small" className="uppercase font-bold text-xs mb-0 tracking-widest font-mono">Catchment Efficiency</Typography>
           </div>
           <Typography variant="h2" className="mb-1 uppercase font-mono tracking-tighter">
             {index.waterCatchment.potential}
           </Typography>
-          <Typography variant="small" className="opacity-70 text-[10px] leading-tight mb-0 uppercase font-mono">
+          <Typography variant="small" className="opacity-70 text-xs leading-tight mb-0 uppercase font-mono">
             {index.waterCatchment.nextRain 
               ? `Next Inflow: ${new Date(index.waterCatchment.nextRain).toLocaleDateString()}`
               : "Zero Atmospheric Precip Detected"}
@@ -68,13 +68,13 @@ const SurvivalDashboard = ({ index }: SurvivalDashboardProps) => {
         <BrutalistBlock className="p-5 relative overflow-hidden group" refTag="PV_ARRAY_YIELD">
           <div className="flex items-center gap-3 mb-4 opacity-80 group-hover:opacity-100 transition-opacity">
             <Zap size={16} className="text-accent" />
-            <Typography variant="small" className="uppercase font-bold text-[10px] mb-0 tracking-widest font-mono">Solar Energy Capture</Typography>
+            <Typography variant="small" className="uppercase font-bold text-xs mb-0 tracking-widest font-mono">Solar Energy Capture</Typography>
           </div>
           <div className="flex items-baseline gap-2">
             <Typography variant="h2" className="mb-1 font-mono tracking-tighter">{index.solarEfficiency.percentage}%</Typography>
-            <span className="text-[10px] font-mono opacity-40">EFF</span>
+            <span className="text-xs font-mono opacity-40">EFF</span>
           </div>
-          <Typography variant="small" className="opacity-70 text-[10px] leading-tight mb-0 uppercase font-mono">
+          <Typography variant="small" className="opacity-70 text-xs leading-tight mb-0 uppercase font-mono">
             EST {index.solarEfficiency.hours} PEAK SUN HRS
           </Typography>
         </BrutalistBlock>
@@ -83,29 +83,29 @@ const SurvivalDashboard = ({ index }: SurvivalDashboardProps) => {
         <BrutalistBlock className="p-5 relative overflow-hidden group" refTag="AGRI_OPS_SAFE">
           <div className="flex items-center gap-3 mb-4 opacity-80 group-hover:opacity-100 transition-opacity">
             <Cloud size={16} className="text-accent" />
-            <Typography variant="small" className="uppercase font-bold text-[10px] mb-0 tracking-widest font-mono">Application Suitability</Typography>
+            <Typography variant="small" className="uppercase font-bold text-xs mb-0 tracking-widest font-mono">Application Suitability</Typography>
           </div>
           <Typography variant="h2" className="mb-1 uppercase font-mono tracking-tighter" style={{ color: index.sprayConditions.suitable ? '#22c55e' : '#ef4444' }}>
             {index.sprayConditions.suitable ? "OPTIMAL" : "CRITICAL ABORT"}
           </Typography>
-          <Typography variant="small" className="opacity-70 text-[10px] leading-tight mb-0 uppercase font-mono">{index.sprayConditions.reason}</Typography>
+          <Typography variant="small" className="opacity-70 text-xs leading-tight mb-0 uppercase font-mono">{index.sprayConditions.reason}</Typography>
         </BrutalistBlock>
 
         {/* LIVESTOCK STRESS */}
         <BrutalistBlock className="p-5 relative overflow-hidden group" refTag="BIO_SENS_LOG">
           <div className="flex items-center gap-3 mb-4 opacity-80 group-hover:opacity-100 transition-opacity">
             <Beef size={16} className="text-accent" />
-            <Typography variant="small" className="uppercase font-bold text-[10px] mb-0 tracking-widest font-mono">Livestock Metabolic Load</Typography>
+            <Typography variant="small" className="uppercase font-bold text-xs mb-0 tracking-widest font-mono">Livestock Metabolic Load</Typography>
           </div>
           <Typography variant="h2" className="mb-1 uppercase font-mono tracking-tighter" style={{ color: getStressColor(index.livestockStress.level) }}>
             {index.livestockStress.level}
           </Typography>
-          <Typography variant="small" className="opacity-70 text-[10px] leading-tight mb-0 uppercase font-mono">{index.livestockStress.description}</Typography>
+          <Typography variant="small" className="opacity-70 text-xs leading-tight mb-0 uppercase font-mono">{index.livestockStress.description}</Typography>
         </BrutalistBlock>
 
         {/* READINESS BAR (FULL WIDTH ON LG) */}
         <BrutalistBlock className="p-5 lg:col-span-1 border-accent/40 bg-accent/5 relative" refTag="CORE_READINESS">
-          <Typography variant="small" className="uppercase font-bold text-[10px] mb-4 tracking-widest font-mono opacity-80">System Integrity Index</Typography>
+          <Typography variant="small" className="uppercase font-bold text-xs mb-4 tracking-widest font-mono opacity-80">System Integrity Index</Typography>
           <div className="flex items-center gap-4">
             <div className="flex-grow h-8 bg-background-secondary border-2 border-border-primary overflow-hidden relative">
               <div 

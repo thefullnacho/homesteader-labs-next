@@ -26,7 +26,7 @@ export default function FeaturedProducts() {
             <BrutalistBlock className="p-4 hover:shadow-brutalist-lg transition-all">
               {/* Product Image Placeholder */}
               <div className="h-32 bg-background-secondary border-b border-border-primary mb-4 flex items-center justify-center relative overflow-hidden">
-                <div className="absolute top-2 left-2 text-[10px] font-bold opacity-50">
+                <div className="absolute top-2 left-2 text-xs font-bold opacity-50">
                   {product.id}
                 </div>
                 <div className="w-16 h-16 border border-dashed border-border-primary rounded-full flex items-center justify-center">

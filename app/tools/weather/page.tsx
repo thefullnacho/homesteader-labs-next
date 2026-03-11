@@ -144,7 +144,7 @@ export default function WeatherPage() {
         <div className="flex flex-col md:flex-row md:items-start justify-between gap-6 border-b-2 border-border-primary pb-6">
           <div>
             <Typography variant="h2" className="mb-1 uppercase tracking-tight font-mono">Weather Station</Typography>
-            <Typography variant="small" className="opacity-40 font-mono text-[9px] uppercase tracking-widest">
+            <Typography variant="small" className="opacity-40 font-mono text-[11px] uppercase tracking-widest">
               Multi-Source Ensemble Telemetry // Active Link: OPEN_METEO_V4
             </Typography>
           </div>
@@ -153,7 +153,7 @@ export default function WeatherPage() {
             <div className="flex border-2 border-border-primary p-1 bg-black/20">
               <button 
                 onClick={() => setMode("SURVIVAL")}
-                className={`flex items-center gap-2 px-4 py-1.5 text-[10px] font-bold font-mono uppercase transition-all ${
+                className={`flex items-center gap-2 px-4 py-1.5 text-xs font-bold font-mono uppercase transition-all ${
                   mode === "SURVIVAL" ? "bg-accent text-white" : "opacity-40 hover:opacity-100"
                 }`}
               >
@@ -161,7 +161,7 @@ export default function WeatherPage() {
               </button>
               <button 
                 onClick={() => setMode("PLANTING")}
-                className={`flex items-center gap-2 px-4 py-1.5 text-[10px] font-bold font-mono uppercase transition-all ${
+                className={`flex items-center gap-2 px-4 py-1.5 text-xs font-bold font-mono uppercase transition-all ${
                   mode === "PLANTING" ? "bg-accent text-white" : "opacity-40 hover:opacity-100"
                 }`}
               >
@@ -207,7 +207,7 @@ export default function WeatherPage() {
 
             <div className="mb-12">
               <div className="flex items-center gap-3 mb-6">
-                <DymoLabel className="text-[10px]">{mode} DASHBOARD V.2</DymoLabel>
+                <DymoLabel className="text-xs">{mode} DASHBOARD V.2</DymoLabel>
                 <div className="h-[2px] flex-grow bg-border-primary/20" />
               </div>
 
@@ -235,7 +235,7 @@ export default function WeatherPage() {
 
             <div className="space-y-4">
               <div className="flex items-center gap-3 mb-2">
-                <Typography variant="small" className="font-mono font-bold uppercase text-[10px] mb-0 opacity-40">Ensemble 7D Outlook</Typography>
+                <Typography variant="small" className="font-mono font-bold uppercase text-xs mb-0 opacity-40">Ensemble 7D Outlook</Typography>
                 <div className="h-[1px] flex-grow bg-border-primary/10" />
               </div>
               <ForecastGrid forecast={weather.forecast} />

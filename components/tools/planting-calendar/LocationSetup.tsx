@@ -52,7 +52,7 @@ export default function LocationSetup({
 
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="relative">
-          <label className="block text-[10px] font-mono font-bold uppercase opacity-40 mb-2 tracking-widest">
+          <label className="block text-xs font-mono font-bold uppercase opacity-40 mb-2 tracking-widest">
             Enter_ZIP_Coordinates
           </label>
           <div className="flex gap-2">
@@ -82,7 +82,7 @@ export default function LocationSetup({
         </div>
 
         {(localError || error) && (
-          <div className="p-3 border-2 border-red-500 bg-red-500/10 text-red-500 text-[10px] font-mono font-bold uppercase flex items-center gap-2">
+          <div className="p-3 border-2 border-red-500 bg-red-500/10 text-red-500 text-xs font-mono font-bold uppercase flex items-center gap-2">
             <span className="animate-pulse">⚠</span> {localError || error}
           </div>
         )}

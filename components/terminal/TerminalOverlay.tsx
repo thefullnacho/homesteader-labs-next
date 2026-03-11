@@ -282,7 +282,7 @@ export default function TerminalOverlay() {
             </Typography>
           </div>
           <div className="flex items-center gap-4">
-            <span className="hidden sm:inline text-[10px] text-foreground-secondary font-mono">
+            <span className="hidden sm:inline text-xs text-foreground-secondary font-mono">
               {isEditorMode ? "ESC to cancel" : "ALT+T to toggle"}
             </span>
             <button
@@ -306,7 +306,7 @@ export default function TerminalOverlay() {
               spellCheck={false}
             />
             <div className="p-3 border-t-2 border-accent bg-background-secondary/50 flex justify-between items-center">
-              <span className="text-[10px] text-foreground-secondary font-mono">
+              <span className="text-xs text-foreground-secondary font-mono">
                 {editorContent.length} chars | {editorContent.split("\n").length} lines
               </span>
               <div className="flex gap-2">
@@ -381,7 +381,7 @@ export default function TerminalOverlay() {
             </form>
 
             {/* Quick Links */}
-            <div className="px-3 py-2 border-t border-accent/30 bg-black/20 flex flex-wrap gap-x-4 gap-y-1 text-[10px] uppercase font-bold">
+            <div className="px-3 py-2 border-t border-accent/30 bg-black/20 flex flex-wrap gap-x-4 gap-y-1 text-xs uppercase font-bold">
               <Link href="/shop/" className="text-foreground-secondary hover:text-accent transition-colors">
                 [shop]
               </Link>

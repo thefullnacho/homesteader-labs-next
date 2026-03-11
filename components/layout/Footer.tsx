@@ -27,7 +27,7 @@ export default function Footer() {
             </Typography>
           </div>
           
-          <div className="flex gap-x-6 gap-y-2 text-[10px] font-bold uppercase tracking-widest flex-wrap justify-center font-mono">
+          <div className="flex gap-x-6 gap-y-2 text-xs font-bold uppercase tracking-widest flex-wrap justify-center font-mono">
             <Link href="/archive/" className="opacity-50 hover:opacity-100 hover:text-accent transition-all">
               [ARCHIVE]
             </Link>

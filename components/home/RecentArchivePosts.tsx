@@ -32,7 +32,7 @@ export default function RecentArchivePosts() {
               {/* Content */}
               <div className="flex-grow min-w-0">
                 {/* Meta */}
-                <div className="flex items-center gap-3 mb-1 text-[10px] text-foreground-secondary">
+                <div className="flex items-center gap-3 mb-1 text-xs text-foreground-secondary">
                   <span className="uppercase">{post.category}</span>
                   <span>{"//"}</span>
                   <span className="flex items-center gap-1">

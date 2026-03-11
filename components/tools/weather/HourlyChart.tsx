@@ -32,7 +32,7 @@ export default function HourlyChart({ hourly }: HourlyChartProps) {
   return (
     <div className="w-full overflow-x-auto pb-4">
       <div className="flex items-center gap-3 mb-2 min-w-[600px]">
-        <h4 className="text-[10px] font-mono font-bold uppercase tracking-widest opacity-60">
+        <h4 className="text-xs font-mono font-bold uppercase tracking-widest opacity-60">
           24-Hour Micro-Trend
         </h4>
       </div>
