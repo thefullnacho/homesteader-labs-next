@@ -40,6 +40,7 @@ export default function FabricationPage() {
   const [dimensions, setDimensions] = useState<{ x: number; y: number; z: number } | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [hasVolume, setHasVolume] = useState(false);
+  const rawVolumeRef = useRef<number>(0);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -51,6 +52,7 @@ export default function FabricationPage() {
   }, []);
 
   const handleVolumeCalculated = useCallback((volumeCm3: number, dims: { x: number; y: number; z: number }) => {
+    rawVolumeRef.current = volumeCm3;
     setHasVolume(true);
     setDimensions(dims);
     const newEstimate = calculatePrintEstimate(volumeCm3, selectedFilament, settings);
@@ -92,10 +94,9 @@ export default function FabricationPage() {
   const updateSettings = (key: keyof PrintSettings, value: number | boolean) => {
     setSettings((prev) => {
       const newSettings = { ...prev, [key]: value };
-      // Recalculate estimate if we have a model
-      if (estimate && dimensions) {
-        const volumeFromWeight = estimate.weight / selectedFilament.density;
-        setEstimate(calculatePrintEstimate(volumeFromWeight, selectedFilament, newSettings));
+      // Recalculate estimate using stored raw volume (avoids stale closure on back-calculation)
+      if (rawVolumeRef.current > 0 && dimensions) {
+        setEstimate(calculatePrintEstimate(rawVolumeRef.current, selectedFilament, newSettings));
       }
       return newSettings;
     });
@@ -105,9 +106,9 @@ export default function FabricationPage() {
     const filament = FILAMENT_TYPES.find((f) => f.id === filamentId);
     if (filament) {
       setSelectedFilament(filament);
-      if (estimate && dimensions) {
-        const volumeFromWeight = estimate.weight / selectedFilament.density;
-        setEstimate(calculatePrintEstimate(volumeFromWeight, filament, settings));
+      // Use stored raw volume instead of back-calculating from weight with potentially stale density
+      if (rawVolumeRef.current > 0 && dimensions) {
+        setEstimate(calculatePrintEstimate(rawVolumeRef.current, filament, settings));
       }
     }
   };

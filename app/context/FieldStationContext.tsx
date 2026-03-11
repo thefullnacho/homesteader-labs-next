@@ -195,14 +195,16 @@ export function FieldStationProvider({ children }: { children: ReactNode }) {
   const removeLocation = useCallback((id: string) => {
     setLocations((prev) => {
       const filtered = prev.filter((loc) => loc.id !== id);
-      if (activeLocation?.id === id && filtered.length > 0) {
-        setActiveLocation(filtered[0]);
-      } else if (filtered.length === 0) {
-        setActiveLocation(null);
-      }
+      // Use setActiveLocation updater to read current value (avoids stale closure)
+      setActiveLocation((currentActive) => {
+        if (currentActive?.id === id) {
+          return filtered.length > 0 ? filtered[0] : null;
+        }
+        return currentActive;
+      });
       return filtered;
     });
-  }, [activeLocation]);
+  }, []);
 
   const updateLocation = useCallback((id: string, updates: Partial<SavedLocation>) => {
     setLocations((prev) =>
@@ -292,17 +294,19 @@ export function FieldStationProvider({ children }: { children: ReactNode }) {
       setFrostDates(result);
       
       // Sync with locations if we don't have this one
-      setLocations(prev => {
-        const existing = prev.find(l => l.zipCode === zipPrefix);
-        if (!existing) {
-          // Fire geocode lookup in background to add to locations
-          geocodeZipCode(zipPrefix).then(locData => {
-            if (locData) {
+      // NOTE: Fire geocode outside setState to avoid side effects in updaters.
+      // Use setLocations updater to read current value (avoids stale closure).
+      setLocations(prev => prev);  // no-op to read current state
+      geocodeZipCode(zipPrefix).then(locData => {
+        if (locData) {
+          setLocations(prev => {
+            const existing = prev.find(l => l.zipCode === zipPrefix);
+            if (!existing) {
               addLocation({ ...locData, zipCode: zipPrefix });
             }
+            return prev;
           });
         }
-        return prev;
       });
 
       return result;
@@ -313,18 +317,22 @@ export function FieldStationProvider({ children }: { children: ReactNode }) {
       
       console.warn("API failed, using fallback data:", message);
       try {
-        const mockData = getMockFrostData(zipCode.substring(0, 5));
+        const zipPrefix = zipCode.substring(0, 5);
+        const mockData = getMockFrostData(zipPrefix);
         setFrostDates(mockData);
         setFrostError("Using estimated frost dates. Confirm with your local extension office for precision.");
         
-        // Also fire background geocode
-        geocodeZipCode(zipCode.substring(0, 5)).then(locData => {
-            if (locData) {
-                const existing = locations.find(l => l.zipCode === zipCode.substring(0, 5));
-                if (!existing) {
-                    addLocation({ ...locData, zipCode: zipCode.substring(0, 5) });
-                }
-            }
+        // Fire background geocode outside setState, use updater to check current locations
+        geocodeZipCode(zipPrefix).then(locData => {
+          if (locData) {
+            setLocations(prev => {
+              const existing = prev.find(l => l.zipCode === zipPrefix);
+              if (!existing) {
+                addLocation({ ...locData, zipCode: zipPrefix });
+              }
+              return prev;
+            });
+          }
         });
 
         return mockData;
@@ -334,7 +342,7 @@ export function FieldStationProvider({ children }: { children: ReactNode }) {
     } finally {
       setFrostLoading(false);
     }
-  }, [addLocation, locations]);
+  }, [addLocation]);
 
   const value = {
     locations,
