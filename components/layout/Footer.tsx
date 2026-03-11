@@ -3,21 +3,10 @@
 import Link from "next/link";
 import Typography from "@/components/ui/Typography";
 import Badge from "@/components/ui/Badge";
-import { useEffect, useState } from "react";
+import { useThemePreferences } from "@/app/hooks/useThemePreferences";
 
 export default function Footer() {
-  const [isLow, setIsLow] = useState(false);
-
-  useEffect(() => {
-    setIsLow(localStorage.getItem("hl_ui_low_fx") === "true");
-  }, []);
-
-  const toggleFX = () => {
-    const newVal = !isLow;
-    localStorage.setItem("hl_ui_low_fx", String(newVal));
-    setIsLow(newVal);
-    window.dispatchEvent(new CustomEvent('hl-toggle-fx'));
-  };
+  const { lowFX, toggleLowFX } = useThemePreferences();
 
   return (
     <footer className="border-t-2 border-border-primary bg-background-secondary mt-auto relative overflow-hidden">
@@ -49,10 +38,10 @@ export default function Footer() {
               [FABRICATION]
             </Link>
             <button 
-              onClick={toggleFX}
+              onClick={toggleLowFX}
               className="opacity-50 hover:opacity-100 hover:text-accent transition-all uppercase"
             >
-              [FX_{isLow ? 'MIN' : 'MAX'}]
+              [FX_{lowFX ? 'MIN' : 'MAX'}]
             </button>
             <Link href="/terms-of-fabrication/" className="opacity-50 hover:opacity-100 hover:text-accent transition-all">
               [TERMS]
