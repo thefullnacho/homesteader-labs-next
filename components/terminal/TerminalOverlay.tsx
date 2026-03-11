@@ -51,14 +51,18 @@ const COMMANDS: Record<string, (args: string[]) => string[]> = {
     "Usage: navigate to /tools/[name]",
   ],
   fx: () => {
-    const current = localStorage.getItem("hl_ui_low_fx") === "true";
-    const newState = !current;
-    localStorage.setItem("hl_ui_low_fx", String(newState));
-    window.dispatchEvent(new CustomEvent("hl-toggle-fx"));
-    return [
-      `VISUAL EFFECTS: ${newState ? "DISABLED (LOW-FX)" : "ENABLED"}`,
-      "System environment updated.",
-    ];
+    try {
+      const current = localStorage.getItem("hl_ui_low_fx") === "true";
+      const newState = !current;
+      localStorage.setItem("hl_ui_low_fx", String(newState));
+      window.dispatchEvent(new CustomEvent("hl-toggle-fx"));
+      return [
+        `VISUAL EFFECTS: ${newState ? "DISABLED (LOW-FX)" : "ENABLED"}`,
+        "System environment updated.",
+      ];
+    } catch {
+      return ["ERROR: Unable to access localStorage."];
+    }
   },
   about: () => [
     "HOMESTEADER LABS v2.0",
@@ -115,6 +119,7 @@ export default function TerminalOverlay() {
   const inputRef = useRef<HTMLInputElement>(null);
   const terminalRef = useRef<HTMLDivElement>(null);
   const hasBooted = useRef(false);
+  const bootTimersRef = useRef<ReturnType<typeof setTimeout>[]>([]);
 
   const toggleTerminal = useCallback(() => {
     setIsOpen((prev) => !prev);
@@ -123,9 +128,10 @@ export default function TerminalOverlay() {
       setIsBooting(true);
       // Simulate boot sequence
       let delay = 0;
+      bootTimersRef.current = [];
       BOOT_SEQUENCE.forEach((line, index) => {
         delay += Math.random() * 100 + 50;
-        setTimeout(() => {
+        const timerId = setTimeout(() => {
           setCommands((prev) => [
             ...prev,
             { input: "", output: [line], isError: false },
@@ -134,9 +140,18 @@ export default function TerminalOverlay() {
             setIsBooting(false);
           }
         }, delay);
+        bootTimersRef.current.push(timerId);
       });
     }
   }, [isOpen]);
+
+  // Clean up boot timers on unmount
+  useEffect(() => {
+    return () => {
+      bootTimersRef.current.forEach((id) => clearTimeout(id));
+      bootTimersRef.current = [];
+    };
+  }, []);
 
   // Handle keyboard shortcut
   useEffect(() => {

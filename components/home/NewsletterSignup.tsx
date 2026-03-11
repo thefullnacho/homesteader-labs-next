@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Send, Terminal } from "lucide-react";
 import BrutalistBlock from "@/components/ui/BrutalistBlock";
 import Typography from "@/components/ui/Typography";
@@ -9,6 +9,16 @@ import Button from "@/components/ui/Button";
 export default function NewsletterSignup() {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
+  const statusTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Clean up status timer on unmount
+  useEffect(() => {
+    return () => {
+      if (statusTimerRef.current) {
+        clearTimeout(statusTimerRef.current);
+      }
+    };
+  }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -16,7 +26,10 @@ export default function NewsletterSignup() {
     if (email.includes("@")) {
       setStatus("success");
       setEmail("");
-      setTimeout(() => setStatus("idle"), 3000);
+      if (statusTimerRef.current) {
+        clearTimeout(statusTimerRef.current);
+      }
+      statusTimerRef.current = setTimeout(() => setStatus("idle"), 3000);
     } else {
       setStatus("error");
     }
@@ -24,13 +37,13 @@ export default function NewsletterSignup() {
 
   return (
     <section className="mb-12">
-      <BrutalistBlock className="bg-[var(--accent)]/10 border-[var(--accent)] p-0">
+      <BrutalistBlock className="bg-accent/10 border-accent p-0">
         <div className="p-6 md:p-8">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
             {/* Text */}
             <div className="flex-grow">
               <div className="flex items-center gap-2 mb-2">
-                <Terminal size={20} className="text-[var(--accent)]" />
+                <Terminal size={20} className="text-accent" />
                 <Typography variant="h3" className="mb-0">Stay_In_The_Loop</Typography>
               </div>
               <Typography variant="small" className="text-foreground-secondary mb-0">
@@ -49,7 +62,7 @@ export default function NewsletterSignup() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="your@email.com"
-                  className="flex-grow md:w-64 px-3 py-2 bg-background-secondary border-2 border-border-primary text-foreground-primary placeholder:text-foreground-secondary/50 focus:outline-none focus:border-[var(--accent)] font-mono text-sm"
+                  className="flex-grow md:w-64 px-3 py-2 bg-background-secondary border-2 border-border-primary text-foreground-primary placeholder:text-foreground-secondary/50 focus:outline-none focus:border-accent font-mono text-sm"
                 />
                 <Button
                   type="submit"
@@ -68,7 +81,7 @@ export default function NewsletterSignup() {
                   </p>
                 )}
                 {status === "error" && (
-                  <p className="text-xs text-[var(--accent)] mt-2">
+                  <p className="text-xs text-accent mt-2">
                     &gt;&gt; ERROR: INVALID_EMAIL_FORMAT
                   </p>
                 )}
@@ -78,7 +91,7 @@ export default function NewsletterSignup() {
         </div>
 
         {/* Decorative terminal footer */}
-        <div className="border-t-2 border-[var(--accent)]/30 px-6 py-2 bg-background-secondary/30">
+        <div className="border-t-2 border-accent/30 px-6 py-2 bg-background-secondary/30">
           <p className="text-[10px] font-mono text-foreground-secondary">
             ENCRYPTION: NONE | FREQUENCY: MONTHLY | UNSUBSCRIBE: ANYTIME
           </p>
