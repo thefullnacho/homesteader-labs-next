@@ -1,26 +1,12 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React from 'react';
+import { useThemePreferences } from '@/app/hooks/useThemePreferences';
 
 const VisualEffects = () => {
-  const [enabled, setEnabled] = useState(true);
+  const { lowFX } = useThemePreferences();
 
-  useEffect(() => {
-    // Initial check
-    const saved = localStorage.getItem("hl_ui_low_fx");
-    if (saved === "true") setEnabled(false);
-
-    // Listen for custom toggle events
-    const handleToggle = () => {
-      const isLow = localStorage.getItem("hl_ui_low_fx") === "true";
-      setEnabled(!isLow);
-    };
-
-    window.addEventListener('hl-toggle-fx', handleToggle);
-    return () => window.removeEventListener('hl-toggle-fx', handleToggle);
-  }, []);
-
-  if (!enabled) return null;
+  if (lowFX) return null;
 
   return (
     <>

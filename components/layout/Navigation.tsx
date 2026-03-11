@@ -1,45 +1,17 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Box, Sun, Moon, ShoppingCart, Menu, X, Zap, ZapOff } from "lucide-react";
 import { useCart } from "@/app/context/CartContext";
 import Link from "next/link";
 import Badge from "@/components/ui/Badge";
 import DymoLabel from "@/components/ui/DymoLabel";
+import { useThemePreferences } from "@/app/hooks/useThemePreferences";
 
 export default function Navigation() {
-  const [isDark, setIsDark] = useState(false);
-  const [lowFX, setLowFX] = useState(false);
+  const { isDark, lowFX, toggleDarkMode, toggleLowFX } = useThemePreferences();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { totalItems, isRequisitionSubmitted } = useCart();
-
-  useEffect(() => {
-    // Load preferences from localStorage
-    const savedDark = localStorage.getItem("hl_dark_mode");
-    if (savedDark) {
-      const dark = JSON.parse(savedDark);
-      setIsDark(dark);
-      if (dark) document.documentElement.classList.add("dark");
-    }
-    
-    const savedLowFX = localStorage.getItem("hl_ui_low_fx");
-    if (savedLowFX === "true") setLowFX(true);
-  }, []);
-
-  const toggleDarkMode = () => {
-    const newValue = !isDark;
-    setIsDark(newValue);
-    document.documentElement.classList.toggle("dark", newValue);
-    localStorage.setItem("hl_dark_mode", JSON.stringify(newValue));
-  };
-
-  const toggleLowFX = () => {
-    const newValue = !lowFX;
-    setLowFX(newValue);
-    localStorage.setItem("hl_ui_low_fx", String(newValue));
-    // Trigger event for VisualEffects component
-    window.dispatchEvent(new Event("hl-toggle-fx"));
-  };
 
   const requisitionStatus = isRequisitionSubmitted ? "SUBMITTED" : "PENDING";
 
