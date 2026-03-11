@@ -1,1 +1,997 @@
-[]
+[
+  {
+    "id": "basil",
+    "name": "Basil",
+    "category": "herb",
+    "icon": "🌿",
+    "varieties": [
+      { "id": "genovese", "name": "Genovese", "daysToMaturity": 60, "type": "Sweet", "special": ["classic", "pesto"] },
+      { "id": "thai", "name": "Thai Basil", "daysToMaturity": 65, "type": "Asian", "special": ["anise-flavor", "heat-tolerant"] },
+      { "id": "purple", "name": "Purple Basil", "daysToMaturity": 65, "type": "Ornamental", "special": ["colorful", "mild"] }
+    ],
+    "startIndoors": 42,
+    "transplant": 14,
+    "directSow": 14,
+    "daysToMaturity": 60,
+    "successionEnabled": true,
+    "successionInterval": 3,
+    "successionMax": 3,
+    "sun": "full",
+    "spacing": "12-18\" apart",
+    "notes": ["Pinch flower buds to prolong leaf harvest", "Very frost-sensitive", "Companion plant with tomatoes"],
+    "lunarAffinity": "waxing",
+    "growthHabit": "annual",
+    "yearsToFirstHarvest": 0,
+    "waterNeedsPerWeek": 0.5,
+    "yield": {
+      "avgPerPlant": 8,
+      "unit": "oz",
+      "caloriesPer100g": 23,
+      "proteinPer100g": 3.2,
+      "carbsPer100g": 2.7,
+      "fatPer100g": 0.6,
+      "storageLifeDays": 5
+    },
+    "preservation": [
+      { "method": "drying", "shelfLifeMonths": 12, "notes": "Hang dry or dehydrator; store in airtight jars" },
+      { "method": "freezing", "shelfLifeMonths": 6, "notes": "Freeze in olive oil in ice cube trays for cooking" },
+      { "method": "oil-preserving", "shelfLifeMonths": 3, "notes": "Infuse in olive oil; keep refrigerated" }
+    ],
+    "uses": ["cooking", "companion", "pest-deterrent"],
+    "companions": ["tomato", "pepper-bell", "pepper-hot"],
+    "antagonists": ["sage"]
+  },
+  {
+    "id": "cilantro",
+    "name": "Cilantro",
+    "category": "herb",
+    "icon": "🌿",
+    "varieties": [
+      { "id": "slow-bolt", "name": "Slow Bolt", "daysToMaturity": 50, "type": "Leaf", "special": ["heat-tolerant"] }
+    ],
+    "startIndoors": null,
+    "transplant": null,
+    "directSow": -14,
+    "daysToMaturity": 50,
+    "successionEnabled": true,
+    "successionInterval": 2,
+    "successionMax": 6,
+    "sun": "partial",
+    "spacing": "6-8\" apart",
+    "notes": ["Bolts quickly in heat", "Harvest seeds as coriander", "Taproot does not transplant well"],
+    "lunarAffinity": "waxing",
+    "growthHabit": "annual",
+    "yearsToFirstHarvest": 0,
+    "waterNeedsPerWeek": 0.5,
+    "yield": {
+      "avgPerPlant": 4,
+      "unit": "bunches",
+      "caloriesPer100g": 23,
+      "proteinPer100g": 2.1,
+      "carbsPer100g": 3.7,
+      "fatPer100g": 0.5,
+      "storageLifeDays": 7
+    },
+    "preservation": [
+      { "method": "freezing", "shelfLifeMonths": 6, "notes": "Chop and freeze in water or oil" },
+      { "method": "drying", "shelfLifeMonths": 12, "notes": "Mainly for coriander seeds, leaves lose flavor when dried" }
+    ],
+    "uses": ["cooking", "companion"],
+    "companions": ["tomato", "spinach", "pea"],
+    "antagonists": ["fennel"]
+  },
+  {
+    "id": "dill",
+    "name": "Dill",
+    "category": "herb",
+    "icon": "🌿",
+    "varieties": [
+      { "id": "bouquet", "name": "Bouquet", "daysToMaturity": 55, "type": "Seed/Leaf", "special": ["early-bloomer"] }
+    ],
+    "startIndoors": null,
+    "transplant": null,
+    "directSow": -7,
+    "daysToMaturity": 55,
+    "successionEnabled": true,
+    "successionInterval": 3,
+    "successionMax": 4,
+    "sun": "full",
+    "spacing": "10-12\" apart",
+    "notes": ["Self-seeds readily", "Attracts beneficial wasps", "Taproot makes transplanting difficult"],
+    "lunarAffinity": "waxing",
+    "growthHabit": "annual",
+    "yearsToFirstHarvest": 0,
+    "waterNeedsPerWeek": 0.5,
+    "yield": {
+      "avgPerPlant": 4,
+      "unit": "bunches",
+      "caloriesPer100g": 43,
+      "proteinPer100g": 3.5,
+      "carbsPer100g": 7.0,
+      "fatPer100g": 1.1,
+      "storageLifeDays": 7
+    },
+    "preservation": [
+      { "method": "drying", "shelfLifeMonths": 12, "notes": "Dry fronds or seed heads upside down in paper bags" },
+      { "method": "freezing", "shelfLifeMonths": 6, "notes": "Freeze chopped fronds in water" }
+    ],
+    "uses": ["cooking", "companion", "pollinator"],
+    "companions": ["cabbage", "onion", "corn"],
+    "antagonists": ["carrot", "tomato"]
+  },
+  {
+    "id": "parsley",
+    "name": "Parsley",
+    "category": "herb",
+    "icon": "🌿",
+    "varieties": [
+      { "id": "flat-leaf", "name": "Italian Flat Leaf", "daysToMaturity": 75, "type": "Culinary", "special": ["strong-flavor"] },
+      { "id": "curly", "name": "Curly Leaf", "daysToMaturity": 75, "type": "Garnish", "special": ["textured"] }
+    ],
+    "startIndoors": 56,
+    "transplant": -14,
+    "directSow": -21,
+    "daysToMaturity": 75,
+    "successionEnabled": false,
+    "successionInterval": 0,
+    "successionMax": 1,
+    "sun": "partial",
+    "spacing": "8-10\" apart",
+    "notes": ["Seeds are notoriously slow to germinate (up to 3-4 weeks)", "Soak seeds overnight before planting"],
+    "lunarAffinity": "waxing",
+    "growthHabit": "biennial",
+    "yearsToFirstHarvest": 0,
+    "waterNeedsPerWeek": 0.5,
+    "yield": {
+      "avgPerPlant": 10,
+      "unit": "oz",
+      "caloriesPer100g": 36,
+      "proteinPer100g": 3.0,
+      "carbsPer100g": 6.3,
+      "fatPer100g": 0.8,
+      "storageLifeDays": 10
+    },
+    "preservation": [
+      { "method": "freezing", "shelfLifeMonths": 6, "notes": "Roll into a log and freeze, slice as needed" },
+      { "method": "drying", "shelfLifeMonths": 12, "notes": "Dehydrate on low heat" }
+    ],
+    "uses": ["cooking", "companion"],
+    "companions": ["tomato", "asparagus", "rose"],
+    "antagonists": ["lettuce"]
+  },
+  {
+    "id": "rosemary",
+    "name": "Rosemary",
+    "category": "herb",
+    "icon": "🌿",
+    "varieties": [
+      { "id": "arp", "name": "Arp", "daysToMaturity": 100, "type": "Upright", "special": ["cold-hardy"] },
+      { "id": "prostratus", "name": "Prostratus", "daysToMaturity": 100, "type": "Creeping", "special": ["groundcover"] }
+    ],
+    "startIndoors": 70,
+    "transplant": 14,
+    "directSow": null,
+    "daysToMaturity": 100,
+    "successionEnabled": false,
+    "successionInterval": 0,
+    "successionMax": 1,
+    "sun": "full",
+    "spacing": "24-36\" apart",
+    "notes": ["Requires excellent drainage", "Easier to propagate from cuttings than seed", "Drought tolerant once established"],
+    "lunarAffinity": "waxing",
+    "growthHabit": "perennial",
+    "yearsToFirstHarvest": 1,
+    "waterNeedsPerWeek": 0.25,
+    "yield": {
+      "avgPerPlant": 1,
+      "unit": "lbs",
+      "caloriesPer100g": 131,
+      "proteinPer100g": 3.3,
+      "carbsPer100g": 20.7,
+      "fatPer100g": 5.9,
+      "storageLifeDays": 14
+    },
+    "preservation": [
+      { "method": "drying", "shelfLifeMonths": 12, "notes": "Hang in bunches" },
+      { "method": "oil-preserving", "shelfLifeMonths": 3, "notes": "Infuse in olive oil" }
+    ],
+    "uses": ["cooking", "medicinal", "aromatherapy", "pest-deterrent"],
+    "companions": ["sage", "cabbage", "carrot"],
+    "antagonists": ["pumpkin", "cucumber"]
+  },
+  {
+    "id": "thyme",
+    "name": "Thyme",
+    "category": "herb",
+    "icon": "🌿",
+    "varieties": [
+      { "id": "english", "name": "English Thyme", "daysToMaturity": 90, "type": "Culinary", "special": ["classic-flavor"] },
+      { "id": "lemon", "name": "Lemon Thyme", "daysToMaturity": 90, "type": "Culinary", "special": ["citrus-scent"] }
+    ],
+    "startIndoors": 56,
+    "transplant": 14,
+    "directSow": null,
+    "daysToMaturity": 90,
+    "successionEnabled": false,
+    "successionInterval": 0,
+    "successionMax": 1,
+    "sun": "full",
+    "spacing": "12-18\" apart",
+    "notes": ["Prune woody stems to encourage new growth", "Prefers poor, rocky soil with good drainage"],
+    "lunarAffinity": "waxing",
+    "growthHabit": "perennial",
+    "yearsToFirstHarvest": 1,
+    "waterNeedsPerWeek": 0.25,
+    "yield": {
+      "avgPerPlant": 8,
+      "unit": "oz",
+      "caloriesPer100g": 101,
+      "proteinPer100g": 5.6,
+      "carbsPer100g": 24.5,
+      "fatPer100g": 1.7,
+      "storageLifeDays": 10
+    },
+    "preservation": [
+      { "method": "drying", "shelfLifeMonths": 12, "notes": "Dehydrate and strip leaves from stems" },
+      { "method": "freezing", "shelfLifeMonths": 6, "notes": "Freeze sprigs whole" }
+    ],
+    "uses": ["cooking", "medicinal", "companion", "pest-deterrent"],
+    "companions": ["cabbage", "eggplant", "strawberry"],
+    "antagonists": []
+  },
+  {
+    "id": "oregano",
+    "name": "Oregano",
+    "category": "herb",
+    "icon": "🌿",
+    "varieties": [
+      { "id": "greek", "name": "Greek Oregano", "daysToMaturity": 80, "type": "Culinary", "special": ["pungent"] },
+      { "id": "italian", "name": "Italian Oregano", "daysToMaturity": 80, "type": "Culinary", "special": ["milder"] }
+    ],
+    "startIndoors": 56,
+    "transplant": 14,
+    "directSow": null,
+    "daysToMaturity": 80,
+    "successionEnabled": false,
+    "successionInterval": 0,
+    "successionMax": 1,
+    "sun": "full",
+    "spacing": "18-24\" apart",
+    "notes": ["Spreads aggressively, consider planting in a container", "Flavor peaks just before flowering"],
+    "lunarAffinity": "waxing",
+    "growthHabit": "perennial",
+    "yearsToFirstHarvest": 0,
+    "waterNeedsPerWeek": 0.5,
+    "yield": {
+      "avgPerPlant": 12,
+      "unit": "oz",
+      "caloriesPer100g": 265,
+      "proteinPer100g": 9.0,
+      "carbsPer100g": 68.9,
+      "fatPer100g": 4.2,
+      "storageLifeDays": 7
+    },
+    "preservation": [
+      { "method": "drying", "shelfLifeMonths": 12, "notes": "Hang dry; flavor intensifies when dried" },
+      { "method": "oil-preserving", "shelfLifeMonths": 3, "notes": "Infuse oil or vinegar" }
+    ],
+    "uses": ["cooking", "medicinal", "companion"],
+    "companions": ["tomato", "pepper-bell", "pumpkin"],
+    "antagonists": []
+  },
+  {
+    "id": "sage",
+    "name": "Sage",
+    "category": "herb",
+    "icon": "🌿",
+    "varieties": [
+      { "id": "broadleaf", "name": "Broadleaf", "daysToMaturity": 75, "type": "Culinary", "special": ["classic"] },
+      { "id": "purple", "name": "Purple Sage", "daysToMaturity": 75, "type": "Ornamental/Culinary", "special": ["colorful"] }
+    ],
+    "startIndoors": 56,
+    "transplant": 14,
+    "directSow": null,
+    "daysToMaturity": 75,
+    "successionEnabled": false,
+    "successionInterval": 0,
+    "successionMax": 1,
+    "sun": "full",
+    "spacing": "18-24\" apart",
+    "notes": ["Prune heavily in early spring to prevent getting woody", "Tolerates drought well"],
+    "lunarAffinity": "waxing",
+    "growthHabit": "perennial",
+    "yearsToFirstHarvest": 1,
+    "waterNeedsPerWeek": 0.5,
+    "yield": {
+      "avgPerPlant": 8,
+      "unit": "oz",
+      "caloriesPer100g": 315,
+      "proteinPer100g": 10.6,
+      "carbsPer100g": 60.7,
+      "fatPer100g": 12.7,
+      "storageLifeDays": 10
+    },
+    "preservation": [
+      { "method": "drying", "shelfLifeMonths": 12, "notes": "Dry whole leaves in a dehydrator" },
+      { "method": "freezing", "shelfLifeMonths": 6, "notes": "Freeze leaves whole" }
+    ],
+    "uses": ["cooking", "medicinal", "companion"],
+    "companions": ["cabbage", "carrot", "rosemary"],
+    "antagonists": ["onion", "cucumber", "basil"]
+  },
+  {
+    "id": "chives",
+    "name": "Chives",
+    "category": "herb",
+    "icon": "🌿",
+    "varieties": [
+      { "id": "common", "name": "Common Chives", "daysToMaturity": 60, "type": "Onion", "special": ["mild-onion"] },
+      { "id": "garlic", "name": "Garlic Chives", "daysToMaturity": 60, "type": "Garlic", "special": ["flat-leaves", "garlic-flavor"] }
+    ],
+    "startIndoors": 42,
+    "transplant": -14,
+    "directSow": -21,
+    "daysToMaturity": 60,
+    "successionEnabled": false,
+    "successionInterval": 0,
+    "successionMax": 1,
+    "sun": "full",
+    "spacing": "8-12\" apart",
+    "notes": ["Divide clumps every 3-4 years", "Edible purple flowers bloom in spring"],
+    "lunarAffinity": "waxing",
+    "growthHabit": "perennial",
+    "yearsToFirstHarvest": 0,
+    "waterNeedsPerWeek": 0.5,
+    "yield": {
+      "avgPerPlant": 4,
+      "unit": "bunches",
+      "caloriesPer100g": 30,
+      "proteinPer100g": 3.2,
+      "carbsPer100g": 4.3,
+      "fatPer100g": 0.7,
+      "storageLifeDays": 7
+    },
+    "preservation": [
+      { "method": "freezing", "shelfLifeMonths": 6, "notes": "Chop and freeze in ice cube trays with water" },
+      { "method": "drying", "shelfLifeMonths": 12, "notes": "Dehydrate chopped chives (flavor diminishes)" }
+    ],
+    "uses": ["cooking", "companion", "pest-deterrent"],
+    "companions": ["carrot", "tomato", "rose"],
+    "antagonists": ["bean", "pea"]
+  },
+  {
+    "id": "tarragon",
+    "name": "Tarragon",
+    "category": "herb",
+    "icon": "🌿",
+    "varieties": [
+      { "id": "french", "name": "French Tarragon", "daysToMaturity": 85, "type": "Culinary", "special": ["anise-flavor", "sterile-seeds"] }
+    ],
+    "startIndoors": null,
+    "transplant": 14,
+    "directSow": null,
+    "daysToMaturity": 85,
+    "successionEnabled": false,
+    "successionInterval": 0,
+    "successionMax": 1,
+    "sun": "full",
+    "spacing": "18-24\" apart",
+    "notes": ["French tarragon must be propagated by division or cuttings, not seed", "Prefers well-drained soil"],
+    "lunarAffinity": "waxing",
+    "growthHabit": "perennial",
+    "yearsToFirstHarvest": 1,
+    "waterNeedsPerWeek": 0.5,
+    "yield": {
+      "avgPerPlant": 6,
+      "unit": "oz",
+      "caloriesPer100g": 295,
+      "proteinPer100g": 22.7,
+      "carbsPer100g": 50.2,
+      "fatPer100g": 7.2,
+      "storageLifeDays": 7
+    },
+    "preservation": [
+      { "method": "freezing", "shelfLifeMonths": 6, "notes": "Freeze sprigs whole" },
+      { "method": "drying", "shelfLifeMonths": 12, "notes": "Air dry out of direct sunlight" },
+      { "method": "infusion", "shelfLifeMonths": 12, "notes": "Classic herb for infusing white wine vinegar" }
+    ],
+    "uses": ["cooking", "companion"],
+    "companions": ["eggplant"],
+    "antagonists": []
+  },
+  {
+    "id": "mint",
+    "name": "Mint",
+    "category": "herb",
+    "icon": "🌿",
+    "varieties": [
+      { "id": "peppermint", "name": "Peppermint", "daysToMaturity": 90, "type": "Culinary/Medicinal", "special": ["strong-menthol"] },
+      { "id": "spearmint", "name": "Spearmint", "daysToMaturity": 90, "type": "Culinary", "special": ["sweet-mint"] }
+    ],
+    "startIndoors": 56,
+    "transplant": 14,
+    "directSow": null,
+    "daysToMaturity": 90,
+    "successionEnabled": false,
+    "successionInterval": 0,
+    "successionMax": 1,
+    "sun": "partial",
+    "spacing": "18-24\" apart",
+    "notes": ["Highly invasive; always plant in containers or bottomless pots sunk into the ground", "Keep soil consistently moist"],
+    "lunarAffinity": "waxing",
+    "growthHabit": "perennial",
+    "yearsToFirstHarvest": 0,
+    "waterNeedsPerWeek": 0.75,
+    "yield": {
+      "avgPerPlant": 1,
+      "unit": "lbs",
+      "caloriesPer100g": 70,
+      "proteinPer100g": 3.8,
+      "carbsPer100g": 14.9,
+      "fatPer100g": 0.9,
+      "storageLifeDays": 7
+    },
+    "preservation": [
+      { "method": "drying", "shelfLifeMonths": 12, "notes": "Air dry or dehydrate at low temp to preserve oils" },
+      { "method": "freezing", "shelfLifeMonths": 6, "notes": "Freeze in ice cubes for drinks" }
+    ],
+    "uses": ["cooking", "tea", "medicinal", "pest-deterrent", "aromatherapy"],
+    "companions": ["cabbage", "tomato", "pea"],
+    "antagonists": ["chamomile"]
+  },
+  {
+    "id": "chamomile",
+    "name": "Chamomile",
+    "category": "herb",
+    "icon": "🌿",
+    "varieties": [
+      { "id": "german", "name": "German Chamomile", "daysToMaturity": 60, "type": "Annual", "special": ["upright", "prolific-bloomer"] },
+      { "id": "roman", "name": "Roman Chamomile", "daysToMaturity": 60, "type": "Perennial", "special": ["groundcover"] }
+    ],
+    "startIndoors": 42,
+    "transplant": -7,
+    "directSow": -14,
+    "daysToMaturity": 60,
+    "successionEnabled": true,
+    "successionInterval": 4,
+    "successionMax": 2,
+    "sun": "full",
+    "spacing": "8-12\" apart",
+    "notes": ["Harvest flowers when fully open", "German chamomile self-seeds aggressively"],
+    "lunarAffinity": "waxing",
+    "growthHabit": "annual",
+    "yearsToFirstHarvest": 0,
+    "waterNeedsPerWeek": 0.5,
+    "yield": {
+      "avgPerPlant": 4,
+      "unit": "oz",
+      "caloriesPer100g": 1,
+      "proteinPer100g": 0,
+      "carbsPer100g": 0.2,
+      "fatPer100g": 0,
+      "storageLifeDays": 5
+    },
+    "preservation": [
+      { "method": "drying", "shelfLifeMonths": 12, "notes": "Dry flower heads thoroughly before storing for tea" },
+      { "method": "tincture", "shelfLifeMonths": 24, "notes": "Infuse in alcohol for medicinal use" }
+    ],
+    "uses": ["tea", "medicinal", "companion", "pollinator"],
+    "companions": ["cabbage", "onion", "cucumber"],
+    "antagonists": ["mint"]
+  },
+  {
+    "id": "lavender",
+    "name": "Lavender",
+    "category": "herb",
+    "icon": "🌿",
+    "varieties": [
+      { "id": "english", "name": "English Lavender", "daysToMaturity": 100, "type": "Munstead/Hidcote", "special": ["cold-hardy", "culinary"] },
+      { "id": "french", "name": "French Lavender", "daysToMaturity": 100, "type": "Grosso", "special": ["high-oil-content", "fragrant"] }
+    ],
+    "startIndoors": 70,
+    "transplant": 14,
+    "directSow": null,
+    "daysToMaturity": 100,
+    "successionEnabled": false,
+    "successionInterval": 0,
+    "successionMax": 1,
+    "sun": "full",
+    "spacing": "24-36\" apart",
+    "notes": ["Requires excellent drainage, alkaline soil preferred", "Do not overwater", "Prune after flowering"],
+    "lunarAffinity": "waxing",
+    "growthHabit": "perennial",
+    "yearsToFirstHarvest": 1,
+    "waterNeedsPerWeek": 0.25,
+    "yield": {
+      "avgPerPlant": 10,
+      "unit": "bunches",
+      "caloriesPer100g": 49,
+      "proteinPer100g": 1.0,
+      "carbsPer100g": 11.0,
+      "fatPer100g": 1.0,
+      "storageLifeDays": 7
+    },
+    "preservation": [
+      { "method": "drying", "shelfLifeMonths": 24, "notes": "Hang bunches upside down in a dark, well-ventilated area" },
+      { "method": "infusion", "shelfLifeMonths": 6, "notes": "Infuse in honey or sugar" }
+    ],
+    "uses": ["aromatherapy", "medicinal", "tea", "cooking", "pollinator"],
+    "companions": ["cabbage", "rose"],
+    "antagonists": []
+  },
+  {
+    "id": "echinacea",
+    "name": "Echinacea",
+    "category": "herb",
+    "icon": "🌿",
+    "varieties": [
+      { "id": "purpurea", "name": "Purple Coneflower", "daysToMaturity": 120, "type": "E. purpurea", "special": ["medicinal", "hardy"] }
+    ],
+    "startIndoors": 60,
+    "transplant": 14,
+    "directSow": null,
+    "daysToMaturity": 120,
+    "successionEnabled": false,
+    "successionInterval": 0,
+    "successionMax": 1,
+    "sun": "full",
+    "spacing": "18-24\" apart",
+    "notes": ["Seeds require cold stratification for best germination", "Roots harvested in 3rd year for medicinal use"],
+    "lunarAffinity": "waning",
+    "growthHabit": "perennial",
+    "yearsToFirstHarvest": 2,
+    "waterNeedsPerWeek": 0.5,
+    "yield": {
+      "avgPerPlant": 8,
+      "unit": "oz",
+      "caloriesPer100g": 0,
+      "proteinPer100g": 0,
+      "carbsPer100g": 0,
+      "fatPer100g": 0,
+      "storageLifeDays": 5
+    },
+    "preservation": [
+      { "method": "drying", "shelfLifeMonths": 12, "notes": "Dry petals, seed heads, and roots" },
+      { "method": "tincture", "shelfLifeMonths": 24, "notes": "Extract roots and flowers in high-proof alcohol" }
+    ],
+    "uses": ["medicinal", "tea", "pollinator"],
+    "companions": ["yarrow", "bee-balm"],
+    "antagonists": []
+  },
+  {
+    "id": "lemon-balm",
+    "name": "Lemon Balm",
+    "category": "herb",
+    "icon": "🌿",
+    "varieties": [
+      { "id": "common", "name": "Common Lemon Balm", "daysToMaturity": 70, "type": "Medicinal", "special": ["citrus-scent", "calming"] }
+    ],
+    "startIndoors": 42,
+    "transplant": 14,
+    "directSow": 0,
+    "daysToMaturity": 70,
+    "successionEnabled": false,
+    "successionInterval": 0,
+    "successionMax": 1,
+    "sun": "partial",
+    "spacing": "18-24\" apart",
+    "notes": ["Member of the mint family; spreads readily by seed and runners", "Cut back after flowering to prevent spreading"],
+    "lunarAffinity": "waxing",
+    "growthHabit": "perennial",
+    "yearsToFirstHarvest": 0,
+    "waterNeedsPerWeek": 0.5,
+    "yield": {
+      "avgPerPlant": 12,
+      "unit": "oz",
+      "caloriesPer100g": 45,
+      "proteinPer100g": 3.0,
+      "carbsPer100g": 8.0,
+      "fatPer100g": 0.5,
+      "storageLifeDays": 7
+    },
+    "preservation": [
+      { "method": "drying", "shelfLifeMonths": 12, "notes": "Dry quickly to prevent leaves from turning black" },
+      { "method": "tincture", "shelfLifeMonths": 24, "notes": "Fresh leaf tincture captures volatile oils best" }
+    ],
+    "uses": ["tea", "medicinal", "pollinator", "aromatherapy"],
+    "companions": ["squash", "melon", "tomato"],
+    "antagonists": []
+  },
+  {
+    "id": "calendula",
+    "name": "Calendula",
+    "category": "herb",
+    "icon": "🌿",
+    "varieties": [
+      { "id": "resina", "name": "Resina", "daysToMaturity": 55, "type": "Medicinal", "special": ["high-resin"] },
+      { "id": "pacific-beauty", "name": "Pacific Beauty", "daysToMaturity": 55, "type": "Ornamental/Medicinal", "special": ["mixed-colors"] }
+    ],
+    "startIndoors": 42,
+    "transplant": -14,
+    "directSow": -14,
+    "daysToMaturity": 55,
+    "successionEnabled": true,
+    "successionInterval": 3,
+    "successionMax": 3,
+    "sun": "full",
+    "spacing": "10-12\" apart",
+    "notes": ["Pick flowers frequently to encourage continuous blooming", "Sticky resin contains the medicinal properties"],
+    "lunarAffinity": "waxing",
+    "growthHabit": "annual",
+    "yearsToFirstHarvest": 0,
+    "waterNeedsPerWeek": 0.5,
+    "yield": {
+      "avgPerPlant": 8,
+      "unit": "oz",
+      "caloriesPer100g": 0,
+      "proteinPer100g": 0,
+      "carbsPer100g": 0,
+      "fatPer100g": 0,
+      "storageLifeDays": 4
+    },
+    "preservation": [
+      { "method": "drying", "shelfLifeMonths": 12, "notes": "Dry flower heads whole in a dark, dry place" },
+      { "method": "oil-preserving", "shelfLifeMonths": 12, "notes": "Infuse dried flowers in carrier oil for salves" }
+    ],
+    "uses": ["medicinal", "dye", "companion", "pollinator"],
+    "companions": ["tomato", "radish", "carrot"],
+    "antagonists": []
+  },
+  {
+    "id": "valerian",
+    "name": "Valerian",
+    "category": "herb",
+    "icon": "🌿",
+    "varieties": [
+      { "id": "officinalis", "name": "Common Valerian", "daysToMaturity": 365, "type": "Medicinal", "special": ["sedative-roots"] }
+    ],
+    "startIndoors": 56,
+    "transplant": 14,
+    "directSow": null,
+    "daysToMaturity": 365,
+    "successionEnabled": false,
+    "successionInterval": 0,
+    "successionMax": 1,
+    "sun": "full",
+    "spacing": "24-36\" apart",
+    "notes": ["Roots are harvested in the fall of the second year", "Cats are highly attracted to the scent of the roots"],
+    "lunarAffinity": "waning",
+    "growthHabit": "perennial",
+    "yearsToFirstHarvest": 1,
+    "waterNeedsPerWeek": 0.75,
+    "yield": {
+      "avgPerPlant": 1,
+      "unit": "lbs",
+      "caloriesPer100g": 0,
+      "proteinPer100g": 0,
+      "carbsPer100g": 0,
+      "fatPer100g": 0,
+      "storageLifeDays": 7
+    },
+    "preservation": [
+      { "method": "drying", "shelfLifeMonths": 12, "notes": "Wash thoroughly, chop, and dry roots (very pungent odor)" },
+      { "method": "tincture", "shelfLifeMonths": 24, "notes": "Tincture fresh or dried roots" }
+    ],
+    "uses": ["medicinal", "tea"],
+    "companions": ["echinacea"],
+    "antagonists": []
+  },
+  {
+    "id": "comfrey",
+    "name": "Comfrey",
+    "category": "herb",
+    "icon": "🌿",
+    "varieties": [
+      { "id": "bocking-14", "name": "Bocking 14", "daysToMaturity": 60, "type": "Sterile Hybrid", "special": ["non-invasive", "nutrient-accumulator"] }
+    ],
+    "startIndoors": null,
+    "transplant": 14,
+    "directSow": null,
+    "daysToMaturity": 60,
+    "successionEnabled": false,
+    "successionInterval": 0,
+    "successionMax": 1,
+    "sun": "partial",
+    "spacing": "36\" apart",
+    "notes": ["Propagate by root cuttings (Bocking 14 is sterile)", "Excellent chop-and-drop mulch or fertilizer tea", "Deep taproot"],
+    "lunarAffinity": "waxing",
+    "growthHabit": "perennial",
+    "yearsToFirstHarvest": 0,
+    "waterNeedsPerWeek": 0.75,
+    "yield": {
+      "avgPerPlant": 5,
+      "unit": "lbs",
+      "caloriesPer100g": 0,
+      "proteinPer100g": 0,
+      "carbsPer100g": 0,
+      "fatPer100g": 0,
+      "storageLifeDays": 5
+    },
+    "preservation": [
+      { "method": "drying", "shelfLifeMonths": 12, "notes": "Dry leaves for salves and poultices" },
+      { "method": "oil-preserving", "shelfLifeMonths": 12, "notes": "Infuse oil for topical salves" }
+    ],
+    "uses": ["medicinal", "companion", "livestock-feed"],
+    "companions": ["apple", "plum", "tomato"],
+    "antagonists": []
+  },
+  {
+    "id": "yarrow",
+    "name": "Yarrow",
+    "category": "herb",
+    "icon": "🌿",
+    "varieties": [
+      { "id": "wild", "name": "Wild White", "daysToMaturity": 120, "type": "Medicinal", "special": ["hemostatic"] },
+      { "id": "colorado", "name": "Colorado Blend", "daysToMaturity": 120, "type": "Ornamental", "special": ["multi-color"] }
+    ],
+    "startIndoors": 56,
+    "transplant": 14,
+    "directSow": 0,
+    "daysToMaturity": 120,
+    "successionEnabled": false,
+    "successionInterval": 0,
+    "successionMax": 1,
+    "sun": "full",
+    "spacing": "18-24\" apart",
+    "notes": ["Drought tolerant once established", "Spreads via rhizomes", "White wild variety is best for medicinal use"],
+    "lunarAffinity": "waxing",
+    "growthHabit": "perennial",
+    "yearsToFirstHarvest": 1,
+    "waterNeedsPerWeek": 0.25,
+    "yield": {
+      "avgPerPlant": 8,
+      "unit": "oz",
+      "caloriesPer100g": 0,
+      "proteinPer100g": 0,
+      "carbsPer100g": 0,
+      "fatPer100g": 0,
+      "storageLifeDays": 7
+    },
+    "preservation": [
+      { "method": "drying", "shelfLifeMonths": 12, "notes": "Hang bunches to dry in shade" },
+      { "method": "tincture", "shelfLifeMonths": 24, "notes": "Tincture flowers and leaves" }
+    ],
+    "uses": ["medicinal", "companion", "pollinator"],
+    "companions": ["lavender", "rosemary"],
+    "antagonists": []
+  },
+  {
+    "id": "elderflower",
+    "name": "Elderflower",
+    "category": "herb",
+    "icon": "🌿",
+    "varieties": [
+      { "id": "samyl", "name": "Samyl", "daysToMaturity": 730, "type": "European", "special": ["high-flower-yield"] },
+      { "id": "adams", "name": "Adams", "daysToMaturity": 730, "type": "American", "special": ["large-berries"] }
+    ],
+    "startIndoors": null,
+    "transplant": 14,
+    "directSow": null,
+    "daysToMaturity": 730,
+    "successionEnabled": false,
+    "successionInterval": 0,
+    "successionMax": 1,
+    "sun": "partial",
+    "spacing": "6-8' apart",
+    "notes": ["Actually a large shrub/small tree", "Need two different varieties for cross-pollination", "Stems and leaves are toxic"],
+    "lunarAffinity": "waxing",
+    "growthHabit": "perennial",
+    "yearsToFirstHarvest": 2,
+    "waterNeedsPerWeek": 1.0,
+    "yield": {
+      "avgPerPlant": 10,
+      "unit": "lbs",
+      "caloriesPer100g": 73,
+      "proteinPer100g": 0.7,
+      "carbsPer100g": 18.4,
+      "fatPer100g": 0.5,
+      "storageLifeDays": 3
+    },
+    "preservation": [
+      { "method": "drying", "shelfLifeMonths": 12, "notes": "Dry flowers for tea; do not wash before drying" },
+      { "method": "freezing", "shelfLifeMonths": 6, "notes": "Freeze berries for later processing" },
+      { "method": "infusion", "shelfLifeMonths": 12, "notes": "Make elderflower cordial or syrup" }
+    ],
+    "uses": ["medicinal", "tea", "cooking", "pollinator"],
+    "companions": ["mint", "comfrey"],
+    "antagonists": []
+  },
+  {
+    "id": "holy-basil",
+    "name": "Holy Basil (Tulsi)",
+    "category": "herb",
+    "icon": "🌿",
+    "varieties": [
+      { "id": "rama", "name": "Rama Tulsi", "daysToMaturity": 65, "type": "Medicinal", "special": ["cooling", "mellow"] },
+      { "id": "krishna", "name": "Krishna Tulsi", "daysToMaturity": 65, "type": "Medicinal", "special": ["purple-tinged", "peppery"] }
+    ],
+    "startIndoors": 42,
+    "transplant": 14,
+    "directSow": 14,
+    "daysToMaturity": 65,
+    "successionEnabled": true,
+    "successionInterval": 4,
+    "successionMax": 2,
+    "sun": "full",
+    "spacing": "12-18\" apart",
+    "notes": ["Adaptogenic herb", "Requires warm soil to germinate", "Very attractive to bees when flowering"],
+    "lunarAffinity": "waxing",
+    "growthHabit": "annual",
+    "yearsToFirstHarvest": 0,
+    "waterNeedsPerWeek": 0.5,
+    "yield": {
+      "avgPerPlant": 6,
+      "unit": "oz",
+      "caloriesPer100g": 22,
+      "proteinPer100g": 3.0,
+      "carbsPer100g": 2.5,
+      "fatPer100g": 0.5,
+      "storageLifeDays": 5
+    },
+    "preservation": [
+      { "method": "drying", "shelfLifeMonths": 12, "notes": "Hang dry for medicinal tea" },
+      { "method": "tincture", "shelfLifeMonths": 24, "notes": "Fresh or dried leaves in alcohol" }
+    ],
+    "uses": ["tea", "medicinal", "pollinator", "cooking"],
+    "companions": ["tomato", "pepper", "marigold"],
+    "antagonists": ["rue"]
+  },
+  {
+    "id": "fennel",
+    "name": "Fennel",
+    "category": "herb",
+    "icon": "🌿",
+    "varieties": [
+      { "id": "florence", "name": "Florence Fennel", "daysToMaturity": 90, "type": "Bulb", "special": ["culinary-bulb"] },
+      { "id": "bronze", "name": "Bronze Fennel", "daysToMaturity": 65, "type": "Leaf/Seed", "special": ["ornamental", "pollinator"] }
+    ],
+    "startIndoors": null,
+    "transplant": null,
+    "directSow": -14,
+    "daysToMaturity": 90,
+    "successionEnabled": false,
+    "successionInterval": 0,
+    "successionMax": 1,
+    "sun": "full",
+    "spacing": "12-18\" apart",
+    "notes": ["Allelopathic: stunts the growth of many other plants", "Do not plant near dill to avoid cross-pollination", "Host plant for swallowtail butterflies"],
+    "lunarAffinity": "waning",
+    "growthHabit": "perennial",
+    "yearsToFirstHarvest": 0,
+    "waterNeedsPerWeek": 0.75,
+    "yield": {
+      "avgPerPlant": 1,
+      "unit": "lbs",
+      "caloriesPer100g": 31,
+      "proteinPer100g": 1.2,
+      "carbsPer100g": 7.3,
+      "fatPer100g": 0.2,
+      "storageLifeDays": 10
+    },
+    "preservation": [
+      { "method": "drying", "shelfLifeMonths": 12, "notes": "Dry seeds and fronds" },
+      { "method": "freezing", "shelfLifeMonths": 6, "notes": "Chop and freeze fronds" }
+    ],
+    "uses": ["cooking", "tea", "medicinal", "pollinator"],
+    "companions": ["dill"],
+    "antagonists": ["tomato", "bush-bean", "kohlrabi", "cilantro"]
+  },
+  {
+    "id": "borage",
+    "name": "Borage",
+    "category": "herb",
+    "icon": "🌿",
+    "varieties": [
+      { "id": "common", "name": "Common Borage", "daysToMaturity": 55, "type": "Edible Flower", "special": ["star-shaped", "blue-flowers"] }
+    ],
+    "startIndoors": null,
+    "transplant": null,
+    "directSow": 0,
+    "daysToMaturity": 55,
+    "successionEnabled": true,
+    "successionInterval": 4,
+    "successionMax": 2,
+    "sun": "full",
+    "spacing": "12-24\" apart",
+    "notes": ["Prolific self-seeder", "Leaves have a mild cucumber flavor", "Excellent companion plant for tomatoes and strawberries"],
+    "lunarAffinity": "waxing",
+    "growthHabit": "annual",
+    "yearsToFirstHarvest": 0,
+    "waterNeedsPerWeek": 0.5,
+    "yield": {
+      "avgPerPlant": 8,
+      "unit": "oz",
+      "caloriesPer100g": 21,
+      "proteinPer100g": 1.8,
+      "carbsPer100g": 3.1,
+      "fatPer100g": 0.5,
+      "storageLifeDays": 3
+    },
+    "preservation": [
+      { "method": "freezing", "shelfLifeMonths": 6, "notes": "Freeze edible flowers in ice cubes" },
+      { "method": "drying", "shelfLifeMonths": 12, "notes": "Dry leaves and flowers (leaves can be prickly)" }
+    ],
+    "uses": ["cooking", "medicinal", "companion", "pollinator"],
+    "companions": ["tomato", "strawberry", "squash"],
+    "antagonists": []
+  },
+  {
+    "id": "st-johns-wort",
+    "name": "St. John's Wort",
+    "category": "herb",
+    "icon": "🌿",
+    "varieties": [
+      { "id": "perforatum", "name": "Common St. John's Wort", "daysToMaturity": 100, "type": "Medicinal", "special": ["yellow-flowers", "red-oil"] }
+    ],
+    "startIndoors": 56,
+    "transplant": 14,
+    "directSow": null,
+    "daysToMaturity": 100,
+    "successionEnabled": false,
+    "successionInterval": 0,
+    "successionMax": 1,
+    "sun": "partial",
+    "spacing": "18-24\" apart",
+    "notes": ["Considered an invasive weed in some areas; check local regulations", "Harvest flowers and top buds when in full bloom"],
+    "lunarAffinity": "waxing",
+    "growthHabit": "perennial",
+    "yearsToFirstHarvest": 1,
+    "waterNeedsPerWeek": 0.5,
+    "yield": {
+      "avgPerPlant": 8,
+      "unit": "oz",
+      "caloriesPer100g": 0,
+      "proteinPer100g": 0,
+      "carbsPer100g": 0,
+      "fatPer100g": 0,
+      "storageLifeDays": 3
+    },
+    "preservation": [
+      { "method": "oil-preserving", "shelfLifeMonths": 12, "notes": "Infuse fresh flowers in olive oil in sunlight to turn oil deep red" },
+      { "method": "drying", "shelfLifeMonths": 12, "notes": "Dry flowering tops for tea" },
+      { "method": "tincture", "shelfLifeMonths": 24, "notes": "Extract fresh flowers in alcohol" }
+    ],
+    "uses": ["medicinal", "tea", "dye"],
+    "companions": ["yarrow", "echinacea"],
+    "antagonists": []
+  },
+  {
+    "id": "stevia",
+    "name": "Stevia",
+    "category": "herb",
+    "icon": "🌿",
+    "varieties": [
+      { "id": "rebaudiana", "name": "Sweet Leaf", "daysToMaturity": 100, "type": "Sweetener", "special": ["high-sugar-equivalent"] }
+    ],
+    "startIndoors": 56,
+    "transplant": 14,
+    "directSow": null,
+    "daysToMaturity": 100,
+    "successionEnabled": false,
+    "successionInterval": 0,
+    "successionMax": 1,
+    "sun": "full",
+    "spacing": "12-18\" apart",
+    "notes": ["Seeds have very low germination rates; surface sow and do not cover", "Cuttings root easily", "Harvest before flowers open for maximum sweetness"],
+    "lunarAffinity": "waxing",
+    "growthHabit": "perennial",
+    "yearsToFirstHarvest": 0,
+    "waterNeedsPerWeek": 0.5,
+    "yield": {
+      "avgPerPlant": 4,
+      "unit": "oz",
+      "caloriesPer100g": 0,
+      "proteinPer100g": 0,
+      "carbsPer100g": 0,
+      "fatPer100g": 0,
+      "storageLifeDays": 7
+    },
+    "preservation": [
+      { "method": "drying", "shelfLifeMonths": 12, "notes": "Dry leaves and grind into a green powder for sweetening" },
+      { "method": "tincture", "shelfLifeMonths": 24, "notes": "Make a liquid extract using alcohol or vegetable glycerin" }
+    ],
+    "uses": ["tea", "cooking", "medicinal"],
+    "companions": ["marjoram", "thyme"],
+    "antagonists": []
+  }
+]
