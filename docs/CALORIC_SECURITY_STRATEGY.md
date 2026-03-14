@@ -69,3 +69,49 @@ The existing `lib/survivalIndex.ts` will act as a real-time "Modifier" for the i
 1. **Accuracy vs. Simplicity:** Should we use "Ideal Yields" or allow users to set a "Skill Level" modifier (Beginner/Expert)?
 2. **Privacy:** Since this data is highly sensitive for survivalists, should we explicitly state that all data remains in `localStorage` and is never sent to a server?
 3. **Hardware Integration:** Is there interest in manual "Tank Level" inputs for water, or should we strictly stick to "Projected" values from weather?
+
+## TO DO
+1. Logic & Data Layer (The "Engine")
+   - [ ] Implement yieldCalculations.ts: Create a utility to normalize various units (lbs, oz,
+     ears, bulbs) into grams and calculate total potential calories based on the avgPerPlant
+     and caloriesPer100g fields.
+   - [ ] Create waterAutonomy.ts: Develop logic to calculate "Days of Hydration" by comparing
+     totalStorageCapacity and roofAreaSqFt (from Phase 2 config) against real-time
+     precipitationProbability from the weather API.
+   - [ ] Companion Relationship Parser: Add a utility to cropLoader.ts that cross-references
+     companion-planting.json to flag "Antagonist Alerts" if a user selects incompatible crops
+     in their calendar.
+
+
+  2. Context & State (The "Homestead OS")
+   - [ ] Update FieldStationContext.tsx:
+       - [ ] Define and implement the HomesteadConfig interface (Roof area, solar capacity,
+         household size).
+       - [ ] Define and implement the SurvivalManifest (Current stored water, pantry
+         inventory, active garden count).
+       - [ ] Add localStorage persistence so user survival data survives page refreshes.
+   - [ ] Survival Modifiers: Integrate lib/survivalIndex.ts output into the context so that a
+     low "Water Score" automatically applies a "Stress Penalty" (e.g., -20%) to projected crop
+     yields.
+
+
+  3. UI & Dashboard (The "Interface")
+   - [ ] AutonomyDashboard Component: Create a high-visibility module in the SurvivalDashboard
+     (or a new route) that displays three primary "Survival Clocks":
+       - Food: "X Days of Caloric Security" (Projected yield / Household needs).
+       - Water: "Y Days of Hydration" (Stored + Projected rain / Consumption).
+       - Energy: "Z Hours of Power" (Battery + Solar forecast / Baseload).
+   - [ ] InventoryInput Modal: A brutalist-style UI for users to input their "Actuals" (e.g.,
+     "I just planted 12 Tomato plants" or "My water tank is at 50%").
+   - [ ] Companion Advisor UI: A "Garden Optimization" view that suggests where to place crops
+     based on the mechanism field (e.g., "Plant Basil here to deter hornworms").
+
+
+  4. Validation & Intelligence
+   - [ ] Frost Guard Alerts: Create a listener that triggers a Terminal notification (ALT+T)
+     if the firstFallFrost date in PlantingConfig is within 7 days and the user has "Active"
+     crops in their manifest.
+   - [ ] Caloric ROI Report: A summary tool that ranks the user's current garden by "Caloric
+     Density" to identify gaps in their survival strategy (e.g., "Warning: High water use, low
+     caloric return").
+
