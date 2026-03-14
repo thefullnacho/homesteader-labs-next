@@ -351,7 +351,7 @@ function StepEnergy({ state, set }: { state: WizardState; set: (k: keyof WizardS
 
       <div className="border border-border-primary/20 px-3 py-2">
         <p className="text-[10px] font-mono opacity-30 uppercase leading-relaxed">
-          [i] Skip this section if you don't have solar/battery yet — the energy clock will show as unconfigured and can be set up later.
+          [i] Skip this section if you don&apos;t have solar/battery yet — the energy clock will show as unconfigured and can be set up later.
         </p>
       </div>
     </div>

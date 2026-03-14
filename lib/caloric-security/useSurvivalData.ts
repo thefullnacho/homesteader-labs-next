@@ -5,7 +5,7 @@ import { getDB } from './db';
 import { calculateTotalCalories } from './yieldCalculations';
 import { calculateWaterAutonomy } from './waterAutonomy';
 import { forecastToRainDays } from './catchmentConfig';
-import { saveCachedTotals } from './homesteadStore';
+
 import type { HomesteadConfig, InventoryItem, CaloricTotals, WaterAutonomyResult } from './types';
 import type { ForecastDay } from '@/lib/weatherTypes';
 
@@ -67,9 +67,6 @@ export function useSurvivalData(opts: {
 
     // Days of Food
     const caloricTotals = calculateTotalCalories(inventory, config, season);
-
-    // Persist derived totals so non-reactive callers can read a cached value
-    await saveCachedTotals(caloricTotals);
 
     // Days of Water
     const rainDays = forecastDays.length > 0 ? forecastToRainDays(forecastDays) : [];

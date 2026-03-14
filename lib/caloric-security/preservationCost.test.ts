@@ -1,7 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import {
   PRESERVATION_COST_PROFILES,
-  PRODUCE_LBS_PER_BATCH,
   estimateBatchCount,
   calculatePreservationCost,
   calculateAutonomyImpact,

@@ -1,7 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import {
   UNIT_NORMALIZATIONS,
-  DAILY_KCAL_PER_PERSON,
   calculateCropYield,
   calculateTotalCalories,
   getDailyCalorieTarget,
@@ -243,7 +242,7 @@ describe('calculateTotalCalories', () => {
     // We can't import real crops in unit tests, so test via the real cropLoader
     // These tests verify aggregation logic with mock items that will return
     // undefined from getCropById — they're handled gracefully (skipped).
-    const result = calculateTotalCalories([tomatoItem, cornItem], mockConfig);
+    const result = calculateTotalCalories([tomatoItem, cornItem, echinaceaItem], mockConfig);
     // Both will be skipped (IDs not in real DB unless running integration)
     expect(result.daysOfFood).toBeGreaterThanOrEqual(0);
     expect(typeof result.totalKcal).toBe('number');
