@@ -25,6 +25,7 @@ interface WizardState {
   // Step 1 — Household
   householdSize:    number;
   skillLevel:       number;
+  seedSavingPct:    number;   // 0–30%; % of projected yield reserved for seeds
 
   // Step 2 — Water
   collectionMethod: CollectionMethod;
@@ -43,6 +44,7 @@ interface WizardState {
 const INITIAL_STATE: WizardState = {
   householdSize:     2,
   skillLevel:        0.8,
+  seedSavingPct:     0,
   collectionMethod:  'rooftop-gutters',
   roofLengthFt:      '',
   roofWidthFt:       '',
@@ -182,6 +184,27 @@ function StepHousehold({ state, set }: { state: WizardState; set: (k: keyof Wiza
         </div>
         <p className="text-[10px] font-mono opacity-30 uppercase mt-2">
           Applied to planned/active crops. Stored yield is already realised.
+        </p>
+      </div>
+
+      <div>
+        <label className="block text-xs font-mono font-bold uppercase tracking-widest mb-3 text-foreground-primary/70">
+          Seed Saving Reserve <span className="opacity-40 normal-case">[optional]</span>
+        </label>
+        <div className="flex items-center gap-4">
+          <input
+            type="range"
+            min={0} max={30} step={5}
+            value={state.seedSavingPct}
+            onChange={e => set('seedSavingPct', parseInt(e.target.value))}
+            className="flex-1 accent-accent"
+          />
+          <span className="text-sm font-mono font-bold w-10 text-right tabular-nums">
+            {state.seedSavingPct}%
+          </span>
+        </div>
+        <p className="text-[10px] font-mono opacity-30 uppercase mt-2">
+          Deducted from projected yield — reserved for year-two seed saving.
         </p>
       </div>
     </div>
@@ -369,6 +392,7 @@ function StepReview({ state }: { state: WizardState }) {
   const rows = [
     ['Household size',    `${state.householdSize} person${state.householdSize !== 1 ? 's' : ''}`],
     ['Skill level',       SKILL_LEVELS.find(s => s.value === state.skillLevel)?.label ?? '—'],
+    ['Seed saving',       state.seedSavingPct > 0 ? `${state.seedSavingPct}% reserved` : 'None'],
     ['Collection method', COLLECTION_METHOD_PRESETS[state.collectionMethod].label],
     ['Collection area',   collectionAreaSqFt > 0 ? `${collectionAreaSqFt.toLocaleString()} sq ft` : '—'],
     ['Storage tank',      state.storageCap ? `${parseFloat(state.storageCap).toLocaleString()} gal` : '—'],
@@ -444,8 +468,9 @@ export default function SetupWizard({ onComplete }: SetupWizardProps) {
           ).sqFt;
 
       const config: HomesteadConfig = {
-        householdSize: state.householdSize,
-        skillLevel:    state.skillLevel,
+        householdSize:  state.householdSize,
+        skillLevel:     state.skillLevel,
+        seedSavingPct:  state.seedSavingPct,
         waterCatchment: buildCatchmentConfig(
           state.collectionMethod,
           collectionAreaSqFt,

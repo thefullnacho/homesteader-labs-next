@@ -46,6 +46,7 @@ export interface WaterAutonomyResult {
 export interface HomesteadConfig {
   householdSize: number;
   skillLevel: number;           // 0.6 (Novice) → 1.0 (Expert)
+  seedSavingPct: number;        // 0–30%; fraction of projected yield set aside for seeds (default 0)
   waterCatchment: CatchmentConfig;
   energy: {
     batteryCapacityAh: number;

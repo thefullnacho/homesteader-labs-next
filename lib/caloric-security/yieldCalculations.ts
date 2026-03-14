@@ -121,8 +121,13 @@ export function calculateTotalCalories(
     const crop = getCropById(item.cropId);
     if (!crop) continue;
 
-    // Stored items: yield already realised, skill not applied
-    const effectiveSkill = item.status === 'stored' ? 1.0 : config.skillLevel;
+    // Stored items: yield already realised, skill not applied.
+    // Planned/active items: apply seed saving deduction on top of skill level —
+    // a portion of the harvest is set aside for next year's seeds.
+    const seedRetentionMod = item.status !== 'stored'
+      ? 1 - Math.min(0.3, (config.seedSavingPct ?? 0) / 100)
+      : 1.0;
+    const effectiveSkill = item.status === 'stored' ? 1.0 : config.skillLevel * seedRetentionMod;
 
     const result = calculateCropYield(crop, item.plantCount, effectiveSkill);
 

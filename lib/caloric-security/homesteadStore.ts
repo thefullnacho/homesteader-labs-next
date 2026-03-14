@@ -12,6 +12,7 @@ export async function getConfig(): Promise<HomesteadConfig | null> {
   return {
     householdSize:  row.householdSize,
     skillLevel:     row.skillLevel,
+    seedSavingPct:  (row as unknown as Record<string, number>).seedSavingPct ?? 0,
     waterCatchment: row.waterCatchment,
     energy:         row.energy,
   };

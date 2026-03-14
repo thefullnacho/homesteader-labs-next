@@ -64,6 +64,7 @@ export function useSurvivalData(opts: {
     const config: HomesteadConfig = {
       householdSize:  configRow.householdSize,
       skillLevel:     configRow.skillLevel,
+      seedSavingPct:  (configRow as unknown as Record<string, number>).seedSavingPct ?? 0,
       waterCatchment: configRow.waterCatchment,
       energy:         configRow.energy,
     };

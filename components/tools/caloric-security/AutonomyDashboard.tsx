@@ -13,6 +13,7 @@ import Button from '@/components/ui/Button';
 import ClockDisplay, { type DetailRow } from './ClockDisplay';
 import ActualsInput, { type Actuals } from './ActualsInput';
 import FrostGuardAlert from './FrostGuardAlert';
+import DroughtAlert from './DroughtAlert';
 import CanningDayBanner from './CanningDayBanner';
 import { useSurvivalData } from '@/lib/caloric-security/useSurvivalData';
 import { resetConfig } from '@/lib/caloric-security/homesteadStore';
@@ -157,11 +158,15 @@ export default function AutonomyDashboard({
       {/* Frost Guard alert — shows when freeze detected + active crops at risk */}
       <FrostGuardAlert forecastDays={forecastDays} activeCropNames={activeCropNames} />
 
+      {/* Drought alert — shows when no rain forecast + water supply below 30 days */}
+      <DroughtAlert waterAutonomy={waterAutonomy} activeCropCount={activeCropNames.length} />
+
       {/* Config summary strip */}
       {config && (
         <div className="flex flex-wrap gap-x-6 gap-y-1 text-[10px] font-mono uppercase opacity-40 border border-border-primary/20 px-4 py-2">
           <span>Household: {config.householdSize} persons</span>
           <span>Skill: {(config.skillLevel * 100).toFixed(0)}%</span>
+          {config.seedSavingPct > 0 && <span>Seed reserve: {config.seedSavingPct}%</span>}
           <span>Tank: {config.waterCatchment.storageCap.toLocaleString()} gal cap</span>
           <span>Solar: {config.energy.solarArrayWatts} W</span>
           <span>Battery: {config.energy.batteryCapacityAh} Ah</span>
