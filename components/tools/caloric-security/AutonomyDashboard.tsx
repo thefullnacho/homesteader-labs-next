@@ -3,16 +3,21 @@
 import { useState } from 'react';
 import {
   Utensils, Droplets, Zap, Settings,
-  LayoutDashboard, RefreshCw,
+  LayoutDashboard, RefreshCw, TrendingUp, Leaf,
 } from 'lucide-react';
+import Link from 'next/link';
 import Typography from '@/components/ui/Typography';
 import Badge from '@/components/ui/Badge';
 import BrutalistBlock from '@/components/ui/BrutalistBlock';
 import Button from '@/components/ui/Button';
 import ClockDisplay, { type DetailRow } from './ClockDisplay';
 import ActualsInput, { type Actuals } from './ActualsInput';
+import FrostGuardAlert from './FrostGuardAlert';
+import CanningDayBanner from './CanningDayBanner';
 import { useSurvivalData } from '@/lib/caloric-security/useSurvivalData';
 import { resetConfig } from '@/lib/caloric-security/homesteadStore';
+import { getCropById } from '@/lib/tools/planting-calendar/cropLoader';
+import { calculateItemDecay } from '@/lib/caloric-security/decayCalculations';
 import type { ForecastDay } from '@/lib/weatherTypes';
 
 // ============================================================
@@ -42,7 +47,7 @@ export default function AutonomyDashboard({
     currentBatteryPct:      100,
   });
 
-  const { config, caloricTotals, waterAutonomy, energyAutonomy, isLoading } = useSurvivalData({
+  const { config, caloricTotals, waterAutonomy, energyAutonomy, inventory, isLoading } = useSurvivalData({
     storedGallons:          actuals.storedGallons,
     currentBatteryPct:      actuals.currentBatteryPct,
     forecastDays,
@@ -95,6 +100,23 @@ export default function AutonomyDashboard({
     ? 'Irrigation not tracked — set daily gal/day in actuals to include in clock.'
     : undefined;
 
+  // ── Frost Guard: names of active crops ──────────────────
+  const activeCropNames = inventory
+    .filter(i => i.status === 'active')
+    .map(i => getCropById(i.cropId)?.name ?? i.cropId)
+    .filter(Boolean);
+
+  // ── Canning Day: fresh stored items in declining phase ──
+  const decliningFreshItems = inventory
+    .filter(i => i.status === 'stored' && (!i.preservationMethod || i.preservationMethod === 'fresh'))
+    .map(i => {
+      const crop = getCropById(i.cropId);
+      if (!crop) return null;
+      const decay = calculateItemDecay(i, crop);
+      return decay.phase === 'declining' ? crop.name : null;
+    })
+    .filter(Boolean) as string[];
+
   // ── Loading / error states ──────────────────────────────
   if (isLoading) {
     return (
@@ -131,6 +153,9 @@ export default function AutonomyDashboard({
           </button>
         </div>
       </div>
+
+      {/* Frost Guard alert — shows when freeze detected + active crops at risk */}
+      <FrostGuardAlert forecastDays={forecastDays} activeCropNames={activeCropNames} />
 
       {/* Config summary strip */}
       {config && (
@@ -230,6 +255,29 @@ export default function AutonomyDashboard({
             </div>
           )}
         </ClockDisplay>
+      </div>
+
+      {/* Canning Day banner — shows when solar surplus is significant */}
+      <CanningDayBanner energyAutonomy={energyAutonomy} decliningFreshItems={decliningFreshItems} />
+
+      {/* Gated feature nav */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <Link href="/tools/caloric-security/roi" className="group border border-border-primary/20 hover:border-accent/50 px-4 py-3 flex items-center gap-3 transition-colors">
+          <TrendingUp size={14} className="opacity-40 group-hover:opacity-80 transition-opacity" />
+          <div className="flex-1 min-w-0">
+            <div className="text-[10px] font-mono uppercase font-bold group-hover:text-accent transition-colors">Caloric_ROI_Report</div>
+            <div className="text-[9px] font-mono uppercase opacity-30">kcal per sq ft ranking // free</div>
+          </div>
+          <span className="text-[9px] font-mono opacity-30 group-hover:opacity-60">→</span>
+        </Link>
+        <Link href="/tools/caloric-security/companions" className="group border border-border-primary/20 hover:border-accent/50 px-4 py-3 flex items-center gap-3 transition-colors">
+          <Leaf size={14} className="opacity-40 group-hover:opacity-80 transition-opacity" />
+          <div className="flex-1 min-w-0">
+            <div className="text-[10px] font-mono uppercase font-bold group-hover:text-accent transition-colors">Companion_Advisor</div>
+            <div className="text-[9px] font-mono uppercase opacity-30">antagonist alerts + suggestions // free</div>
+          </div>
+          <span className="text-[9px] font-mono opacity-30 group-hover:opacity-60">→</span>
+        </Link>
       </div>
 
       {/* Inventory summary */}
