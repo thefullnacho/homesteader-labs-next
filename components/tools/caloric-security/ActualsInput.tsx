@@ -21,6 +21,7 @@ import Typography from '@/components/ui/Typography';
 export interface Actuals {
   storedGallons:          number;
   irrigationDailyGallons: number;
+  currentBatteryPct:      number;   // 0–100 % of usable capacity; 100 = fully charged
 }
 
 interface ActualsInputProps {
@@ -118,6 +119,33 @@ export default function ActualsInput({ actuals, onChange }: ActualsInputProps) {
                       When 0, irrigation is not included in the water clock — a warning will display.
                     </p>
                   </div>
+                </div>
+              </div>
+
+              {/* Energy */}
+              <div>
+                <p className="text-[10px] font-mono font-bold uppercase tracking-widest opacity-50 mb-3">
+                  Energy
+                </p>
+                <div>
+                  <label className="block text-xs font-mono uppercase tracking-widest mb-1 opacity-70">
+                    Battery State of Charge <span className="opacity-40">[0–100 %]</span>
+                  </label>
+                  <div className="flex items-center gap-3">
+                    <input
+                      type="range"
+                      min={0} max={100} step={5}
+                      value={draft.currentBatteryPct}
+                      onChange={e => setDraft(d => ({ ...d, currentBatteryPct: parseInt(e.target.value) }))}
+                      className="flex-1 accent-accent"
+                    />
+                    <span className="text-sm font-mono font-bold w-12 text-right tabular-nums">
+                      {draft.currentBatteryPct}%
+                    </span>
+                  </div>
+                  <p className="text-[9px] font-mono opacity-30 uppercase mt-1">
+                    0% = at DoD limit (empty), 100% = fully charged
+                  </p>
                 </div>
               </div>
             </div>

@@ -39,10 +39,12 @@ export default function AutonomyDashboard({
   const [actuals, setActuals] = useState<Actuals>({
     storedGallons:          0,
     irrigationDailyGallons: 0,
+    currentBatteryPct:      100,
   });
 
-  const { config, caloricTotals, waterAutonomy, isLoading } = useSurvivalData({
+  const { config, caloricTotals, waterAutonomy, energyAutonomy, isLoading } = useSurvivalData({
     storedGallons:          actuals.storedGallons,
+    currentBatteryPct:      actuals.currentBatteryPct,
     forecastDays,
     irrigationDailyGallons: actuals.irrigationDailyGallons > 0
       ? actuals.irrigationDailyGallons
@@ -192,21 +194,41 @@ export default function AutonomyDashboard({
           )}
         </ClockDisplay>
 
-        {/* Clock 3 — Days of Energy (Phase 4 placeholder) */}
+        {/* Clock 3 — Days of Energy */}
         <ClockDisplay
           title="Days_of_Energy"
           systemId="ENERGY_SEC_v1"
           icon={Zap}
-          days={null}
-          details={config ? [
-            { label: 'Battery bank',   value: config.energy.batteryCapacityAh + ' Ah' },
-            { label: 'Solar array',    value: config.energy.solarArrayWatts + ' W'   },
-            { label: 'Baseload draw',  value: config.energy.baseloadWatts + ' W'     },
+          days={energyAutonomy?.daysOfEnergy ?? null}
+          details={energyAutonomy ? [
+            { label: 'Battery stored',   value: energyAutonomy.storedUsableWh.toFixed(0) + ' Wh' },
+            { label: 'Forecast solar',   value: energyAutonomy.projectedSolarWh.toFixed(0) + ' Wh' },
+            { label: 'Daily draw',       value: energyAutonomy.dailyDrawWh.toFixed(0) + ' Wh/day' },
+            { label: 'Avg daily solar',  value: energyAutonomy.averageDailySolarWh.toFixed(0) + ' Wh/day' },
+            { label: 'Battery-only',     value: energyAutonomy.currentSupplyDays.toFixed(1) + ' days', dim: true },
+          ] : config ? [
+            { label: 'Battery bank',  value: config.energy.batteryCapacityAh + ' Ah' },
+            { label: 'Solar array',   value: config.energy.solarArrayWatts + ' W'    },
+            { label: 'Baseload draw', value: config.energy.baseloadWatts + ' W'      },
           ] : []}
+          confidence={energyAutonomy?.confidence}
+          warning={energyAutonomy?.solarCoversBaseload
+            ? undefined
+            : energyAutonomy && energyAutonomy.averageDailySolarWh > 0
+              ? 'Solar output below baseload — battery depleting.'
+              : undefined}
         >
-          <div className="text-[9px] font-mono uppercase opacity-30 text-center py-2 border border-border-primary/10">
-            Live solar forecast wiring — Phase_4
-          </div>
+          {energyAutonomy?.solarCoversBaseload && (
+            <div className="flex items-center gap-2 text-[9px] font-mono uppercase px-2 py-1.5 bg-green-500/10 border border-green-500/20 text-green-400">
+              <span className="w-1.5 h-1.5 rounded-full bg-green-400" />
+              Solar covers baseload — system self-sustaining
+            </div>
+          )}
+          {actuals.currentBatteryPct === 100 && (
+            <div className="text-[9px] font-mono opacity-30 text-center py-1 uppercase">
+              Battery % set via Update_Actuals
+            </div>
+          )}
         </ClockDisplay>
       </div>
 

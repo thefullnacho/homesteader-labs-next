@@ -129,6 +129,40 @@ export interface CaloricTotals {
 }
 
 // ============================================================
+// Energy autonomy calculation I/O
+// ============================================================
+
+export interface ForecastSolarDay {
+  date: string;
+  peakSunHours: number;       // estimated effective peak sun hours for the day
+  estimatedGenWh: number;     // projected panel output after system efficiency
+}
+
+export interface EnergyAutonomyInput {
+  batteryCapacityAh: number;
+  solarArrayWatts:   number;
+  baseloadWatts:     number;
+  forecastSolarDays?: ForecastSolarDay[];  // pre-converted via forecastToSolarDays()
+  currentBatteryPct?: number;   // 0–100; % of usable capacity currently available; default 100
+  systemVoltageV?:    number;   // default 12; multiply Ah by this to get Wh
+  depthOfDischarge?:  number;   // 0.0–1.0; 0.5 = conservative lead-acid, 0.8 = lithium
+  systemEfficiency?:  number;   // inverter + wiring derating; default 0.85
+}
+
+export interface EnergyAutonomyResult {
+  daysOfEnergy:         number;
+  storedUsableWh:       number;   // usable battery energy right now
+  batteryCapWh:         number;   // total battery capacity in Wh
+  dailyDrawWh:          number;   // baseload × 24
+  projectedSolarWh:     number;   // expected inflow over forecast window
+  currentSupplyDays:    number;   // battery-only, no solar
+  averageDailySolarWh:  number;   // mean daily generation over forecast window
+  solarCoversBaseload:  boolean;  // true when average solar ≥ daily draw
+  confidence:           'high' | 'medium' | 'low';
+  forecastSolarDays:    ForecastSolarDay[];
+}
+
+// ============================================================
 // Top-level state persisted to Dexie
 // ============================================================
 

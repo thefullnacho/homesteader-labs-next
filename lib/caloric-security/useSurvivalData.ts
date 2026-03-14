@@ -5,8 +5,9 @@ import { getDB } from './db';
 import { calculateTotalCalories } from './yieldCalculations';
 import { calculateWaterAutonomy } from './waterAutonomy';
 import { forecastToRainDays } from './catchmentConfig';
+import { calculateEnergyAutonomy, forecastToSolarDays } from './energyAutonomy';
 
-import type { HomesteadConfig, InventoryItem, CaloricTotals, WaterAutonomyResult } from './types';
+import type { HomesteadConfig, InventoryItem, CaloricTotals, WaterAutonomyResult, EnergyAutonomyResult } from './types';
 import type { ForecastDay } from '@/lib/weatherTypes';
 
 // ============================================================
@@ -30,21 +31,23 @@ import type { ForecastDay } from '@/lib/weatherTypes';
 // ============================================================
 
 export interface SurvivalData {
-  config:         HomesteadConfig | null;
-  inventory:      InventoryItem[];
-  caloricTotals:  CaloricTotals   | null;
-  waterAutonomy:  WaterAutonomyResult | null;
-  isLoading:      boolean;
-  isFirstRun:     boolean;
+  config:          HomesteadConfig | null;
+  inventory:       InventoryItem[];
+  caloricTotals:   CaloricTotals       | null;
+  waterAutonomy:   WaterAutonomyResult | null;
+  energyAutonomy:  EnergyAutonomyResult | null;
+  isLoading:       boolean;
+  isFirstRun:      boolean;
 }
 
 export function useSurvivalData(opts: {
-  storedGallons:  number;
-  forecastDays?:  ForecastDay[];
+  storedGallons:          number;
+  currentBatteryPct?:     number;
+  forecastDays?:          ForecastDay[];
   irrigationDailyGallons?: number;
-  season?:        'standard' | 'winter' | 'labor';
+  season?:                'standard' | 'winter' | 'labor';
 }): SurvivalData {
-  const { storedGallons, forecastDays = [], irrigationDailyGallons, season = 'standard' } = opts;
+  const { storedGallons, currentBatteryPct = 100, forecastDays = [], irrigationDailyGallons, season = 'standard' } = opts;
 
   const result = useLiveQuery(async () => {
     const db = getDB();
@@ -55,7 +58,7 @@ export function useSurvivalData(opts: {
     ]);
 
     if (!configRow) {
-      return { config: null, inventory, caloricTotals: null, waterAutonomy: null, isFirstRun: true };
+      return { config: null, inventory, caloricTotals: null, waterAutonomy: null, energyAutonomy: null, isFirstRun: true };
     }
 
     const config: HomesteadConfig = {
@@ -78,17 +81,28 @@ export function useSurvivalData(opts: {
       irrigationDailyGallons,
     });
 
-    return { config, inventory, caloricTotals, waterAutonomy, isFirstRun: false };
+    // Days of Energy
+    const solarDays = forecastDays.length > 0 ? forecastToSolarDays(forecastDays) : [];
+    const energyAutonomy = calculateEnergyAutonomy({
+      batteryCapacityAh: config.energy.batteryCapacityAh,
+      solarArrayWatts:   config.energy.solarArrayWatts,
+      baseloadWatts:     config.energy.baseloadWatts,
+      forecastSolarDays: solarDays,
+      currentBatteryPct,
+    });
+
+    return { config, inventory, caloricTotals, waterAutonomy, energyAutonomy, isFirstRun: false };
   });
 
   if (result === undefined) {
     return {
-      config:        null,
-      inventory:     [],
-      caloricTotals: null,
-      waterAutonomy: null,
-      isLoading:     true,
-      isFirstRun:    false,
+      config:         null,
+      inventory:      [],
+      caloricTotals:  null,
+      waterAutonomy:  null,
+      energyAutonomy: null,
+      isLoading:      true,
+      isFirstRun:     false,
     };
   }
 
