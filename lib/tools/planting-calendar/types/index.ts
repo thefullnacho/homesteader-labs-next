@@ -139,6 +139,10 @@ export interface SelectedCrop {
   varietyId: string;
   successionEnabled: boolean;
   successionInterval?: number;
+  actualActionDate?: {
+    action: 'start-indoors' | 'transplant' | 'direct-sow';
+    date: string;  // ISO date string YYYY-MM-DD
+  };
 }
 
 export interface PlantingConfig {
@@ -158,6 +162,7 @@ export interface PlantingDate {
   notes?: string[];
   lunarPhase?: string;
   lunarAligned?: boolean;
+  completed?: boolean;  // true when date is in the past (shifted by actualActionDate)
 }
 
 export interface CropSchedule {
