@@ -77,7 +77,7 @@
       { "method": "drying", "shelfLifeMonths": 12, "notes": "Mainly for coriander seeds, leaves lose flavor when dried" }
     ],
     "uses": ["cooking", "companion"],
-    "companions": ["tomato", "spinach", "pea"],
+    "companions": ["tomato", "spinach", "peas"],
     "antagonists": ["fennel"]
   },
   {
@@ -357,7 +357,7 @@
     ],
     "uses": ["cooking", "companion", "pest-deterrent"],
     "companions": ["carrot", "tomato", "rose"],
-    "antagonists": ["bean", "pea"]
+    "antagonists": ["beans-bush", "beans-pole", "peas"]
   },
   {
     "id": "tarragon",
@@ -436,7 +436,7 @@
       { "method": "freezing", "shelfLifeMonths": 6, "notes": "Freeze in ice cubes for drinks" }
     ],
     "uses": ["cooking", "tea", "medicinal", "pest-deterrent", "aromatherapy"],
-    "companions": ["cabbage", "tomato", "pea"],
+    "companions": ["cabbage", "tomato", "peas"],
     "antagonists": ["chamomile"]
   },
   {
@@ -548,6 +548,7 @@
       "proteinPer100g": 0,
       "carbsPer100g": 0,
       "fatPer100g": 0,
+      "non-caloric": true,
       "storageLifeDays": 5
     },
     "preservation": [
@@ -594,7 +595,7 @@
       { "method": "tincture", "shelfLifeMonths": 24, "notes": "Fresh leaf tincture captures volatile oils best" }
     ],
     "uses": ["tea", "medicinal", "pollinator", "aromatherapy"],
-    "companions": ["squash", "melon", "tomato"],
+    "companions": ["squash-summer", "melon", "tomato"],
     "antagonists": []
   },
   {
@@ -627,6 +628,7 @@
       "proteinPer100g": 0,
       "carbsPer100g": 0,
       "fatPer100g": 0,
+      "non-caloric": true,
       "storageLifeDays": 4
     },
     "preservation": [
@@ -666,6 +668,7 @@
       "proteinPer100g": 0,
       "carbsPer100g": 0,
       "fatPer100g": 0,
+      "non-caloric": true,
       "storageLifeDays": 7
     },
     "preservation": [
@@ -705,6 +708,7 @@
       "proteinPer100g": 0,
       "carbsPer100g": 0,
       "fatPer100g": 0,
+      "non-caloric": true,
       "storageLifeDays": 5
     },
     "preservation": [
@@ -745,6 +749,7 @@
       "proteinPer100g": 0,
       "carbsPer100g": 0,
       "fatPer100g": 0,
+      "non-caloric": true,
       "storageLifeDays": 7
     },
     "preservation": [
@@ -833,7 +838,7 @@
       { "method": "tincture", "shelfLifeMonths": 24, "notes": "Fresh or dried leaves in alcohol" }
     ],
     "uses": ["tea", "medicinal", "pollinator", "cooking"],
-    "companions": ["tomato", "pepper", "marigold"],
+    "companions": ["tomato", "pepper-bell", "pepper-hot", "marigold"],
     "antagonists": ["rue"]
   },
   {
@@ -874,7 +879,7 @@
     ],
     "uses": ["cooking", "tea", "medicinal", "pollinator"],
     "companions": ["dill"],
-    "antagonists": ["tomato", "bush-bean", "kohlrabi", "cilantro"]
+    "antagonists": ["tomato", "beans-bush", "kohlrabi", "cilantro"]
   },
   {
     "id": "borage",
@@ -912,7 +917,7 @@
       { "method": "drying", "shelfLifeMonths": 12, "notes": "Dry leaves and flowers (leaves can be prickly)" }
     ],
     "uses": ["cooking", "medicinal", "companion", "pollinator"],
-    "companions": ["tomato", "strawberry", "squash"],
+    "companions": ["tomato", "strawberry", "squash-summer"],
     "antagonists": []
   },
   {
@@ -944,6 +949,7 @@
       "proteinPer100g": 0,
       "carbsPer100g": 0,
       "fatPer100g": 0,
+      "non-caloric": true,
       "storageLifeDays": 3
     },
     "preservation": [
@@ -984,6 +990,7 @@
       "proteinPer100g": 0,
       "carbsPer100g": 0,
       "fatPer100g": 0,
+      "non-caloric": true,
       "storageLifeDays": 7
     },
     "preservation": [

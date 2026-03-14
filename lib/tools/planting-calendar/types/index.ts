@@ -44,6 +44,7 @@ export interface CropYield {
   carbsPer100g?: number;            // grams
   fatPer100g?: number;              // grams
   storageLifeDays: number;          // fresh shelf life before spoilage
+  'non-caloric'?: boolean;          // true for medicinal/companion plants — excluded from food math
 }
 
 // ============================================================

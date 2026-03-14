@@ -37,7 +37,7 @@
     ],
     "uses": ["cooking"],
     "companions": ["corn", "radish", "nasturtium", "sunflower"],
-    "antagonists": ["potato", "zucchini"]
+    "antagonists": ["potato", "squash-summer"]
   },
   {
     "id": "cantaloupe",
@@ -76,7 +76,7 @@
       { "method": "dehydrating", "shelfLifeMonths": 12, "notes": "Dehydrate slices for a chewy, sweet snack" }
     ],
     "uses": ["cooking"],
-    "companions": ["corn", "radish", "bush-bean"],
+    "companions": ["corn", "radish", "beans-bush"],
     "antagonists": ["potato"]
   },
   {
@@ -157,7 +157,48 @@
       { "method": "cold-storage", "shelfLifeMonths": 4, "notes": "Store whole in a cool, dry basement" }
     ],
     "uses": ["cooking", "livestock-feed", "companion"],
-    "companions": ["corn", "bean", "marigold", "nasturtium"],
+    "companions": ["corn", "beans-bush", "beans-pole", "marigold", "nasturtium"],
+    "antagonists": ["potato"]
+  },
+  {
+    "id": "melon",
+    "name": "Melon (Honeydew/Specialty)",
+    "category": "fruit",
+    "icon": "🍈",
+    "varieties": [
+      { "id": "green-flesh", "name": "Green Flesh Honeydew", "daysToMaturity": 105, "type": "Honeydew", "special": ["sweet", "smooth-rind"] }
+    ],
+    "startIndoors": 28,
+    "transplant": 14,
+    "directSow": 14,
+    "daysToMaturity": 105,
+    "successionEnabled": false,
+    "successionInterval": 0,
+    "successionMax": 1,
+    "sun": "full",
+    "spacing": "36-48\" apart",
+    "notes": [
+      "Requires a long, hot growing season",
+      "Unlike cantaloupe, honeydew does not 'slip' from the vine when ripe"
+    ],
+    "lunarAffinity": "waxing",
+    "growthHabit": "annual",
+    "yearsToFirstHarvest": 0,
+    "waterNeedsPerWeek": 1.5,
+    "yield": {
+      "avgPerPlant": 10,
+      "unit": "lbs",
+      "caloriesPer100g": 36,
+      "proteinPer100g": 0.5,
+      "carbsPer100g": 9.1,
+      "fatPer100g": 0.1,
+      "storageLifeDays": 14
+    },
+    "preservation": [
+      { "method": "freezing", "shelfLifeMonths": 6, "notes": "Puree or freeze in chunks" }
+    ],
+    "uses": ["cooking"],
+    "companions": ["corn", "radish"],
     "antagonists": ["potato"]
   }
 ]
