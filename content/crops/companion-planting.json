@@ -1,0 +1,151 @@
+[
+  {
+    "plantId": "tomato",
+    "relationships": [
+      {
+        "targetId": "basil",
+        "type": "companion",
+        "mechanism": "pest-deterrent",
+        "description": "Basil masks the smell of tomatoes, deterring thrips and tomato hornworms, and is widely believed to improve tomato flavor."
+      },
+      {
+        "targetId": "carrot",
+        "type": "companion",
+        "mechanism": "space-efficiency",
+        "description": "Carrots naturally aerate the soil around tomato roots, while the taller tomatoes provide welcome afternoon shade for the carrots."
+      },
+      {
+        "targetId": "potato",
+        "type": "antagonist",
+        "mechanism": "disease-sharing",
+        "description": "Both belong to the nightshade family and are highly susceptible to early and late blight; planting them together creates a disease bridge."
+      },
+      {
+        "targetId": "cabbage",
+        "type": "antagonist",
+        "mechanism": "resource-competition",
+        "description": "Both are heavy feeders that will aggressively compete for soil nutrients, stunting the growth of both."
+      }
+    ]
+  },
+  {
+    "plantId": "basil",
+    "relationships": [
+      {
+        "targetId": "tomato",
+        "type": "companion",
+        "mechanism": "flavor-enhancement",
+        "description": "Thrives in the same soil and light conditions, creating a mutually beneficial microclimate at the base of the tomato plant."
+      },
+      {
+        "targetId": "sage",
+        "type": "antagonist",
+        "mechanism": "environmental-conflict",
+        "description": "Basil requires rich, consistently moist soil, whereas sage prefers poorer, drier, well-draining conditions."
+      }
+    ]
+  },
+  {
+    "plantId": "carrot",
+    "relationships": [
+      {
+        "targetId": "onion",
+        "type": "companion",
+        "mechanism": "pest-deterrent",
+        "description": "A classic pairing: onions repel the carrot rust fly, while carrots repel the onion fly."
+      },
+      {
+        "targetId": "rosemary",
+        "type": "companion",
+        "mechanism": "pest-deterrent",
+        "description": "The strong scent of rosemary helps mask the smell of the carrots from rust flies."
+      },
+      {
+        "targetId": "dill",
+        "type": "antagonist",
+        "mechanism": "growth-inhibition",
+        "description": "Mature dill can stunt the growth of carrots and, because they are closely related, they can cross-pollinate if allowed to go to seed."
+      }
+    ]
+  },
+  {
+    "plantId": "bush-bean",
+    "relationships": [
+      {
+        "targetId": "cucumber",
+        "type": "companion",
+        "mechanism": "soil-enrichment",
+        "description": "Beans fix nitrogen in the soil, which feeds heavy-feeding cucumbers, while cucumbers provide ground cover that retains moisture."
+      },
+      {
+        "targetId": "strawberry",
+        "type": "companion",
+        "mechanism": "soil-enrichment",
+        "description": "The nitrogen fixed by the beans helps promote vigorous leaf growth and runner production in strawberries."
+      },
+      {
+        "targetId": "onion",
+        "type": "antagonist",
+        "mechanism": "allelopathy",
+        "description": "Alliums (onions, garlic) secrete antibacterial compounds that kill the beneficial nitrogen-fixing rhizobia bacteria on bean roots."
+      },
+      {
+        "targetId": "garlic",
+        "type": "antagonist",
+        "mechanism": "allelopathy",
+        "description": "Similar to onions, garlic will stunt the growth of legumes and prevent them from fixing nitrogen."
+      }
+    ]
+  },
+  {
+    "plantId": "borage",
+    "relationships": [
+      {
+        "targetId": "strawberry",
+        "type": "companion",
+        "mechanism": "pollinator-attractor",
+        "description": "Borage is a powerhouse for attracting bees, which greatly increases strawberry pollination rates and overall yield."
+      },
+      {
+        "targetId": "tomato",
+        "type": "companion",
+        "mechanism": "pest-deterrent",
+        "description": "Helps repel tomato hornworms and attracts beneficial predatory wasps that manage garden pests."
+      }
+    ]
+  },
+  {
+    "plantId": "onion",
+    "relationships": [
+      {
+        "targetId": "cabbage",
+        "type": "companion",
+        "mechanism": "pest-deterrent",
+        "description": "The strong sulfur compounds in onions deter cabbage loopers, cabbage worms, and cabbage maggots."
+      },
+      {
+        "targetId": "chamomile",
+        "type": "companion",
+        "mechanism": "flavor-enhancement",
+        "description": "Chamomile is thought to improve the flavor and growth of onions when planted nearby."
+      }
+    ]
+  },
+  {
+    "plantId": "fennel",
+    "relationships": [
+      {
+        "targetId": "dill",
+        "type": "antagonist",
+        "mechanism": "cross-pollination",
+        "description": "Fennel and dill will readily cross-pollinate, resulting in strangely flavored, unpredictable seeds for both plants."
+      },
+      {
+        "targetId": "tomato",
+        "type": "antagonist",
+        "mechanism": "allelopathy",
+        "description": "Fennel releases chemical compounds from its roots that stunt the growth of many garden vegetables, particularly tomatoes."
+      }
+    ]
+  }
+]
