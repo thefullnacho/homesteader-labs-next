@@ -1,5 +1,6 @@
 import Dexie, { type EntityTable } from 'dexie';
 import type { InventoryItem, HomesteadConfig, CaloricTotals } from './types';
+import type { SavedLocation } from '@/lib/weatherTypes';
 
 // ============================================================
 // SurvivalManifest table shapes
@@ -20,6 +21,7 @@ export interface HomesteadConfigRow {
   id:            'singleton';   // enforced single-row key
   householdSize: number;
   skillLevel:    number;
+  seedSavingPct?: number;
   waterCatchment: HomesteadConfig['waterCatchment'];
   energy:         HomesteadConfig['energy'];
   lastUpdated:    Date;
@@ -32,13 +34,54 @@ export interface CaloricTotalsRow {
 }
 
 // ============================================================
+// Location + frost date rows (version 2)
+//
+// Replaces localStorage keys 'homesteader-locations' and
+// 'homesteader-frost-dates' with IndexedDB tables. Native Date
+// objects survive round-trips via structured clone.
+// ============================================================
+
+export type LocationRow = SavedLocation;   // already has id: string
+
+export interface FrostDatesRow {
+  id:                         'singleton';
+  zipCode:                    string;
+  city?:                      string;
+  state?:                     string;
+  lastSpringFrost:            Date;
+  lastSpringFrostConfidence:  number;
+  firstFallFrost:             Date;
+  firstFallFrostConfidence:   number;
+  frostFreeDays:              number;
+  growingZone?:               string;
+}
+
+// ============================================================
+// Actuals row (version 2)
+//
+// Persists ActualsInput values across page refreshes so the
+// user doesn't have to re-enter stored-gallons / battery % on
+// every visit.
+// ============================================================
+
+export interface ActualsRow {
+  id:                     'singleton';
+  storedGallons:          number;
+  irrigationDailyGallons: number;
+  currentBatteryPct:      number;
+}
+
+// ============================================================
 // Database definition
 // ============================================================
 
 export class HomesteadDB extends Dexie {
-  config!:    EntityTable<HomesteadConfigRow, 'id'>;
-  inventory!: EntityTable<InventoryItem,      'id'>;
-  cachedTotals!: EntityTable<CaloricTotalsRow, 'id'>;
+  config!:       EntityTable<HomesteadConfigRow, 'id'>;
+  inventory!:    EntityTable<InventoryItem,      'id'>;
+  cachedTotals!: EntityTable<CaloricTotalsRow,   'id'>;
+  locations!:    EntityTable<LocationRow,        'id'>;
+  frostDates!:   EntityTable<FrostDatesRow,      'id'>;
+  actuals!:      EntityTable<ActualsRow,         'id'>;
 
   constructor() {
     super('HomesteadDB');
@@ -50,6 +93,14 @@ export class HomesteadDB extends Dexie {
       config:        'id',
       inventory:     'id, cropId, type, status',
       cachedTotals:  'id',
+    });
+
+    // Version 2: add location, frost date, and actuals persistence.
+    // Existing tables carry forward unchanged (Dexie 3+ behaviour).
+    this.version(2).stores({
+      locations:  'id, zipCode',
+      frostDates: 'id',
+      actuals:    'id',
     });
   }
 }

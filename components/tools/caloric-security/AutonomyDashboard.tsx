@@ -1,8 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import {
-  Utensils, Droplets, Zap, Settings,
+  Utensils, Droplets, Zap, Settings, Pencil,
   LayoutDashboard, RefreshCw, TrendingUp, Leaf,
 } from 'lucide-react';
 import Link from 'next/link';
@@ -16,7 +16,7 @@ import FrostGuardAlert from './FrostGuardAlert';
 import DroughtAlert from './DroughtAlert';
 import CanningDayBanner from './CanningDayBanner';
 import { useSurvivalData } from '@/lib/caloric-security/useSurvivalData';
-import { resetConfig } from '@/lib/caloric-security/homesteadStore';
+import { resetConfig, getActuals, saveActuals } from '@/lib/caloric-security/homesteadStore';
 import { getCropById } from '@/lib/tools/planting-calendar/cropLoader';
 import { calculateItemDecay } from '@/lib/caloric-security/decayCalculations';
 import type { ForecastDay } from '@/lib/weatherTypes';
@@ -36,17 +36,40 @@ import type { ForecastDay } from '@/lib/weatherTypes';
 interface AutonomyDashboardProps {
   forecastDays?: ForecastDay[];
   onReconfigure: () => void;
+  onEditConfig:  () => void;
 }
 
 export default function AutonomyDashboard({
   forecastDays = [],
   onReconfigure,
+  onEditConfig,
 }: AutonomyDashboardProps) {
   const [actuals, setActuals] = useState<Actuals>({
     storedGallons:          0,
     irrigationDailyGallons: 0,
     currentBatteryPct:      100,
   });
+  const actualsLoaded = useRef(false);
+
+  // Load persisted actuals on mount
+  useEffect(() => {
+    getActuals().then(row => {
+      if (row) {
+        setActuals({
+          storedGallons:          row.storedGallons,
+          irrigationDailyGallons: row.irrigationDailyGallons,
+          currentBatteryPct:      row.currentBatteryPct,
+        });
+      }
+      actualsLoaded.current = true;
+    }).catch(() => { actualsLoaded.current = true; });
+  }, []);
+
+  // Persist actuals whenever they change (after initial load)
+  useEffect(() => {
+    if (!actualsLoaded.current) return;
+    saveActuals(actuals).catch(console.error);
+  }, [actuals]);
 
   const { config, caloricTotals, waterAutonomy, energyAutonomy, inventory, isLoading } = useSurvivalData({
     storedGallons:          actuals.storedGallons,
@@ -58,7 +81,7 @@ export default function AutonomyDashboard({
   });
 
   async function handleReset() {
-    if (!confirm('Reset homestead config? This cannot be undone.')) return;
+    if (!confirm('Wipe all config and inventory? This cannot be undone.')) return;
     await resetConfig();
     onReconfigure();
   }
@@ -146,11 +169,18 @@ export default function AutonomyDashboard({
           <ActualsInput actuals={actuals} onChange={setActuals} />
           <Badge variant="status" pulse>Clocks_Active</Badge>
           <button
+            onClick={onEditConfig}
+            className="flex items-center gap-1.5 text-[10px] font-mono uppercase opacity-40 hover:opacity-80 hover:text-accent transition-all"
+          >
+            <Pencil size={10} />
+            Edit_Config
+          </button>
+          <button
             onClick={handleReset}
-            className="flex items-center gap-1.5 text-[10px] font-mono uppercase opacity-30 hover:opacity-60 hover:text-accent transition-all"
+            className="flex items-center gap-1.5 text-[10px] font-mono uppercase opacity-20 hover:opacity-50 hover:text-red-400 transition-all"
           >
             <Settings size={10} />
-            Reconfigure
+            Reset
           </button>
         </div>
       </div>

@@ -4,15 +4,17 @@ import { useEffect, useState } from 'react';
 import FieldStationLayout from '@/components/ui/FieldStationLayout';
 import SetupWizard from '@/components/tools/caloric-security/SetupWizard';
 import AutonomyDashboard from '@/components/tools/caloric-security/AutonomyDashboard';
-import { isFirstRun } from '@/lib/caloric-security/homesteadStore';
+import { isFirstRun, getConfig } from '@/lib/caloric-security/homesteadStore';
 import { useFieldStation } from '@/app/context/FieldStationContext';
 import { fetchWeatherData } from '@/lib/weatherApi';
 import type { ForecastDay } from '@/lib/weatherTypes';
+import type { HomesteadConfig } from '@/lib/caloric-security/types';
 
 export default function CaloricSecurityPage() {
-  const [ready, setReady]           = useState(false);
-  const [needsSetup, setNeedsSetup] = useState(false);
-  const [forecast, setForecast]     = useState<ForecastDay[]>([]);
+  const [ready, setReady]             = useState(false);
+  const [needsSetup, setNeedsSetup]   = useState(false);
+  const [editConfig, setEditConfig]   = useState<HomesteadConfig | null>(null);
+  const [forecast, setForecast]       = useState<ForecastDay[]>([]);
 
   const { activeLocation } = useFieldStation();
 
@@ -28,8 +30,15 @@ export default function CaloricSecurityPage() {
     if (!activeLocation) return;
     fetchWeatherData(activeLocation.lat, activeLocation.lon)
       .then(w => setForecast(w.forecast))
-      .catch(() => setForecast([]));   // forecast is optional — clock degrades gracefully
+      .catch(() => setForecast([]));
   }, [activeLocation]);
+
+  function handleEditConfig() {
+    getConfig().then(cfg => {
+      setEditConfig(cfg);
+      setNeedsSetup(true);
+    });
+  }
 
   if (!ready) {
     return (
@@ -46,7 +55,10 @@ export default function CaloricSecurityPage() {
   if (needsSetup) {
     return (
       <FieldStationLayout stationId="HL_CALORIC_SEC_V1.0">
-        <SetupWizard onComplete={() => setNeedsSetup(false)} />
+        <SetupWizard
+          initialConfig={editConfig ?? undefined}
+          onComplete={() => { setNeedsSetup(false); setEditConfig(null); }}
+        />
       </FieldStationLayout>
     );
   }
@@ -55,7 +67,8 @@ export default function CaloricSecurityPage() {
     <FieldStationLayout stationId="HL_CALORIC_SEC_V1.0">
       <AutonomyDashboard
         forecastDays={forecast}
-        onReconfigure={() => setNeedsSetup(true)}
+        onReconfigure={() => { setEditConfig(null); setNeedsSetup(true); }}
+        onEditConfig={handleEditConfig}
       />
     </FieldStationLayout>
   );

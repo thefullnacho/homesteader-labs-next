@@ -433,12 +433,32 @@ function StepReview({ state }: { state: WizardState }) {
 // ============================================================
 
 interface SetupWizardProps {
-  onComplete: () => void;
+  onComplete:     () => void;
+  initialConfig?: HomesteadConfig;
 }
 
-export default function SetupWizard({ onComplete }: SetupWizardProps) {
+function stateFromConfig(config: HomesteadConfig): WizardState {
+  return {
+    householdSize:     config.householdSize,
+    skillLevel:        config.skillLevel,
+    seedSavingPct:     config.seedSavingPct ?? 0,
+    collectionMethod:  config.waterCatchment.collectionMethod,
+    roofLengthFt:      '',
+    roofWidthFt:       '',
+    manualAreaSqFt:    config.waterCatchment.collectionAreaSqFt.toString(),
+    useManualArea:     true,
+    storageCap:        config.waterCatchment.storageCap.toString(),
+    batteryCapacityAh: config.energy.batteryCapacityAh > 0 ? config.energy.batteryCapacityAh.toString() : '',
+    solarArrayWatts:   config.energy.solarArrayWatts   > 0 ? config.energy.solarArrayWatts.toString()   : '',
+    baseloadWatts:     config.energy.baseloadWatts     > 0 ? config.energy.baseloadWatts.toString()     : '',
+  };
+}
+
+export default function SetupWizard({ onComplete, initialConfig }: SetupWizardProps) {
   const [step, setStep] = useState(0);
-  const [state, setState] = useState<WizardState>(INITIAL_STATE);
+  const [state, setState] = useState<WizardState>(
+    initialConfig ? stateFromConfig(initialConfig) : INITIAL_STATE,
+  );
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -498,12 +518,14 @@ export default function SetupWizard({ onComplete }: SetupWizardProps) {
     <div className="max-w-lg mx-auto">
       <div className="mb-6 flex items-start justify-between">
         <div>
-          <Typography variant="h2" className="uppercase tracking-tight mb-1">Homestead_Setup</Typography>
+          <Typography variant="h2" className="uppercase tracking-tight mb-1">
+            {initialConfig ? 'Update_Config' : 'Homestead_Setup'}
+          </Typography>
           <Typography variant="small" className="opacity-40 font-mono text-[11px] uppercase tracking-widest">
-            First_Run // Initialising_Survival_Clocks
+            {initialConfig ? 'Edit // Re-calibrate_Survival_Clocks' : 'First_Run // Initialising_Survival_Clocks'}
           </Typography>
         </div>
-        <Badge variant="status" pulse>Config_Required</Badge>
+        <Badge variant="status" pulse>{initialConfig ? 'Editing' : 'Config_Required'}</Badge>
       </div>
 
       <StepIndicator current={step} />
@@ -548,7 +570,7 @@ export default function SetupWizard({ onComplete }: SetupWizardProps) {
               onClick={handleSave}
               disabled={saving}
             >
-              {saving ? 'Saving...' : 'Initialise_Clocks'}
+              {saving ? 'Saving...' : initialConfig ? 'Save_Changes' : 'Initialise_Clocks'}
             </Button>
           )}
         </div>

@@ -1,8 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useLiveQuery } from 'dexie-react-hooks';
-import { Plus, Trash2, Edit3, ArrowLeft, Package } from 'lucide-react';
+import { Plus, Trash2, Edit3, ArrowLeft, Package, Search } from 'lucide-react';
 import Link from 'next/link';
 import FieldStationLayout from '@/components/ui/FieldStationLayout';
 import BrutalistBlock from '@/components/ui/BrutalistBlock';
@@ -70,10 +70,22 @@ export default function InventoryPage() {
     [] as InventoryItem[],
   );
 
-  const [formOpen,  setFormOpen]  = useState(false);
-  const [editId,    setEditId]    = useState<string | null>(null);
-  const [form,      setForm]      = useState<FormState>(BLANK_FORM);
-  const [saving,    setSaving]    = useState(false);
+  const [formOpen,      setFormOpen]      = useState(false);
+  const [editId,        setEditId]        = useState<string | null>(null);
+  const [form,          setForm]          = useState<FormState>(BLANK_FORM);
+  const [saving,        setSaving]        = useState(false);
+  const [searchQuery,   setSearchQuery]   = useState('');
+  const [statusFilter,  setStatusFilter]  = useState<InventoryItem['status'] | 'all'>('all');
+
+  const filteredInventory = useMemo(() => {
+    return inventory.filter(item => {
+      const crop = getCropById(item.cropId);
+      const name = (crop?.name ?? item.cropId).toLowerCase();
+      const matchesSearch = !searchQuery || name.includes(searchQuery.toLowerCase());
+      const matchesStatus = statusFilter === 'all' || item.status === statusFilter;
+      return matchesSearch && matchesStatus;
+    });
+  }, [inventory, searchQuery, statusFilter]);
 
   function openAdd() {
     const firstCrop = allCrops[0];
@@ -149,6 +161,37 @@ export default function InventoryPage() {
           </Button>
         </div>
 
+        {/* Search + filter bar */}
+        {inventory.length > 0 && (
+          <div className="flex flex-col sm:flex-row gap-3">
+            <div className="relative flex-1">
+              <Search size={11} className="absolute left-3 top-1/2 -translate-y-1/2 opacity-30" />
+              <input
+                type="text"
+                placeholder="Search crops..."
+                value={searchQuery}
+                onChange={e => setSearchQuery(e.target.value)}
+                className="w-full bg-black/20 border border-border-primary/30 focus:border-accent outline-none pl-8 pr-3 py-2 text-xs font-mono uppercase placeholder:opacity-30 transition-colors"
+              />
+            </div>
+            <div className="flex gap-1">
+              {(['all', 'planned', 'active', 'stored'] as const).map(s => (
+                <button
+                  key={s}
+                  onClick={() => setStatusFilter(s)}
+                  className={`px-3 py-2 text-[10px] font-mono uppercase border transition-colors ${
+                    statusFilter === s
+                      ? 'border-accent text-accent bg-accent/10'
+                      : 'border-border-primary/20 opacity-40 hover:opacity-70'
+                  }`}
+                >
+                  {s}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* Empty state */}
         {inventory.length === 0 && (
           <BrutalistBlock refTag="NO_ITEMS">
@@ -165,6 +208,12 @@ export default function InventoryPage() {
         {/* Inventory table */}
         {inventory.length > 0 && (
           <BrutalistBlock refTag="INVENTORY_MANIFEST" className="overflow-x-auto">
+            {filteredInventory.length === 0 && (
+              <div className="py-8 text-center font-mono text-[10px] uppercase opacity-30">
+                No items match &quot;{searchQuery}&quot; {statusFilter !== 'all' && `+ status: ${statusFilter}`}
+              </div>
+            )}
+            {filteredInventory.length > 0 && (
             <table className="w-full text-[10px] font-mono uppercase">
               <thead>
                 <tr className="border-b border-border-primary/20">
@@ -174,7 +223,7 @@ export default function InventoryPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-border-primary/10">
-                {inventory.map(item => {
+                {filteredInventory.map(item => {
                   const crop  = getCropById(item.cropId);
                   const decay = crop ? calculateItemDecay(item, crop) : null;
 
@@ -228,6 +277,7 @@ export default function InventoryPage() {
                 })}
               </tbody>
             </table>
+            )}
           </BrutalistBlock>
         )}
 

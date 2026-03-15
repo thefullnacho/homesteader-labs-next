@@ -1,6 +1,8 @@
 import { getDB } from './db';
 import type { HomesteadConfig, InventoryItem, CaloricTotals } from './types';
-import type { HomesteadConfigRow } from './db';
+import type { HomesteadConfigRow, FrostDatesRow, ActualsRow } from './db';
+import type { SavedLocation } from '@/lib/weatherTypes';
+import type { FrostDates } from '@/lib/tools/planting-calendar/types';
 
 // ============================================================
 // Config — read / write / reset
@@ -12,7 +14,7 @@ export async function getConfig(): Promise<HomesteadConfig | null> {
   return {
     householdSize:  row.householdSize,
     skillLevel:     row.skillLevel,
-    seedSavingPct:  (row as unknown as Record<string, number>).seedSavingPct ?? 0,
+    seedSavingPct:  row.seedSavingPct ?? 0,
     waterCatchment: row.waterCatchment,
     energy:         row.energy,
   };
@@ -23,6 +25,7 @@ export async function saveConfig(config: HomesteadConfig): Promise<void> {
     id:             'singleton',
     householdSize:  config.householdSize,
     skillLevel:     config.skillLevel,
+    seedSavingPct:  config.seedSavingPct,
     waterCatchment: config.waterCatchment,
     energy:         config.energy,
     lastUpdated:    new Date(),
@@ -105,4 +108,81 @@ export async function invalidateCachedTotals(): Promise<void> {
 export async function isFirstRun(): Promise<boolean> {
   const count = await getDB().config.count();
   return count === 0;
+}
+
+// ============================================================
+// Locations
+// ============================================================
+
+export async function getLocations(): Promise<SavedLocation[]> {
+  return getDB().locations.toArray();
+}
+
+export async function putLocation(loc: SavedLocation): Promise<void> {
+  await getDB().locations.put(loc);
+}
+
+export async function bulkPutLocations(locs: SavedLocation[]): Promise<void> {
+  await getDB().locations.bulkPut(locs);
+}
+
+export async function deleteLocation(id: string): Promise<void> {
+  await getDB().locations.delete(id);
+}
+
+export async function clearLocations(): Promise<void> {
+  await getDB().locations.clear();
+}
+
+// ============================================================
+// Frost dates (singleton — one per active location)
+// ============================================================
+
+export async function getFrostDates(): Promise<FrostDates | null> {
+  const row = await getDB().frostDates.get('singleton');
+  if (!row) return null;
+  return {
+    zipCode:                   row.zipCode,
+    city:                      row.city,
+    state:                     row.state,
+    lastSpringFrost:           new Date(row.lastSpringFrost),
+    lastSpringFrostConfidence: row.lastSpringFrostConfidence,
+    firstFallFrost:            new Date(row.firstFallFrost),
+    firstFallFrostConfidence:  row.firstFallFrostConfidence,
+    frostFreeDays:             row.frostFreeDays,
+    growingZone:               row.growingZone,
+  };
+}
+
+export async function saveFrostDates(dates: FrostDates): Promise<void> {
+  const row: FrostDatesRow = {
+    id:                         'singleton',
+    zipCode:                    dates.zipCode,
+    city:                       dates.city,
+    state:                      dates.state,
+    lastSpringFrost:            dates.lastSpringFrost,
+    lastSpringFrostConfidence:  dates.lastSpringFrostConfidence,
+    firstFallFrost:             dates.firstFallFrost,
+    firstFallFrostConfidence:   dates.firstFallFrostConfidence,
+    frostFreeDays:              dates.frostFreeDays,
+    growingZone:                dates.growingZone,
+  };
+  await getDB().frostDates.put(row);
+}
+
+export async function deleteFrostDates(): Promise<void> {
+  await getDB().frostDates.delete('singleton');
+}
+
+// ============================================================
+// Actuals (singleton — persists gallons/battery across reloads)
+// ============================================================
+
+export async function getActuals(): Promise<ActualsRow | null> {
+  const row = await getDB().actuals.get('singleton');
+  return row ?? null;
+}
+
+export async function saveActuals(actuals: Omit<ActualsRow, 'id'>): Promise<void> {
+  await getDB().actuals.put({ id: 'singleton', ...actuals });
 }

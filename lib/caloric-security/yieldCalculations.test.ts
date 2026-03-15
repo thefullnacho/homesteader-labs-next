@@ -94,6 +94,7 @@ const echinacea: Crop = {
 const mockConfig: HomesteadConfig = {
   householdSize: 4,
   skillLevel: 0.8,
+  seedSavingPct: 0,
   waterCatchment: {
     collectionMethod:   'rooftop-gutters',
     collectionAreaSqFt: 1200,
