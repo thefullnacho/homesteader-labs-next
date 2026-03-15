@@ -20,15 +20,21 @@ export default function NewsletterSignup() {
     };
   }, []);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Mock submission - in production, this would call an API route
-    if (email.includes("@")) {
+    if (!email.includes("@")) {
+      setStatus("error");
+      return;
+    }
+    const res = await fetch("/api/subscribe", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, type: "newsletter" }),
+    });
+    if (res.ok) {
       setStatus("success");
       setEmail("");
-      if (statusTimerRef.current) {
-        clearTimeout(statusTimerRef.current);
-      }
+      if (statusTimerRef.current) clearTimeout(statusTimerRef.current);
       statusTimerRef.current = setTimeout(() => setStatus("idle"), 3000);
     } else {
       setStatus("error");

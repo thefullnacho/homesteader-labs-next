@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { getProductBySlug, getAllProducts } from "@/lib/products";
 import { Metadata } from "next";
 import ProductDetail from "./ProductDetail";
+import WalkingManDetail from "./WalkingManDetail";
 
 interface ProductPageProps {
   params: {
@@ -36,6 +37,10 @@ export default function ProductPage({ params }: ProductPageProps) {
 
   if (!product) {
     notFound();
+  }
+
+  if (product.id === 'WLK-MN-PRO') {
+    return <WalkingManDetail product={product} />;
   }
 
   return <ProductDetail product={product} />;

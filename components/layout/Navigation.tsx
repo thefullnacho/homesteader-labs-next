@@ -38,6 +38,9 @@ export default function Navigation() {
           <Link href="/tools/planting-calendar/">
             <DymoLabel className="opacity-80 hover:opacity-100 scale-90">PLANTING</DymoLabel>
           </Link>
+          <Link href="/tools/caloric-security/">
+            <DymoLabel className="opacity-80 hover:opacity-100 scale-90">CALORIC_SEC</DymoLabel>
+          </Link>
           <Link href="/tools/fabrication/">
             <DymoLabel className="opacity-80 hover:opacity-100 scale-90">FABRICATION</DymoLabel>
           </Link>
@@ -103,6 +106,9 @@ export default function Navigation() {
             </Link>
             <Link href="/tools/planting-calendar/" onClick={() => setMobileMenuOpen(false)}>
               <DymoLabel className="w-full text-center">PLANTING</DymoLabel>
+            </Link>
+            <Link href="/tools/caloric-security/" onClick={() => setMobileMenuOpen(false)}>
+              <DymoLabel className="w-full text-center">CALORIC_SEC</DymoLabel>
             </Link>
             <Link href="/tools/fabrication/" onClick={() => setMobileMenuOpen(false)}>
               <DymoLabel className="w-full text-center">FABRICATION</DymoLabel>

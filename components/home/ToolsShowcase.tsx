@@ -1,9 +1,25 @@
 import Link from "next/link";
-import { Wrench, Cloud, ArrowRight } from "lucide-react";
+import { Wrench, Cloud, Sprout, ShieldCheck, ArrowRight } from "lucide-react";
 import BrutalistBlock from "@/components/ui/BrutalistBlock";
 import Typography from "@/components/ui/Typography";
 
 const tools = [
+  {
+    id: "caloric-security",
+    name: "Caloric_Security",
+    description: "Three survival clocks — Days of Food, Water, and Energy. Inventory tracking, frost guard, and solar alerts.",
+    icon: "shield",
+    href: "/tools/caloric-security/",
+    status: "ONLINE"
+  },
+  {
+    id: "planting-calendar",
+    name: "Planting_Calendar",
+    description: "Frost-date-anchored planting schedules for 54 crops. Succession planting, lunar sync, and actual-date anchoring.",
+    icon: "sprout",
+    href: "/tools/planting-calendar/",
+    status: "ONLINE"
+  },
   {
     id: "fabrication",
     name: "Fabrication_Workbench",
@@ -25,6 +41,8 @@ const tools = [
 const IconMap = {
   wrench: Wrench,
   cloud: Cloud,
+  sprout: Sprout,
+  shield: ShieldCheck,
 };
 
 export default function ToolsShowcase() {
@@ -37,7 +55,7 @@ export default function ToolsShowcase() {
         </span>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
         {tools.map((tool) => {
           const ToolIcon = IconMap[tool.icon as keyof typeof IconMap];
           return (

@@ -49,13 +49,26 @@ export default function CropSelector({
 
   const toggleSuccession = (cropId: string) => {
     onCropsChange(
-      selectedCrops.map(sc => 
-        sc.cropId === cropId 
+      selectedCrops.map(sc =>
+        sc.cropId === cropId
           ? { ...sc, successionEnabled: !sc.successionEnabled }
           : sc
       )
     );
   };
+
+  const updateActualActionDate = (
+    cropId: string,
+    value: SelectedCrop['actualActionDate']
+  ) => {
+    onCropsChange(
+      selectedCrops.map(sc =>
+        sc.cropId === cropId ? { ...sc, actualActionDate: value } : sc
+      )
+    );
+  };
+
+  const todayIso = new Date().toISOString().slice(0, 10);
 
   return (
     <BrutalistBlock className="p-6" variant="default" refTag="INV_MANIFEST_01">
@@ -147,6 +160,68 @@ export default function CropSelector({
                       </span>
                     </label>
                   )}
+
+                  {/* Actual date anchoring */}
+                  <div className="pt-3 border-t border-border-primary/10">
+                    <label className="flex items-center gap-3 cursor-pointer group">
+                      <div className="relative">
+                        <input
+                          type="checkbox"
+                          checked={!!isSelected.actualActionDate}
+                          onChange={e => {
+                            if (!e.target.checked) {
+                              updateActualActionDate(crop.id, undefined);
+                            } else {
+                              // Default to first available anchor action
+                              const firstAction = crop.startIndoors !== null
+                                ? 'start-indoors'
+                                : crop.transplant !== null
+                                  ? 'transplant'
+                                  : 'direct-sow';
+                              updateActualActionDate(crop.id, { action: firstAction as 'start-indoors' | 'transplant' | 'direct-sow', date: todayIso });
+                            }
+                          }}
+                          className="sr-only"
+                        />
+                        <div className={`w-8 h-4 border-2 transition-colors ${isSelected.actualActionDate ? 'bg-accent border-accent' : 'border-border-primary/30 bg-black/20'}`}>
+                          <div className={`absolute top-0.5 w-2 h-2 bg-white transition-all ${isSelected.actualActionDate ? 'left-[1.1rem]' : 'left-0.5'}`} />
+                        </div>
+                      </div>
+                      <span className="text-[9px] font-mono uppercase opacity-60 group-hover:opacity-100 transition-opacity">
+                        Already_Started
+                      </span>
+                    </label>
+
+                    {isSelected.actualActionDate && (
+                      <div className="mt-3 space-y-2 pl-11">
+                        <select
+                          value={isSelected.actualActionDate.action}
+                          onChange={e => updateActualActionDate(crop.id, {
+                            ...isSelected.actualActionDate!,
+                            action: e.target.value as 'start-indoors' | 'transplant' | 'direct-sow',
+                          })}
+                          className="w-full text-xs font-mono bg-black/40 border-2 border-border-primary/30 px-2 py-1.5 outline-none focus:border-accent uppercase"
+                        >
+                          {crop.startIndoors !== null && <option value="start-indoors" className="bg-background-primary">Start_Indoors</option>}
+                          {crop.transplant !== null    && <option value="transplant"    className="bg-background-primary">Transplant</option>}
+                          {crop.directSow !== null     && <option value="direct-sow"    className="bg-background-primary">Direct_Sow</option>}
+                        </select>
+                        <input
+                          type="date"
+                          max={todayIso}
+                          value={isSelected.actualActionDate.date}
+                          onChange={e => updateActualActionDate(crop.id, {
+                            ...isSelected.actualActionDate!,
+                            date: e.target.value,
+                          })}
+                          className="w-full text-xs font-mono bg-black/40 border-2 border-border-primary/30 px-2 py-1.5 outline-none focus:border-accent"
+                        />
+                        <p className="text-[8px] font-mono opacity-30 uppercase">
+                          All harvest + succession dates shift to match.
+                        </p>
+                      </div>
+                    )}
+                  </div>
                 </div>
               )}
             </div>

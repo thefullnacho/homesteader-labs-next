@@ -40,6 +40,24 @@ export function calculateCropSchedule(
     }
   }
 
+  // Apply actual-date anchoring if the user recorded a past action.
+  // Find the matching main planting entry, compute the delta between the
+  // predicted date and the actual date, then shift every date by that delta.
+  if (selectedCrop.actualActionDate) {
+    const { action, date: actualIso } = selectedCrop.actualActionDate;
+    // Anchor to the first (non-succession) occurrence of this action
+    const anchor = dates.find(d => d.action === action && !d.successionNumber);
+    if (anchor) {
+      const deltaMs = new Date(actualIso).getTime() - anchor.date.getTime();
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      return dates.map(d => {
+        const shifted = new Date(d.date.getTime() + deltaMs);
+        return { ...d, date: shifted, completed: shifted <= today };
+      });
+    }
+  }
+
   return dates;
 }
 

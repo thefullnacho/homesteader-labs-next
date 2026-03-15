@@ -103,12 +103,15 @@ export function useWeatherEmailCapture(locationCount: number) {
     }
   }, []);
 
-  const submitEmail = useCallback(async (emailValue: string, locationName?: string) => {
+  const submitEmail = useCallback(async (emailValue: string) => {
     setIsSubmitting(true);
     
-    // Simulate API call - replace with actual email service
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
+    await fetch("/api/subscribe", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: emailValue, type: captureType }),
+    });
+
     // Store subscription
     localStorage.setItem(STORAGE_KEY, JSON.stringify({
       email: emailValue,
@@ -116,9 +119,6 @@ export function useWeatherEmailCapture(locationCount: number) {
       isSubscribed: true,
       dismissedAt: null
     }));
-    
-    // TODO: Send to email service (ConvertKit, Mailchimp, etc.)
-    console.log("Email captured:", emailValue, "Type:", captureType, "Location:", locationName);
     
     setIsSubmitting(false);
     setIsSuccess(true);

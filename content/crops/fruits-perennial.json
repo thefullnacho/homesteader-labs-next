@@ -37,7 +37,7 @@
       { "method": "dehydrating", "shelfLifeMonths": 12, "notes": "Make fruit leather or dried slices" }
     ],
     "uses": ["cooking", "companion"],
-    "companions": ["bush-bean", "spinach", "borage", "thyme"],
+    "companions": ["beans-bush", "spinach", "borage", "thyme"],
     "antagonists": ["cabbage", "broccoli", "cauliflower"]
   },
   {
@@ -161,5 +161,47 @@
     "uses": ["cooking", "livestock-feed"],
     "companions": ["comfrey", "chives", "nasturtium", "daffodil"],
     "antagonists": ["cedar", "walnut"]
+  },
+  {
+    "id": "blackberry",
+    "name": "Blackberry",
+    "category": "fruit",
+    "icon": "🫐",
+    "varieties": [
+      { "id": "triple-crown", "name": "Triple Crown", "daysToMaturity": 365, "type": "Thornless Semi-Erect", "special": ["high-yield", "sweet"] }
+    ],
+    "startIndoors": null,
+    "transplant": 28,
+    "directSow": null,
+    "daysToMaturity": 365,
+    "successionEnabled": false,
+    "successionInterval": 0,
+    "successionMax": 1,
+    "sun": "full",
+    "spacing": "3-5' apart",
+    "notes": [
+      "Trellising is recommended to manage the vigorous canes",
+      "Fruits on second-year wood (floricanes)"
+    ],
+    "lunarAffinity": "waxing",
+    "growthHabit": "perennial",
+    "yearsToFirstHarvest": 1,
+    "waterNeedsPerWeek": 1.5,
+    "yield": {
+      "avgPerPlant": 8,
+      "unit": "lbs",
+      "caloriesPer100g": 43,
+      "proteinPer100g": 1.4,
+      "carbsPer100g": 9.6,
+      "fatPer100g": 0.5,
+      "storageLifeDays": 4
+    },
+    "preservation": [
+      { "method": "freezing", "shelfLifeMonths": 12, "notes": "Freeze in a single layer before bagging" },
+      { "method": "jam", "shelfLifeMonths": 18, "notes": "Water bath can as jam or preserves" }
+    ],
+    "uses": ["cooking", "medicinal"],
+    "companions": ["mint", "chives"],
+    "antagonists": ["raspberry"]
   }
 ]
