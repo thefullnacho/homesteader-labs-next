@@ -76,10 +76,14 @@ export default function RoiPage() {
       .sort((a, b) => b.kcalPerSqFt - a.kcalPerSqFt);
   }, []);
 
-  function handleUnlock(e: React.FormEvent) {
+  async function handleUnlock(e: React.FormEvent) {
     e.preventDefault();
     if (!consent) return;
-    // TODO: wire email to mailing list API
+    await fetch("/api/subscribe", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, type: "roi-unlock" }),
+    });
     localStorage.setItem(GATE_KEY, 'true');
     setUnlocked(true);
     setGateOpen(false);

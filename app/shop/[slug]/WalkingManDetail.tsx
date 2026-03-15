@@ -83,9 +83,11 @@ export default function WalkingManDetail({ product }: WalkingManDetailProps) {
     e.preventDefault();
     if (!email) return;
     setSubmitting(true);
-    // Simple no-backend capture — logs to console; wire to real endpoint when ready
-    await new Promise((r) => setTimeout(r, 600));
-    console.log("[WAITLIST]", email);
+    await fetch("/api/subscribe", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, type: "waitlist" }),
+    });
     setSubmitted(true);
     setSubmitting(false);
   };

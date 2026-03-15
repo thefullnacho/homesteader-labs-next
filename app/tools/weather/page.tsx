@@ -333,7 +333,7 @@ export default function WeatherPage() {
           type={captureType}
           locationName={activeLocation?.name}
           emergencyCondition={survivalIndex?.fireRisk.level === "extreme" ? "EXTREME FIRE RISK" : undefined}
-          onSubmit={(email) => submitEmail(email, activeLocation?.name)}
+          onSubmit={(email) => submitEmail(email)}
           onDismiss={dismiss}
           isSubmitting={isSubmitting}
           isSuccess={isSuccess}
