@@ -1,4 +1,4 @@
-import type { WeatherData, ForecastDay, HourlyForecast, WeatherAlert } from "./weatherTypes";
+import type { WeatherData, ForecastDay, HourlyForecast, WeatherAlert, NWSAlertFeature } from "./weatherTypes";
 
 interface OpenMeteoCurrent {
   temperature_2m: number;
@@ -410,18 +410,6 @@ export async function fetchWeatherAlerts(lat: number, lon: number): Promise<Weat
   }
 }
 
-interface NWSAlertFeature {
-  properties: {
-    id: string;
-    event: string;
-    severity: string;
-    headline?: string;
-    description?: string;
-    onset: string;
-    expires: string;
-    instruction?: string;
-  };
-}
 
 function mapNWSSeverity(severity: string): WeatherAlert['severity'] {
   switch (severity.toLowerCase()) {

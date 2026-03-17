@@ -67,6 +67,19 @@ export interface WeatherAlert {
   action?: string;
 }
 
+export interface NWSAlertFeature {
+  properties: {
+    id: string;
+    event: string;
+    severity: string;
+    headline?: string;
+    description?: string;
+    onset: string;
+    expires: string;
+    instruction?: string;
+  };
+}
+
 export interface SurvivalIndex {
   fireRisk: {
     level: "low" | "moderate" | "high" | "extreme";

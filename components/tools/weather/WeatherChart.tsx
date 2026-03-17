@@ -8,8 +8,8 @@ interface WeatherChartProps {
 
 export default function WeatherChart({ forecast }: WeatherChartProps) {
   const days = forecast.slice(0, 7);
-  
-  if (days.length === 0) return null;
+
+  if (days.length < 2) return null;
 
   const temps = days.flatMap(d => [d.minTemp, d.maxTemp]);
   const minTemp = Math.min(...temps) - 5;
@@ -126,7 +126,7 @@ export default function WeatherChart({ forecast }: WeatherChartProps) {
 
         {/* Day labels */}
         {days.map((d, i) => {
-          const date = new Date(d.date);
+          const date = new Date(`${d.date}T12:00:00`);
           const dayName = date.toLocaleDateString('en-US', { weekday: 'short' });
           return (
             <text

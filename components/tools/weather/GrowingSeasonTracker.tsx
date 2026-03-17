@@ -7,6 +7,7 @@ import Typography from "@/components/ui/Typography";
 import BrutalistBlock from "@/components/ui/BrutalistBlock";
 import type { ForecastDay } from "@/lib/weatherTypes";
 import { db } from "@/lib/db";
+import { useFieldStation } from "@/app/context/FieldStationContext";
 
 interface GrowingSeasonProps {
   forecast: ForecastDay[];
@@ -41,8 +42,16 @@ function toLocationKey(name: string) {
 export default function GrowingSeasonTracker({ forecast, locationName }: GrowingSeasonProps) {
   const year = new Date().getFullYear();
   const key = toLocationKey(locationName);
+  const { frostDates } = useFieldStation();
 
-  const seasonStart = useMemo(() => new Date(year, 2, 20), [year]);
+  // Use the user's actual last spring frost date if available; fall back to spring equinox
+  const seasonStart = useMemo(() => {
+    if (frostDates?.lastSpringFrost) {
+      const d = new Date(frostDates.lastSpringFrost);
+      return new Date(year, d.getMonth(), d.getDate());
+    }
+    return new Date(year, 2, 20);
+  }, [year, frostDates]);
   const daysSinceStart = Math.max(0, Math.floor((Date.now() - seasonStart.getTime()) / 86400000));
 
   // Historical GDD — persisted in IndexedDB, updated at most once per calendar day

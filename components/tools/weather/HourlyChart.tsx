@@ -9,8 +9,8 @@ interface HourlyChartProps {
 export default function HourlyChart({ hourly }: HourlyChartProps) {
   // Use the next 24 hours of data
   const data = hourly.slice(0, 24);
-  
-  if (data.length === 0) return null;
+
+  if (data.length < 2) return null;
 
   const temps = data.map(d => d.temperature);
   const minTemp = Math.min(...temps) - 5;
