@@ -1,10 +1,12 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useMemo } from "react";
+import { useLiveQuery } from "dexie-react-hooks";
 import { TrendingUp, Leaf, ThermometerSun } from "lucide-react";
 import Typography from "@/components/ui/Typography";
 import BrutalistBlock from "@/components/ui/BrutalistBlock";
 import type { ForecastDay } from "@/lib/weatherTypes";
+import { db } from "@/lib/db";
 
 interface GrowingSeasonProps {
   forecast: ForecastDay[];
@@ -26,66 +28,78 @@ const MILESTONES: SeasonMilestone[] = [
   { name: 'Peak Summer', gdd: 1500, description: 'Peak growing season', crops: ['🌽', '🍅', '🥒'] },
 ];
 
+const BASE_TEMP = 50;
+
+function todayISO() {
+  return new Date().toISOString().slice(0, 10);
+}
+
+function toLocationKey(name: string) {
+  return name.replace(/\s+/g, '_').toLowerCase();
+}
+
 export default function GrowingSeasonTracker({ forecast, locationName }: GrowingSeasonProps) {
-  const [seasonStart] = useState(() => {
-    // Start of growing season (spring equinox)
-    const year = new Date().getFullYear();
-    return new Date(year, 2, 20); // March 20
-  });
-  
-  const [totalGDD, setTotalGDD] = useState(0);
-  const [daysSinceStart, setDaysSinceStart] = useState(0);
-  
+  const year = new Date().getFullYear();
+  const key = toLocationKey(locationName);
+
+  const seasonStart = useMemo(() => new Date(year, 2, 20), [year]);
+  const daysSinceStart = Math.max(0, Math.floor((Date.now() - seasonStart.getTime()) / 86400000));
+
+  // Historical GDD — persisted in IndexedDB, updated at most once per calendar day
+  const record = useLiveQuery(
+    () => db.gdd.where('[locationKey+year]').equals([key, year]).first(),
+    [key, year]
+  );
+
+  // Forecast GDD — derived fresh every render, never stored
+  const forecastGDD = useMemo(() => {
+    return forecast.slice(0, 14).reduce((acc, day) => {
+      const avg = (day.maxTemp + day.minTemp) / 2;
+      return avg > BASE_TEMP ? acc + (avg - BASE_TEMP) : acc;
+    }, 0);
+  }, [forecast]);
+
+  const historicalGDD = record?.historicalGDD ?? 0;
+  const totalGDD = Math.round(historicalGDD + forecastGDD);
+
+  // Advance the stored historical GDD by one day's worth when the calendar day turns
   useEffect(() => {
-    // Load from localStorage
-    const stored = localStorage.getItem(`hl_gdd_${locationName.replace(/\s+/g, '_')}`);
-    if (stored) {
-      const data = JSON.parse(stored);
-      const storedYear = new Date(data.date).getFullYear();
-      // Reset if new year
-      if (storedYear === new Date().getFullYear()) {
-        setTotalGDD(data.gdd);
+    if (!forecast.length) return;
+    const today = todayISO();
+
+    async function maybeAdvanceDay() {
+      const existing = await db.gdd.where('[locationKey+year]').equals([key, year]).first();
+
+      if (!existing) {
+        await db.gdd.add({ locationKey: key, year, historicalGDD: 0, lastUpdated: today });
+        return;
       }
+
+      if (existing.lastUpdated === today) return;
+
+      // A new day has passed — fold forecast[0] (most recent day) into the historical total
+      const avg = (forecast[0].maxTemp + forecast[0].minTemp) / 2;
+      const dayGDD = avg > BASE_TEMP ? avg - BASE_TEMP : 0;
+
+      await db.gdd.update(existing.id!, {
+        historicalGDD: existing.historicalGDD + dayGDD,
+        lastUpdated: today,
+      });
     }
-  }, [locationName]);
-  
-  useEffect(() => {
-    // Calculate GDD from forecast
-    const baseTemp = 50;
-    let gdd = 0;
-    
-    forecast.slice(0, 14).forEach((day) => {
-      const avgTemp = (day.maxTemp + day.minTemp) / 2;
-      if (avgTemp > baseTemp) {
-        gdd += avgTemp - baseTemp;
-      }
-    });
-    
-    const newTotal = totalGDD + gdd;
-    setTotalGDD(newTotal);
-    
-    // Calculate days since season start
-    const days = Math.floor((Date.now() - seasonStart.getTime()) / (24 * 60 * 60 * 1000));
-    setDaysSinceStart(Math.max(0, days));
-    
-    // Save to localStorage
-    localStorage.setItem(
-      `hl_gdd_${locationName.replace(/\s+/g, '_')}`,
-      JSON.stringify({ gdd: newTotal, date: new Date().toISOString() })
-    );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [forecast, locationName]);
-  
+
+    maybeAdvanceDay();
+  }, [key, year, forecast]);
+
   const currentMilestone = MILESTONES.find((m, i) => {
     const prev = i === 0 ? 0 : MILESTONES[i - 1].gdd;
     return totalGDD >= prev && totalGDD < m.gdd;
   }) || MILESTONES[MILESTONES.length - 1];
-  
+
   const nextMilestone = MILESTONES.find(m => m.gdd > totalGDD);
-  const progressToNext = nextMilestone 
+  const progressToNext = nextMilestone
     ? ((totalGDD - (currentMilestone?.gdd || 0)) / (nextMilestone.gdd - (currentMilestone?.gdd || 0))) * 100
     : 100;
-  
+
   return (
     <BrutalistBlock className="p-6 border-green-900/40 bg-green-900/5" title="GROWING SEASON TRACKER" refTag="GDD_TRACKER_V1">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-4">
@@ -104,7 +118,7 @@ export default function GrowingSeasonTracker({ forecast, locationName }: Growing
             <span className="text-xs font-mono opacity-40 uppercase mb-1">Base 50°F</span>
           </div>
         </div>
-        
+
         {/* Days Since Spring */}
         <div className="flex flex-col gap-2 border-l-2 border-border-primary/20 pl-4">
           <div className="flex items-center gap-2 opacity-60">
@@ -120,7 +134,7 @@ export default function GrowingSeasonTracker({ forecast, locationName }: Growing
             <span className="text-xs font-mono opacity-40 uppercase mb-1">Days</span>
           </div>
         </div>
-        
+
         {/* Current Stage */}
         <div className="flex flex-col gap-2 border-l-2 border-border-primary/20 pl-4">
           <div className="flex items-center gap-2 opacity-60">
@@ -141,7 +155,7 @@ export default function GrowingSeasonTracker({ forecast, locationName }: Growing
           </div>
         </div>
       </div>
-      
+
       {/* Progress bar to next milestone */}
       {nextMilestone && (
         <div className="mt-8 pt-6 border-t border-border-primary/10">
@@ -154,7 +168,7 @@ export default function GrowingSeasonTracker({ forecast, locationName }: Growing
             </span>
           </div>
           <div className="w-full h-2 bg-background-secondary border border-border-primary/20 overflow-hidden">
-            <div 
+            <div
               className="h-full bg-accent transition-all duration-1000 ease-in-out"
               style={{ width: `${Math.min(progressToNext, 100)}%` }}
             />
