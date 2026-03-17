@@ -139,7 +139,10 @@ export async function fetchWeatherData(
     precipitation_unit: "inch",
   });
 
-  const response = await fetch(`${OPEN_METEO_BASE}/forecast?${params}`);
+  const [response, alerts] = await Promise.all([
+    fetch(`${OPEN_METEO_BASE}/forecast?${params}`),
+    fetchWeatherAlerts(lat, lon),
+  ]);
 
   if (!response.ok) {
     throw new Error(`Weather API error: ${response.status}`);
@@ -148,10 +151,11 @@ export async function fetchWeatherData(
   const data: OpenMeteoResponse = await response.json();
 
   const weatherData = transformWeatherData(data);
-  
+  weatherData.alerts = alerts;
+
   // Cache the result
   setCachedWeather(lat, lon, weatherData);
-  
+
   return weatherData;
 }
 

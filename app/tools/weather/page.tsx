@@ -29,6 +29,7 @@ import HourlyChart from "@/components/tools/weather/HourlyChart";
 import MoonPhaseDisplay from "@/components/tools/weather/MoonPhaseDisplay";
 import GrowingSeasonTracker from "@/components/tools/weather/GrowingSeasonTracker";
 import DashboardErrorBoundary from "@/components/ui/DashboardErrorBoundary";
+import WeatherAlertsBanner from "@/components/tools/weather/WeatherAlertsBanner";
 
 type DashboardMode = "SURVIVAL" | "PLANTING";
 
@@ -170,6 +171,11 @@ export default function WeatherPage() {
 
         {weather && (
           <div className="animate-in fade-in duration-500 space-y-8">
+
+            {/* ── ALERTS ─────────────────────────────────────── */}
+            {weather.alerts.length > 0 && (
+              <WeatherAlertsBanner alerts={weather.alerts} />
+            )}
 
             {/* ── CURRENT CONDITIONS ─────────────────────────── */}
             <TelemetryHeader weather={weather} />
