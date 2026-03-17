@@ -35,7 +35,7 @@ const PlantingDashboard = ({ index }: PlantingDashboardProps) => {
             {[
               { label: "7-DAY CYCLE", risk: index.frostRisk.next7Days },
               { label: "14-DAY CYCLE", risk: index.frostRisk.next14Days },
-              { label: "30-DAY CYCLE", risk: index.frostRisk.next30Days },
+              { label: "16-DAY CYCLE", risk: index.frostRisk.next30Days },
             ].map((period) => (
               <div key={period.label}>
                 <div className="flex justify-between items-end mb-2">

@@ -8,6 +8,7 @@ interface OpenMeteoCurrent {
   wind_speed_10m: number;
   wind_direction_10m: number;
   cloud_cover: number;
+  soil_temperature_0cm?: number;
 }
 
 interface OpenMeteoDaily {
@@ -118,6 +119,7 @@ export async function fetchWeatherData(
       "wind_speed_10m",
       "wind_direction_10m",
       "cloud_cover",
+      "soil_temperature_0cm",
     ].join(","),
     hourly: [
       "temperature_2m",
@@ -145,7 +147,7 @@ export async function fetchWeatherData(
       "sunset",
     ].join(","),
     timezone: "auto",
-    forecast_days: "14",
+    forecast_days: "16",
     temperature_unit: "fahrenheit",
     wind_speed_unit: "mph",
     precipitation_unit: "inch",
@@ -241,7 +243,7 @@ function transformWeatherData(data: OpenMeteoResponse): WeatherData {
       visibility: null, // Open-Meteo free tier doesn't provide visibility
       cloudCover: current.cloud_cover,
       precipitation: hourly.precipitation[0] || 0,
-      soilTemperature: daily.soil_temperature_0cm_mean?.[0],
+      soilTemperature: current.soil_temperature_0cm ?? daily.soil_temperature_0cm_mean?.[0],
     },
     forecast,
     alerts: [], // Open-Meteo doesn't provide alerts, would need separate API
@@ -636,9 +638,11 @@ export function getMoonPhase(date: Date = new Date()): MoonPhase {
   const illumination = Math.round((1 - Math.cos((lunarAge / synodicMonthDays) * 2 * Math.PI)) * 50);
   
   // Days until full moon
-  const daysUntilFull = lunarAge < synodicMonthDays / 2 
+  // Waxing: full moon is (half cycle - lunarAge) days away
+  // Waning: full moon is (1.5 cycles - lunarAge) days away — next cycle's full moon
+  const daysUntilFull = lunarAge < synodicMonthDays / 2
     ? Math.round((synodicMonthDays / 2) - lunarAge)
-    : Math.round(synodicMonthDays - lunarAge);
+    : Math.round((synodicMonthDays * 1.5) - lunarAge);
   
   // Days until new moon
   const daysUntilNew = Math.round(synodicMonthDays - lunarAge);

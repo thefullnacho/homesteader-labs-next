@@ -24,11 +24,6 @@ export interface WeatherData {
   lastUpdated: string;
 }
 
-export interface WeatherProvider {
-  name: string;
-  getCurrentWeather(lat: number, lon: number): Promise<WeatherData>;
-  getForecast(lat: number, lon: number): Promise<ForecastDay[]>;
-}
 
 export interface ForecastDay {
   date: string;

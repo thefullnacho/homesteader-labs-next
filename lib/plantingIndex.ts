@@ -30,33 +30,30 @@ export function calculatePlantingIndex(data: WeatherData): PlantingIndex {
 
 function calculateFrostRisk(forecast: ForecastDay[]): PlantingIndex["frostRisk"] {
   // Look at min temps for next 7, 14, and 30 days
-  const next7Days = forecast.slice(0, 7);
+  const next7Days  = forecast.slice(0, 7);
   const next14Days = forecast.slice(0, 14);
-  const next30Days = forecast.slice(0, 30);
+  const next16Days = forecast.slice(0, 16); // max available from Open-Meteo free tier
 
-  const minTemp7 = Math.min(...next7Days.map((d) => d.minTemp));
+  const minTemp7  = Math.min(...next7Days.map((d) => d.minTemp));
   const minTemp14 = Math.min(...next14Days.map((d) => d.minTemp));
-  const minTemp30 = next30Days.length > 0 ? Math.min(...next30Days.map((d) => d.minTemp)) : minTemp14;
+  const minTemp16 = Math.min(...(next16Days.length > 0 ? next16Days : next14Days).map((d) => d.minTemp));
 
-  // Frost threshold: 32°F (consider 28°F for hard freeze)
-  const risk7 = calculatePeriodRisk(minTemp7);
+  const risk7  = calculatePeriodRisk(minTemp7);
   const risk14 = calculatePeriodRisk(minTemp14);
-  const risk30 = calculatePeriodRisk(minTemp30);
+  const risk16 = calculatePeriodRisk(minTemp16);
 
-  // Calculate confidence based on proximity to 32°F
   const tempsNearFreezing = next7Days.filter(d => Math.abs(d.minTemp - 32) <= 5).length;
   let confidence: "high" | "medium" | "low";
   if (tempsNearFreezing === 0) confidence = "high";
   else if (tempsNearFreezing <= 2) confidence = "medium";
   else confidence = "low";
 
-  // Calculate variance for display purposes
   const tempVariance = calculateVariance(next7Days.map((d) => d.minTemp));
 
   return {
-    next7Days: risk7,
+    next7Days:  risk7,
     next14Days: risk14,
-    next30Days: risk30,
+    next30Days: risk16, // field kept for API compat; now reflects 16-day window
     confidence,
     variance: Math.round(tempVariance * 10) / 10,
   };
