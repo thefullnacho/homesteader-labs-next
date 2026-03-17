@@ -58,8 +58,11 @@ interface CacheEntry<T> {
   ttl: number;
 }
 
-const weatherCache = new Map<string, CacheEntry<WeatherData>>();
+// LRU cache: insertion order in a Map is stable, so deleting + re-inserting
+// on every hit keeps the oldest-accessed entry at the front for easy eviction.
 const WEATHER_CACHE_TTL = 5 * 60 * 1000; // 5 minutes
+const WEATHER_CACHE_MAX = 20;             // max location entries
+const weatherCache = new Map<string, CacheEntry<WeatherData>>();
 
 function getCacheKey(lat: number, lon: number): string {
   return `${lat.toFixed(2)},${lon.toFixed(2)}`;
@@ -68,21 +71,30 @@ function getCacheKey(lat: number, lon: number): string {
 function getCachedWeather(lat: number, lon: number): WeatherData | null {
   const key = getCacheKey(lat, lon);
   const entry = weatherCache.get(key);
-  
-  if (entry && Date.now() - entry.timestamp < entry.ttl) {
-    return entry.data;
+  if (!entry) return null;
+
+  if (Date.now() - entry.timestamp >= entry.ttl) {
+    weatherCache.delete(key);
+    return null;
   }
-  
-  return null;
+
+  // Promote to most-recently-used by re-inserting at the end
+  weatherCache.delete(key);
+  weatherCache.set(key, entry);
+  return entry.data;
 }
 
 function setCachedWeather(lat: number, lon: number, data: WeatherData): void {
   const key = getCacheKey(lat, lon);
-  weatherCache.set(key, {
-    data,
-    timestamp: Date.now(),
-    ttl: WEATHER_CACHE_TTL,
-  });
+  weatherCache.delete(key); // remove if already present before re-inserting
+
+  // Evict least-recently-used entry if at capacity
+  if (weatherCache.size >= WEATHER_CACHE_MAX) {
+    const lruKey = weatherCache.keys().next().value;
+    if (lruKey !== undefined) weatherCache.delete(lruKey);
+  }
+
+  weatherCache.set(key, { data, timestamp: Date.now(), ttl: WEATHER_CACHE_TTL });
 }
 
 export async function fetchWeatherData(
@@ -496,13 +508,21 @@ export async function fetchHistoricalComparison(lat: number, lon: number): Promi
 } | null> {
   try {
     const today = new Date();
-    
-    // Get historical data for this day of year using Open-Meteo's archive API
+
+    // Fetch a ±15-day window around today from the archive API instead of
+    // the full year — same data needed, ~30x less payload.
+    const windowStart = new Date(today);
+    windowStart.setDate(today.getDate() - 15);
+    const windowEnd = new Date(today);
+    windowEnd.setDate(today.getDate() + 15);
+
+    const toISO = (d: Date) => d.toISOString().split('T')[0];
+
     const params = new URLSearchParams({
       latitude: lat.toString(),
       longitude: lon.toString(),
-      start_date: `${today.getFullYear()}-01-01`,
-      end_date: `${today.getFullYear()}-12-31`,
+      start_date: toISO(windowStart),
+      end_date: toISO(windowEnd),
       daily: [
         'temperature_2m_max',
         'temperature_2m_min',
@@ -535,8 +555,8 @@ export async function fetchHistoricalComparison(lat: number, lon: number): Promi
       return {
         avgHigh: Math.round(avgHigh),
         avgLow: Math.round(avgHigh - 15), // Estimate
-        recordHigh: Math.round(Math.max(...data.daily.temperature_2m_max)),
-        recordLow: Math.round(Math.min(...data.daily.temperature_2m_min)),
+        recordHigh: Math.round(Math.max(...data.daily.temperature_2m_max)), // window high
+        recordLow: Math.round(Math.min(...data.daily.temperature_2m_min)),  // window low
         precipChance: 30, // Estimate
       };
     }
