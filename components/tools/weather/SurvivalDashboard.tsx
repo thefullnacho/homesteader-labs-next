@@ -11,6 +11,9 @@ interface SurvivalDashboardProps {
 }
 
 const SurvivalDashboard = ({ index }: SurvivalDashboardProps) => {
+  if (!index?.fireRisk || !index?.waterCatchment || !index?.sprayConditions || !index?.solarEfficiency || !index?.livestockStress) {
+    return null;
+  }
   const getRiskColor = (level: string): string => {
     switch (level) {
       case "low": return "#22c55e";

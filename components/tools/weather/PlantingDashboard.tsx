@@ -13,6 +13,9 @@ interface PlantingDashboardProps {
 }
 
 const PlantingDashboard = ({ index }: PlantingDashboardProps) => {
+  if (!index?.frostRisk || !index?.soilWorkability || !index?.plantingWindow || !index?.recommendations) {
+    return null;
+  }
   const getSoilStatusClass = (status: string): string => {
     switch (status) {
       case "workable": return "text-green-500";

@@ -28,6 +28,7 @@ import WeatherChart from "@/components/tools/weather/WeatherChart";
 import HourlyChart from "@/components/tools/weather/HourlyChart";
 import MoonPhaseDisplay from "@/components/tools/weather/MoonPhaseDisplay";
 import GrowingSeasonTracker from "@/components/tools/weather/GrowingSeasonTracker";
+import DashboardErrorBoundary from "@/components/ui/DashboardErrorBoundary";
 
 type DashboardMode = "SURVIVAL" | "PLANTING";
 
@@ -223,19 +224,25 @@ export default function WeatherPage() {
               </div>
 
               {mode === "SURVIVAL" && survivalIndex && (
-                <SurvivalDashboard index={survivalIndex} />
+                <DashboardErrorBoundary label="SURVIVAL_OPS">
+                  <SurvivalDashboard index={survivalIndex} />
+                </DashboardErrorBoundary>
               )}
 
               {mode === "PLANTING" && plantingIndex && (
-                <PlantingDashboard index={plantingIndex} />
+                <DashboardErrorBoundary label="PLANTING_LOG">
+                  <PlantingDashboard index={plantingIndex} />
+                </DashboardErrorBoundary>
               )}
 
               {mode === "PLANTING" && (
                 <div className="mt-8">
-                  <GrowingSeasonTracker
-                    forecast={weather.forecast}
-                    locationName={activeLocation?.name || 'default'}
-                  />
+                  <DashboardErrorBoundary label="GDD_TRACKER">
+                    <GrowingSeasonTracker
+                      forecast={weather.forecast}
+                      locationName={activeLocation?.name || 'default'}
+                    />
+                  </DashboardErrorBoundary>
                 </div>
               )}
             </div>
