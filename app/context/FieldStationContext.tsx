@@ -4,6 +4,7 @@ import { createContext, useContext, useState, useEffect, useCallback, ReactNode 
 import type { SavedLocation } from "@/lib/weatherTypes";
 import { FrostDates } from "@/lib/tools/planting-calendar/types";
 import { geocodeZipCode } from "@/lib/weatherApi";
+import { getFrostDatesByZone } from "@/lib/frostNormals";
 import {
   getLocations, putLocation, bulkPutLocations, deleteLocation,
   getFrostDates, saveFrostDates, deleteFrostDates,
@@ -51,77 +52,8 @@ export const getGrowingZoneFromZip = (zipCode: string): string | undefined => {
 };
 
 export const getMockFrostData = (zipCode: string): FrostDates => {
-  const zipNum = parseInt(zipCode.substring(0, 3), 10);
-
-  let lastFrostMonth = 4, lastFrostDay = 15;
-  let firstFrostMonth = 10, firstFrostDay = 15;
-  let zone = "6a";
-
-  if (zipNum >= 0 && zipNum <= 99) {
-    lastFrostMonth = 5; lastFrostDay = 10;
-    firstFrostMonth = 10; firstFrostDay = 1;
-    zone = "5b";
-  } else if (zipNum >= 100 && zipNum <= 199) {
-    lastFrostMonth = 4; lastFrostDay = 20;
-    firstFrostMonth = 10; firstFrostDay = 15;
-    zone = "6b";
-  } else if (zipNum >= 200 && zipNum <= 299) {
-    lastFrostMonth = 4; lastFrostDay = 5;
-    firstFrostMonth = 11; firstFrostDay = 1;
-    zone = "7b";
-  } else if (zipNum >= 300 && zipNum <= 399) {
-    lastFrostMonth = 3; lastFrostDay = 15;
-    firstFrostMonth = 11; firstFrostDay = 15;
-    zone = "8b";
-  } else if (zipNum >= 400 && zipNum <= 499) {
-    lastFrostMonth = 4; lastFrostDay = 30;
-    firstFrostMonth = 10; firstFrostDay = 10;
-    zone = "6a";
-  } else if (zipNum >= 500 && zipNum <= 599) {
-    lastFrostMonth = 5; lastFrostDay = 15;
-    firstFrostMonth = 9; firstFrostDay = 20;
-    zone = "4b";
-  } else if (zipNum >= 600 && zipNum <= 699) {
-    lastFrostMonth = 4; lastFrostDay = 25;
-    firstFrostMonth = 10; firstFrostDay = 15;
-    zone = "5b";
-  } else if (zipNum >= 700 && zipNum <= 799) {
-    lastFrostMonth = 3; lastFrostDay = 10;
-    firstFrostMonth = 11; firstFrostDay = 20;
-    zone = "8a";
-  } else if (zipNum >= 800 && zipNum <= 899) {
-    lastFrostMonth = 5; lastFrostDay = 5;
-    firstFrostMonth = 10; firstFrostDay = 5;
-    zone = "5b";
-  } else if (zipNum >= 900 && zipNum <= 999) {
-    if (zipNum >= 900 && zipNum <= 930) {
-      lastFrostMonth = 2; lastFrostDay = 15;
-      firstFrostMonth = 12; firstFrostDay = 15;
-      zone = "10a";
-    } else {
-      lastFrostMonth = 3; lastFrostDay = 25;
-      firstFrostMonth = 11; firstFrostDay = 5;
-      zone = "8b";
-    }
-  }
-
-  const currentMonth = new Date().getMonth();
-  const currentYear = new Date().getFullYear();
-  const targetYear = currentMonth >= 9 ? currentYear + 1 : currentYear;
-
-  const lastFrost = new Date(targetYear, lastFrostMonth - 1, lastFrostDay);
-  const firstFrost = new Date(targetYear, firstFrostMonth - 1, firstFrostDay);
-  const frostFreeDays = Math.round((firstFrost.getTime() - lastFrost.getTime()) / (1000 * 60 * 60 * 24));
-
-  return {
-    zipCode,
-    lastSpringFrost: lastFrost,
-    lastSpringFrostConfidence: 7,
-    firstFallFrost: firstFrost,
-    firstFallFrostConfidence: 10,
-    frostFreeDays,
-    growingZone: zone,
-  };
+  const zone = getGrowingZoneFromZip(zipCode) ?? "6a";
+  return getFrostDatesByZone(zone, zipCode);
 };
 
 const FieldStationContext = createContext<FieldStationState | undefined>(undefined);

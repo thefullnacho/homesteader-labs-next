@@ -332,13 +332,6 @@ export function parseCoordinates(latStr: string, lonStr: string): { lat: number;
   };
 }
 
-// Fetch historical frost data to calculate typical frost dates
-export async function fetchHistoricalFrostData(): Promise<{ lastSpringFrost: string; firstFallFrost: string; avgGrowingDays: number } | null> {
-  // This would typically fetch from a climate API
-  // For now, return null - in production, you'd use NOAA/NWS or similar
-  return null;
-}
-
 // Fetch weather alerts from NWS API
 export async function fetchWeatherAlerts(lat: number, lon: number): Promise<WeatherAlert[]> {
   try {

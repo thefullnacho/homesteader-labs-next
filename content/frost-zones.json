@@ -1,0 +1,26 @@
+{
+  "_source": "NOAA 1991-2020 U.S. Climate Normals — last/first 32°F dates at 50% probability by USDA hardiness zone",
+  "_note": "varianceDays reflects typical ±spread in the 10th–90th percentile window for each zone",
+  "zones": {
+    "1a": { "lastSpringFrost": "06-20", "firstFallFrost": "07-25", "frostFreeDays": 35,  "lastFrostVarianceDays": 21, "firstFrostVarianceDays": 21 },
+    "1b": { "lastSpringFrost": "06-10", "firstFallFrost": "08-05", "frostFreeDays": 56,  "lastFrostVarianceDays": 21, "firstFrostVarianceDays": 21 },
+    "2a": { "lastSpringFrost": "05-25", "firstFallFrost": "08-20", "frostFreeDays": 87,  "lastFrostVarianceDays": 18, "firstFrostVarianceDays": 18 },
+    "2b": { "lastSpringFrost": "05-15", "firstFallFrost": "09-01", "frostFreeDays": 109, "lastFrostVarianceDays": 18, "firstFrostVarianceDays": 18 },
+    "3a": { "lastSpringFrost": "05-10", "firstFallFrost": "09-10", "frostFreeDays": 123, "lastFrostVarianceDays": 16, "firstFrostVarianceDays": 16 },
+    "3b": { "lastSpringFrost": "05-01", "firstFallFrost": "09-20", "frostFreeDays": 142, "lastFrostVarianceDays": 16, "firstFrostVarianceDays": 16 },
+    "4a": { "lastSpringFrost": "05-10", "firstFallFrost": "09-15", "frostFreeDays": 128, "lastFrostVarianceDays": 14, "firstFrostVarianceDays": 14 },
+    "4b": { "lastSpringFrost": "05-05", "firstFallFrost": "09-22", "frostFreeDays": 140, "lastFrostVarianceDays": 14, "firstFrostVarianceDays": 14 },
+    "5a": { "lastSpringFrost": "04-20", "firstFallFrost": "10-05", "frostFreeDays": 168, "lastFrostVarianceDays": 12, "firstFrostVarianceDays": 12 },
+    "5b": { "lastSpringFrost": "04-01", "firstFallFrost": "10-22", "frostFreeDays": 204, "lastFrostVarianceDays": 12, "firstFrostVarianceDays": 12 },
+    "6a": { "lastSpringFrost": "03-25", "firstFallFrost": "11-01", "frostFreeDays": 221, "lastFrostVarianceDays": 10, "firstFrostVarianceDays": 10 },
+    "6b": { "lastSpringFrost": "03-15", "firstFallFrost": "11-10", "frostFreeDays": 240, "lastFrostVarianceDays": 10, "firstFrostVarianceDays": 10 },
+    "7a": { "lastSpringFrost": "03-05", "firstFallFrost": "11-20", "frostFreeDays": 260, "lastFrostVarianceDays": 10, "firstFrostVarianceDays": 10 },
+    "7b": { "lastSpringFrost": "02-22", "firstFallFrost": "11-28", "frostFreeDays": 279, "lastFrostVarianceDays": 9,  "firstFrostVarianceDays": 9  },
+    "8a": { "lastSpringFrost": "02-15", "firstFallFrost": "12-05", "frostFreeDays": 293, "lastFrostVarianceDays": 9,  "firstFrostVarianceDays": 9  },
+    "8b": { "lastSpringFrost": "02-08", "firstFallFrost": "12-12", "frostFreeDays": 307, "lastFrostVarianceDays": 8,  "firstFrostVarianceDays": 8  },
+    "9a": { "lastSpringFrost": "01-25", "firstFallFrost": "12-20", "frostFreeDays": 329, "lastFrostVarianceDays": 7,  "firstFrostVarianceDays": 7  },
+    "9b": { "lastSpringFrost": "01-10", "firstFallFrost": "12-28", "frostFreeDays": 352, "lastFrostVarianceDays": 7,  "firstFrostVarianceDays": 7  },
+    "10a": { "lastSpringFrost": "02-08", "firstFallFrost": "12-10", "frostFreeDays": 305, "lastFrostVarianceDays": 6, "firstFrostVarianceDays": 6  },
+    "10b": { "lastSpringFrost": "01-01", "firstFallFrost": "12-31", "frostFreeDays": 365, "lastFrostVarianceDays": 5, "firstFrostVarianceDays": 5  }
+  }
+}
