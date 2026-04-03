@@ -61,11 +61,11 @@ export default function Home() {
         </BrutalistBlock>
       </section>
 
-      {/* Featured Products */}
-      <FeaturedProducts />
-
       {/* Tools Showcase */}
       <ToolsShowcase />
+
+      {/* Featured Products */}
+      <FeaturedProducts />
 
       {/* Recent Archive Posts */}
       <RecentArchivePosts />
