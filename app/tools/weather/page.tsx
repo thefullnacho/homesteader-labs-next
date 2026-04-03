@@ -11,6 +11,7 @@ import { calculatePlantingIndex } from "@/lib/plantingIndex";
 import type { WeatherData } from "@/lib/weatherTypes";
 
 import FieldStationLayout from "@/components/ui/FieldStationLayout";
+import FieldStationBridge from "@/components/ui/FieldStationBridge";
 import BrutalistBlock from "@/components/ui/BrutalistBlock";
 import Typography from "@/components/ui/Typography";
 import Badge from "@/components/ui/Badge";
@@ -351,6 +352,8 @@ export default function WeatherPage() {
           isSubmitting={isSubmitting}
           isSuccess={isSuccess}
         />
+
+        <FieldStationBridge currentOps="WEATHER" />
 
       </div>
     </FieldStationLayout>

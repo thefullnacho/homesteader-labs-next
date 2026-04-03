@@ -13,6 +13,7 @@ import { SelectedCrop, PlantingDate } from "@/lib/tools/planting-calendar/types"
 import { getCropById } from "@/lib/tools/planting-calendar/crops";
 import { calculateCropSchedule } from "@/lib/tools/planting-calendar/plantingCalculations";
 import FieldStationLayout from "@/components/ui/FieldStationLayout";
+import FieldStationBridge from "@/components/ui/FieldStationBridge";
 import Typography from "@/components/ui/Typography";
 import BrutalistBlock from "@/components/ui/BrutalistBlock";
 import Badge from "@/components/ui/Badge";
@@ -243,6 +244,8 @@ export default function PlantingCalendarPage() {
           isSubmitting={isSubmitting}
           isSuccess={isSuccess}
         />
+
+        <FieldStationBridge currentOps="PLANT" />
 
         {/* Footer Info */}
         <div className="pt-12 pb-8 flex flex-col items-center gap-4 border-t border-border-primary/10 opacity-20 font-mono print:hidden">

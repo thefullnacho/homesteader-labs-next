@@ -50,8 +50,8 @@ export default function Home() {
 
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button href="/tools/planting-calendar/" variant="primary">
-                Try Free Tools
+              <Button href="/tools/" variant="primary">
+                Enter Field Station
               </Button>
               <Button href="/shop/" variant="secondary">
                 Browse Hardware

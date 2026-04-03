@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import FieldStationLayout from '@/components/ui/FieldStationLayout';
+import FieldStationBridge from '@/components/ui/FieldStationBridge';
 import SetupWizard from '@/components/tools/caloric-security/SetupWizard';
 import AutonomyDashboard from '@/components/tools/caloric-security/AutonomyDashboard';
 import { isFirstRun, getConfig } from '@/lib/caloric-security/homesteadStore';
@@ -65,11 +66,14 @@ export default function CaloricSecurityPage() {
 
   return (
     <FieldStationLayout stationId="HL_CALORIC_SEC_V1.0">
-      <AutonomyDashboard
-        forecastDays={forecast}
-        onReconfigure={() => { setEditConfig(null); setNeedsSetup(true); }}
-        onEditConfig={handleEditConfig}
-      />
+      <>
+        <AutonomyDashboard
+          forecastDays={forecast}
+          onReconfigure={() => { setEditConfig(null); setNeedsSetup(true); }}
+          onEditConfig={handleEditConfig}
+        />
+        <FieldStationBridge currentOps="SURVIVAL" />
+      </>
     </FieldStationLayout>
   );
 }

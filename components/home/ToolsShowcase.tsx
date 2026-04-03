@@ -5,19 +5,27 @@ import Typography from "@/components/ui/Typography";
 
 const tools = [
   {
-    id: "caloric-security",
-    name: "Caloric_Security",
-    description: "Three survival clocks — Days of Food, Water, and Energy. Inventory tracking, frost guard, and solar alerts.",
-    icon: "shield",
-    href: "/tools/caloric-security/",
+    id: "weather",
+    name: "WEATHER_OPS",
+    description: "What's happening right now and what can I do today. Frost probability, soil workability, GDD, solar capture, catchment efficiency.",
+    icon: "cloud",
+    href: "/tools/weather/",
     status: "ONLINE"
   },
   {
     id: "planting-calendar",
-    name: "Planting_Calendar",
-    description: "Frost-date-anchored planting schedules for 54 crops. Succession planting, lunar sync, and actual-date anchoring.",
+    name: "PLANT_OPS",
+    description: "What to plant, when to plant it, and how to extend your season. Zone-calibrated, succession logic, lunar sync, 54 crops.",
     icon: "sprout",
     href: "/tools/planting-calendar/",
+    status: "ONLINE"
+  },
+  {
+    id: "caloric-security",
+    name: "SURVIVAL_OPS",
+    description: "How long can your homestead sustain itself. Days of food, water, and energy. Caloric ROI, household profile, canning protocols.",
+    icon: "shield",
+    href: "/tools/caloric-security/",
     status: "ONLINE"
   },
   {
@@ -28,14 +36,6 @@ const tools = [
     href: "/tools/fabrication/",
     status: "ONLINE"
   },
-  {
-    id: "weather",
-    name: "Weather_Station",
-    description: "Real-time weather data from the field. Temperature, humidity, pressure, forecasts.",
-    icon: "cloud",
-    href: "/tools/weather/",
-    status: "ONLINE"
-  }
 ];
 
 const IconMap = {
@@ -49,7 +49,7 @@ export default function ToolsShowcase() {
   return (
     <section className="mb-12">
       <div className="flex justify-between items-end mb-6 border-b-2 border-border-primary pb-2">
-        <Typography variant="h3" className="mb-0">Field_Tools</Typography>
+        <Typography variant="h3" className="mb-0">HL_SYS_OPS // Field_Station</Typography>
         <span className="text-xs text-foreground-secondary font-mono">
           STATUS: OPERATIONAL
         </span>
