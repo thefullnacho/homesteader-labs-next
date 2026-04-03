@@ -3,22 +3,27 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --hostname 0.0.0.0 --experimental-https",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
     "test": "vitest"
   },
   "dependencies": {
+    "@keystatic/core": "^0.5.48",
+    "@keystatic/next": "^5.0.4",
     "@mdx-js/loader": "^3.1.1",
     "@mdx-js/react": "^3.1.1",
     "@types/three": "^0.182.0",
+    "dexie": "^4.3.0",
+    "dexie-react-hooks": "^4.2.0",
     "gray-matter": "^4.0.3",
     "lucide-react": "^0.474.0",
     "next": "14.2.21",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "remark-gfm": "^4.0.1",
+    "resend": "^6.9.3",
     "three": "^0.182.0"
   },
   "devDependencies": {

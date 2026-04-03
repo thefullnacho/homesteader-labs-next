@@ -1,0 +1,212 @@
+---
+title: "Build Log: Survival Index"
+description: "How and why we built the homestead survival index — the design choices behind fire risk, livestock stress, solar efficiency, and water catchment calculations."
+date: "2026-03-08"
+author: "Eli Rowe"
+tags: ["build-log", "weather", "algorithms", "open-meteo", "fire-risk"]
+category: "build-log"
+excerpt: "Weather apps give you a forecast. A homestead needs decisions. Here's how we built the survival index — every design choice, every formula, and why we made the tradeoffs we did."
+---
+
+# Build log: survival index
+
+Weather apps give you a forecast. A homestead needs decisions.
+
+The gap between "it's going to be hot and dry tomorrow" and "don't burn anything and stage your water tanks" is the problem we were solving. The survival index is what fills that gap.
+
+---
+
+## Why build it at all
+
+The tools that exist are built for commuters and event planners. AccuWeather tells you whether to bring an umbrella. The National Weather Service issues alerts when conditions are already dangerous. Neither answers the homestead question: **what do I need to do today to be ready for tomorrow?**
+
+We wanted a system that:
+1. Translates weather data into homestead-specific risk scores
+2. Requires no account, no API key, no subscription
+3. Works in the browser with no backend
+4. Produces actionable outputs, not readouts
+
+Open-Meteo made this possible.
+
+---
+
+## Data source: Open-Meteo
+
+Open-Meteo is a free, open-source weather API. No API key, no account, no rate limit for reasonable use. It provides:
+
+- 14-day hourly and daily forecasts
+- Soil temperature at multiple depths
+- Air quality index (separate endpoint)
+- UV index
+- Wind gusts, not just sustained wind
+- Precipitation probability and expected accumulation
+
+The "no auth" constraint was deliberate. One of our design principles is **offline-first philosophy**: the tools should degrade gracefully without accounts, servers, or paid services. Open-Meteo aligns with that. If it ever disappears, we can swap in NOAA's public API — the calculation layer is completely separate from the data-fetch layer.
+
+The fetch lives in `lib/weatherApi.ts`. The survival index calculations in `lib/survivalIndex.ts` receive plain data objects. They have no knowledge of where the data came from.
+
+---
+
+## Fire risk: additive scoring, capped at 100
+
+The fire risk score is built from four independent factors. Each contributes a fixed number of points. The total is capped at 100.
+
+```
+fireRisk = tempScore + humidityScore + windScore + drySpellScore
+fireRisk = min(100, fireRisk)
+```
+
+**Temperature scoring:**
+
+```
+temp >= 90°F  → +30 points
+temp >= 80°F  → +20 points
+temp >= 75°F  → +10 points
+```
+
+**Humidity scoring (inverted — low humidity = high risk):**
+
+```
+humidity < 20% → +30 points
+humidity < 30% → +20 points
+humidity < 40% → +10 points
+```
+
+**Wind scoring:**
+
+```
+wind > 25 mph → +25 points
+wind > 15 mph → +15 points
+```
+
+**Dry spell scoring:**
+
+```
+days_since_rain >= 14 → +15 points
+days_since_rain >= 7  → +10 points
+days_since_rain >= 3  → +5 points
+```
+
+**Why additive?**
+
+The alternative — a multiplicative model or a weighted formula — would let a single extreme factor produce a misleadingly high score, or let moderate conditions across all factors be masked by a low score in one. The additive model is transparent: you can look at the score and trace exactly which factors contributed.
+
+Hot, dry, windy, and drought-dry is a 100. Cool, humid, calm, and recently rained is a 0. Reality lives between those extremes. The score reflects which combination you are actually facing.
+
+---
+
+## Livestock stress: the NOAA nine-term polynomial
+
+For heat stress, we use the official NOAA heat index formula. Not a simplified version — the full nine-term polynomial:
+
+```
+HI = -42.379
+   + 2.04901523 × T
+   + 10.14333127 × RH
+   - 0.22475541 × T × RH
+   - 6.83783e-3 × T²
+   - 5.481717e-2 × RH²
+   + 1.22874e-3 × T² × RH
+   + 8.5282e-4 × T × RH²
+   - 1.99e-6 × T² × RH²
+```
+
+Where `T` is temperature in °F and `RH` is relative humidity as a percentage.
+
+**Why use the official standard?**
+
+This is a formula used to make animal welfare decisions. If someone sees "severe stress" and acts on it — or doesn't act on it — they are trusting the number we show them. Using a simplified approximation that diverges from the NOAA standard in edge cases is not acceptable when the edge cases are exactly where the stakes are highest.
+
+The formula is also used by veterinary extension services, livestock producers, and USDA guidance. Using the same standard means our scores can be compared to existing guidance rather than recalibrated from scratch.
+
+For cold stress, we use the NWS wind chill formula:
+
+```
+WC = 35.74 + 0.6215 × T - 35.75 × V^0.16 + 0.4275 × T × V^0.16
+```
+
+Where `V` is wind speed in mph and `T` is temperature in °F. This formula applies when `T <= 50°F` and `V > 3 mph`.
+
+---
+
+## Solar efficiency: cloud factor × day length × 0.5
+
+Solar efficiency is the simplest calculation in the index:
+
+```
+cloud_factor = 1 - (cloud_cover_percent / 100)
+peak_hours = day_length_hours × cloud_factor × 0.5
+```
+
+The `0.5` multiplier is a deliberate simplification. Real panel output depends on:
+- Panel tilt and azimuth relative to sun angle
+- Shading from trees, structures, or terrain
+- Panel age and soiling
+- Inverter efficiency
+- Diffuse vs. direct irradiance
+
+We do not have user panel configuration. We cannot compute real watt-hours without knowing tilt angle, panel wattage, and bank size. So we do not try.
+
+What we compute is a **planning proxy**: a dimensionless estimate of relative daily output quality. A 6-hour estimate is better than a 2-hour estimate; both are better than ignoring the forecast entirely. We are honest in the UI about what the number represents.
+
+> If you need watt-hour projections for solar system sizing, use PVWatts (NREL) with your panel specs entered directly. The efficiency index is a daily planning tool, not a system design tool.
+
+---
+
+## Water catchment: probability and amount together
+
+The water catchment rating combines two factors that must both be above threshold to produce a useful rating:
+
+```
+if precipitation_probability >= threshold_prob
+   AND precipitation_amount >= threshold_amount:
+       rate as Good or Excellent
+```
+
+The specific thresholds:
+
+| Rating | Probability | Amount |
+|--------|-------------|--------|
+| Poor | Any | < 0.1 in |
+| Fair | >= 30% | >= 0.1 in |
+| Good | >= 60% | >= 0.25 in |
+| Excellent | >= 80% | >= 0.5 in |
+
+**Why require both?**
+
+A high probability of trace precipitation is not a collection event. A 100% chance of 0.01 inches of rain will not move the needle on a 500-gallon cistern. Conversely, a forecast for 1 inch of rain at 20% probability is not worth staging your full collection infrastructure for.
+
+You need both confidence that rain is coming and confidence that the amount is worth acting on. The AND gate enforces that logic.
+
+---
+
+## Pure functions throughout
+
+Every calculation in `lib/survivalIndex.ts` is a pure function:
+
+```typescript
+function calculateFireRisk(temp: number, humidity: number, windSpeed: number, daysSinceRain: number): number
+function calculateHeatIndex(tempF: number, humidity: number): number
+function calculateSolarEfficiency(cloudCover: number, dayLengthHours: number): number
+function calculateWaterCatchment(precipProb: number, precipAmount: number): CatchmentRating
+```
+
+No side effects. No internal state. No async. Same inputs always produce the same outputs.
+
+This matters for three reasons:
+
+1. **Testability** — every function has a test suite that runs without browser globals, network calls, or mocked providers. The tests use real numeric inputs and assert real numeric outputs.
+2. **Replayability** — given a historical weather dataset, you can run the full index against any past date and get the same results that would have been shown at the time. This enables backtesting survival decisions against historical records.
+3. **Auditability** — a user (or a developer, or a reviewer) can look at the code, trace a score from input to output, and verify that it is correct. There are no magic constants hidden in state.
+
+---
+
+## What's next
+
+Two extensions are already within reach of the current architecture:
+
+**Drought index** — a rolling GDD-based precipitation deficit. Open-Meteo already returns soil moisture data. The calculation would be a rolling 30-day deficit against historical averages.
+
+**Historical comparison** — the Open-Meteo archive API is already wired into the data layer. We can fetch the same weather variables for any past date range and show current conditions against the 10-year average for this week. That context — "this is the 4th driest March in a decade" — changes how you interpret a fire risk score of 40.
+
+The pure function architecture means adding these requires no refactoring. Write the function, wire it to the existing data fetch, test it.

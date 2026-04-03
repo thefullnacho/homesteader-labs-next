@@ -20,11 +20,16 @@ export const products: Product[] = [
     name: "WALKING MAN PRO",
     price: 299,
     category: "HARDWARE",
-    description: "RPi 5 + E-Ink + Coral Edge TPU + Sony IMX500 AI Cam + BLE Sensor Suite. Offline foraging AI: 95% plant ID, yield sims. 40hr AA runtime.",
-    specs: ["RPI5_8GB", "MOBILENETV3_CUSTOM", "BLE_SENSORSx4", "IP67", "OFFLINE_TTS"],
-    image: "/images/pro-render.jpg",
-    stock: 12,
-    features: ["Thanksgiving-trained model: Deadly/edible bias (79% acc)", "Solar trickle"]
+    description: "RPi 5 + Hailo 8L NPU + Waveshare 4.2\" e-ink + RPi Camera Module 3. Offline field identification: 95–96% accuracy across 15 species and deadly lookalikes. No cloud, no signal required.",
+    specs: ["RPI5_8GB", "HAILO_8L_NPU", "4.2IN_EINK", "RPi_CAM_3", "BLE_SENSORSx4", "OFFLINE_FIRST"],
+    stock: "PRE-ORDER",
+    features: [
+      "95–96% field ID accuracy — industry baseline ~76%",
+      "Multi-model cartridge convergence — mycologist, berry, herbalist",
+      "Hailo 8L: 8 TOPS dedicated NPU, runs all cartridges in parallel",
+      "Offline-first — no cloud dependency, works without signal",
+      "BLE sensor integration: humidity, air quality, radiation context (upcoming)"
+    ]
   },
   {
     id: "AFF-HELTEC-V3",

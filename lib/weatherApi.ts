@@ -1,4 +1,4 @@
-import type { WeatherData, ForecastDay, HourlyForecast, WeatherAlert } from "./weatherTypes";
+import type { WeatherData, ForecastDay, HourlyForecast, WeatherAlert, NWSAlertFeature } from "./weatherTypes";
 
 interface OpenMeteoCurrent {
   temperature_2m: number;
@@ -8,6 +8,7 @@ interface OpenMeteoCurrent {
   wind_speed_10m: number;
   wind_direction_10m: number;
   cloud_cover: number;
+  soil_temperature_0cm?: number;
 }
 
 interface OpenMeteoDaily {
@@ -58,8 +59,11 @@ interface CacheEntry<T> {
   ttl: number;
 }
 
-const weatherCache = new Map<string, CacheEntry<WeatherData>>();
+// LRU cache: insertion order in a Map is stable, so deleting + re-inserting
+// on every hit keeps the oldest-accessed entry at the front for easy eviction.
 const WEATHER_CACHE_TTL = 5 * 60 * 1000; // 5 minutes
+const WEATHER_CACHE_MAX = 20;             // max location entries
+const weatherCache = new Map<string, CacheEntry<WeatherData>>();
 
 function getCacheKey(lat: number, lon: number): string {
   return `${lat.toFixed(2)},${lon.toFixed(2)}`;
@@ -68,21 +72,30 @@ function getCacheKey(lat: number, lon: number): string {
 function getCachedWeather(lat: number, lon: number): WeatherData | null {
   const key = getCacheKey(lat, lon);
   const entry = weatherCache.get(key);
-  
-  if (entry && Date.now() - entry.timestamp < entry.ttl) {
-    return entry.data;
+  if (!entry) return null;
+
+  if (Date.now() - entry.timestamp >= entry.ttl) {
+    weatherCache.delete(key);
+    return null;
   }
-  
-  return null;
+
+  // Promote to most-recently-used by re-inserting at the end
+  weatherCache.delete(key);
+  weatherCache.set(key, entry);
+  return entry.data;
 }
 
 function setCachedWeather(lat: number, lon: number, data: WeatherData): void {
   const key = getCacheKey(lat, lon);
-  weatherCache.set(key, {
-    data,
-    timestamp: Date.now(),
-    ttl: WEATHER_CACHE_TTL,
-  });
+  weatherCache.delete(key); // remove if already present before re-inserting
+
+  // Evict least-recently-used entry if at capacity
+  if (weatherCache.size >= WEATHER_CACHE_MAX) {
+    const lruKey = weatherCache.keys().next().value;
+    if (lruKey !== undefined) weatherCache.delete(lruKey);
+  }
+
+  weatherCache.set(key, { data, timestamp: Date.now(), ttl: WEATHER_CACHE_TTL });
 }
 
 export async function fetchWeatherData(
@@ -106,6 +119,7 @@ export async function fetchWeatherData(
       "wind_speed_10m",
       "wind_direction_10m",
       "cloud_cover",
+      "soil_temperature_0cm",
     ].join(","),
     hourly: [
       "temperature_2m",
@@ -133,13 +147,16 @@ export async function fetchWeatherData(
       "sunset",
     ].join(","),
     timezone: "auto",
-    forecast_days: "14",
+    forecast_days: "16",
     temperature_unit: "fahrenheit",
     wind_speed_unit: "mph",
     precipitation_unit: "inch",
   });
 
-  const response = await fetch(`${OPEN_METEO_BASE}/forecast?${params}`);
+  const [response, alerts] = await Promise.all([
+    fetch(`${OPEN_METEO_BASE}/forecast?${params}`),
+    fetchWeatherAlerts(lat, lon),
+  ]);
 
   if (!response.ok) {
     throw new Error(`Weather API error: ${response.status}`);
@@ -148,10 +165,11 @@ export async function fetchWeatherData(
   const data: OpenMeteoResponse = await response.json();
 
   const weatherData = transformWeatherData(data);
-  
+  weatherData.alerts = alerts;
+
   // Cache the result
   setCachedWeather(lat, lon, weatherData);
-  
+
   return weatherData;
 }
 
@@ -225,7 +243,7 @@ function transformWeatherData(data: OpenMeteoResponse): WeatherData {
       visibility: null, // Open-Meteo free tier doesn't provide visibility
       cloudCover: current.cloud_cover,
       precipitation: hourly.precipitation[0] || 0,
-      soilTemperature: daily.soil_temperature_0cm_mean?.[0],
+      soilTemperature: current.soil_temperature_0cm ?? daily.soil_temperature_0cm_mean?.[0],
     },
     forecast,
     alerts: [], // Open-Meteo doesn't provide alerts, would need separate API
@@ -328,13 +346,6 @@ export function parseCoordinates(latStr: string, lonStr: string): { lat: number;
   };
 }
 
-// Fetch historical frost data to calculate typical frost dates
-export async function fetchHistoricalFrostData(): Promise<{ lastSpringFrost: string; firstFallFrost: string; avgGrowingDays: number } | null> {
-  // This would typically fetch from a climate API
-  // For now, return null - in production, you'd use NOAA/NWS or similar
-  return null;
-}
-
 // Fetch weather alerts from NWS API
 export async function fetchWeatherAlerts(lat: number, lon: number): Promise<WeatherAlert[]> {
   try {
@@ -399,18 +410,6 @@ export async function fetchWeatherAlerts(lat: number, lon: number): Promise<Weat
   }
 }
 
-interface NWSAlertFeature {
-  properties: {
-    id: string;
-    event: string;
-    severity: string;
-    headline?: string;
-    description?: string;
-    onset: string;
-    expires: string;
-    instruction?: string;
-  };
-}
 
 function mapNWSSeverity(severity: string): WeatherAlert['severity'] {
   switch (severity.toLowerCase()) {
@@ -499,13 +498,21 @@ export async function fetchHistoricalComparison(lat: number, lon: number): Promi
 } | null> {
   try {
     const today = new Date();
-    
-    // Get historical data for this day of year using Open-Meteo's archive API
+
+    // Fetch a ±15-day window around today from the archive API instead of
+    // the full year — same data needed, ~30x less payload.
+    const windowStart = new Date(today);
+    windowStart.setDate(today.getDate() - 15);
+    const windowEnd = new Date(today);
+    windowEnd.setDate(today.getDate() + 15);
+
+    const toISO = (d: Date) => d.toISOString().split('T')[0];
+
     const params = new URLSearchParams({
       latitude: lat.toString(),
       longitude: lon.toString(),
-      start_date: `${today.getFullYear()}-01-01`,
-      end_date: `${today.getFullYear()}-12-31`,
+      start_date: toISO(windowStart),
+      end_date: toISO(windowEnd),
       daily: [
         'temperature_2m_max',
         'temperature_2m_min',
@@ -538,8 +545,8 @@ export async function fetchHistoricalComparison(lat: number, lon: number): Promi
       return {
         avgHigh: Math.round(avgHigh),
         avgLow: Math.round(avgHigh - 15), // Estimate
-        recordHigh: Math.round(Math.max(...data.daily.temperature_2m_max)),
-        recordLow: Math.round(Math.min(...data.daily.temperature_2m_min)),
+        recordHigh: Math.round(Math.max(...data.daily.temperature_2m_max)), // window high
+        recordLow: Math.round(Math.min(...data.daily.temperature_2m_min)),  // window low
         precipChance: 30, // Estimate
       };
     }
@@ -619,9 +626,11 @@ export function getMoonPhase(date: Date = new Date()): MoonPhase {
   const illumination = Math.round((1 - Math.cos((lunarAge / synodicMonthDays) * 2 * Math.PI)) * 50);
   
   // Days until full moon
-  const daysUntilFull = lunarAge < synodicMonthDays / 2 
+  // Waxing: full moon is (half cycle - lunarAge) days away
+  // Waning: full moon is (1.5 cycles - lunarAge) days away — next cycle's full moon
+  const daysUntilFull = lunarAge < synodicMonthDays / 2
     ? Math.round((synodicMonthDays / 2) - lunarAge)
-    : Math.round(synodicMonthDays - lunarAge);
+    : Math.round((synodicMonthDays * 1.5) - lunarAge);
   
   // Days until new moon
   const daysUntilNew = Math.round(synodicMonthDays - lunarAge);

@@ -23,7 +23,7 @@ const ForecastGrid = ({ forecast }: ForecastGridProps) => {
       {forecast.slice(0, 7).map((day, i) => (
         <div key={day.date} className="min-w-[120px] flex-1 p-4 flex flex-col items-center group hover:bg-background-secondary transition-colors cursor-default">
             <Typography variant="small" className="font-mono text-[9px] mb-3 opacity-80 font-bold uppercase tracking-tighter">
-              {i === 0 ? "ENTRY TODAY" : new Date(day.date).toLocaleDateString("en-US", { weekday: "short" }).toUpperCase()}
+              {i === 0 ? "ENTRY TODAY" : new Date(`${day.date}T12:00:00`).toLocaleDateString("en-US", { weekday: "short" }).toUpperCase()}
             </Typography>
           
           <div className="text-2xl mb-4 group-hover:scale-110 transition-transform">

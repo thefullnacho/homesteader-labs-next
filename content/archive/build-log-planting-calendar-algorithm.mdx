@@ -1,0 +1,235 @@
+---
+title: "Build Log: Planting Calendar Algorithm"
+description: "The engineering behind the Homesteader Labs planting calendar — frost-date anchoring, viability checks, succession math, actual-date self-correction, and moon phase calculation."
+date: "2026-03-14"
+author: "Eli Rowe"
+tags: ["build-log", "planting", "algorithms", "lunar", "succession"]
+category: "build-log"
+excerpt: "Paper seed packets use calendar dates. That works if you live in the same climate as the packet author. We built something different — a calendar anchored to frost dates, self-correcting from real data, and deterministically synced to moon phase."
+---
+
+# Build log: planting calendar algorithm
+
+Paper seed packets use calendar dates. That works if you live in the same climate as the packet author.
+
+We built something different. The Homesteader Labs planting calendar is anchored to frost dates, not calendar dates. Every schedule it generates is location-specific from the first calculation. Here is how it works.
+
+---
+
+## The core insight: frost dates, not calendar dates
+
+Every date in the planting schedule is an offset from two anchor points:
+
+```
+lastSpringFrost   // the average date of final frost in spring at your location
+firstFallFrost    // the average date of first frost in autumn at your location
+```
+
+Start-indoors dates are calculated as:
+
+```
+startIndoors = lastSpringFrost - daysBeforeTransplant - indoorWeeks × 7
+```
+
+Transplant dates:
+
+```
+transplantDate = lastSpringFrost + daysAfterFrost
+```
+
+Harvest dates:
+
+```
+harvestDate = transplantDate + daysToMaturity
+```
+
+This makes the calendar **location-agnostic**. Enter a ZIP code in Maine and the dates reflect a short growing season. Enter a ZIP code in Georgia and the dates reflect a long one. The same algorithm, the same crop data, different frost anchors.
+
+The frost date lookup returns historical averages from NOAA's climate normals dataset, keyed by ZIP code. These are 30-year averages — statistically meaningful but not guarantees. We build buffer into start-indoors windows precisely because a late frost can still arrive after the historical average date.
+
+---
+
+## Viability check: the most important guard
+
+Before any planting cycle is added to the schedule, it passes a single viability check:
+
+```typescript
+if (harvestDate >= firstFrostDate) {
+  // Drop this planting — it cannot mature before frost
+  return null;
+}
+```
+
+If the calculated harvest date is on or after your first fall frost, the planting is not shown. At all.
+
+This is the most important design decision in the algorithm. Many calendar tools show you all possible planting windows and leave it to you to figure out which ones will actually work. That puts the math burden on the user, and most users do not do the math. They plant in August, watch their tomatoes get killed by frost, and blame the weather.
+
+The viability check makes the calendar take responsibility for showing only what can succeed. You may notice that some crops have fewer succession cycles than the theoretical maximum — that is the viability check dropping cycles that would not finish before frost. That is correct behavior.
+
+---
+
+## Succession planting math
+
+Succession planting is the practice of staggering the same crop in multiple batches to extend the harvest window. The calendar auto-calculates how many viable succession cycles fit in your growing season.
+
+```typescript
+const daysAvailable = firstFrostDate - firstViableSowDate;
+const rawCount = Math.floor(daysAvailable / intervalDays);
+const maxPlantings = Math.min(rawCount, crop.successionMax);
+```
+
+The `Math.floor()` is critical. You cannot schedule a partial planting cycle. If `daysAvailable / intervalDays` returns 3.8, you get 3 cycles — the fourth would not mature in time (and would fail the viability check anyway, which acts as a second guard).
+
+`crop.successionMax` is a per-crop ceiling defined in the crop JSON. Some crops have natural limits beyond the math — you probably do not need 12 successions of lettuce, and some crops do not succession-plant well even if the math says they could.
+
+Each succession cycle is then checked individually against the viability filter. If any cycle's harvest date is after first frost, it is dropped.
+
+---
+
+## Actual-date anchoring: self-correction
+
+The predicted schedule is the best guess before you have local evidence. Real growing deviates from averages. The self-correction mechanism captures that deviation.
+
+When you record an actual planting date, the calendar computes a delta:
+
+```typescript
+const delta = actualDate.getTime() - predictedDate.getTime();
+// delta in milliseconds, converted to days
+
+// Shift all remaining dates in this crop's schedule
+remainingDates.forEach(date => {
+  date.setTime(date.getTime() + delta);
+});
+
+// Mark the recorded event as completed
+event.status = 'completed';
+event.actualDate = actualDate;
+```
+
+If you transplanted 5 days later than predicted, your harvest window shifts 5 days later. If you direct-sowed 3 days early (your soil was ready), your harvest window moves 3 days earlier.
+
+The delta captures the **actual growing condition signal** that historical averages cannot. Your soil might warm faster than the regional average. Your microclimate might run warmer or colder. Your specific seed lot might germinate faster than the published days-to-maturity.
+
+After two or three seasons of recording actual dates, the accumulated deltas reflect your land's real behavior. The calendar does not average them across seasons — that is a future feature — but per-season recording still gives you a useful feedback loop within each growing year.
+
+> Record actual dates as events happen, not at season end. The delta is most useful applied in real time, shifting forward dates before you commit to the next task.
+
+---
+
+## Moon phase calculation: a fixed reference point
+
+Moon phase is calculated from a single known reference and the synodic month constant:
+
+```typescript
+const KNOWN_NEW_MOON = new Date('2000-01-06T18:14:00Z'); // Jan 6, 2000 at 18:14 UTC
+const SYNODIC_MONTH = 29.530588853; // days
+
+function getMoonPhase(date: Date): number {
+  const elapsed = (date.getTime() - KNOWN_NEW_MOON.getTime()) / (1000 * 60 * 60 * 24);
+  const cyclePosition = ((elapsed % SYNODIC_MONTH) + SYNODIC_MONTH) % SYNODIC_MONTH;
+  return cyclePosition / SYNODIC_MONTH; // 0 = new moon, 0.5 = full moon
+}
+```
+
+The January 6, 2000 reference is a well-documented astronomical new moon — the first new moon of the year 2000, occurring at 18:14 UTC. This is used as the reference point in many lunar calculation implementations.
+
+The synodic month (`29.530588853` days) is the average time between successive new moons. It is not constant — the moon's elliptical orbit means actual lunations vary by hours — but for planting timing, where we are advising on multi-day windows, the average is sufficient.
+
+**Why a fixed-reference calculation rather than an API?**
+
+- **Deterministic** — the same date always produces the same phase value. No network call, no API key, no service outage.
+- **Testable** — the function is pure. The test suite checks known moon dates against expected phase values.
+- **Replayable** — any past or future date can be computed instantly. No caching required.
+
+The phase value maps to an emoji and a waxing/waning classification:
+
+```typescript
+const phases = [
+  { min: 0,    max: 0.025, emoji: '🌑', name: 'new moon' },
+  { min: 0.025, max: 0.25, emoji: '🌒', name: 'waxing crescent' },
+  { min: 0.25,  max: 0.275, emoji: '🌓', name: 'first quarter' },
+  { min: 0.275, max: 0.5,  emoji: '🌔', name: 'waxing gibbous' },
+  { min: 0.5,   max: 0.525, emoji: '🌕', name: 'full moon' },
+  { min: 0.525, max: 0.75, emoji: '🌖', name: 'waning gibbous' },
+  { min: 0.75,  max: 0.775, emoji: '🌗', name: 'last quarter' },
+  { min: 0.775, max: 1.0,  emoji: '🌘', name: 'waning crescent' },
+];
+
+const isWaxing = phase < 0.5;
+```
+
+---
+
+## Lunar affinity by crop type
+
+Each crop in the JSON data carries a `lunarAffinity` field:
+
+```json
+{
+  "name": "Lettuce",
+  "lunarAffinity": "leaf",
+  ...
+}
+```
+
+Valid values: `leaf`, `root`, `neutral`.
+
+The alignment check:
+
+```typescript
+function getLunarAlignment(affinity: LunarAffinity, isWaxing: boolean): Alignment {
+  if (affinity === 'neutral') return 'neutral';
+  if (affinity === 'leaf' && isWaxing) return 'aligned';
+  if (affinity === 'root' && !isWaxing) return 'aligned';
+  return 'off-cycle';
+}
+```
+
+This is biodynamic planting tradition mapped directly to code. The tradition holds that:
+- Waxing moon (new → full): sap rises, germination energy increases, favorable for above-ground leafy crops
+- Waning moon (full → new): energy moves downward into roots, favorable for root crops and bulbs
+
+We do not make scientific claims about biodynamic efficacy. We implement the tradition accurately for growers who follow it, and we mark the feature clearly as optional. A grower who does not use lunar timing gets a correct schedule regardless of the moon phase indicator.
+
+---
+
+## Pure functions and test coverage
+
+Every calculation in the planting calendar is a pure function:
+
+```typescript
+// From lib/plantingIndex.ts
+function calculateFrostRisk(forecastTemps: number[], thresholdF: number): FrostRisk
+function calculateSoilWorkability(soilTempC: number, precipMm: number): WorkabilityStatus
+function calculateGDD(highF: number, lowF: number, baseF?: number): number
+
+// From lib/tools/planting-calendar/plantingCalculations.ts
+function calculateSuccessionDates(crop: Crop, lastFrost: Date, firstFrost: Date): PlantingCycle[]
+function applyActualDateDelta(cycle: PlantingCycle, event: PlantingEvent, actualDate: Date): PlantingCycle
+function getMoonPhase(date: Date): number
+function getLunarAlignment(affinity: LunarAffinity, phase: number): Alignment
+```
+
+The test suite in `plantingIndex.test.ts` and `plantingCalculations.test.ts` runs against real date fixtures. Tests check known frost date scenarios, known moon phase dates, and specific succession edge cases (cycles that fail viability, crops with zero viable successions, delta application at season boundary).
+
+Running the tests:
+
+```bash
+npm run test
+# or for just the planting tests:
+npx vitest run lib/plantingIndex.test.ts
+```
+
+Pure functions make the test suite fast and deterministic. No database, no network, no mocked providers. The tests run in under a second and catch regressions immediately.
+
+---
+
+## What's next
+
+Two extensions fit cleanly into the existing architecture:
+
+**Grow-zone-aware variety filtering** — filter the crop browser to show only varieties rated for your USDA hardiness zone. The crop JSON already has zone ratings; the UI filter is not wired yet.
+
+**Canning day predictor integration** — the planting calendar knows your expected harvest dates. The canning day predictor (planned) would take those dates and produce a processing schedule: when to have jars washed, when pectin needs to be on hand, which weeks are high-volume. The two tools share the same frost date and location context already.
+
+The frost-date-anchored architecture handles both without redesign. Add the filter logic to the crop loader, wire the output dates to the canning predictor's input — the calculation layer does not change.

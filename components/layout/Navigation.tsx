@@ -35,8 +35,14 @@ export default function Navigation() {
           <Link href="/archive/">
             <DymoLabel className="opacity-80 hover:opacity-100 scale-90">ARCHIVE</DymoLabel>
           </Link>
+          <Link href="/tools/">
+            <DymoLabel className="opacity-80 hover:opacity-100 scale-90">FIELD_STA</DymoLabel>
+          </Link>
           <Link href="/tools/planting-calendar/">
             <DymoLabel className="opacity-80 hover:opacity-100 scale-90">PLANTING</DymoLabel>
+          </Link>
+          <Link href="/tools/caloric-security/">
+            <DymoLabel className="opacity-80 hover:opacity-100 scale-90">CALORIC_SEC</DymoLabel>
           </Link>
           <Link href="/tools/fabrication/">
             <DymoLabel className="opacity-80 hover:opacity-100 scale-90">FABRICATION</DymoLabel>
@@ -101,8 +107,14 @@ export default function Navigation() {
             <Link href="/archive/" onClick={() => setMobileMenuOpen(false)}>
               <DymoLabel className="w-full text-center">ARCHIVE</DymoLabel>
             </Link>
+            <Link href="/tools/" onClick={() => setMobileMenuOpen(false)}>
+              <DymoLabel className="w-full text-center">FIELD_STA</DymoLabel>
+            </Link>
             <Link href="/tools/planting-calendar/" onClick={() => setMobileMenuOpen(false)}>
               <DymoLabel className="w-full text-center">PLANTING</DymoLabel>
+            </Link>
+            <Link href="/tools/caloric-security/" onClick={() => setMobileMenuOpen(false)}>
+              <DymoLabel className="w-full text-center">CALORIC_SEC</DymoLabel>
             </Link>
             <Link href="/tools/fabrication/" onClick={() => setMobileMenuOpen(false)}>
               <DymoLabel className="w-full text-center">FABRICATION</DymoLabel>

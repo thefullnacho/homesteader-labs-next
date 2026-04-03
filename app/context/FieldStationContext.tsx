@@ -4,6 +4,11 @@ import { createContext, useContext, useState, useEffect, useCallback, ReactNode 
 import type { SavedLocation } from "@/lib/weatherTypes";
 import { FrostDates } from "@/lib/tools/planting-calendar/types";
 import { geocodeZipCode } from "@/lib/weatherApi";
+import { getFrostDatesByZone } from "@/lib/frostNormals";
+import {
+  getLocations, putLocation, bulkPutLocations, deleteLocation,
+  getFrostDates, saveFrostDates, deleteFrostDates,
+} from "@/lib/caloric-security/homesteadStore";
 
 interface FieldStationState {
   locations: SavedLocation[];
@@ -20,14 +25,15 @@ interface FieldStationState {
   frostError: string | null;
 }
 
-const STORAGE_KEY = "homesteader-locations";
-const FROST_STORAGE_KEY = "homesteader-frost-dates";
-const FROST_API_BASE = "https://api.frost.date/v1/frost";
+// Legacy localStorage keys — read once on first load for migration, then removed.
+const LS_LOCATIONS_KEY  = "homesteader-locations";
+const LS_FROST_KEY      = "homesteader-frost-dates";
+const FROST_API_BASE    = "https://api.frost.date/v1/frost";
 
 // Helper function to estimate growing zone from zip code
 export const getGrowingZoneFromZip = (zipCode: string): string | undefined => {
   const zipNum = parseInt(zipCode.substring(0, 3), 10);
-  
+
   if (zipNum >= 0 && zipNum <= 99) return "5b"; // New England
   if (zipNum >= 100 && zipNum <= 199) return "6b"; // Mid-Atlantic
   if (zipNum >= 200 && zipNum <= 299) return "7b"; // VA, Carolinas
@@ -37,86 +43,17 @@ export const getGrowingZoneFromZip = (zipCode: string): string | undefined => {
   if (zipNum >= 600 && zipNum <= 699) return "5b"; // Central Midwest
   if (zipNum >= 700 && zipNum <= 799) return "8a"; // South Central
   if (zipNum >= 800 && zipNum <= 899) return "5b"; // Mountain West
-  if (zipNum >= 900 && zipNum <= 999) { // West Coast
+  if (zipNum >= 900 && zipNum <= 999) {
     if (zipNum >= 900 && zipNum <= 930) return "10a"; // SoCal
     return "8b"; // PNW / NorCal
   }
-  
+
   return "6a";
 };
 
 export const getMockFrostData = (zipCode: string): FrostDates => {
-  const zipNum = parseInt(zipCode.substring(0, 3), 10);
-  
-  let lastFrostMonth = 4, lastFrostDay = 15;
-  let firstFrostMonth = 10, firstFrostDay = 15;
-  let zone = "6a";
-
-  if (zipNum >= 0 && zipNum <= 99) { // New England
-    lastFrostMonth = 5; lastFrostDay = 10;
-    firstFrostMonth = 10; firstFrostDay = 1;
-    zone = "5b";
-  } else if (zipNum >= 100 && zipNum <= 199) { // Mid-Atlantic
-    lastFrostMonth = 4; lastFrostDay = 20;
-    firstFrostMonth = 10; firstFrostDay = 15;
-    zone = "6b";
-  } else if (zipNum >= 200 && zipNum <= 299) { // VA, Carolinas
-    lastFrostMonth = 4; lastFrostDay = 5;
-    firstFrostMonth = 11; firstFrostDay = 1;
-    zone = "7b";
-  } else if (zipNum >= 300 && zipNum <= 399) { // Deep South
-    lastFrostMonth = 3; lastFrostDay = 15;
-    firstFrostMonth = 11; firstFrostDay = 15;
-    zone = "8b";
-  } else if (zipNum >= 400 && zipNum <= 499) { // Midwest
-    lastFrostMonth = 4; lastFrostDay = 30;
-    firstFrostMonth = 10; firstFrostDay = 10;
-    zone = "6a";
-  } else if (zipNum >= 500 && zipNum <= 599) { // Northern Midwest
-    lastFrostMonth = 5; lastFrostDay = 15;
-    firstFrostMonth = 9; firstFrostDay = 20;
-    zone = "4b";
-  } else if (zipNum >= 600 && zipNum <= 699) { // Central Midwest
-    lastFrostMonth = 4; lastFrostDay = 25;
-    firstFrostMonth = 10; firstFrostDay = 15;
-    zone = "5b";
-  } else if (zipNum >= 700 && zipNum <= 799) { // South Central
-    lastFrostMonth = 3; lastFrostDay = 10;
-    firstFrostMonth = 11; firstFrostDay = 20;
-    zone = "8a";
-  } else if (zipNum >= 800 && zipNum <= 899) { // Mountain West
-    lastFrostMonth = 5; lastFrostDay = 5;
-    firstFrostMonth = 10; firstFrostDay = 5;
-    zone = "5b";
-  } else if (zipNum >= 900 && zipNum <= 999) { // West Coast
-    if (zipNum >= 900 && zipNum <= 930) { // SoCal
-      lastFrostMonth = 2; lastFrostDay = 15;
-      firstFrostMonth = 12; firstFrostDay = 15;
-      zone = "10a";
-    } else { // PNW / NorCal
-      lastFrostMonth = 3; lastFrostDay = 25;
-      firstFrostMonth = 11; firstFrostDay = 5;
-      zone = "8b";
-    }
-  }
-
-  const currentMonth = new Date().getMonth();
-  const currentYear = new Date().getFullYear();
-  const targetYear = currentMonth >= 9 ? currentYear + 1 : currentYear;
-  
-  const lastFrost = new Date(targetYear, lastFrostMonth - 1, lastFrostDay);
-  const firstFrost = new Date(targetYear, firstFrostMonth - 1, firstFrostDay);
-  const frostFreeDays = Math.round((firstFrost.getTime() - lastFrost.getTime()) / (1000 * 60 * 60 * 24));
-  
-  return {
-    zipCode,
-    lastSpringFrost: lastFrost,
-    lastSpringFrostConfidence: 7,
-    firstFallFrost: firstFrost,
-    firstFallFrostConfidence: 10,
-    frostFreeDays,
-    growingZone: zone,
-  };
+  const zone = getGrowingZoneFromZip(zipCode) ?? "6a";
+  return getFrostDatesByZone(zone, zipCode);
 };
 
 const FieldStationContext = createContext<FieldStationState | undefined>(undefined);
@@ -124,59 +61,67 @@ const FieldStationContext = createContext<FieldStationState | undefined>(undefin
 export function FieldStationProvider({ children }: { children: ReactNode }) {
   const [locations, setLocations] = useState<SavedLocation[]>([]);
   const [activeLocation, setActiveLocation] = useState<SavedLocation | null>(null);
-  const [frostDates, setFrostDates] = useState<FrostDates | null>(null);
+  const [frostDates, setFrostDatesState] = useState<FrostDates | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [frostLoading, setFrostLoading] = useState(false);
   const [frostError, setFrostError] = useState<string | null>(null);
 
-  // Load from localStorage on mount
+  // ── Load from Dexie on mount, migrating from localStorage if needed ──
   useEffect(() => {
-    const storedLocations = localStorage.getItem(STORAGE_KEY);
-    const storedFrostDates = localStorage.getItem(FROST_STORAGE_KEY);
-
-    if (storedLocations) {
+    async function load() {
       try {
-        const parsed = JSON.parse(storedLocations);
-        if (Array.isArray(parsed) && parsed.length > 0) {
-          setLocations(parsed);
-          const defaultLoc = parsed.find((loc: SavedLocation) => loc.isDefault) || parsed[0];
+        // Load locations from Dexie
+        const dbLocs = await getLocations();
+
+        if (dbLocs.length > 0) {
+          setLocations(dbLocs);
+          const defaultLoc = dbLocs.find(l => l.isDefault) || dbLocs[0];
           setActiveLocation(defaultLoc);
+        } else {
+          // One-time migration from localStorage
+          const raw = localStorage.getItem(LS_LOCATIONS_KEY);
+          if (raw) {
+            try {
+              const parsed: SavedLocation[] = JSON.parse(raw);
+              if (Array.isArray(parsed) && parsed.length > 0) {
+                setLocations(parsed);
+                const defaultLoc = parsed.find(l => l.isDefault) || parsed[0];
+                setActiveLocation(defaultLoc);
+                await bulkPutLocations(parsed);
+                localStorage.removeItem(LS_LOCATIONS_KEY);
+              }
+            } catch { /* corrupt data — start fresh */ }
+          }
         }
-      } catch {
-        // Invalid data, start fresh
-      }
-    }
 
-    if (storedFrostDates) {
-      try {
-        const parsedFrost = JSON.parse(storedFrostDates);
-        // Revive date objects
-        parsedFrost.lastSpringFrost = new Date(parsedFrost.lastSpringFrost);
-        parsedFrost.firstFallFrost = new Date(parsedFrost.firstFallFrost);
-        setFrostDates(parsedFrost);
-      } catch {
-        // Invalid frost data
+        // Load frost dates from Dexie
+        const dbFrost = await getFrostDates();
+        if (dbFrost) {
+          setFrostDatesState(dbFrost);
+        } else {
+          // One-time migration of frost dates from localStorage
+          const rawFrost = localStorage.getItem(LS_FROST_KEY);
+          if (rawFrost) {
+            try {
+              const parsed = JSON.parse(rawFrost);
+              parsed.lastSpringFrost = new Date(parsed.lastSpringFrost);
+              parsed.firstFallFrost  = new Date(parsed.firstFallFrost);
+              setFrostDatesState(parsed);
+              await saveFrostDates(parsed);
+              localStorage.removeItem(LS_FROST_KEY);
+            } catch { /* corrupt frost data — ignore */ }
+          }
+        }
+      } finally {
+        setIsLoaded(true);
       }
     }
-    
-    setIsLoaded(true);
+    load();
   }, []);
 
-  // Save to localStorage when locations change
-  useEffect(() => {
-    if (isLoaded) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(locations));
-    }
-  }, [locations, isLoaded]);
-
-  // Save to localStorage when frostDates change
-  useEffect(() => {
-    if (isLoaded && frostDates) {
-      localStorage.setItem(FROST_STORAGE_KEY, JSON.stringify(frostDates));
-    } else if (isLoaded && !frostDates) {
-      localStorage.removeItem(FROST_STORAGE_KEY);
-    }
-  }, [frostDates, isLoaded]);
+  // ── Persist location changes to Dexie ──────────────────────────────
+  // (individual operations handle their own writes; this effect is a
+  //  safety net for bulk state replacements not covered elsewhere)
 
   const addLocation = useCallback((location: Omit<SavedLocation, "id">) => {
     const newLocation: SavedLocation = {
@@ -185,17 +130,15 @@ export function FieldStationProvider({ children }: { children: ReactNode }) {
     };
     setLocations((prev) => {
       const updated = [...prev, newLocation];
-      if (prev.length === 0) {
-        setActiveLocation(newLocation);
-      }
+      if (prev.length === 0) setActiveLocation(newLocation);
       return updated;
     });
+    putLocation(newLocation).catch(console.error);
   }, []);
 
   const removeLocation = useCallback((id: string) => {
     setLocations((prev) => {
-      const filtered = prev.filter((loc) => loc.id !== id);
-      // Use setActiveLocation updater to read current value (avoids stale closure)
+      const filtered = prev.filter(loc => loc.id !== id);
       setActiveLocation((currentActive) => {
         if (currentActive?.id === id) {
           return filtered.length > 0 ? filtered[0] : null;
@@ -204,28 +147,36 @@ export function FieldStationProvider({ children }: { children: ReactNode }) {
       });
       return filtered;
     });
+    deleteLocation(id).catch(console.error);
   }, []);
 
   const updateLocation = useCallback((id: string, updates: Partial<SavedLocation>) => {
-    setLocations((prev) =>
-      prev.map((loc) => (loc.id === id ? { ...loc, ...updates } : loc))
-    );
-    if (activeLocation?.id === id) {
-      setActiveLocation((prev) => prev ? { ...prev, ...updates } : null);
-    }
-  }, [activeLocation]);
+    setLocations((prev) => {
+      const next = prev.map(loc => loc.id === id ? { ...loc, ...updates } : loc);
+      // Persist the updated row
+      const updated = next.find(l => l.id === id);
+      if (updated) putLocation(updated).catch(console.error);
+      return next;
+    });
+    setActiveLocation((prev) => prev?.id === id ? { ...prev, ...updates } : prev);
+  }, []);
 
   const switchLocation = useCallback((id: string) => {
-    const location = locations.find((loc) => loc.id === id);
-    if (location) {
-      setActiveLocation(location);
-      // Auto-sync frost dates if we switch location and it has a zip code
-      if (location.zipCode) {
-         // Optionally lookup here, but let's not auto-fetch on every switch to save API calls,
-         // or we can auto-fetch if frostDates?.zipCode != location.zipCode
-      }
+    setLocations((prev) => {
+      const location = prev.find(loc => loc.id === id);
+      if (location) setActiveLocation(location);
+      return prev;
+    });
+  }, []);
+
+  const setFrostDates = useCallback((dates: FrostDates | null) => {
+    setFrostDatesState(dates);
+    if (dates) {
+      saveFrostDates(dates).catch(console.error);
+    } else {
+      deleteFrostDates().catch(console.error);
     }
-  }, [locations]);
+  }, []);
 
   const lookupFrostDates = useCallback(async (zipCode: string): Promise<FrostDates | null> => {
     setFrostLoading(true);
@@ -250,60 +201,48 @@ export function FieldStationProvider({ children }: { children: ReactNode }) {
       }
 
       const data = await response.json();
-
-      if (data.error) {
-        throw new Error(data.error);
-      }
+      if (data.error) throw new Error(data.error);
 
       const currentMonth = new Date().getMonth();
-      const currentYear = new Date().getFullYear();
-      const targetYear = currentMonth >= 9 ? currentYear + 1 : currentYear;
-      
+      const currentYear  = new Date().getFullYear();
+      const targetYear   = currentMonth >= 9 ? currentYear + 1 : currentYear;
+
       const parseFrostDate = (dateStr: string, year: number): Date => {
         const [month, day] = dateStr.split('-').map(Number);
         return new Date(year, month - 1, day);
       };
 
-      const lastFrostDate = parseFrostDate(data.last_frost_32f["50%"], targetYear);
+      const lastFrostDate  = parseFrostDate(data.last_frost_32f["50%"],  targetYear);
       const firstFrostDate = parseFrostDate(data.first_frost_32f["50%"], targetYear);
-      
-      const frostFreeDays = Math.round((firstFrostDate.getTime() - lastFrostDate.getTime()) / (1000 * 60 * 60 * 24));
+      const frostFreeDays  = Math.round((firstFrostDate.getTime() - lastFrostDate.getTime()) / (1000 * 60 * 60 * 24));
 
-      const earlyLastFrost = parseFrostDate(data.last_frost_32f["10%"], targetYear);
-      const lateLastFrost = parseFrostDate(data.last_frost_32f["90%"], targetYear);
-      const lastFrostConfidence = Math.round((lateLastFrost.getTime() - earlyLastFrost.getTime()) / (1000 * 60 * 60 * 24) / 2);
+      const earlyLast  = parseFrostDate(data.last_frost_32f["10%"],  targetYear);
+      const lateLast   = parseFrostDate(data.last_frost_32f["90%"],  targetYear);
+      const lastConf   = Math.round((lateLast.getTime() - earlyLast.getTime()) / (1000 * 60 * 60 * 24) / 2);
 
-      const earlyFirstFrost = parseFrostDate(data.first_frost_32f["10%"], targetYear);
-      const lateFirstFrost = parseFrostDate(data.first_frost_32f["90%"], targetYear);
-      const firstFrostConfidence = Math.round((lateFirstFrost.getTime() - earlyFirstFrost.getTime()) / (1000 * 60 * 60 * 24) / 2);
-
-      const growingZone = getGrowingZoneFromZip(zipPrefix);
+      const earlyFirst = parseFrostDate(data.first_frost_32f["10%"], targetYear);
+      const lateFirst  = parseFrostDate(data.first_frost_32f["90%"], targetYear);
+      const firstConf  = Math.round((lateFirst.getTime() - earlyFirst.getTime()) / (1000 * 60 * 60 * 24) / 2);
 
       const result: FrostDates = {
-        zipCode: zipPrefix,
-        city: data.location?.city,
-        state: data.location?.state,
-        lastSpringFrost: lastFrostDate,
-        lastSpringFrostConfidence: lastFrostConfidence,
-        firstFallFrost: firstFrostDate,
-        firstFallFrostConfidence: firstFrostConfidence,
+        zipCode:                    zipPrefix,
+        city:                       data.location?.city,
+        state:                      data.location?.state,
+        lastSpringFrost:            lastFrostDate,
+        lastSpringFrostConfidence:  lastConf,
+        firstFallFrost:             firstFrostDate,
+        firstFallFrostConfidence:   firstConf,
         frostFreeDays,
-        growingZone,
+        growingZone:                getGrowingZoneFromZip(zipPrefix),
       };
 
       setFrostDates(result);
-      
-      // Sync with locations if we don't have this one
-      // NOTE: Fire geocode outside setState to avoid side effects in updaters.
-      // Use setLocations updater to read current value (avoids stale closure).
-      setLocations(prev => prev);  // no-op to read current state
+
       geocodeZipCode(zipPrefix).then(locData => {
         if (locData) {
           setLocations(prev => {
             const existing = prev.find(l => l.zipCode === zipPrefix);
-            if (!existing) {
-              addLocation({ ...locData, zipCode: zipPrefix });
-            }
+            if (!existing) addLocation({ ...locData, zipCode: zipPrefix });
             return prev;
           });
         }
@@ -314,22 +253,19 @@ export function FieldStationProvider({ children }: { children: ReactNode }) {
     } catch (err) {
       const message = err instanceof Error ? err.message : "Failed to lookup frost dates";
       setFrostError(message);
-      
+
       console.warn("API failed, using fallback data:", message);
       try {
-        const zipPrefix = zipCode.substring(0, 5);
-        const mockData = getMockFrostData(zipPrefix);
+        const zipPrefix  = zipCode.substring(0, 5);
+        const mockData   = getMockFrostData(zipPrefix);
         setFrostDates(mockData);
         setFrostError("Using estimated frost dates. Confirm with your local extension office for precision.");
-        
-        // Fire background geocode outside setState, use updater to check current locations
+
         geocodeZipCode(zipPrefix).then(locData => {
           if (locData) {
             setLocations(prev => {
               const existing = prev.find(l => l.zipCode === zipPrefix);
-              if (!existing) {
-                addLocation({ ...locData, zipCode: zipPrefix });
-              }
+              if (!existing) addLocation({ ...locData, zipCode: zipPrefix });
               return prev;
             });
           }
@@ -342,9 +278,9 @@ export function FieldStationProvider({ children }: { children: ReactNode }) {
     } finally {
       setFrostLoading(false);
     }
-  }, [addLocation]);
+  }, [addLocation, setFrostDates]);
 
-  const value = {
+  const value: FieldStationState = {
     locations,
     activeLocation,
     frostDates,

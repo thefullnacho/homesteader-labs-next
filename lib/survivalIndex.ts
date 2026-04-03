@@ -24,7 +24,7 @@ export function calculateSurvivalIndex(data: WeatherData): SurvivalIndex {
   const overall = Math.round(
     (normalizeFireRisk(fireRiskScore.score) +
       normalizeWaterCatchment(waterCatchment.score) +
-      (sprayConditions.suitable ? 100 : 0) +
+      sprayConditions.score +
       solarEfficiency.score +
       normalizeLivestockStress(livestockStress.score)) / 5
   );
@@ -128,20 +128,48 @@ function calculateWaterCatchment(forecast: ForecastDay[]): SurvivalIndex["waterC
 }
 
 function calculateSprayConditions(current: WeatherData["current"]): SurvivalIndex["sprayConditions"] {
-  // Ideal spray conditions: temp 50-85°F, wind 3-10mph, humidity 50-90%, no rain imminent
-  const tempOk = current.temperature >= 50 && current.temperature <= 85;
-  const windOk = current.windSpeed >= 3 && current.windSpeed <= 10;
-  const humidityOk = current.humidity >= 40 && current.humidity <= 90;
+  // Ideal spray conditions: temp 50-85°F, wind 3-10mph, humidity 40-90%
+  // Scores are graduated — partial credit for near-miss conditions
+
+  function lerp(value: number, inMin: number, inMax: number, outMin: number, outMax: number) {
+    const clamped = Math.min(Math.max(value, inMin), inMax);
+    return outMin + ((clamped - inMin) / (inMax - inMin)) * (outMax - outMin);
+  }
+
+  let tempScore: number;
+  const t = current.temperature;
+  if (t < 40)       tempScore = 0;
+  else if (t < 50)  tempScore = lerp(t, 40, 50, 0, 100);
+  else if (t <= 85) tempScore = 100;
+  else if (t <= 95) tempScore = lerp(t, 85, 95, 100, 0);
+  else              tempScore = 0;
+
+  let windScore: number;
+  const w = current.windSpeed;
+  if (w < 1)        windScore = lerp(w, 0, 1, 40, 40);   // dead calm: poor coverage, flat 40
+  else if (w < 3)   windScore = lerp(w, 1, 3, 40, 100);
+  else if (w <= 10) windScore = 100;
+  else if (w <= 15) windScore = lerp(w, 10, 15, 100, 0);
+  else              windScore = 0;
+
+  let humidityScore: number;
+  const h = current.humidity;
+  if (h < 25)       humidityScore = 0;
+  else if (h < 40)  humidityScore = lerp(h, 25, 40, 0, 100);
+  else if (h <= 90) humidityScore = 100;
+  else if (h <= 97) humidityScore = lerp(h, 90, 97, 100, 30);
+  else              humidityScore = 30;  // near-saturation, likely rain, still not zero
+
+  const score = Math.round((tempScore + windScore + humidityScore) / 3);
+  const suitable = score >= 60;
 
   const reasons: string[] = [];
-  if (!tempOk) reasons.push(current.temperature < 50 ? "Too cold" : "Too hot");
-  if (!windOk) reasons.push(current.windSpeed < 3 ? "Too calm" : "Too windy");
-  if (!humidityOk) reasons.push(current.humidity < 40 ? "Too dry" : "Too humid");
-
-  const score = tempOk && windOk && humidityOk ? 100 : 0;
+  if (tempScore < 100) reasons.push(t < 50 ? "Too cold" : "Too hot");
+  if (windScore < 100) reasons.push(w < 3 ? "Too calm" : "Too windy");
+  if (humidityScore < 100) reasons.push(h < 40 ? "Too dry" : "Too humid");
 
   return {
-    suitable: tempOk && windOk && humidityOk,
+    suitable,
     score,
     reason: reasons.length > 0 ? reasons.join(", ") : "Conditions optimal",
   };

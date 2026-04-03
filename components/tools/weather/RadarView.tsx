@@ -1,9 +1,9 @@
 "use client";
 
-import React from 'react';
+import React, { useState } from 'react';
 import BrutalistBlock from "@/components/ui/BrutalistBlock";
 import Typography from "@/components/ui/Typography";
-import { Map as MapIcon, Layers, Zap } from 'lucide-react';
+import { Map as MapIcon, Layers, Zap, WifiOff } from 'lucide-react';
 
 interface RadarViewProps {
   lat: number;
@@ -12,6 +12,8 @@ interface RadarViewProps {
 }
 
 const RadarView = ({ lat, lon, zoom = 6 }: RadarViewProps) => {
+  const [iframeState, setIframeState] = useState<"loading" | "loaded" | "error">("loading");
+
   // RainViewer Embed URL
   // Parameters:
   // loc: lat,lon,zoom
@@ -38,7 +40,7 @@ const RadarView = ({ lat, lon, zoom = 6 }: RadarViewProps) => {
         </div>
         <div className="flex items-center gap-2">
           <div className="flex items-center gap-1.5 px-2 py-0.5 bg-blue-500/10 border border-blue-500/30 rounded-sm">
-            <div className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-pulse" />
+            <div className={`w-1.5 h-1.5 rounded-full ${iframeState === "loaded" ? "bg-blue-500 animate-pulse" : "bg-gray-500"}`} />
             <span className="text-[8px] font-mono text-blue-400 font-bold uppercase">Precip</span>
           </div>
           <div className="flex items-center gap-1.5 px-2 py-0.5 bg-white/10 border border-white/30 rounded-sm">
@@ -49,19 +51,48 @@ const RadarView = ({ lat, lon, zoom = 6 }: RadarViewProps) => {
       </div>
       
       <div className="relative w-full aspect-video md:aspect-[21/9] min-h-[300px] bg-background-secondary/20">
+        {/* Loading skeleton */}
+        {iframeState === "loading" && (
+          <div className="absolute inset-0 z-20 flex flex-col items-center justify-center gap-3 bg-background-secondary/60">
+            <Layers size={24} className="text-accent/40 animate-pulse" />
+            <span className="text-[9px] font-mono uppercase tracking-widest opacity-40">
+              Acquiring radar stream...
+            </span>
+          </div>
+        )}
+
+        {/* Error state */}
+        {iframeState === "error" && (
+          <div className="absolute inset-0 z-20 flex flex-col items-center justify-center gap-3 bg-background-secondary/80">
+            <WifiOff size={24} className="text-red-500/60" />
+            <span className="text-[9px] font-mono uppercase tracking-widest text-red-400/70">
+              Radar stream unavailable
+            </span>
+            <span className="text-[8px] font-mono uppercase tracking-widest opacity-30">
+              RainViewer unreachable — check connection
+            </span>
+          </div>
+        )}
+
         <iframe
           src={radarUrl}
           width="100%"
           height="100%"
           frameBorder="0"
           allowFullScreen
-          className="absolute inset-0 grayscale-[0.2] contrast-[1.1]"
+          className={`absolute inset-0 grayscale-[0.2] contrast-[1.1] transition-opacity duration-500 ${iframeState === "loaded" ? "opacity-100" : "opacity-0"}`}
           title="Weather Radar"
+          onLoad={() => setIframeState("loaded")}
+          onError={() => setIframeState("error")}
         />
-        
-        {/* Overlay scanning effect */}
-        <div className="absolute inset-0 pointer-events-none border border-accent/10 z-10" />
-        <div className="absolute top-0 left-0 w-full h-px bg-accent/20 animate-scan z-10" />
+
+        {/* Overlay scanning effect — only shown when loaded */}
+        {iframeState === "loaded" && (
+          <>
+            <div className="absolute inset-0 pointer-events-none border border-accent/10 z-10" />
+            <div className="absolute top-0 left-0 w-full h-px bg-accent/20 animate-scan z-10" />
+          </>
+        )}
       </div>
 
       <div className="p-3 bg-black/20 flex items-center justify-between border-t-2 border-border-primary/10">

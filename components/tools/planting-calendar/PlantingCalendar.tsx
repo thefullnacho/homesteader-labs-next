@@ -101,9 +101,13 @@ export default function PlantingCalendar({
               {monthDates.map((date, idx) => {
                 const crop = getCropById(date.cropId);
                 return (
-                  <div 
+                  <div
                     key={`${date.cropId}-${date.action}-${idx}`}
-                    className="group flex flex-col sm:flex-row sm:items-center gap-4 p-3 bg-black/20 border-2 border-border-primary/30 hover:border-accent/50 transition-all print:break-inside-avoid print:bg-white print:border-black print:p-2 print:gap-2"
+                    className={`group flex flex-col sm:flex-row sm:items-center gap-4 p-3 border-2 transition-all print:break-inside-avoid print:bg-white print:border-black print:p-2 print:gap-2 ${
+                      date.completed
+                        ? 'bg-black/10 border-border-primary/10 opacity-50'
+                        : 'bg-black/20 border-border-primary/30 hover:border-accent/50'
+                    }`}
                   >
                     {/* Timestamp */}
                     <div className="flex flex-row sm:flex-col items-center sm:items-start gap-2 sm:gap-0 min-w-[100px] border-r-2 border-border-primary/10 pr-4 print:border-black/20 print:min-w-[80px] print:pr-2">
@@ -149,9 +153,15 @@ export default function PlantingCalendar({
                         <div className="text-[8px] font-mono opacity-30 uppercase print:text-black print:opacity-100">Protocol</div>
                         <div className="text-xs font-bold font-mono tracking-tighter opacity-60 uppercase print:text-black print:opacity-100">{date.action.replace('-', '_')}</div>
                       </div>
-                      <div className={`px-3 py-1.5 font-mono text-xs font-bold border-2 ${getActionStyle(date.action)} print:bg-transparent print:border-black print:text-black print:px-2 print:py-1`}>
-                        {ActionMap[date.action]}
-                      </div>
+                      {date.completed ? (
+                        <div className="px-3 py-1.5 font-mono text-xs font-bold border-2 border-border-primary/20 text-foreground-secondary/40 bg-black/10 print:bg-transparent print:border-black print:text-black print:px-2 print:py-1">
+                          ✓_DONE
+                        </div>
+                      ) : (
+                        <div className={`px-3 py-1.5 font-mono text-xs font-bold border-2 ${getActionStyle(date.action)} print:bg-transparent print:border-black print:text-black print:px-2 print:py-1`}>
+                          {ActionMap[date.action]}
+                        </div>
+                      )}
                     </div>
                   </div>
                 );

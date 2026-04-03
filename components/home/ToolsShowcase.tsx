@@ -1,9 +1,33 @@
 import Link from "next/link";
-import { Wrench, Cloud, ArrowRight } from "lucide-react";
+import { Wrench, Cloud, Sprout, ShieldCheck, ArrowRight } from "lucide-react";
 import BrutalistBlock from "@/components/ui/BrutalistBlock";
 import Typography from "@/components/ui/Typography";
 
 const tools = [
+  {
+    id: "weather",
+    name: "WEATHER_OPS",
+    description: "What's happening right now and what can I do today. Frost probability, soil workability, GDD, solar capture, catchment efficiency.",
+    icon: "cloud",
+    href: "/tools/weather/",
+    status: "ONLINE"
+  },
+  {
+    id: "planting-calendar",
+    name: "PLANT_OPS",
+    description: "What to plant, when to plant it, and how to extend your season. Zone-calibrated, succession logic, lunar sync, 54 crops.",
+    icon: "sprout",
+    href: "/tools/planting-calendar/",
+    status: "ONLINE"
+  },
+  {
+    id: "caloric-security",
+    name: "SURVIVAL_OPS",
+    description: "How long can your homestead sustain itself. Days of food, water, and energy. Caloric ROI, household profile, canning protocols.",
+    icon: "shield",
+    href: "/tools/caloric-security/",
+    status: "ONLINE"
+  },
   {
     id: "fabrication",
     name: "Fabrication_Workbench",
@@ -12,32 +36,26 @@ const tools = [
     href: "/tools/fabrication/",
     status: "ONLINE"
   },
-  {
-    id: "weather",
-    name: "Weather_Station",
-    description: "Real-time weather data from the field. Temperature, humidity, pressure, forecasts.",
-    icon: "cloud",
-    href: "/tools/weather/",
-    status: "ONLINE"
-  }
 ];
 
 const IconMap = {
   wrench: Wrench,
   cloud: Cloud,
+  sprout: Sprout,
+  shield: ShieldCheck,
 };
 
 export default function ToolsShowcase() {
   return (
     <section className="mb-12">
       <div className="flex justify-between items-end mb-6 border-b-2 border-border-primary pb-2">
-        <Typography variant="h3" className="mb-0">Field_Tools</Typography>
+        <Typography variant="h3" className="mb-0">HL_SYS_OPS // Field_Station</Typography>
         <span className="text-xs text-foreground-secondary font-mono">
           STATUS: OPERATIONAL
         </span>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
         {tools.map((tool) => {
           const ToolIcon = IconMap[tool.icon as keyof typeof IconMap];
           return (

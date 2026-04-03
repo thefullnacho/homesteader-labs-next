@@ -1,0 +1,171 @@
+---
+title: "How to Read Your Weather Station"
+description: "A field operator's guide to every index on the Homesteader Labs weather dashboard — what each score means and when to act on it."
+date: "2026-03-10"
+author: "Marcus Webb"
+tags: ["weather", "field-guide", "fire-risk", "livestock", "solar"]
+category: "field-guide"
+excerpt: "Numbers on a screen don't mean anything until you know what to do with them. Here's how to read every index on the weather station — and what action each one demands."
+---
+
+# How to read your weather station
+
+Numbers on a screen don't mean anything until you know what to do with them.
+
+The Homesteader Labs weather station pulls live forecast data from Open-Meteo — a free, open-source weather API that requires no account and no API key. It looks 14 days out. Every index you see is calculated locally in your browser from that raw forecast data. There is no server in the middle, no account required, no subscription.
+
+Here is what each index means and when it demands action.
+
+---
+
+## Fire risk index
+
+Fire risk is scored 0–100. It is additive — temperature, humidity, wind speed, and dry spell days each contribute a fixed amount to the score. No single factor dominates.
+
+**Score ranges:**
+
+| Score | Status | What to do |
+|-------|--------|------------|
+| 0–24 | Safe | Normal operations |
+| 25–49 | Caution | Delay burning; have water staged |
+| 50–74 | Avoid burning | No open flames outdoors |
+| 75+ | No burning | Full fire suppression posture |
+
+**What drives the score:**
+
+- **Temperature:** Crosses thresholds at 75°F, 80°F, and 90°F. Each threshold adds points.
+- **Humidity:** Low humidity is the primary accelerant. Scores rise sharply below 40%, again below 30%, and again below 20%.
+- **Wind:** Sustained wind above 15 mph adds points; above 25 mph adds more. Wind drives fire laterally.
+- **Dry spell:** Days since last measurable precipitation. Long dry spells cure vegetation and surface debris into fuel.
+
+> Check fire risk before any burning, brush clearing, or chainsaw work. A score above 50 means no open flames, even in a barrel.
+
+---
+
+## Water catchment
+
+Water catchment shows two things: the **collection potential** for the next rain event, and the **date** of that event.
+
+**Potential ratings:**
+
+- **Poor** — low probability or very low expected accumulation. Not worth staging tanks.
+- **Fair** — moderate event. Top off existing storage.
+- **Good** — worth opening every collection point. Stage your barrels and cistern intakes.
+- **Excellent** — high probability, meaningful accumulation. Full collection posture. Clear debris from gutters now.
+
+The "next rain" date tells you when to expect the event. Use the gap between today and that date to plan:
+
+- Two or more days out: you have time to inspect and clear collection surfaces.
+- Same-day or tomorrow: stage now, not later.
+
+> Both probability and amount must be above threshold to rate Good or Excellent. A 100% chance of 0.01 inches of rain does nothing for a 500-gallon cistern.
+
+---
+
+## Solar efficiency
+
+Solar efficiency is a daily estimate of **peak productive hours** — the hours in a day when your panels are operating at meaningful output.
+
+The calculation is:
+
+```
+peak_hours = day_length_hours × cloud_factor × 0.5
+```
+
+The `0.5` multiplier is a deliberate simplification. Real panel output depends on tilt, azimuth, shading, and panel age. This estimate is honest about what it is: a planning proxy, not a watt-hour calculator.
+
+**How to use it:**
+
+- **0–2 hours:** Overcast or very short day. Don't run high-draw loads if your bank is low.
+- **3–4 hours:** Average. Normal consumption patterns.
+- **5+ hours:** High-output day. Good time to run power-hungry tasks — water pumping, battery conditioning, dehydrating.
+
+Check the next 3–5 days together. A string of low-efficiency days means you should reduce draw or run a generator now, before your bank is depleted.
+
+---
+
+## Livestock stress index
+
+The livestock stress index uses the **NOAA nine-term polynomial heat index formula** for heat stress, and a wind chill calculation for cold stress. These are the official federal standards — the same ones used by extension services and veterinary guidelines.
+
+**Heat stress (above 80°F effective temperature):**
+
+| THI Range | Status | Action |
+|-----------|--------|--------|
+| 80–84°F | Mild stress | Ensure water access, shade available |
+| 85–89°F | Moderate stress | Increase water frequency, reduce feed timing |
+| 90°F+ | Severe stress | Shade mandatory, misting if available, reduce handling |
+
+**Cold stress (below 50°F wind chill):**
+
+| Wind Chill | Status | Action |
+|------------|--------|--------|
+| 32–49°F | Watch | Bedding adequate, young and old animals sheltered |
+| 20–31°F | Caution | Increase feed (energy for thermoregulation), windbreaks |
+| Below 20°F | Alert | Supplement heat for young, sick, or thin-coated animals |
+
+> Livestock cannot communicate heat exhaustion or hypothermia early. Act on the index before symptoms appear, not after.
+
+---
+
+## Planting index
+
+The planting index pulls from three sub-calculations: **frost risk**, **soil workability**, and **growing degree days (GDD)**.
+
+**Frost risk windows:**
+
+The 7-day, 14-day, and 30-day windows show the probability of a frost event in each period. A frost risk above 50% in the 7-day window means transplants go out with row cover or stay inside.
+
+**Soil workability:**
+
+Based on soil temperature and recent precipitation. Statuses:
+
+- **Not workable** — frozen or saturated. Working it now damages soil structure.
+- **Marginal** — possible, but you will compact wet soil. Work raised beds only.
+- **Workable** — proceed. Optimal soil preparation conditions.
+
+**Growing degree days (GDD):**
+
+GDD accumulates from March 1 each year using a base temperature of 50°F. The display shows your current accumulation against the 200-unit target — the point at which most cool-season crops have enough heat to push germination and early growth.
+
+```
+GDD = max(0, (daily_high + daily_low) / 2 - 50)
+```
+
+Track this number against your crop's heat requirements. The planting calendar uses GDD alongside frost dates to determine start-indoors windows.
+
+---
+
+## Spray conditions
+
+The spray conditions index is a strict three-way check. All three must be true for the index to show "favorable":
+
+```
+temperature: 50°F–85°F
+wind:        3 mph–10 mph
+humidity:    40%–90%
+```
+
+- **Below 50°F:** Many products do not activate at low temperatures. Absorption is poor.
+- **Above 85°F:** Evaporation is rapid. Foliar damage risk increases.
+- **Wind below 3 mph:** No air movement means poor coverage distribution.
+- **Wind above 10 mph:** Drift. Your product ends up in the wrong place — neighbor's garden, water, habitat.
+- **Humidity below 40%:** Rapid drying reduces contact time and uptake.
+- **Humidity above 90%:** Fungal disease conditions. Foliar sprays compound the problem.
+
+> If any single condition is out of range, the index reads "not favorable." There is no partial credit for spray timing.
+
+---
+
+## How to use the station daily
+
+Check the station each morning, not just before a task. The indices you care about most change based on what is happening in the next 24–72 hours, not just today.
+
+Build a simple morning check habit:
+
+1. Fire risk — is it trending up? Plan burn and power-tool work around the forecast low.
+2. Planting index — frost risk trending? Protect transplants tonight.
+3. Livestock stress — does tomorrow look worse than today? Stage water and shade now.
+4. Solar efficiency — low-output stretch coming? Reduce draw, run generator, or defer high-load tasks.
+
+The station is most useful as a **decision tool**, not a readout. Every number has an action attached. If you are just reading the numbers and not doing anything with them, you are using it as a weather app. That is fine — but you can get more from it.

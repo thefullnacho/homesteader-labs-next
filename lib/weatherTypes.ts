@@ -24,11 +24,6 @@ export interface WeatherData {
   lastUpdated: string;
 }
 
-export interface WeatherProvider {
-  name: string;
-  getCurrentWeather(lat: number, lon: number): Promise<WeatherData>;
-  getForecast(lat: number, lon: number): Promise<ForecastDay[]>;
-}
 
 export interface ForecastDay {
   date: string;
@@ -70,6 +65,19 @@ export interface WeatherAlert {
   start: string;
   end: string;
   action?: string;
+}
+
+export interface NWSAlertFeature {
+  properties: {
+    id: string;
+    event: string;
+    severity: string;
+    headline?: string;
+    description?: string;
+    onset: string;
+    expires: string;
+    instruction?: string;
+  };
 }
 
 export interface SurvivalIndex {

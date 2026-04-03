@@ -1,0 +1,132 @@
+---
+title: "How to Use the Planting Calendar"
+description: "Setup guide for the Homesteader Labs planting calendar — from entering your ZIP code to recording actual planting dates that make the schedule smarter over time."
+date: "2026-03-12"
+author: "Sarah Chen"
+tags: ["planting", "field-guide", "frost-dates", "succession", "lunar"]
+category: "field-guide"
+excerpt: "A planting calendar is only as good as the data you feed it. Here's how to set up yours, read the schedule, and record your actuals so the calendar gets smarter every season."
+---
+
+# How to use the planting calendar
+
+A planting calendar is only as good as the data you feed it.
+
+Most gardeners use calendar dates — "plant tomatoes after May 15th" — because that is how paper seed packets work. Paper doesn't know where you live. The Homesteader Labs planting calendar doesn't use calendar dates as anchors. It uses your frost dates.
+
+Everything you see in the schedule is an offset from two numbers: your last spring frost and your first fall frost. Change your location and every date shifts. That is the foundation.
+
+---
+
+## Setting up your location
+
+Enter your ZIP code in the location field. The calendar queries a frost date database for your ZIP and returns:
+
+- **Last spring frost date** — the average date of your final frost in spring
+- **First fall frost date** — the average date of your first frost in autumn
+- **USDA growing zone** — a rough hardiness proxy
+
+These are historical averages, not guarantees. A late frost is always possible. The calendar builds buffer into start-indoors windows specifically because of this.
+
+> If your ZIP is not found or returns an obviously wrong zone, enter the nearest large city's ZIP. Frost dates are interpolated regionally — within 20–30 miles the dates are usually the same.
+
+Once location is set, your frost dates persist in local storage. You do not need to re-enter them.
+
+---
+
+## Reading the schedule
+
+Each crop shows up to four date types. Not every crop has all four — direct-sow crops skip the transplant step; crops without succession planting show only one cycle.
+
+**Date types:**
+
+- **Start indoors** — when to sow seeds in trays under lights or in a warm space. Usually 6–10 weeks before your last frost date.
+- **Transplant** — when to move seedlings outside. Set relative to last frost date, often a week after it.
+- **Direct sow** — when to sow directly in the ground. Usually after last frost or at soil workability.
+- **Expected harvest** — calculated from transplant or direct-sow date plus days-to-maturity for the selected variety.
+
+The schedule shows dates in calendar form. Dates in the past are shown as completed (if you have recorded them) or as missed. Dates in the next 14 days are highlighted.
+
+---
+
+## Succession planting
+
+Succession planting means staggering the same crop in multiple plantings to extend your harvest window. Instead of 30 heads of lettuce ready on the same day, you get 6 heads every two weeks across three months.
+
+The calendar auto-calculates succession planting for crops that support it:
+
+```
+max_plantings = floor(days_available / interval_days)
+max_plantings = min(max_plantings, crop.successionMax)
+```
+
+`days_available` is the time between your first viable sow date and the date at which a final planting would not mature before first frost. `interval_days` is the crop's recommended succession interval (typically 14–21 days for fast crops).
+
+**The viability check:** if a planting's projected harvest date falls on or after your first fall frost, that planting is dropped from the schedule. The calendar does not show you plantings that cannot succeed. You may see fewer successions than the maximum — that is correct behavior, not a bug.
+
+> Early-season setup matters. The later you start succession planting, the fewer viable cycles fit before frost.
+
+---
+
+## Recording actual dates — the most important feature
+
+The planting schedule is a starting prediction. What makes it genuinely useful over time is recording what actually happened.
+
+When a task completes, tap the date field and enter the real date. The calendar computes the delta:
+
+```
+delta = actual_date - predicted_date
+```
+
+It then shifts all remaining dates in that crop's schedule by that delta. If you transplanted 5 days late, your expected harvest moves 5 days later. Every downstream date self-corrects.
+
+This matters for two reasons:
+
+1. **Reality diverges from averages.** Frost date databases are historical averages. Your land runs cold, or your beds warm up faster, or you had a late spring. Recording actual dates accumulates that local knowledge.
+2. **Timing compounds.** A 5-day late transplant becomes a 10-day-late harvest if you do not adjust. The calendar tracks drift so you do not have to hold it in your head.
+
+> Record actual dates as you go, not at the end of the season. End-of-season reconstruction from memory is inaccurate. The value comes from real-time recording.
+
+---
+
+## Lunar sync
+
+The calendar shows a moon phase indicator for each planting window. This is based on biodynamic planting tradition — a practice with roots in Rudolf Steiner's agricultural lectures and adopted by many organic growers.
+
+**The rule:**
+
+- **Waxing moon (new → full):** Favorable for above-ground leafy crops. Sap rises, germination energy is high.
+- **Waning moon (full → new):** Favorable for root crops, bulbs, and perennials. Energy moves downward.
+
+Each crop carries a `lunarAffinity` tag: `leaf`, `root`, or `neutral`. The calendar shows whether your planting window aligns with the correct phase for that crop.
+
+The moon phase indicator shows:
+- Current phase emoji (🌑 🌒 🌓 🌔 🌕 🌖 🌗 🌘)
+- Alignment status: **aligned**, **off-cycle**, or **neutral**
+
+If your schedule window is off-cycle, you can shift the planting by a few days to catch alignment — the calendar lets you adjust within a ±7-day window without affecting the viability check.
+
+> Lunar alignment is optional. The calendar schedules correctly without it. Think of it as a tiebreaker when you have flexibility, not a hard constraint.
+
+---
+
+## Crop browser
+
+The calendar includes 54 crops across vegetables, herbs, and fruits. Each crop has multiple varieties — **variety selection matters** because days-to-maturity varies significantly.
+
+Examples:
+- Tomato: Stupice (70 days) vs. Brandywine (90 days) — 20-day difference in your harvest window and your latest viable transplant date
+- Lettuce: Oak Leaf (50 days) vs. Buttercrunch (75 days)
+- Carrot: Danvers (70 days) vs. Chantenay (65 days)
+
+Select the variety you are actually growing. Using the wrong variety's days-to-maturity shifts all dates and changes which succession cycles are viable.
+
+---
+
+## The calendar is a starting point
+
+The schedule the calendar generates is based on historical frost date averages, standard days-to-maturity, and regional growing zone data. It is the best guess before you have local evidence.
+
+Your job is to record actuals. Every real date you log makes next season's plan more accurate. After two or three seasons of recording, you will have a calendar that reflects your land, your microclimate, and your specific varieties — not a generic regional average.
+
+That is the goal: a calendar that gets smarter the longer you use it.

@@ -45,6 +45,8 @@ const COMMANDS: Record<string, (args: string[]) => string[]> = {
   ],
   tools: () => [
     "AVAILABLE TOOLS:",
+    "  caloric-sec   - Survival clocks: food / water / energy autonomy",
+    "  planting      - Frost-date planting calendar, 54 crops",
     "  fabrication   - 3D STL viewer & print calculator",
     "  weather       - Field weather station data",
     "",

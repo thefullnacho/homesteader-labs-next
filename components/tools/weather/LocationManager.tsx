@@ -11,12 +11,13 @@ import { geocodeLocation, geocodeZipCode, parseCoordinates } from "@/lib/weather
 interface LocationManagerProps {
   locations: SavedLocation[];
   activeLocation?: SavedLocation | null;
+  growingZone?: string;
   onSwitch: (id: string) => void;
   onAdd: (loc: Omit<SavedLocation, 'id'>) => void;
   onRemove: (id: string) => void;
 }
 
-const LocationManager = ({ locations, activeLocation, onSwitch, onAdd, onRemove }: LocationManagerProps) => {
+const LocationManager = ({ locations, activeLocation, growingZone, onSwitch, onAdd, onRemove }: LocationManagerProps) => {
   const [showAdd, setShowAdd] = useState(false);
   const [mode, setMode] = useState<"city" | "zip" | "coords">("city");
   const [query, setQuery] = useState("");
@@ -57,9 +58,32 @@ const LocationManager = ({ locations, activeLocation, onSwitch, onAdd, onRemove 
       <div className="flex flex-wrap gap-2 items-center">
         {activeLocation && (
           <div className="flex items-center gap-3 bg-black/40 border-2 border-border-primary p-2 px-4 mr-2">
-            <MapPin size={14} className="text-accent" />
-            <Typography variant="h4" className="mb-0 text-xs font-mono tracking-tighter uppercase">{activeLocation.name}</Typography>
-            <span className="text-[9px] font-mono opacity-30">[{activeLocation.lat.toFixed(2)}, {activeLocation.lon.toFixed(2)}]</span>
+            <MapPin size={14} className="text-accent shrink-0" />
+            <div className="flex flex-col">
+              <Typography variant="h4" className="mb-0 text-xs font-mono tracking-tighter uppercase leading-tight">
+                {activeLocation.name}
+              </Typography>
+              <div className="flex items-center gap-2 mt-0.5">
+                {growingZone && (
+                  <span className="text-[8px] font-mono text-accent/70 uppercase font-bold tracking-widest">
+                    Zone {growingZone}
+                  </span>
+                )}
+                {activeLocation.elevation && (
+                  <>
+                    {growingZone && <span className="text-[8px] font-mono opacity-20">/</span>}
+                    <span className="text-[8px] font-mono opacity-40 uppercase">
+                      {Math.round(activeLocation.elevation).toLocaleString()} ft
+                    </span>
+                  </>
+                )}
+                {!growingZone && !activeLocation.elevation && (
+                  <span className="text-[8px] font-mono opacity-25">
+                    [{activeLocation.lat.toFixed(2)}, {activeLocation.lon.toFixed(2)}]
+                  </span>
+                )}
+              </div>
+            </div>
           </div>
         )}
 
