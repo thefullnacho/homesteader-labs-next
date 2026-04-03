@@ -21,6 +21,9 @@ const COMMANDS: Record<string, (args: string[]) => string[]> = {
     "  clear         - Clear terminal history",
     "  shop          - Navigate to hardware shop",
     "  archive       - Navigate to field archive",
+    "  field-station - Navigate to Field Station hub",
+    "  planting      - Navigate to planting calendar",
+    "  caloric-sec   - Navigate to caloric security",
     "  tools         - List available tools",
     "  fx            - Toggle visual effects (Low-FX mode)",
     "  about         - About Homesteader Labs",
@@ -43,14 +46,27 @@ const COMMANDS: Record<string, (args: string[]) => string[]> = {
     "Accessing field archive...",
     "Use 'exit' to close terminal first, or click below:",
   ],
+  'field-station': () => [
+    "Navigating to Field Station hub...",
+    "Use 'exit' to close terminal first, or click below:",
+  ],
+  planting: () => [
+    "Navigating to planting calendar...",
+    "Use 'exit' to close terminal first, or click below:",
+  ],
+  'caloric-sec': () => [
+    "Navigating to caloric security...",
+    "Use 'exit' to close terminal first, or click below:",
+  ],
   tools: () => [
-    "AVAILABLE TOOLS:",
-    "  caloric-sec   - Survival clocks: food / water / energy autonomy",
-    "  planting      - Frost-date planting calendar, 54 crops",
-    "  fabrication   - 3D STL viewer & print calculator",
-    "  weather       - Field weather station data",
+    "FIELD STATION — /tools/",
     "",
-    "Usage: navigate to /tools/[name]",
+    "  weather        - Real-time conditions, frost matrix, GDD",
+    "  planting       - Frost-calibrated calendar, 54 crops",
+    "  caloric-sec    - Food / water / energy autonomy clocks",
+    "  fabrication    - 3D STL viewer & print calculator",
+    "",
+    "Run a tool name to navigate, or type 'field-station' for hub.",
   ],
   fx: () => {
     try {
@@ -384,18 +400,13 @@ export default function TerminalOverlay() {
 
             {/* Quick Links */}
             <div className="px-3 py-2 border-t border-accent/30 bg-black/20 flex flex-wrap gap-x-4 gap-y-1 text-xs uppercase font-bold">
-              <Link href="/shop/" className="text-foreground-secondary hover:text-accent transition-colors">
-                [shop]
-              </Link>
-              <Link href="/archive/" className="text-foreground-secondary hover:text-accent transition-colors">
-                [archive]
-              </Link>
-              <Link href="/tools/fabrication/" className="text-foreground-secondary hover:text-accent transition-colors">
-                [fabrication]
-              </Link>
-              <Link href="/tools/weather/" className="text-foreground-secondary hover:text-accent transition-colors">
-                [weather]
-              </Link>
+              <Link href="/shop/" className="text-foreground-secondary hover:text-accent transition-colors">[shop]</Link>
+              <Link href="/archive/" className="text-foreground-secondary hover:text-accent transition-colors">[archive]</Link>
+              <Link href="/tools/" className="text-foreground-secondary hover:text-accent transition-colors">[field-station]</Link>
+              <Link href="/tools/planting-calendar/" className="text-foreground-secondary hover:text-accent transition-colors">[planting]</Link>
+              <Link href="/tools/caloric-security/" className="text-foreground-secondary hover:text-accent transition-colors">[caloric-sec]</Link>
+              <Link href="/tools/fabrication/" className="text-foreground-secondary hover:text-accent transition-colors">[fabrication]</Link>
+              <Link href="/tools/weather/" className="text-foreground-secondary hover:text-accent transition-colors">[weather]</Link>
             </div>
           </>
         )}
