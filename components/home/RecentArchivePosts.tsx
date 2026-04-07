@@ -10,9 +10,9 @@ export default function RecentArchivePosts() {
   return (
     <section className="mb-12">
       <div className="flex justify-between items-end mb-6 border-b-2 border-border-primary pb-2">
-        <h2 className="text-xl font-bold uppercase">Latest_Field_Notes</h2>
+        <h2 className="text-xl font-bold uppercase">Latest Field Notes</h2>
         <Link href="/archive/" className="opacity-80 hover:opacity-100">
-          <DymoLabel className="text-xs">VIEW_ARCHIVE</DymoLabel>
+          <DymoLabel className="text-xs">View All →</DymoLabel>
         </Link>
       </div>
 

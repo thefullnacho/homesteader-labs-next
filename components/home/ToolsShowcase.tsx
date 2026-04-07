@@ -6,35 +6,35 @@ import Typography from "@/components/ui/Typography";
 const tools = [
   {
     id: "weather",
-    name: "WEATHER_OPS",
-    description: "What's happening right now and what can I do today. Frost probability, soil workability, GDD, solar capture, catchment efficiency.",
+    name: "Weather Station",
+    description: "Real-time conditions, frost risk, soil workability, growing degree days, and more — calibrated to your location.",
     icon: "cloud",
     href: "/tools/weather/",
-    status: "ONLINE"
+    iconColor: "text-sky-400",
   },
   {
     id: "planting-calendar",
-    name: "PLANT_OPS",
-    description: "What to plant, when to plant it, and how to extend your season. Zone-calibrated, succession logic, lunar sync, 54 crops.",
+    name: "Planting Calendar",
+    description: "Zone-calibrated planting dates with succession logic, season extension options, and lunar sync. 54 crops.",
     icon: "sprout",
     href: "/tools/planting-calendar/",
-    status: "ONLINE"
+    iconColor: "text-green-500",
   },
   {
     id: "caloric-security",
-    name: "SURVIVAL_OPS",
-    description: "How long can your homestead sustain itself. Days of food, water, and energy. Caloric ROI, household profile, canning protocols.",
+    name: "Resilience Dashboard",
+    description: "Track your household's food, water, and energy autonomy. Set up your profile and see how many days your homestead can sustain itself.",
     icon: "shield",
     href: "/tools/caloric-security/",
-    status: "ONLINE"
+    iconColor: "text-amber-500",
   },
   {
     id: "fabrication",
-    name: "Fabrication_Workbench",
-    description: "3D STL viewer, upload models, calculate print times, generate G-code.",
+    name: "Workshop",
+    description: "3D print estimation tools. Upload an STL, pick your material, and get time and cost estimates.",
     icon: "wrench",
     href: "/tools/fabrication/",
-    status: "ONLINE"
+    iconColor: "text-accent",
   },
 ];
 
@@ -49,10 +49,7 @@ export default function ToolsShowcase() {
   return (
     <section className="mb-12">
       <div className="flex justify-between items-end mb-6 border-b-2 border-border-primary pb-2">
-        <Typography variant="h3" className="mb-0">HL_SYS_OPS // Field_Station</Typography>
-        <span className="text-xs text-foreground-secondary font-mono">
-          STATUS: OPERATIONAL
-        </span>
+        <Typography variant="h3" className="mb-0">Free Tools</Typography>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -68,7 +65,7 @@ export default function ToolsShowcase() {
                 <div className="flex items-start gap-4 h-full">
                   {/* Icon */}
                   <div className="shrink-0 w-16 h-16 bg-background-secondary border-2 border-border-primary flex items-center justify-center">
-                    <ToolIcon size={32} className="text-foreground-primary" />
+                    <ToolIcon size={32} className={tool.iconColor} />
                   </div>
 
                   {/* Content */}
@@ -77,9 +74,6 @@ export default function ToolsShowcase() {
                       <Typography variant="h4" className="mb-0 group-hover:text-accent transition-colors">
                         {tool.name}
                       </Typography>
-                      <span className="text-xs border border-accent text-accent px-1 font-mono">
-                        {tool.status}
-                      </span>
                     </div>
 
                     <Typography variant="small" className="text-foreground-secondary mb-4 block">
@@ -87,7 +81,7 @@ export default function ToolsShowcase() {
                     </Typography>
 
                     <div className="flex items-center gap-2 text-xs text-accent opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100 transition-opacity font-bold uppercase">
-                      <span>Access Tool</span>
+                      <span>Open</span>
                       <ArrowRight size={14} />
                     </div>
                   </div>

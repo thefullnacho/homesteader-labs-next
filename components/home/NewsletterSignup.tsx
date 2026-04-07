@@ -50,7 +50,7 @@ export default function NewsletterSignup() {
             <div className="flex-grow">
               <div className="flex items-center gap-2 mb-2">
                 <Terminal size={20} className="text-accent" />
-                <Typography variant="h3" className="mb-0">Stay_In_The_Loop</Typography>
+                <Typography variant="h3" className="mb-0">Stay in the loop</Typography>
               </div>
               <Typography variant="small" className="text-foreground-secondary mb-0">
                 Get field reports, new hardware drops, and survival tips. 
@@ -99,7 +99,7 @@ export default function NewsletterSignup() {
         {/* Decorative terminal footer */}
         <div className="border-t-2 border-accent/30 px-6 py-2 bg-background-secondary/30">
           <p className="text-xs font-mono text-foreground-secondary">
-            ENCRYPTION: NONE | FREQUENCY: MONTHLY | UNSUBSCRIBE: ANYTIME
+            Monthly. Unsubscribe anytime.
           </p>
         </div>
       </BrutalistBlock>

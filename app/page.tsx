@@ -4,8 +4,8 @@ import ToolsShowcase from "@/components/home/ToolsShowcase";
 import NewsletterSignup from "@/components/home/NewsletterSignup";
 import Button from "@/components/ui/Button";
 import BrutalistBlock from "@/components/ui/BrutalistBlock";
-import Badge from "@/components/ui/Badge";
 import Typography from "@/components/ui/Typography";
+import Image from "next/image";
 
 export const metadata = {
   title: "Homesteader Labs | Off-Grid Hardware & Fabrication Tools",
@@ -17,10 +17,10 @@ export default function Home() {
     <div className="max-w-7xl mx-auto px-4 py-8 md:py-12">
       {/* Hero Section */}
       <section className="mb-16">
-        <BrutalistBlock className="p-8 md:p-12 text-center overflow-hidden" refTag="REF: HL_SYS_V2.1">
+        <BrutalistBlock className="p-8 md:p-12 text-center overflow-hidden">
           {/* Background decoration */}
           <div className="absolute inset-0 opacity-5 pointer-events-none">
-            <div 
+            <div
               className="absolute inset-0"
               style={{
                 backgroundImage: 'linear-gradient(0deg, transparent 24%, #000 25%, #000 26%, transparent 27%, transparent 74%, #000 75%, #000 76%, transparent 77%, transparent), linear-gradient(90deg, transparent 24%, #000 25%, #000 26%, transparent 27%, transparent 74%, #000 75%, #000 76%, transparent 77%, transparent)',
@@ -30,32 +30,38 @@ export default function Home() {
           </div>
 
           <div className="relative z-10">
-            {/* Status Badge */}
-            <div className="mb-6">
-              <Badge variant="outline" pulse>SYSTEM_ONLINE</Badge>
-            </div>
-
             {/* Main Heading */}
             <Typography variant="h1">
-              Tools for Those Who Build
+              Tools for those who build
               <br />
-              <span className="text-accent">Their Own World</span>
+              <span className="text-accent">their own world.</span>
             </Typography>
 
             {/* Subheading */}
             <Typography variant="body" className="max-w-2xl mx-auto text-foreground-secondary mb-8">
-              Off-grid hardware, fabrication tools, and field documentation for homesteaders, 
-              survivalists, and self-reliant builders.
+              Free planning tools for homesteaders, gardeners, and anyone growing their own food.
+              Know your weather. Plan your season. Track your resilience. No account required.
             </Typography>
 
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button href="/tools/" variant="primary">
-                Enter Field Station
+                Explore Tools
               </Button>
               <Button href="/shop/" variant="secondary">
                 Browse Hardware
               </Button>
+            </div>
+
+            <div className="mt-8 w-full border border-border-primary overflow-hidden">
+              <Image
+                src="/images/seedlings_sprouting.png"
+                alt="Seedlings sprouting in a garden"
+                width={1600}
+                height={900}
+                className="w-full object-cover"
+                priority
+              />
             </div>
           </div>
         </BrutalistBlock>
@@ -63,6 +69,16 @@ export default function Home() {
 
       {/* Tools Showcase */}
       <ToolsShowcase />
+
+      <div className="mb-12 w-full border border-border-primary overflow-hidden">
+        <Image
+          src="/images/hose_spraying.png"
+          alt="Hose spraying water in a garden"
+          width={1600}
+          height={900}
+          className="w-full object-cover"
+        />
+      </div>
 
       {/* Featured Products */}
       <FeaturedProducts />
@@ -80,30 +96,39 @@ export default function Home() {
             <div>
               <Typography variant="h4">Hardware</Typography>
               <Typography variant="small">
-                Tools and devices designed for off-grid resilience. From LoRa mesh nodes 
+                Tools and devices designed for off-grid resilience. From LoRa mesh nodes
                 to portable power systems.
               </Typography>
             </div>
             <div>
               <Typography variant="h4">Knowledge</Typography>
               <Typography variant="small">
-                Field-tested documentation on foraging, fabrication, and survival skills. 
+                Field-tested documentation on foraging, fabrication, and survival skills.
                 Written by those who live it.
               </Typography>
             </div>
             <div>
               <Typography variant="h4">Community</Typography>
               <Typography variant="small">
-                Open designs. Shared knowledge. A network of builders helping builders 
+                Open designs. Shared knowledge. A network of builders helping builders
                 navigate the gray zones.
               </Typography>
             </div>
           </div>
+          <div className="mt-6 w-full border border-border-primary overflow-hidden">
+            <Image
+              src="/images/compost_steam.png"
+              alt="Steaming compost pile"
+              width={1600}
+              height={900}
+              className="w-full object-cover"
+            />
+          </div>
         </BrutalistBlock>
       </section>
 
-      {/* Terminal Hint */}
-      <section className="text-center py-8">
+      {/* Terminal Hint — hidden from casual visitors, ALT+T still works */}
+      <section className="sr-only">
         <Typography variant="small" className="font-mono">
           <span className="opacity-50">[</span>
           <kbd className="border border-foreground-primary px-1 mx-1">ALT</kbd>
