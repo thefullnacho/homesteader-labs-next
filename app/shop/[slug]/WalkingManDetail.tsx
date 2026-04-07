@@ -78,18 +78,26 @@ export default function WalkingManDetail({ product }: WalkingManDetailProps) {
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState(false);
 
   const handleWaitlist = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email) return;
     setSubmitting(true);
-    await fetch("/api/subscribe", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, type: "waitlist" }),
-    });
-    setSubmitted(true);
-    setSubmitting(false);
+    setSubmitError(false);
+    try {
+      const res = await fetch("/api/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, type: "waitlist" }),
+      });
+      if (!res.ok) throw new Error("Subscribe failed");
+      setSubmitted(true);
+    } catch {
+      setSubmitError(true);
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -341,6 +349,9 @@ export default function WalkingManDetail({ product }: WalkingManDetailProps) {
               >
                 {submitting ? "Submitting..." : "Submit →"}
               </button>
+              {submitError && (
+                <p className="text-xs text-red-400 mt-2">Something went wrong. Please try again.</p>
+              )}
             </form>
           )}
         </BrutalistBlock>

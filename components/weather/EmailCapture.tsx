@@ -12,6 +12,7 @@ interface EmailCaptureProps {
   onDismiss: () => void;
   isSubmitting: boolean;
   isSuccess: boolean;
+  isError?: boolean;
 }
 
 export default function EmailCapture({
@@ -22,7 +23,8 @@ export default function EmailCapture({
   onSubmit,
   onDismiss,
   isSubmitting,
-  isSuccess
+  isSuccess,
+  isError = false,
 }: EmailCaptureProps) {
   const [email, setEmail] = useState("");
   const [consent, setConsent] = useState(false);
@@ -160,6 +162,10 @@ export default function EmailCapture({
             )}
           </button>
         </form>
+
+        {isError && (
+          <p className="text-xs text-red-500 mt-2">Something went wrong. Please try again.</p>
+        )}
 
         {/* Trust signals */}
         <div className="mt-4 pt-3 border-t border-border-primary/30 text-xs opacity-50 text-center">

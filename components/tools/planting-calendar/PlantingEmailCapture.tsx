@@ -11,6 +11,7 @@ interface PlantingEmailCaptureProps {
   onDismiss: () => void;
   isSubmitting: boolean;
   isSuccess: boolean;
+  isError?: boolean;
 }
 
 export default function PlantingEmailCapture({
@@ -20,7 +21,8 @@ export default function PlantingEmailCapture({
   onSubmit,
   onDismiss,
   isSubmitting,
-  isSuccess
+  isSuccess,
+  isError = false,
 }: PlantingEmailCaptureProps) {
   const [email, setEmail] = useState("");
   const [consent, setConsent] = useState(false);
@@ -145,6 +147,10 @@ export default function PlantingEmailCapture({
             )}
           </button>
         </form>
+
+        {isError && (
+          <p className="text-xs text-red-500 mt-2">Something went wrong. Please try again.</p>
+        )}
 
         {/* Trust signals */}
         <div className="mt-4 pt-3 border-t border-border-primary/30 text-center">
