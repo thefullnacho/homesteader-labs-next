@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Wrench, Cloud, Sprout, ShieldCheck, ArrowRight } from "lucide-react";
+import { Wrench, Cloud, Sprout, ShieldCheck } from "lucide-react";
 import BrutalistBlock from "@/components/ui/BrutalistBlock";
 import Typography from "@/components/ui/Typography";
 
@@ -62,29 +62,13 @@ export default function ToolsShowcase() {
               className="group"
             >
               <BrutalistBlock className="h-full">
-                <div className="flex items-start gap-4 h-full">
-                  {/* Icon */}
-                  <div className="shrink-0 w-16 h-16 bg-background-secondary border-2 border-border-primary flex items-center justify-center">
-                    <ToolIcon size={32} className={tool.iconColor} />
+                <div className="flex items-center gap-4">
+                  <div className="shrink-0 w-12 h-12 bg-background-secondary border-2 border-border-primary flex items-center justify-center">
+                    <ToolIcon size={24} className={tool.iconColor} />
                   </div>
-
-                  {/* Content */}
-                  <div className="flex-grow">
-                    <div className="flex justify-between items-start mb-2">
-                      <Typography variant="h4" className="mb-0 group-hover:text-accent transition-colors">
-                        {tool.name}
-                      </Typography>
-                    </div>
-
-                    <Typography variant="small" className="text-foreground-secondary mb-4 block">
-                      {tool.description}
-                    </Typography>
-
-                    <div className="flex items-center gap-2 text-xs text-accent opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100 transition-opacity font-bold uppercase">
-                      <span>Open</span>
-                      <ArrowRight size={14} />
-                    </div>
-                  </div>
+                  <Typography variant="h4" className="mb-0 group-hover:text-accent transition-colors">
+                    {tool.name}
+                  </Typography>
                 </div>
               </BrutalistBlock>
             </Link>

@@ -1,5 +1,6 @@
-import { getAllPosts, getAllTags, getAllCategories } from "@/lib/posts";
+import { getAllPosts, getAllTags } from "@/lib/posts";
 import Link from "next/link";
+import Image from "next/image";
 import FieldStationLayout from "@/components/ui/FieldStationLayout";
 import BrutalistBlock from "@/components/ui/BrutalistBlock";
 import Typography from "@/components/ui/Typography";
@@ -14,7 +15,6 @@ export const metadata = {
 export default function ArchivePage({ searchParams }: { searchParams: { tag?: string } }) {
   const allPosts = getAllPosts();
   const tags = getAllTags();
-  const categories = getAllCategories();
   const activeTag = searchParams.tag;
   const posts = activeTag
     ? allPosts.filter((post) => post.tags.includes(activeTag))
@@ -23,27 +23,32 @@ export default function ArchivePage({ searchParams }: { searchParams: { tag?: st
   return (
     <FieldStationLayout stationId="HL_FIELD_ARCHIVE">
       <div className="max-w-5xl mx-auto">
+        {/* Header image */}
+        <div className="relative w-full aspect-[16/9] mb-8 overflow-hidden">
+          <Image
+            src="/images/field_notes.png"
+            alt="Field Notes"
+            fill
+            className="object-cover"
+            priority
+          />
+        </div>
+
         {/* Header */}
-        <BrutalistBlock className="mb-8 p-6" variant="default">
-          <div className="flex justify-between items-end">
-            <div>
-              <Typography variant="h2" className="mb-0">Field_Archive</Typography>
-              <Typography variant="small" className="opacity-60">Documentation & Community Knowledge Base</Typography>
-            </div>
-            
-            <div className="text-right flex flex-col items-end gap-2">
-              <Badge variant="outline">RECORDS: {posts.length}</Badge>
-              <Typography variant="small" className="font-mono text-xs opacity-40 uppercase mb-0">
-                CATEGORIES: {categories.length}
-              </Typography>
-            </div>
+        <div className="flex justify-between items-end mb-8 border-b-2 border-border-primary pb-4">
+          <div>
+            <Typography variant="h2" className="mb-0">Field Notes</Typography>
+            <Typography variant="small" className="opacity-60">Documentation & community knowledge base</Typography>
           </div>
-        </BrutalistBlock>
+          <Typography variant="small" className="font-mono text-xs opacity-40 uppercase mb-0">
+            {posts.length} articles
+          </Typography>
+        </div>
 
         {/* Filters */}
         {tags.length > 0 && (
           <div className="mb-8">
-            <Typography variant="h4" className="text-xs opacity-50 mb-3">Filter_By_Tags:</Typography>
+            <Typography variant="h4" className="text-xs opacity-50 mb-3">Filter by tag:</Typography>
             <div className="flex flex-wrap gap-2">
               {activeTag && (
                 <Link href="/archive/">
@@ -124,7 +129,7 @@ export default function ArchivePage({ searchParams }: { searchParams: { tag?: st
                   size="sm"
                   className="shrink-0"
                 >
-                  Read_Document
+                  Read →
                 </Button>
               </div>
             </BrutalistBlock>

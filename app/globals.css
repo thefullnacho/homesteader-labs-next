@@ -7,7 +7,7 @@
   --bg-secondary: #373e42;
   --text-primary: #E8D3BE;
   --text-secondary: #E8D3BE;
-  --border-primary: #d35400;
+  --border-primary: #7a3f1a;
   --shadow-color: rgba(0, 0, 0, 0.6);
   --accent: #ff7300;
   --terminal-glow: rgba(163, 193, 173, 0.15);
@@ -21,7 +21,7 @@
   --bg-secondary: #292524;
   --text-primary: #e8e6e1;
   --text-secondary: #E8D3BE;
-  --border-primary: #d35400;
+  --border-primary: #7a3f1a;
   --shadow-color: rgba(0,0,0,0.5);
   --accent: #ff7300;
 }
@@ -33,7 +33,7 @@
 body {
   margin: 0;
   font-family: var(--font-mono);
-  font-size: 16px;
+  font-size: 17px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: var(--bg-primary);
@@ -48,7 +48,7 @@ body {
 /* Bump base font size on mobile for monospace legibility */
 @media (max-width: 640px) {
   body {
-    font-size: 17px;
+    font-size: 18px;
   }
 }
 
@@ -266,6 +266,22 @@ canvas:not(.interactive) {
   z-index: 20;
   pointer-events: none;
   animation: scan-flash 35s infinite;
+}
+
+/* Raise opacity floor for body text legibility — decorative ghost elements (opacity-20/30) are unaffected */
+/* Bump sub-12px arbitrary text sizes to legible minimums — 134 instances across tool components */
+@layer utilities {
+  .opacity-40 { opacity: 0.65; }
+  .opacity-50 { opacity: 0.75; }
+  .opacity-60 { opacity: 0.82; }
+  .opacity-70 { opacity: 0.88; }
+  .opacity-75 { opacity: 0.92; }
+  .opacity-80 { opacity: 0.95; }
+
+  .text-\[8px\]  { font-size: 11px; line-height: 1.5; }
+  .text-\[9px\]  { font-size: 12px; line-height: 1.5; }
+  .text-\[10px\] { font-size: 13px; line-height: 1.5; }
+  .text-\[11px\] { font-size: 13px; line-height: 1.5; }
 }
 
 /* Global Print Styles */
