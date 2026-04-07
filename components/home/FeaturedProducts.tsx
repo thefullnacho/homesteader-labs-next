@@ -10,9 +10,9 @@ export default function FeaturedProducts() {
   return (
     <section className="mb-12">
       <div className="flex justify-between items-end mb-6 border-b-2 border-border-primary pb-2">
-        <h2 className="text-xl font-bold uppercase">Featured_Hardware</h2>
+        <h2 className="text-xl font-bold uppercase">Hardware</h2>
         <Link href="/shop/" className="opacity-80 hover:opacity-100">
-          <DymoLabel className="text-xs">VIEW_ALL</DymoLabel>
+          <DymoLabel className="text-xs">View All →</DymoLabel>
         </Link>
       </div>
 
@@ -26,9 +26,6 @@ export default function FeaturedProducts() {
             <BrutalistBlock className="p-4 hover:shadow-brutalist-lg transition-all">
               {/* Product Image Placeholder */}
               <div className="h-32 bg-background-secondary border-b border-border-primary mb-4 flex items-center justify-center relative overflow-hidden">
-                <div className="absolute top-2 left-2 text-xs font-bold opacity-50">
-                  {product.id}
-                </div>
                 <div className="w-16 h-16 border border-dashed border-border-primary rounded-full flex items-center justify-center">
                   <Cpu size={32} className="text-foreground-primary opacity-50" />
                 </div>

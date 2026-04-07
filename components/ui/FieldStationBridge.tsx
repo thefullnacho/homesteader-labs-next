@@ -14,13 +14,13 @@ const BRIDGE_MAP: Record<"WEATHER" | "PLANT" | "SURVIVAL", BridgeLink[]> = {
       label: "Frost probability matrix → see your planting window",
       sub: "Zone-calibrated calendar, succession logic, lunar sync",
       href: "/tools/planting-calendar/",
-      code: "PLANT_OPS",
+      code: "Planting",
     },
     {
       label: "Current conditions affecting your reserves",
       sub: "Cross-reference weather against your autonomy clocks",
       href: "/tools/caloric-security/",
-      code: "SURVIVAL_OPS",
+      code: "Resilience",
     },
   ],
   PLANT: [
@@ -28,13 +28,13 @@ const BRIDGE_MAP: Record<"WEATHER" | "PLANT" | "SURVIVAL", BridgeLink[]> = {
       label: "Track harvest against your household calorie target",
       sub: "Caloric ROI by crop, autonomy clocks, canning protocols",
       href: "/tools/caloric-security/",
-      code: "SURVIVAL_OPS",
+      code: "Resilience",
     },
     {
       label: "Check current weather affecting your schedule",
       sub: "Frost probability, GDD tracking, soil workability",
       href: "/tools/weather/",
-      code: "WEATHER_OPS",
+      code: "Weather",
     },
   ],
   SURVIVAL: [
@@ -42,13 +42,13 @@ const BRIDGE_MAP: Record<"WEATHER" | "PLANT" | "SURVIVAL", BridgeLink[]> = {
       label: "Weather conditions affecting your stores",
       sub: "Frost risk, precipitation forecast, catchment efficiency",
       href: "/tools/weather/",
-      code: "WEATHER_OPS",
+      code: "Weather",
     },
     {
       label: "Caloric ROI by crop — optimize your planting",
       sub: "Zone-calibrated calendar with succession and lunar sync",
       href: "/tools/planting-calendar/",
-      code: "PLANT_OPS",
+      code: "Planting",
     },
   ],
 };
@@ -64,14 +64,14 @@ export default function FieldStationBridge({
     <div className="mt-16 pt-6 border-t border-border-primary/30">
       <div className="flex items-center gap-3 mb-4">
         <span className="text-[9px] font-mono uppercase tracking-[0.3em] opacity-40">
-          {'// FIELD_STATION_CROSS_REF'}
+          {'// Related Tools'}
         </span>
         <div className="flex-1 h-px bg-border-primary/20" />
         <Link
           href="/tools/"
           className="text-[9px] font-mono uppercase tracking-[0.2em] opacity-30 hover:opacity-70 hover:text-accent transition-all"
         >
-          ← FIELD_STATION
+          ← All Tools
         </Link>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

@@ -2,12 +2,8 @@
 
 import Link from "next/link";
 import Typography from "@/components/ui/Typography";
-import Badge from "@/components/ui/Badge";
-import { useThemePreferences } from "@/app/hooks/useThemePreferences";
 
 export default function Footer() {
-  const { lowFX, toggleLowFX } = useThemePreferences();
-
   return (
     <footer className="border-t-2 border-border-primary bg-background-secondary mt-auto relative overflow-hidden">
       {/* Subtle Background Text */}
@@ -18,51 +14,39 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-4 py-8 relative z-10">
         <div className="flex flex-col md:flex-row justify-between items-center gap-8">
           <div className="flex flex-col gap-1">
-            <div className="flex items-center gap-2">
-              <Typography variant="h4" className="mb-0 text-sm">HOMESTEADER_LABS</Typography>
-              <Badge variant="outline" className="text-[8px] opacity-40">v2.1 // NEXT_CORE</Badge>
-            </div>
-            <Typography variant="small" className="opacity-30 font-mono text-[9px] mb-0">
-              LOC: 45.5231° N, 122.6765° W // ALT: 154M
-            </Typography>
+            <Typography variant="h4" className="mb-0 text-sm">Homesteader Labs</Typography>
           </div>
-          
+
           <div className="flex gap-x-6 gap-y-2 text-xs font-bold uppercase tracking-widest flex-wrap justify-center font-mono">
             <Link href="/archive/" className="opacity-50 hover:opacity-100 hover:text-accent transition-all">
-              [ARCHIVE]
+              Field Notes
             </Link>
             <Link href="/shop/" className="opacity-50 hover:opacity-100 hover:text-accent transition-all">
-              [SHOP]
+              Shop
             </Link>
             <Link href="/tools/fabrication/" className="opacity-50 hover:opacity-100 hover:text-accent transition-all">
-              [FABRICATION]
+              Workshop
             </Link>
-            <button 
-              onClick={toggleLowFX}
-              className="opacity-50 hover:opacity-100 hover:text-accent transition-all uppercase"
-            >
-              [FX_{lowFX ? 'MIN' : 'MAX'}]
-            </button>
             <Link href="/terms-of-fabrication/" className="opacity-50 hover:opacity-100 hover:text-accent transition-all">
-              [TERMS]
+              Terms
             </Link>
             <Link href="/warranty/" className="opacity-50 hover:opacity-100 hover:text-accent transition-all">
-              [WARRANTY]
+              Warranty
             </Link>
           </div>
-          
+
           <div className="flex flex-col items-center md:items-end gap-1">
             <div className="flex items-center gap-4">
               <Link href="/privacy/" className="text-[9px] opacity-30 hover:opacity-60 transition-opacity uppercase font-bold tracking-widest">
-                Privacy_Protocol
+                Privacy
               </Link>
               <span className="text-[9px] opacity-10">|</span>
               <Link href="/requisition/" className="text-[9px] opacity-30 hover:opacity-60 transition-opacity uppercase font-bold tracking-widest">
-                Requisition_Log
+                Cart
               </Link>
             </div>
             <Typography variant="small" className="opacity-20 font-mono text-[8px] uppercase tracking-widest mb-0">
-              © 2026 HOMESTEADER_LABS // ALL_RIGHTS_RESERVED
+              © 2026 Homesteader Labs
             </Typography>
           </div>
         </div>

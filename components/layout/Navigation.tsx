@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Box, Sun, Moon, ShoppingCart, Menu, X, Zap, ZapOff } from "lucide-react";
+import { Sun, Moon, ShoppingCart, Menu, X } from "lucide-react";
+import Image from "next/image";
 import { useCart } from "@/app/context/CartContext";
 import Link from "next/link";
 import Badge from "@/components/ui/Badge";
@@ -9,46 +10,45 @@ import DymoLabel from "@/components/ui/DymoLabel";
 import { useThemePreferences } from "@/app/hooks/useThemePreferences";
 
 export default function Navigation() {
-  const { isDark, lowFX, toggleDarkMode, toggleLowFX } = useThemePreferences();
+  const { isDark, toggleDarkMode } = useThemePreferences();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { totalItems, isRequisitionSubmitted } = useCart();
-
-  const requisitionStatus = isRequisitionSubmitted ? "SUBMITTED" : "PENDING";
 
   return (
     <nav className="border-b-2 border-border-primary bg-background-secondary text-foreground-primary sticky top-0 z-50 transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
         {/* Logo */}
         <Link href="/" className="text-xl font-bold tracking-tight cursor-pointer flex items-center gap-2 group select-none">
-          <div className="w-8 h-8 bg-accent text-white flex items-center justify-center group-hover:invert transition-all">
-            <Box size={20} />
-          </div>
-          <span className="hidden sm:inline">HOMESTEADER_LABS</span>
-          <span className="sm:hidden">HL_SYS</span>
+          <Image
+            src="/images/homesteaderlabs_logo_flask_seedlingv2.jpeg"
+            alt="Homesteader Labs"
+            width={32}
+            height={32}
+            className="w-8 h-8 group-hover:opacity-80 transition-opacity"
+          />
+          <span className="hidden sm:inline">Homesteader Labs</span>
+          <span className="sm:hidden">HL</span>
         </Link>
 
         {/* Desktop Navigation */}
         <div className="hidden md:flex gap-4 text-sm items-center">
           <Link href="/shop/">
-            <DymoLabel className="opacity-80 hover:opacity-100 scale-90">SHOP</DymoLabel>
+            <DymoLabel className="opacity-80 hover:opacity-100 scale-90">Shop</DymoLabel>
           </Link>
           <Link href="/archive/">
-            <DymoLabel className="opacity-80 hover:opacity-100 scale-90">ARCHIVE</DymoLabel>
-          </Link>
-          <Link href="/tools/">
-            <DymoLabel className="opacity-80 hover:opacity-100 scale-90">FIELD_STA</DymoLabel>
-          </Link>
-          <Link href="/tools/planting-calendar/">
-            <DymoLabel className="opacity-80 hover:opacity-100 scale-90">PLANTING</DymoLabel>
-          </Link>
-          <Link href="/tools/caloric-security/">
-            <DymoLabel className="opacity-80 hover:opacity-100 scale-90">CALORIC_SEC</DymoLabel>
-          </Link>
-          <Link href="/tools/fabrication/">
-            <DymoLabel className="opacity-80 hover:opacity-100 scale-90">FABRICATION</DymoLabel>
+            <DymoLabel className="opacity-80 hover:opacity-100 scale-90">Field Notes</DymoLabel>
           </Link>
           <Link href="/tools/weather/">
-            <DymoLabel className="opacity-80 hover:opacity-100 scale-90">WEATHER</DymoLabel>
+            <DymoLabel className="opacity-80 hover:opacity-100 scale-90">Weather</DymoLabel>
+          </Link>
+          <Link href="/tools/planting-calendar/">
+            <DymoLabel className="opacity-80 hover:opacity-100 scale-90">Planting</DymoLabel>
+          </Link>
+          <Link href="/tools/caloric-security/">
+            <DymoLabel className="opacity-80 hover:opacity-100 scale-90">Resilience</DymoLabel>
+          </Link>
+          <Link href="/tools/fabrication/">
+            <DymoLabel className="opacity-80 hover:opacity-100 scale-90">Workshop</DymoLabel>
           </Link>
 
           <button
@@ -58,32 +58,24 @@ export default function Navigation() {
           >
             {isDark ? <Sun size={16} /> : <Moon size={16} />}
           </button>
-          
-          <button
-            onClick={toggleLowFX}
-            className={`p-2 border transition-all ${lowFX ? 'bg-accent/20 text-accent' : 'border-border-primary hover:bg-accent hover:text-white'}`}
-            aria-label={lowFX ? "Enable visual effects" : "Disable visual effects (Low FX mode)"}
-            title={lowFX ? "Low FX Mode: ON" : "Low FX Mode: OFF"}
-          >
-            {lowFX ? <ZapOff size={16} /> : <Zap size={16} />}
-          </button>
         </div>
 
         {/* Requisition & Mobile Toggle */}
         <div className="flex items-center gap-4">
-          <Link 
+          <Link
             href="/requisition/"
             className="flex items-center gap-2 border-2 border-border-primary px-3 py-1 hover:bg-accent hover:text-white transition-colors bg-background-primary/30"
           >
             <ShoppingCart size={14} />
-            <span className="text-xs hidden lg:inline font-mono">REQ_LOG:</span>
             <span className="font-bold text-xs">{totalItems.toString().padStart(2, "0")}</span>
-            <Badge 
-              variant="solid" 
-              className={`text-[7px] px-1 py-0 leading-tight ${isRequisitionSubmitted ? 'bg-green-600 border-green-600' : 'bg-accent border-accent'}`}
-            >
-              {requisitionStatus}
-            </Badge>
+            {isRequisitionSubmitted && (
+              <Badge
+                variant="solid"
+                className="text-[7px] px-1 py-0 leading-tight bg-green-600 border-green-600"
+              >
+                ✓
+              </Badge>
+            )}
           </Link>
 
           <button
@@ -102,46 +94,23 @@ export default function Navigation() {
         <div className="md:hidden border-t-2 border-border-primary bg-background-secondary p-4 space-y-4 animate-in slide-in-from-top duration-200">
           <div className="grid grid-cols-2 gap-3">
             <Link href="/shop/" onClick={() => setMobileMenuOpen(false)}>
-              <DymoLabel className="w-full text-center">SHOP</DymoLabel>
+              <DymoLabel className="w-full text-center">Shop</DymoLabel>
             </Link>
             <Link href="/archive/" onClick={() => setMobileMenuOpen(false)}>
-              <DymoLabel className="w-full text-center">ARCHIVE</DymoLabel>
-            </Link>
-            <Link href="/tools/" onClick={() => setMobileMenuOpen(false)}>
-              <DymoLabel className="w-full text-center">FIELD_STA</DymoLabel>
-            </Link>
-            <Link href="/tools/planting-calendar/" onClick={() => setMobileMenuOpen(false)}>
-              <DymoLabel className="w-full text-center">PLANTING</DymoLabel>
-            </Link>
-            <Link href="/tools/caloric-security/" onClick={() => setMobileMenuOpen(false)}>
-              <DymoLabel className="w-full text-center">CALORIC_SEC</DymoLabel>
-            </Link>
-            <Link href="/tools/fabrication/" onClick={() => setMobileMenuOpen(false)}>
-              <DymoLabel className="w-full text-center">FABRICATION</DymoLabel>
+              <DymoLabel className="w-full text-center">Field Notes</DymoLabel>
             </Link>
             <Link href="/tools/weather/" onClick={() => setMobileMenuOpen(false)}>
-              <DymoLabel className="w-full text-center">WEATHER</DymoLabel>
+              <DymoLabel className="w-full text-center">Weather</DymoLabel>
             </Link>
-          </div>
-          <div className="flex justify-between items-center pt-2 border-t border-border-primary/20 gap-4">
-            <div className="flex items-center gap-2">
-              <span className="text-xs font-mono opacity-50 uppercase">Theme:</span>
-              <button
-                onClick={toggleDarkMode}
-                className="flex items-center gap-2 px-4 py-1 border border-border-primary text-xs"
-              >
-                {isDark ? <><Sun size={14} /> LIGHT</> : <><Moon size={14} /> DARK</>}
-              </button>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="text-xs font-mono opacity-50 uppercase">FX:</span>
-              <button
-                onClick={toggleLowFX}
-                className={`flex items-center gap-2 px-4 py-1 border text-xs ${lowFX ? 'border-accent text-accent' : 'border-border-primary'}`}
-              >
-                {lowFX ? <><ZapOff size={14} /> ON</> : <><Zap size={14} /> OFF</>}
-              </button>
-            </div>
+            <Link href="/tools/planting-calendar/" onClick={() => setMobileMenuOpen(false)}>
+              <DymoLabel className="w-full text-center">Planting</DymoLabel>
+            </Link>
+            <Link href="/tools/caloric-security/" onClick={() => setMobileMenuOpen(false)}>
+              <DymoLabel className="w-full text-center">Resilience</DymoLabel>
+            </Link>
+            <Link href="/tools/fabrication/" onClick={() => setMobileMenuOpen(false)}>
+              <DymoLabel className="w-full text-center">Workshop</DymoLabel>
+            </Link>
           </div>
         </div>
       )}
