@@ -1,82 +1,106 @@
-# Homesteader Labs - Project Context
+# Homesteader Labs
 
-## Project Overview
-Homesteader Labs is a Next.js 14 application providing tools, hardware, and field documentation for homesteaders, survivalists, and self-reliant builders. The site features a "Brutalist" aesthetic with a focus on off-grid resilience, fabrication, and survival tech.
+Free planning tools for homesteaders, gardeners, and anyone growing their own food. No account required. All data stored locally.
 
-### Core Technologies
+## Stack
+
 - **Framework:** Next.js 14 (App Router)
 - **Language:** TypeScript
-- **Styling:** Tailwind CSS (with Brutalist UI components)
-- **3D Rendering:** Three.js (via `STLViewer` for fabrication tools)
-- **Content:** MDX (for blog and archive posts)
+- **Styling:** Tailwind CSS + custom brutalist design system
+- **Email:** Resend (audience subscriptions via `/api/subscribe`)
+- **3D Rendering:** Three.js via `STLViewer` (`next/dynamic`, SSR disabled)
+- **Content:** MDX with gray-matter frontmatter
+- **Database:** Dexie (IndexedDB) for caloric security / inventory
+- **Weather:** Open-Meteo API (free, no auth)
 - **Icons:** Lucide React
-- **Testing:** Vitest with JSDOM
+- **Testing:** Vitest + JSDOM
 
-### Key Features
-- **Planting Calendar:** Data-driven tool for managing crop schedules.
-- **Weather Tools:** Survival and planting-focused weather dashboards.
-- **Fabrication:** 3D STL viewer for hardware designs and field tools.
-- **Shop:** Catalog for off-grid hardware and survival gear.
-- **Terminal:** Interactive overlay (`ALT+T`) for command-line style interactions.
+## Commands
 
----
-
-## Building and Running
-
-### Development
 ```bash
-npm run dev
+npm run dev        # Dev server at localhost:3000
+npm run build      # Production build
+npm run lint       # ESLint
+npm run test       # Vitest (unit tests, no watch)
 ```
-Starts the development server on `http://localhost:3000`.
 
-### Production
+Run a single test file:
 ```bash
-npm run build
-npm run start
+npx vitest run lib/plantingIndex.test.ts
 ```
-Builds the application for production and starts the server.
 
-### Testing
-```bash
-npm run test
+## Tools
+
+| Tool | Route | Description |
+|------|-------|-------------|
+| Weather Station | `/tools/weather/` | Real-time conditions, frost risk, soil workability, GDD, survival/planting dashboards |
+| Planting Calendar | `/tools/planting-calendar/` | Zone-calibrated schedules, succession logic, lunar sync, caloric yield output. 54 crops |
+| Resilience Dashboard | `/tools/caloric-security/` | Days of food/water/energy clocks, inventory tracking, caloric ROI, companion planting |
+| Workshop | `/tools/fabrication/` | STL viewer, print time + cost estimation |
+
+## Architecture
+
+### Data Layer
+
+| Source | Location | Purpose |
+|--------|----------|---------|
+| Crop database | `content/crops/*.json` | Varieties, timing, caloric data, companion planting |
+| Product catalog | `lib/products.ts` | Hardcoded hardware list |
+| Blog/archive posts | `content/archive/*.mdx`, `content/blog/*.mdx` | Field guides parsed by `lib/posts.ts` |
+| Weather data | Open-Meteo API | Fetched in `lib/weatherApi.ts` |
+| Inventory + config | IndexedDB (Dexie) | Caloric security data — `lib/caloric-security/db.ts` |
+| Cart + locations | localStorage | Cart key: `homesteader_requisition_data`, locations: `homesteader-locations` |
+
+### Calculation Modules
+
+Pure functions with unit test coverage:
+
+- `lib/plantingIndex.ts` — frost risk, soil workability, growing degree days
+- `lib/survivalIndex.ts` — fire risk, water catchment, solar efficiency, livestock stress
+- `lib/caloric-security/yieldCalculations.ts` — kcal math, unit normalization, macros
+- `lib/caloric-security/waterAutonomy.ts` — days of water from storage + forecast inflow
+- `lib/caloric-security/energyAutonomy.ts` — days of energy from battery + solar forecast
+- `lib/tools/planting-calendar/` — crop scheduling, succession logic, date calculations
+
+### Context Providers
+
+Wrapped in `components/providers.tsx` at the root layout:
+
+- `CartProvider` — shopping cart state, persists to localStorage
+- `FieldStationProvider` — location management, frost date lookups, growing zone detection
+
+### Key Component Patterns
+
+- `BrutalistBlock` — primary container with offset shadow border
+- `FieldStationLayout` — wrapper for all tool pages
+- `ClockDisplay` — survival clock UI (food/water/energy)
+- `STLViewer` — loaded via `next/dynamic` with `ssr: false`
+
+## Design System
+
+- Pure Tailwind CSS, no component library
+- Permanently dark theme — `dark` class hardcoded on `<html>` in `app/layout.tsx`
+- CSS custom properties in `app/globals.css` control the full theme
+- **Palette:** burnt orange `#ff7300` (accent), dark brown `#7a3f1a` (borders), cream `#E8D3BE` (text), charcoal backgrounds
+- **Typography:** Courier New / monospace body; Caveat (handwriting) for field-note accents
+- **Brutalist rules:** 2–3px borders, 4–8px shadow offsets
+- Tailwind custom shadows: `shadow-brutalist-sm`, `shadow-brutalist`, `shadow-brutalist-lg`
+
+## Environment Variables
+
+Required on Vercel (not committed):
+
 ```
-Runs the Vitest test suite.
-
-### Linting
-```bash
-npm run lint
+RESEND_API_KEY=...
+RESEND_AUDIENCE_ID=...   # Must be a UUID from the Resend Audiences dashboard
 ```
-Runs ESLint to check for code quality and style issues.
-
----
-
-## Development Conventions
-
-### Architecture
-- **App Router:** All routing and layouts are under the `app/` directory.
-- **Modular Components:** Feature-specific components are in `components/<feature>/`, while shared UI elements are in `components/ui/`.
-- **Domain Logic:** All business logic, types, and utility functions are centralized in the `lib/` directory. Use the `@/lib` alias.
-- **Content Management:** MDX files are stored in `content/` and parsed using `lib/posts.ts` and `lib/products.ts`.
-
-### UI & Styling
-- **Brutalist Aesthetic:** Use standard UI components (`BrutalistBlock`, `Typography`, `Button`, `Badge`) to maintain the project's visual identity.
-- **Shadows & Borders:** Use the `shadow-brutalist` and `border-3` classes for consistency.
-- **Color Palette:** Strictly follow the CSS variables defined in `app/globals.css` and mapped in `tailwind.config.ts`.
-- **Dark Mode:** Supports `.dark` class toggling.
-
-### Performance
-- **Lazy Loading:** 3D components like `STLViewer` should be loaded dynamically using `next/dynamic` with `ssr: false` to keep the initial bundle size small.
-
-### Testing
-- **Unit Tests:** Place logic tests in `lib/` with a `.test.ts` extension (e.g., `lib/survivalIndex.test.ts`).
-- **UI Tests:** Use `@testing-library/react` for component testing within Vitest.
-
----
 
 ## Key Directories
-- `app/`: Next.js pages and API routes.
-- `components/`: React components.
-- `content/`: MDX content files.
-- `docs/`: Project documentation (Audits, MVP specs, Strategies).
-- `lib/`: Shared logic, types, and data fetching.
-- `public/`: Static assets (fonts, images, textures).
+
+```
+app/             Next.js pages, API routes, hooks
+components/      React components (layout/, home/, tools/, ui/)
+content/         MDX posts and JSON crop data
+lib/             Business logic, types, calculations
+public/images/   Photos and logo assets
+```
