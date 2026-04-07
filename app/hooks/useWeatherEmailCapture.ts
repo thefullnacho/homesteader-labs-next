@@ -18,6 +18,7 @@ export function useWeatherEmailCapture(locationCount: number) {
   const [email, setEmail] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [isError, setIsError] = useState(false);
 
   // Load state from localStorage
   useEffect(() => {
@@ -105,29 +106,33 @@ export function useWeatherEmailCapture(locationCount: number) {
 
   const submitEmail = useCallback(async (emailValue: string) => {
     setIsSubmitting(true);
-    
-    await fetch("/api/subscribe", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email: emailValue, type: captureType }),
-    });
+    try {
+      const res = await fetch("/api/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: emailValue, type: captureType }),
+      });
+      if (!res.ok) throw new Error("Subscribe failed");
 
-    // Store subscription
-    localStorage.setItem(STORAGE_KEY, JSON.stringify({
-      email: emailValue,
-      locationCount,
-      isSubscribed: true,
-      dismissedAt: null
-    }));
-    
-    setIsSubmitting(false);
-    setIsSuccess(true);
-    
-    // Hide after 3 seconds
-    setTimeout(() => {
-      setShowCapture(false);
-      setIsSuccess(false);
-    }, 3000);
+      // Only mark subscribed on confirmed success
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({
+        email: emailValue,
+        locationCount,
+        isSubscribed: true,
+        dismissedAt: null
+      }));
+
+      setIsSuccess(true);
+      setTimeout(() => {
+        setShowCapture(false);
+        setIsSuccess(false);
+      }, 3000);
+    } catch {
+      setIsError(true);
+      setTimeout(() => setIsError(false), 4000);
+    } finally {
+      setIsSubmitting(false);
+    }
   }, [captureType, locationCount]);
 
   const dismiss = useCallback(() => {
@@ -154,6 +159,7 @@ export function useWeatherEmailCapture(locationCount: number) {
     setEmail,
     isSubmitting,
     isSuccess,
+    isError,
     submitEmail,
     dismiss,
     showWeeklyCapture,

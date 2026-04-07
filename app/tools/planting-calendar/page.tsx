@@ -28,6 +28,7 @@ export default function PlantingCalendarPage() {
   const [showEmailCapture, setShowEmailCapture] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [isEmailError, setIsEmailError] = useState(false);
 
   const { plantingDates, omittedCrops, adjustedFrostDates } = useMemo(() => {
     if (!frostDates) return { plantingDates: [], omittedCrops: [], adjustedFrostDates: null };
@@ -68,15 +69,26 @@ export default function PlantingCalendarPage() {
     return { plantingDates: dates, omittedCrops: omitted, adjustedFrostDates: adjustedFrost };
   }, [selectedCrops, frostDates, seasonExtension, lunarSync]);
 
-  const handleEmailSubmit = useCallback(async () => {
+  const handleEmailSubmit = useCallback(async (email: string) => {
     setIsSubmitting(true);
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    setIsSubmitting(false);
-    setIsSuccess(true);
-    setTimeout(() => {
-      setShowEmailCapture(false);
-      setIsSuccess(false);
-    }, 3000);
+    setIsEmailError(false);
+    try {
+      const res = await fetch("/api/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, type: "planting-reminders" }),
+      });
+      if (!res.ok) throw new Error("Subscribe failed");
+      setIsSuccess(true);
+      setTimeout(() => {
+        setShowEmailCapture(false);
+        setIsSuccess(false);
+      }, 3000);
+    } catch {
+      setIsEmailError(true);
+    } finally {
+      setIsSubmitting(false);
+    }
   }, []);
 
   const hasCalendarData = frostDates && selectedCrops.length > 0;
@@ -243,6 +255,7 @@ export default function PlantingCalendarPage() {
           onDismiss={() => setShowEmailCapture(false)}
           isSubmitting={isSubmitting}
           isSuccess={isSuccess}
+          isError={isEmailError}
         />
 
         <FieldStationBridge currentOps="PLANT" />

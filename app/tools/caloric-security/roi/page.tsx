@@ -42,10 +42,12 @@ function parseFirstInt(s: string): number {
 }
 
 export default function RoiPage() {
-  const [unlocked, setUnlocked] = useState(false);
-  const [email,    setEmail]    = useState('');
-  const [consent,  setConsent]  = useState(false);
-  const [gateOpen, setGateOpen] = useState(false);
+  const [unlocked,     setUnlocked]     = useState(false);
+  const [email,        setEmail]        = useState('');
+  const [consent,      setConsent]      = useState(false);
+  const [gateOpen,     setGateOpen]     = useState(false);
+  const [submitting,   setSubmitting]   = useState(false);
+  const [submitError,  setSubmitError]  = useState(false);
 
   useEffect(() => {
     setUnlocked(localStorage.getItem(GATE_KEY) === 'true');
@@ -79,14 +81,23 @@ export default function RoiPage() {
   async function handleUnlock(e: React.FormEvent) {
     e.preventDefault();
     if (!consent) return;
-    await fetch("/api/subscribe", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, type: "roi-unlock" }),
-    });
-    localStorage.setItem(GATE_KEY, 'true');
-    setUnlocked(true);
-    setGateOpen(false);
+    setSubmitting(true);
+    setSubmitError(false);
+    try {
+      const res = await fetch("/api/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, type: "roi-unlock" }),
+      });
+      if (!res.ok) throw new Error("Subscribe failed");
+      localStorage.setItem(GATE_KEY, 'true');
+      setUnlocked(true);
+      setGateOpen(false);
+    } catch {
+      setSubmitError(true);
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   const visibleRows  = unlocked ? rows : rows.slice(0, FREE_ROWS);
@@ -217,10 +228,13 @@ export default function RoiPage() {
                 <Button variant="outline" size="sm" onClick={() => setGateOpen(false)} className="flex-1" type="button">
                   Cancel
                 </Button>
-                <Button variant="primary" size="sm" disabled={!consent} className="flex-1" type="submit">
-                  Unlock_Now
+                <Button variant="primary" size="sm" disabled={!consent || submitting} className="flex-1" type="submit">
+                  {submitting ? "Submitting..." : "Unlock_Now"}
                 </Button>
               </div>
+              {submitError && (
+                <p className="text-xs text-red-500 mt-2">Something went wrong. Please try again.</p>
+              )}
             </form>
           </BrutalistBlock>
         </div>

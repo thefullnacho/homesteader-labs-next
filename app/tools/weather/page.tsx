@@ -75,7 +75,7 @@ export default function WeatherPage() {
   const MAX_RETRIES = 3;
 
   const {
-    showCapture, captureType, isSubmitting, isSuccess,
+    showCapture, captureType, isSubmitting, isSuccess, isError,
     submitEmail, dismiss, showWeeklyCapture,
   } = useWeatherEmailCapture(locations.length);
 
@@ -351,6 +351,7 @@ export default function WeatherPage() {
           onDismiss={dismiss}
           isSubmitting={isSubmitting}
           isSuccess={isSuccess}
+          isError={isError}
         />
 
         <FieldStationBridge currentOps="WEATHER" />
