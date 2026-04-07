@@ -11,6 +11,7 @@ import SeasonExtensionSelector, { SeasonExtension } from "@/components/tools/pla
 import ContextualRequisition from "@/components/tools/ContextualRequisition";
 import { SelectedCrop, PlantingDate } from "@/lib/tools/planting-calendar/types";
 import { getCropById } from "@/lib/tools/planting-calendar/crops";
+import { calculateCropYield } from "@/lib/caloric-security/yieldCalculations";
 import { calculateCropSchedule } from "@/lib/tools/planting-calendar/plantingCalculations";
 import FieldStationLayout from "@/components/ui/FieldStationLayout";
 import FieldStationBridge from "@/components/ui/FieldStationBridge";
@@ -91,6 +92,31 @@ export default function PlantingCalendarPage() {
     }
   }, []);
 
+  const caloricSummary = useMemo(() => {
+    if (!frostDates) return null;
+
+    const crops = selectedCrops
+      .map(sc => {
+        const crop = getCropById(sc.cropId);
+        if (!crop) return null;
+        const quantity = sc.quantity ?? 1;
+        const result = calculateCropYield(crop, quantity, 1.0);
+        if (!result) return null;
+        return {
+          cropName: crop.name,
+          icon: crop.icon,
+          quantity,
+          totalKcal: Math.round(result.totalKcal),
+        };
+      })
+      .filter(Boolean) as { cropName: string; icon: string; quantity: number; totalKcal: number }[];
+
+    const totalKcal = crops.reduce((sum, c) => sum + c.totalKcal, 0);
+    const daysOfFood = Math.round(totalKcal / 2000);
+
+    return { crops, totalKcal, daysOfFood };
+  }, [selectedCrops, frostDates]);
+
   const hasCalendarData = frostDates && selectedCrops.length > 0;
 
   return (
@@ -168,7 +194,6 @@ export default function PlantingCalendarPage() {
                 <CropSelector
                   selectedCrops={selectedCrops}
                   onCropsChange={setSelectedCrops}
-                  maxCrops={10}
                 />
               </>
             )}
@@ -230,6 +255,7 @@ export default function PlantingCalendarPage() {
                   dates={plantingDates}
                   frostDates={adjustedFrostDates || frostDates}
                   onEmailCapture={() => setShowEmailCapture(true)}
+                  caloricSummary={caloricSummary}
                 />
               </div>
             ) : (
