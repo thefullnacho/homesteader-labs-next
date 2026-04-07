@@ -91,7 +91,7 @@ export default function WeatherPage() {
       setWeather(data);
       setRetryCount(0);
     } catch {
-      setError("TELEMETRY_LINK_SEVERED");
+      setError("Connection error");
     } finally {
       setLoading(false);
     }
@@ -111,8 +111,8 @@ export default function WeatherPage() {
 
   // Badge label: timestamp once data is loaded
   const badgeLabel = weather
-    ? new Date(weather.lastUpdated).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) + ' // STABLE'
-    : loading ? 'ACQUIRING...' : 'NO_SIGNAL';
+    ? new Date(weather.lastUpdated).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) + ' // Live'
+    : loading ? 'Loading...' : 'No data';
 
   if (!isLoaded || (loading && activeLocation)) {
     return (
@@ -125,7 +125,7 @@ export default function WeatherPage() {
               ))}
             </div>
             <Typography variant="small" className="font-mono uppercase tracking-widest opacity-30">
-              Initializing Stream: {activeLocation?.id || "NULL"}
+              Loading {activeLocation?.id || ""}...
             </Typography>
           </div>
         </div>
@@ -142,7 +142,7 @@ export default function WeatherPage() {
           <div>
             <Typography variant="h2" className="mb-1 uppercase tracking-tight font-mono">Weather Station</Typography>
             <Typography variant="small" className="opacity-40 font-mono text-[11px] uppercase tracking-widest">
-              Multi-Source Ensemble Telemetry // OPEN_METEO_V4
+              Multi-source forecast // Open-Meteo
             </Typography>
           </div>
           <Badge variant="status" pulse>{badgeLabel}</Badge>
@@ -165,7 +165,7 @@ export default function WeatherPage() {
         {!activeLocation && (
           <BrutalistBlock className="p-12 text-center border-dashed border-border-primary/40 mb-8">
             <Typography variant="body" className="opacity-40 font-mono uppercase text-sm">
-              Waiting for coordinate input to initialize node...
+              Add a location to get started
             </Typography>
           </BrutalistBlock>
         )}
@@ -208,7 +208,7 @@ export default function WeatherPage() {
             <div>
               {/* Inline mode toggle + section divider */}
               <div className="flex items-center gap-4 mb-6">
-                <DymoLabel className="text-xs shrink-0">FIELD_ANALYSIS V.2</DymoLabel>
+                <DymoLabel className="text-xs shrink-0">Field Analysis</DymoLabel>
                 <div className="flex border-2 border-border-primary bg-black/20 shrink-0">
                   <button
                     onClick={() => setMode("SURVIVAL")}
@@ -216,7 +216,7 @@ export default function WeatherPage() {
                       mode === "SURVIVAL" ? "bg-accent text-white" : "opacity-40 hover:opacity-100"
                     }`}
                   >
-                    <ShieldAlert size={12} /> Survival Ops
+                    <ShieldAlert size={12} /> Survival
                   </button>
                   <button
                     onClick={() => setMode("PLANTING")}
@@ -224,7 +224,7 @@ export default function WeatherPage() {
                       mode === "PLANTING" ? "bg-accent text-white" : "opacity-40 hover:opacity-100"
                     }`}
                   >
-                    <Sprout size={12} /> Planting Log
+                    <Sprout size={12} /> Planting
                   </button>
                 </div>
                 <div className="h-[2px] flex-grow bg-border-primary/20" />
@@ -262,7 +262,7 @@ export default function WeatherPage() {
               >
                 <Layers size={12} className="text-accent opacity-60 group-hover:opacity-100 transition-opacity" />
                 <span className="text-[10px] font-mono uppercase font-bold opacity-60 group-hover:opacity-100 tracking-widest transition-opacity flex-1">
-                  Radar_View — Live Atmospheric Telemetry
+                  Radar — Live View
                 </span>
                 <ChevronDown
                   size={12}
@@ -297,7 +297,7 @@ export default function WeatherPage() {
             <AlertCircle size={48} className="text-red-500 mx-auto mb-4 opacity-40" />
             <Typography variant="h3" className="text-red-500 uppercase font-mono">{error}</Typography>
             <Typography variant="body" className="opacity-60 text-xs mt-2 uppercase font-mono">
-              Attempting to re-establish uplink...
+              Reconnecting...
             </Typography>
             {retryCount < MAX_RETRIES && (
               <button
@@ -321,7 +321,7 @@ export default function WeatherPage() {
             <Terminal size={14} />
             <Activity size={14} />
             <div className="w-px h-4 bg-foreground-primary" />
-            <span className="text-[8px] font-mono uppercase tracking-[0.4em]">Non Custodial Data Stream</span>
+            <span className="text-[8px] font-mono uppercase tracking-[0.4em]">Weather data via Open-Meteo</span>
           </div>
           {weather && (
             <div className="flex items-center gap-3">

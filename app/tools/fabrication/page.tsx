@@ -10,7 +10,7 @@ const STLViewer = dynamic(() => import("@/components/fabrication/STLViewer"), {
     <div className="h-[400px] w-full flex items-center justify-center bg-black/20 border-2 border-border-primary border-dashed">
       <div className="text-center">
         <Box className="w-12 h-12 text-accent animate-pulse mx-auto mb-4" />
-        <p className="font-mono text-xs text-accent uppercase tracking-widest">Initializing_3D_Engine...</p>
+        <p className="font-mono text-xs text-accent uppercase tracking-widest">Loading 3D viewer...</p>
       </div>
     </div>
   ),
@@ -136,9 +136,8 @@ export default function FabricationPage() {
               <Typography variant="small" className="opacity-60">STL Viewer & Precise Print Estimation Matrix</Typography>
             </div>
             <div className="text-right flex flex-col items-end gap-2">
-              <Badge variant="status" pulse>System_Operational</Badge>
               <Typography variant="small" className="font-mono text-xs opacity-40 uppercase mb-0">
-                FILAMENTS_LOADED: {FILAMENT_TYPES.length}
+                {FILAMENT_TYPES.length} materials available
               </Typography>
             </div>
           </div>
@@ -152,7 +151,7 @@ export default function FabricationPage() {
               <div className="flex justify-between items-center p-4 border-b-2 border-border-primary bg-background-primary/30">
                 <Typography variant="h4" className="mb-0 flex items-center gap-2 text-sm">
                   <Upload size={16} className="text-accent" />
-                  STL_INJECTION_PORT
+                  Upload STL File
                 </Typography>
                 {file && (
                   <Button
@@ -161,7 +160,7 @@ export default function FabricationPage() {
                     size="sm"
                     className="h-8 py-0 px-3"
                   >
-                    Clear_Cache
+                    Clear
                   </Button>
                 )}
               </div>
@@ -185,7 +184,7 @@ export default function FabricationPage() {
                       Drag & Drop STL file or click to scan directory
                     </Typography>
                     <Typography variant="small" className="opacity-20 font-mono mt-4 block">
-                      MAX_PAYLOAD: 50MB
+                      Max file size: 50MB
                     </Typography>
                     <input
                       ref={fileInputRef}
@@ -235,15 +234,15 @@ export default function FabricationPage() {
                 <div className="grid grid-cols-3 gap-6 text-center">
                   <div className="bg-background-primary/30 border border-border-primary/30 p-4">
                     <Typography variant="h3" className="mb-0 text-accent">{dimensions.x.toFixed(1)}</Typography>
-                    <Typography variant="small" className="opacity-40 font-mono mb-0 uppercase text-[11px]">X_Axis (mm)</Typography>
+                    <Typography variant="small" className="opacity-40 font-mono mb-0 uppercase text-[11px]">Width (mm)</Typography>
                   </div>
                   <div className="bg-background-primary/30 border border-border-primary/30 p-4">
                     <Typography variant="h3" className="mb-0 text-accent">{dimensions.y.toFixed(1)}</Typography>
-                    <Typography variant="small" className="opacity-40 font-mono mb-0 uppercase text-[11px]">Y_Axis (mm)</Typography>
+                    <Typography variant="small" className="opacity-40 font-mono mb-0 uppercase text-[11px]">Depth (mm)</Typography>
                   </div>
                   <div className="bg-background-primary/30 border border-border-primary/30 p-4">
                     <Typography variant="h3" className="mb-0 text-accent">{dimensions.z.toFixed(1)}</Typography>
-                    <Typography variant="small" className="opacity-40 font-mono mb-0 uppercase text-[11px]">Z_Axis (mm)</Typography>
+                    <Typography variant="small" className="opacity-40 font-mono mb-0 uppercase text-[11px]">Height (mm)</Typography>
                   </div>
                 </div>
               </BrutalistBlock>
@@ -283,7 +282,7 @@ export default function FabricationPage() {
                 {/* Infill */}
                 <div>
                   <div className="flex justify-between items-end mb-3">
-                    <Typography variant="small" className="mb-0 uppercase font-bold text-xs">Infill_Density</Typography>
+                    <Typography variant="small" className="mb-0 uppercase font-bold text-xs">Infill Density</Typography>
                     <Typography variant="h4" className="mb-0 text-accent">{settings.infill}%</Typography>
                   </div>
                   <input
@@ -296,14 +295,14 @@ export default function FabricationPage() {
                     className="w-full h-1 bg-background-secondary rounded-lg appearance-none cursor-pointer accent-accent border border-border-primary"
                   />
                   <div className="flex justify-between text-[8px] font-mono opacity-30 mt-2 uppercase">
-                    <span>Low_Density</span>
-                    <span>Solid_Core</span>
+                    <span>Low</span>
+                    <span>Solid</span>
                   </div>
                 </div>
 
                 {/* Layer Height */}
                 <div>
-                  <Typography variant="small" className="mb-3 block uppercase font-bold text-xs">Layer_Resolution</Typography>
+                  <Typography variant="small" className="mb-3 block uppercase font-bold text-xs">Layer Height</Typography>
                   <div className="flex gap-2">
                     {[0.1, 0.2, 0.3].map((height) => (
                       <button
@@ -323,7 +322,7 @@ export default function FabricationPage() {
 
                 {/* Supports */}
                 <div className="flex items-center justify-between bg-black/10 p-3 border border-border-primary/20">
-                  <Typography variant="small" className="mb-0 uppercase font-bold text-xs">Overhang_Support</Typography>
+                  <Typography variant="small" className="mb-0 uppercase font-bold text-xs">Support Structures</Typography>
                   <button
                     onClick={() => updateSettings("supportEnabled", !settings.supportEnabled)}
                     className={`w-12 h-6 border-2 transition-all relative ${
@@ -348,13 +347,13 @@ export default function FabricationPage() {
                 <div className="space-y-3 mb-8 mt-2">
                   <div className="flex justify-between items-center text-xs font-mono">
                     <span className="opacity-50 uppercase flex items-center gap-2">
-                      <Weight size={14} /> Net_Weight
+                      <Weight size={14} /> Weight
                     </span>
                     <span className="font-bold">{estimate.weight}g</span>
                   </div>
                   <div className="flex justify-between items-center text-xs font-mono">
                     <span className="opacity-50 uppercase flex items-center gap-2">
-                      <Clock size={14} /> Runtime_Est
+                      <Clock size={14} /> Print Time
                     </span>
                     <span className="font-bold">{formatPrintTime(estimate.printTime)}</span>
                   </div>
@@ -371,7 +370,7 @@ export default function FabricationPage() {
                 <div className="border-t-2 border-accent pt-6 mb-6">
                   <div className="flex justify-between items-end">
                     <div>
-                      <Typography variant="small" className="opacity-40 mb-0 font-mono uppercase text-[11px]">Total_Requisition_Cost</Typography>
+                      <Typography variant="small" className="opacity-40 mb-0 font-mono uppercase text-[11px]">Total</Typography>
                       <Typography variant="h1" className="mb-0 text-accent text-4xl">${estimate.totalCost.toFixed(2)}</Typography>
                     </div>
                     <Badge variant="status" className="mb-1">ESTIMATE</Badge>
@@ -380,7 +379,7 @@ export default function FabricationPage() {
 
                 <Button variant="primary" size="lg" className="w-full group">
                   <DymoLabel className="group-hover:scale-105 transition-transform px-6">
-                    SUBMIT_QUOTE_REQUEST
+                    Request Quote
                   </DymoLabel>
                 </Button>
               </BrutalistBlock>

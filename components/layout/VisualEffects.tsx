@@ -1,13 +1,8 @@
 "use client";
 
 import React from 'react';
-import { useThemePreferences } from '@/app/hooks/useThemePreferences';
 
 const VisualEffects = () => {
-  const { lowFX } = useThemePreferences();
-
-  if (lowFX) return null;
-
   return (
     <>
       {/* Global Grain/Noise Overlay */}

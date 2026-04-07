@@ -46,7 +46,7 @@ export default function CaloricSecurityPage() {
       <FieldStationLayout stationId="HL_CALORIC_SEC_V1.0">
         <div className="flex items-center justify-center min-h-[40vh]">
           <span className="text-xs font-mono uppercase opacity-30 animate-pulse">
-            Loading_Manifest...
+            Loading...
           </span>
         </div>
       </FieldStationLayout>

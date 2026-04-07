@@ -5,13 +5,12 @@ import { Cloud, Sprout, Shield, Compass, ArrowRight, MapPin } from "lucide-react
 import FieldStationLayout from "@/components/ui/FieldStationLayout";
 import BrutalistBlock from "@/components/ui/BrutalistBlock";
 import Typography from "@/components/ui/Typography";
-import Badge from "@/components/ui/Badge";
 import { useFieldStation } from "@/app/context/FieldStationContext";
 
 const ops = [
   {
     id: "weather",
-    code: "WEATHER_OPS",
+    code: "Weather",
     mission: "What's happening right now and what can I do today.",
     href: "/tools/weather/",
     icon: Cloud,
@@ -29,7 +28,7 @@ const ops = [
   },
   {
     id: "plant",
-    code: "PLANT_OPS",
+    code: "Planting",
     mission: "What to plant, when to plant it, and how to extend your season.",
     href: "/tools/planting-calendar/",
     icon: Sprout,
@@ -47,7 +46,7 @@ const ops = [
   },
   {
     id: "survival",
-    code: "SURVIVAL_OPS",
+    code: "Resilience",
     mission: "How long can your homestead sustain itself.",
     href: "/tools/caloric-security/",
     icon: Shield,
@@ -75,7 +74,7 @@ export default function FieldStationPage() {
         <div className="flex items-start justify-between flex-wrap gap-4 mb-6">
           <div>
             <div className="text-[10px] font-mono uppercase tracking-[0.3em] opacity-40 mb-2">
-              HL_SYS // FIELD_STATION
+              Homesteader Labs
             </div>
             <Typography variant="h1" className="mb-2">
               Field Station
@@ -84,12 +83,7 @@ export default function FieldStationPage() {
               Homestead operations platform. Free. No account. All data stored locally.
             </Typography>
           </div>
-          <div className="flex flex-col items-end gap-2 shrink-0">
-            <Badge variant="outline" pulse>SYSTEM_ONLINE</Badge>
-            <span className="text-[9px] font-mono opacity-30 uppercase tracking-widest">
-              THREE_OPS_ACTIVE
-            </span>
-          </div>
+          <div className="flex flex-col items-end gap-2 shrink-0" />
         </div>
 
         {/* Location Calibration Status */}
@@ -100,19 +94,18 @@ export default function FieldStationPage() {
           />
           {activeLocation ? (
             <>
-              <span className="text-accent font-bold uppercase tracking-wide">
-                SYSTEM_CALIBRATED
-              </span>
-              <span className="opacity-30">—</span>
               <span className="opacity-70 truncate">{activeLocation.name}</span>
-              <span className="hidden sm:inline opacity-40 ml-auto shrink-0">
+              <span
+                className="hidden sm:inline opacity-40 ml-auto shrink-0 cursor-help"
+                title="Coordinates derived from your ZIP code"
+              >
                 {activeLocation.lat.toFixed(4)}° N &nbsp;
                 {Math.abs(activeLocation.lon).toFixed(4)}° W
               </span>
             </>
           ) : (
             <span className="opacity-40">
-              AWAITING_CALIBRATION — Enter your location in any OPS module to calibrate the entire system
+              Enter a ZIP code to get started
             </span>
           )}
         </div>
@@ -129,9 +122,6 @@ export default function FieldStationPage() {
                 <div className="w-10 h-10 bg-accent/10 border border-accent/30 flex items-center justify-center">
                   <Icon size={20} className="text-accent" />
                 </div>
-                <span className="text-[9px] font-mono border border-accent text-accent px-1 py-0.5">
-                  {op.status}
-                </span>
               </div>
 
               {/* Mode identifier */}
@@ -158,7 +148,7 @@ export default function FieldStationPage() {
                 href={op.href}
                 className="flex items-center justify-between w-full px-4 py-3 bg-accent text-white text-sm font-bold font-mono uppercase tracking-wider hover:bg-accent/90 transition-colors shadow-brutalist-sm hover:shadow-brutalist"
               >
-                <span>ENTER</span>
+                <span>Open</span>
                 <ArrowRight size={16} />
               </Link>
             </BrutalistBlock>
@@ -177,9 +167,9 @@ export default function FieldStationPage() {
                 </div>
                 <div>
                   <div className="text-[10px] font-mono uppercase tracking-[0.3em] opacity-50 mb-1">
-                    PENDING_DEPLOYMENT
+                    Coming Soon
                   </div>
-                  <h2 className="text-lg font-bold font-mono">FIELD_OPS</h2>
+                  <h2 className="text-lg font-bold font-mono">Workshop</h2>
                   <p className="text-xs font-mono opacity-60 mt-1 max-w-lg">
                     The tool you take when you leave the homestead. Identifies what nature already provides.
                     Weather tells you conditions, planting tells you what to grow, survival tracks your

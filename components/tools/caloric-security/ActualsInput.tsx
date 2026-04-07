@@ -56,7 +56,7 @@ export default function ActualsInput({ actuals, onChange }: ActualsInputProps) {
         className="flex items-center gap-2 px-3 py-1.5 border-2 border-border-primary/40 hover:border-accent hover:text-accent transition-colors text-xs font-mono font-bold uppercase"
       >
         <Edit3 size={12} />
-        Update_Actuals
+        Update Actuals
       </button>
 
       {/* Panel */}
@@ -69,7 +69,7 @@ export default function ActualsInput({ actuals, onChange }: ActualsInputProps) {
             <div className="flex items-center justify-between mb-6">
               <div>
                 <Typography variant="h3" className="uppercase tracking-tight mb-0.5 text-base">
-                  Current_Actuals
+                  Current Actuals
                 </Typography>
                 <p className="text-[10px] font-mono opacity-40 uppercase">
                   Real-world readings — overrides calculated estimates

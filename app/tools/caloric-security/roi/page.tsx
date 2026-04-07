@@ -115,11 +115,11 @@ export default function RoiPage() {
               href="/tools/caloric-security"
               className="inline-flex items-center gap-1.5 text-[10px] font-mono uppercase opacity-40 hover:opacity-80 transition-opacity mb-3"
             >
-              <ArrowLeft size={10} /> Autonomy_Dashboard
+              <ArrowLeft size={10} /> Dashboard
             </Link>
             <Typography variant="h2" className="mb-1 uppercase tracking-tight font-mono flex items-center gap-3">
               <TrendingUp size={20} className="opacity-60" />
-              Caloric_ROI_Report
+              Caloric ROI Report
             </Typography>
             <Typography variant="small" className="opacity-40 font-mono text-[11px] uppercase tracking-widest">
               kcal per sq ft // {rows.length} crops ranked

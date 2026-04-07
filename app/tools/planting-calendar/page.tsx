@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback, useMemo } from "react";
-import { Sprout, FileText, LayoutDashboard, Database, AlertTriangle, Printer, Moon } from "lucide-react";
+import { Sprout, FileText, AlertTriangle, Printer, Moon } from "lucide-react";
 import LocationSetup from "@/components/tools/planting-calendar/LocationSetup";
 import CropSelector from "@/components/tools/planting-calendar/CropSelector";
 import PlantingCalendar from "@/components/tools/planting-calendar/PlantingCalendar";
@@ -17,7 +17,6 @@ import FieldStationLayout from "@/components/ui/FieldStationLayout";
 import FieldStationBridge from "@/components/ui/FieldStationBridge";
 import Typography from "@/components/ui/Typography";
 import BrutalistBlock from "@/components/ui/BrutalistBlock";
-import Badge from "@/components/ui/Badge";
 import Marginalia from "@/components/ui/Marginalia";
 import DymoLabel from "@/components/ui/DymoLabel";
 
@@ -128,26 +127,16 @@ export default function PlantingCalendarPage() {
           <div>
             <Typography variant="h2" className="mb-1 uppercase tracking-tight font-mono">Planting_Calendar</Typography>
             <Typography variant="small" className="opacity-40 font-mono text-[11px] uppercase tracking-widest">
-              Automated Succession Logic // Active_Uplink: NOAA_NCRM_V3
+              Succession planting // Frost dates via NOAA
             </Typography>
           </div>
           
-          <div className="flex items-center gap-4">
-            <div className="flex border-2 border-border-primary p-1 bg-black/20">
-              <div className="flex items-center gap-2 px-4 py-1.5 text-xs font-bold font-mono uppercase opacity-40">
-                <Database size={12} /> DB_LOADED
-              </div>
-            </div>
-            <Badge variant="status" pulse>Sync_Active</Badge>
-          </div>
+          <div />
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 relative print:block">
           <Marginalia className="hidden xl:block -left-32 top-60 w-48 text-center opacity-30 print:hidden">
-            [PRO_TIP]
-            START_SEEDS_INDOORS
-            6-8_WEEKS_BEFORE
-            LAST_FROST_MARKER
+            Start seeds indoors 6–8 weeks before last frost
           </Marginalia>
 
           {/* Left Column - Setup */}
@@ -173,8 +162,8 @@ export default function PlantingCalendarPage() {
                         <Moon size={16} className="text-accent opacity-60" />
                       </div>
                       <div>
-                        <Typography variant="h4" className="mb-0 text-xs uppercase tracking-tighter">Lunar_Sync</Typography>
-                        <Typography variant="small" className="opacity-40 text-[8px] uppercase font-mono mb-0">Phase_Alignment</Typography>
+                        <Typography variant="h4" className="mb-0 text-xs uppercase tracking-tighter">Lunar Planting</Typography>
+                        <Typography variant="small" className="opacity-40 text-[8px] uppercase font-mono mb-0">Align to lunar phases</Typography>
                       </div>
                     </div>
                     <label className="flex items-center cursor-pointer relative">
@@ -203,9 +192,9 @@ export default function PlantingCalendarPage() {
                 <FileText size={14} /> Technical_Specs
               </Typography>
               <ul className="text-[11px] space-y-2 opacity-60 font-mono uppercase tracking-tighter">
-                <li className="flex gap-2"><span>[•]</span> <span>Succession_Engine_v2.1_Active</span></li>
-                <li className="flex gap-2"><span>[•]</span> <span>Maturity_Index_Adjusted</span></li>
-                <li className="flex gap-2"><span>[•]</span> <span>Offline_Ops_Ready</span></li>
+                <li className="flex gap-2"><span>[•]</span> <span>Succession planting active</span></li>
+                <li className="flex gap-2"><span>[•]</span> <span>Days to maturity calibrated</span></li>
+                <li className="flex gap-2"><span>[•]</span> <span>Works offline</span></li>
               </ul>
             </BrutalistBlock>
           </div>
@@ -229,7 +218,7 @@ export default function PlantingCalendarPage() {
 
                 <div className="flex items-center justify-between mb-2 print:hidden">
                   <div className="flex items-center gap-3 flex-grow">
-                    <DymoLabel className="text-xs">OUTPUT_GENERATED</DymoLabel>
+                    <DymoLabel className="text-xs">Calendar Ready</DymoLabel>
                     <div className="h-[2px] flex-grow max-w-[200px] bg-border-primary/20" />
                   </div>
                   <button 
@@ -237,7 +226,7 @@ export default function PlantingCalendarPage() {
                     className="flex items-center gap-2 px-3 py-1.5 border-2 border-border-primary hover:border-accent hover:text-accent transition-colors text-xs font-bold font-mono uppercase bg-black/20"
                   >
                     <Printer size={12} />
-                    PRINT_MANIFEST
+                    Print
                   </button>
                 </div>
 
@@ -262,7 +251,7 @@ export default function PlantingCalendarPage() {
               <BrutalistBlock className="p-16 text-center bg-black/20 border-2 border-dashed border-border-primary/20" variant="default">
                 <div className="max-w-xs mx-auto">
                   <Sprout size={64} className="mx-auto mb-8 opacity-10 text-accent animate-pulse" />
-                  <Typography variant="h3" className="mb-4 uppercase tracking-tighter opacity-40 italic">Awaiting_Input_Parameters</Typography>
+                  <Typography variant="h3" className="mb-4 uppercase tracking-tighter opacity-40 italic">Enter your ZIP code to start</Typography>
                   <Typography variant="body" className="opacity-30 text-xs uppercase font-mono leading-relaxed mb-0">
                     System requires regional coordinates and inventory manifest to initialize temporal sequence.
                   </Typography>
@@ -286,17 +275,6 @@ export default function PlantingCalendarPage() {
 
         <FieldStationBridge currentOps="PLANT" />
 
-        {/* Footer Info */}
-        <div className="pt-12 pb-8 flex flex-col items-center gap-4 border-t border-border-primary/10 opacity-20 font-mono print:hidden">
-          <div className="flex items-center gap-6">
-            <LayoutDashboard size={16} />
-            <div className="w-px h-4 bg-foreground-primary" />
-            <span className="text-[8px] uppercase tracking-[0.4em]">Non_Linear_Temporal_Calibrator</span>
-          </div>
-          <Typography variant="small" className="text-[8px] uppercase tracking-widest text-center mb-0">
-            REF_0x772: SUCCESSION_ENABLED // ACCURACY: ±144_HOURS
-          </Typography>
-        </div>
       </div>
     </FieldStationLayout>
   );

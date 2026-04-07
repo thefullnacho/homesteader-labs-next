@@ -78,7 +78,10 @@ const LocationManager = ({ locations, activeLocation, growingZone, onSwitch, onA
                   </>
                 )}
                 {!growingZone && !activeLocation.elevation && (
-                  <span className="text-[8px] font-mono opacity-25">
+                  <span
+                    className="text-[8px] font-mono opacity-25 cursor-help"
+                    title="Coordinates derived from your ZIP code"
+                  >
                     [{activeLocation.lat.toFixed(2)}, {activeLocation.lon.toFixed(2)}]
                   </span>
                 )}
