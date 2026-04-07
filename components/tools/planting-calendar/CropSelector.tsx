@@ -16,7 +16,7 @@ interface CropSelectorProps {
 export default function CropSelector({ 
   selectedCrops, 
   onCropsChange,
-  maxCrops = 10 
+  maxCrops = 30
 }: CropSelectorProps) {
   const [expandedCrop, setExpandedCrop] = useState<string | null>(null);
   const allCrops = getAllCrops();
@@ -33,7 +33,8 @@ export default function CropSelector({
           cropId: crop.id,
           varietyId: crop.varieties[0].id,
           successionEnabled: crop.successionEnabled,
-          successionInterval: crop.successionInterval
+          successionInterval: crop.successionInterval,
+          quantity: 1
         }
       ]);
     }
@@ -53,6 +54,14 @@ export default function CropSelector({
         sc.cropId === cropId
           ? { ...sc, successionEnabled: !sc.successionEnabled }
           : sc
+      )
+    );
+  };
+
+  const updateQuantity = (cropId: string, quantity: number) => {
+    onCropsChange(
+      selectedCrops.map(sc =>
+        sc.cropId === cropId ? { ...sc, quantity: Math.max(1, quantity) } : sc
       )
     );
   };
@@ -142,6 +151,18 @@ export default function CropSelector({
                     </select>
                   </div>
                   
+                  <div className="mb-4">
+                    <label className="text-[8px] font-mono font-bold uppercase opacity-40 block mb-2 tracking-widest">Plants</label>
+                    <input
+                      type="number"
+                      min={1}
+                      max={999}
+                      value={isSelected.quantity ?? 1}
+                      onChange={(e) => updateQuantity(crop.id, parseInt(e.target.value) || 1)}
+                      className="w-20 text-xs font-mono bg-black/40 border-2 border-border-primary/30 px-2 py-2 outline-none focus:border-accent"
+                    />
+                  </div>
+
                   {crop.successionEnabled && (
                     <label className="flex items-center gap-3 cursor-pointer group">
                       <div className="relative">

@@ -18,6 +18,11 @@ interface PlantingCalendarProps {
   dates: PlantingDate[];
   frostDates: FrostDates;
   onEmailCapture: () => void;
+  caloricSummary?: {
+    crops: { cropName: string; icon: string; quantity: number; totalKcal: number }[];
+    totalKcal: number;
+    daysOfFood: number;
+  } | null;
 }
 
 const ActionMap: Record<string, string> = {
@@ -27,10 +32,11 @@ const ActionMap: Record<string, string> = {
   'harvest': 'HARV_EST',
 };
 
-export default function PlantingCalendar({ 
-  dates, 
+export default function PlantingCalendar({
+  dates,
   frostDates,
-  onEmailCapture 
+  onEmailCapture,
+  caloricSummary
 }: PlantingCalendarProps) {
   const sortedDates = sortDatesByDate(dates);
   const groupedByMonth = groupDatesByMonth(sortedDates);
@@ -49,40 +55,61 @@ export default function PlantingCalendar({
     <div className="space-y-8 animate-in fade-in slide-in-from-right-4 duration-700 print:animate-none print:text-black">
       {/* MISSION PARAMETERS */}
       <BrutalistBlock className="p-6 bg-background-primary/40 border-accent/20 print:bg-white print:border-black print:text-black" variant="default" refTag="LOC_ZONE_DATA">
-        <div className="flex flex-col md:flex-row justify-between gap-8">
-          <div className="flex items-start gap-4">
-            <div className="w-12 h-12 bg-accent/10 border-2 border-accent flex items-center justify-center shrink-0 print:bg-white print:border-black">
-              <Calendar size={24} className="text-accent print:text-black" />
-            </div>
-            <div>
-              <Typography variant="h3" className="mb-1 tracking-tighter print:text-black">PLANTING_TIMELINE_V2</Typography>
-              <div className="flex items-center gap-3 text-xs font-mono opacity-50 uppercase tracking-widest print:text-black print:opacity-100">
-                <span className="flex items-center gap-1"><MapPin size={10} className="text-accent print:text-black" /> {frostDates.zipCode}</span>
-                <span>{"//"}</span>
-                <span>ZONE_{frostDates.growingZone}</span>
-              </div>
-            </div>
+        <div className="flex items-start gap-4 mb-5">
+          <div className="w-12 h-12 bg-accent/10 border-2 border-accent flex items-center justify-center shrink-0 print:bg-white print:border-black">
+            <Calendar size={24} className="text-accent print:text-black" />
           </div>
-
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 flex-grow max-w-xl">
-            <div className="border-l-2 border-border-primary/30 pl-3 print:border-black">
-              <Typography variant="small" className="text-[8px] opacity-40 uppercase mb-1 font-mono print:text-black print:opacity-100">Last_Spring_Frost</Typography>
-              <Typography variant="h4" className="mb-0 text-xs font-mono print:text-black">
-                {frostDates.lastSpringFrost.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }).toUpperCase()}
-              </Typography>
-            </div>
-            <div className="border-l-2 border-border-primary/30 pl-3 print:border-black">
-              <Typography variant="small" className="text-[8px] opacity-40 uppercase mb-1 font-mono print:text-black print:opacity-100">First_Fall_Frost</Typography>
-              <Typography variant="h4" className="mb-0 text-xs font-mono print:text-black">
-                {frostDates.firstFallFrost.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }).toUpperCase()}
-              </Typography>
-            </div>
-            <div className="border-l-2 border-border-primary/30 pl-3 print:border-black">
-              <Typography variant="small" className="text-[8px] opacity-40 uppercase mb-1 font-mono print:text-black print:opacity-100">Growth_Window</Typography>
-              <Typography variant="h4" className="mb-0 text-xs font-mono print:text-black">{frostDates.frostFreeDays}_DAYS</Typography>
+          <div>
+            <Typography variant="h3" className="mb-1 tracking-tighter print:text-black">PLANTING_TIMELINE_V2</Typography>
+            <div className="flex items-center gap-3 text-xs font-mono opacity-50 uppercase tracking-widest print:text-black print:opacity-100">
+              <span className="flex items-center gap-1"><MapPin size={10} className="text-accent print:text-black" /> {frostDates.zipCode}</span>
+              <span>{"//"}</span>
+              <span>ZONE_{frostDates.growingZone}</span>
             </div>
           </div>
         </div>
+
+        <div className="grid grid-cols-3 gap-4">
+          <div className="border-l-2 border-border-primary/30 pl-3 print:border-black">
+            <Typography variant="small" className="text-[8px] opacity-40 uppercase mb-1 font-mono print:text-black print:opacity-100">Last_Spring_Frost</Typography>
+            <Typography variant="h4" className="mb-0 text-xs font-mono print:text-black">
+              {frostDates.lastSpringFrost.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }).toUpperCase()}
+            </Typography>
+          </div>
+          <div className="border-l-2 border-border-primary/30 pl-3 print:border-black">
+            <Typography variant="small" className="text-[8px] opacity-40 uppercase mb-1 font-mono print:text-black print:opacity-100">First_Fall_Frost</Typography>
+            <Typography variant="h4" className="mb-0 text-xs font-mono print:text-black">
+              {frostDates.firstFallFrost.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }).toUpperCase()}
+            </Typography>
+          </div>
+          <div className="border-l-2 border-border-primary/30 pl-3 print:border-black">
+            <Typography variant="small" className="text-[8px] opacity-40 uppercase mb-1 font-mono print:text-black print:opacity-100">Growth_Window</Typography>
+            <Typography variant="h4" className="mb-0 text-xs font-mono print:text-black">{frostDates.frostFreeDays}_DAYS</Typography>
+          </div>
+        </div>
+
+        {caloricSummary && caloricSummary.totalKcal > 0 && (
+          <div className="mt-4 pt-4 border-t border-border-primary/20 print:border-black">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-[9px] font-mono uppercase opacity-40">Est. Season Yield</span>
+              <span className="text-xs font-mono font-bold text-accent">
+                ~{caloricSummary.daysOfFood} days of food
+              </span>
+            </div>
+            <div className="space-y-1">
+              {caloricSummary.crops.map((c) => (
+                <div key={c.cropName} className="flex justify-between text-[9px] font-mono opacity-60">
+                  <span>{c.icon} {c.cropName} × {c.quantity}</span>
+                  <span>{c.totalKcal.toLocaleString()} kcal</span>
+                </div>
+              ))}
+            </div>
+            <div className="flex justify-between text-[10px] font-mono font-bold mt-2 pt-2 border-t border-border-primary/10">
+              <span className="opacity-60">Total</span>
+              <span>{caloricSummary.totalKcal.toLocaleString()} kcal</span>
+            </div>
+          </div>
+        )}
       </BrutalistBlock>
 
       {/* DEPLOYMENT LOG */}

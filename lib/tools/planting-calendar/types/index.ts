@@ -139,6 +139,7 @@ export interface SelectedCrop {
   varietyId: string;
   successionEnabled: boolean;
   successionInterval?: number;
+  quantity?: number;          // number of plants, defaults to 1
   actualActionDate?: {
     action: 'start-indoors' | 'transplant' | 'direct-sow';
     date: string;  // ISO date string YYYY-MM-DD
