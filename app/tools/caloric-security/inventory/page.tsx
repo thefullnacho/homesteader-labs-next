@@ -147,17 +147,17 @@ export default function InventoryPage() {
               href="/tools/caloric-security"
               className="inline-flex items-center gap-1.5 text-[10px] font-mono uppercase opacity-40 hover:opacity-80 transition-opacity mb-3"
             >
-              <ArrowLeft size={10} /> Autonomy_Dashboard
+              <ArrowLeft size={10} /> Dashboard
             </Link>
             <Typography variant="h2" className="mb-1 uppercase tracking-tight font-mono">
-              Inventory_Manifest
+              Food Inventory
             </Typography>
             <Typography variant="small" className="opacity-40 font-mono text-[11px] uppercase tracking-widest">
               Crop inventory // {inventory.length} items tracked
             </Typography>
           </div>
           <Button variant="primary" size="sm" onClick={openAdd} className="flex items-center gap-2">
-            <Plus size={12} /> Add_Item
+            <Plus size={12} /> Add Item
           </Button>
         </div>
 
@@ -293,7 +293,7 @@ export default function InventoryPage() {
           <BrutalistBlock className="w-full max-w-sm" refTag="ITEM_FORM">
             <div className="flex items-center justify-between mb-6">
               <Typography variant="h3" className="uppercase tracking-tight mb-0 text-base">
-                {editId ? 'Edit_Item' : 'Add_Item'}
+                {editId ? 'Edit Item' : 'Add to Inventory'}
               </Typography>
             </div>
 
@@ -396,7 +396,7 @@ export default function InventoryPage() {
                 className="flex-1"
                 disabled={saving || !form.cropId}
               >
-                {saving ? 'Saving...' : editId ? 'Update' : 'Add_to_Manifest'}
+                {saving ? 'Saving...' : editId ? 'Update' : 'Add to Inventory'}
               </Button>
             </div>
           </BrutalistBlock>

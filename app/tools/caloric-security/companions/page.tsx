@@ -140,11 +140,11 @@ export default function CompanionsPage() {
               href="/tools/caloric-security"
               className="inline-flex items-center gap-1.5 text-[10px] font-mono uppercase opacity-40 hover:opacity-80 transition-opacity mb-3"
             >
-              <ArrowLeft size={10} /> Autonomy_Dashboard
+              <ArrowLeft size={10} /> Dashboard
             </Link>
             <Typography variant="h2" className="mb-1 uppercase tracking-tight font-mono flex items-center gap-3">
               <Leaf size={20} className="opacity-60" />
-              Companion_Advisor
+              Companion Planting
             </Typography>
             <Typography variant="small" className="opacity-40 font-mono text-[11px] uppercase tracking-widest">
               Antagonist alerts + companion suggestions // {uniqueIds.length} active crops
@@ -179,7 +179,7 @@ export default function CompanionsPage() {
             <div className="flex items-center gap-2 mb-4">
               <AlertTriangle size={14} className="text-red-400" />
               <Typography variant="h4" className="text-xs uppercase tracking-widest font-mono opacity-60 mb-0">
-                Antagonist_Conflicts ({conflicts.length})
+                Conflicts ({conflicts.length})
               </Typography>
             </div>
 
@@ -220,7 +220,7 @@ export default function CompanionsPage() {
             <div className="flex items-center gap-2 mb-4">
               <Leaf size={14} className="text-green-400" />
               <Typography variant="h4" className="text-xs uppercase tracking-widest font-mono opacity-60 mb-0">
-                Companion_Suggestions ({suggestions.length})
+                Good Companions ({suggestions.length})
               </Typography>
             </div>
 
@@ -257,7 +257,7 @@ export default function CompanionsPage() {
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70">
           <BrutalistBlock className="w-full max-w-sm" refTag="COMPANION_GATE">
             <Typography variant="h3" className="uppercase tracking-tight mb-1 text-base">
-              Unlock_Companion_Advisor
+              Unlock Companion Planting
             </Typography>
             <p className="text-[10px] font-mono opacity-40 uppercase mb-6">
               Free access — see all antagonist conflicts and companion pairings for your crops.

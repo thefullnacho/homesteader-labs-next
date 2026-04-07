@@ -146,7 +146,7 @@ export default function AutonomyDashboard({
     return (
       <div className="flex items-center justify-center min-h-[40vh]">
         <span className="text-xs font-mono uppercase opacity-30 animate-pulse">
-          Reading_Manifest...
+          Loading...
         </span>
       </div>
     );
@@ -159,21 +159,21 @@ export default function AutonomyDashboard({
       <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 border-b-2 border-border-primary pb-6">
         <div>
           <Typography variant="h2" className="mb-1 uppercase tracking-tight font-mono">
-            Autonomy_Dashboard
+            Resilience Dashboard
           </Typography>
           <Typography variant="small" className="opacity-40 font-mono text-[11px] uppercase tracking-widest">
-            Survival_Clocks // Homestead_Security_Index
+            Survival clocks // Homestead security index
           </Typography>
         </div>
         <div className="flex items-center gap-3 flex-wrap">
           <ActualsInput actuals={actuals} onChange={setActuals} />
-          <Badge variant="status" pulse>Clocks_Active</Badge>
+          <Badge variant="status" pulse>Live</Badge>
           <button
             onClick={onEditConfig}
             className="flex items-center gap-1.5 text-[10px] font-mono uppercase opacity-40 hover:opacity-80 hover:text-accent transition-all"
           >
             <Pencil size={10} />
-            Edit_Config
+            Edit Config
           </button>
           <button
             onClick={handleReset}
@@ -208,7 +208,7 @@ export default function AutonomyDashboard({
 
         {/* Clock 1 — Days of Food */}
         <ClockDisplay
-          title="Days_of_Food"
+          title="Days of Food"
           systemId="CALORIC_SEC_v1"
           icon={Utensils}
           days={caloricTotals?.daysOfFood ?? null}
@@ -239,7 +239,7 @@ export default function AutonomyDashboard({
 
         {/* Clock 2 — Days of Water */}
         <ClockDisplay
-          title="Days_of_Water"
+          title="Days of Water"
           systemId="HYDRO_SEC_v1"
           icon={Droplets}
           days={waterAutonomy?.daysOfWater ?? null}
@@ -249,14 +249,14 @@ export default function AutonomyDashboard({
         >
           {actuals.storedGallons === 0 && (
             <div className="text-[9px] font-mono uppercase opacity-40 text-center py-2">
-              Enter stored gallons via Update_Actuals
+              Enter stored gallons via Update Actuals
             </div>
           )}
         </ClockDisplay>
 
         {/* Clock 3 — Days of Energy */}
         <ClockDisplay
-          title="Days_of_Energy"
+          title="Days of Energy"
           systemId="ENERGY_SEC_v1"
           icon={Zap}
           days={energyAutonomy?.daysOfEnergy ?? null}
@@ -286,7 +286,7 @@ export default function AutonomyDashboard({
           )}
           {actuals.currentBatteryPct === 100 && (
             <div className="text-[9px] font-mono opacity-30 text-center py-1 uppercase">
-              Battery % set via Update_Actuals
+              Battery % set via Update Actuals
             </div>
           )}
         </ClockDisplay>
@@ -300,7 +300,7 @@ export default function AutonomyDashboard({
         <Link href="/tools/caloric-security/roi" className="group border border-border-primary/20 hover:border-accent/50 px-4 py-3 flex items-center gap-3 transition-colors">
           <TrendingUp size={14} className="opacity-40 group-hover:opacity-80 transition-opacity" />
           <div className="flex-1 min-w-0">
-            <div className="text-[10px] font-mono uppercase font-bold group-hover:text-accent transition-colors">Caloric_ROI_Report</div>
+            <div className="text-[10px] font-mono uppercase font-bold group-hover:text-accent transition-colors">Caloric ROI Report</div>
             <div className="text-[9px] font-mono uppercase opacity-30">kcal per sq ft ranking // free</div>
           </div>
           <span className="text-[9px] font-mono opacity-30 group-hover:opacity-60">→</span>
@@ -308,7 +308,7 @@ export default function AutonomyDashboard({
         <Link href="/tools/caloric-security/companions" className="group border border-border-primary/20 hover:border-accent/50 px-4 py-3 flex items-center gap-3 transition-colors">
           <Leaf size={14} className="opacity-40 group-hover:opacity-80 transition-opacity" />
           <div className="flex-1 min-w-0">
-            <div className="text-[10px] font-mono uppercase font-bold group-hover:text-accent transition-colors">Companion_Advisor</div>
+            <div className="text-[10px] font-mono uppercase font-bold group-hover:text-accent transition-colors">Companion Planting</div>
             <div className="text-[9px] font-mono uppercase opacity-30">antagonist alerts + suggestions // free</div>
           </div>
           <span className="text-[9px] font-mono opacity-30 group-hover:opacity-60">→</span>
@@ -320,7 +320,7 @@ export default function AutonomyDashboard({
         <BrutalistBlock refTag="INVENTORY_MANIFEST" className="overflow-x-auto">
           <div className="flex items-center justify-between mb-4">
             <Typography variant="h4" className="text-xs uppercase tracking-widest font-mono opacity-60 mb-0 flex items-center gap-2">
-              <LayoutDashboard size={12} /> Inventory_Manifest
+              <LayoutDashboard size={12} /> Food Inventory
             </Typography>
             <Button href="/tools/caloric-security/inventory" variant="ghost" size="sm">
               Manage →
@@ -370,7 +370,7 @@ export default function AutonomyDashboard({
       <div className="pt-6 pb-2 flex flex-col items-center gap-3 border-t border-border-primary/10 opacity-20 font-mono">
         <div className="flex items-center gap-4">
           <RefreshCw size={14} />
-          <span className="text-[8px] uppercase tracking-[0.4em]">Clocks_Update_On_Inventory_Change</span>
+          <span className="text-[8px] uppercase tracking-[0.4em]">Clocks update on inventory change</span>
         </div>
         <span className="text-[8px] uppercase tracking-widest text-center">
           Data stored locally // IndexedDB // No server sync

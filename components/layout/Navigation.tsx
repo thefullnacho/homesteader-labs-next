@@ -1,16 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { Sun, Moon, ShoppingCart, Menu, X } from "lucide-react";
+import { ShoppingCart, Menu, X } from "lucide-react";
 import Image from "next/image";
 import { useCart } from "@/app/context/CartContext";
 import Link from "next/link";
 import Badge from "@/components/ui/Badge";
 import DymoLabel from "@/components/ui/DymoLabel";
-import { useThemePreferences } from "@/app/hooks/useThemePreferences";
 
 export default function Navigation() {
-  const { isDark, toggleDarkMode } = useThemePreferences();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { totalItems, isRequisitionSubmitted } = useCart();
 
@@ -51,13 +49,6 @@ export default function Navigation() {
             <DymoLabel className="opacity-80 hover:opacity-100 scale-90">Workshop</DymoLabel>
           </Link>
 
-          <button
-            onClick={toggleDarkMode}
-            className="p-2 border border-border-primary hover:bg-accent hover:text-white transition-all"
-            aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
-          >
-            {isDark ? <Sun size={16} /> : <Moon size={16} />}
-          </button>
         </div>
 
         {/* Requisition & Mobile Toggle */}

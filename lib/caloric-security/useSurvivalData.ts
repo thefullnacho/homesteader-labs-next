@@ -93,7 +93,7 @@ export function useSurvivalData(opts: {
     });
 
     return { config, inventory, caloricTotals, waterAutonomy, energyAutonomy, isFirstRun: false };
-  });
+  }, [storedGallons, currentBatteryPct, irrigationDailyGallons, season, forecastDays]);
 
   if (result === undefined) {
     return {
