@@ -1,5 +1,6 @@
 import { getAllPosts } from "@/lib/posts";
 import Link from "next/link";
+import Image from "next/image";
 import { Calendar, ArrowRight, FileText } from "lucide-react";
 import BrutalistBlock from "@/components/ui/BrutalistBlock";
 import DymoLabel from "@/components/ui/DymoLabel";
@@ -9,6 +10,15 @@ export default function RecentArchivePosts() {
 
   return (
     <section className="mb-12">
+      <div className="relative w-full aspect-[16/9] mb-6 overflow-hidden">
+        <Image
+          src="/images/field_notes.png"
+          alt="Field Notes"
+          fill
+          className="object-cover"
+        />
+      </div>
+
       <div className="flex justify-between items-end mb-6 border-b-2 border-border-primary pb-2">
         <h2 className="text-xl font-bold uppercase">Latest Field Notes</h2>
         <Link href="/archive/" className="opacity-80 hover:opacity-100">

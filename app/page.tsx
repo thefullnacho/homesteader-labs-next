@@ -14,6 +14,19 @@ export const metadata = {
 
 export default function Home() {
   return (
+    <>
+      {/* Full-bleed hero image — outside padded container, directly under nav */}
+      <div className="w-full aspect-[16/9] overflow-hidden">
+        <Image
+          src="/images/seedlings_sprouting.png"
+          alt="Seedlings sprouting in a garden"
+          width={1600}
+          height={900}
+          className="w-full h-full object-cover"
+          priority
+        />
+      </div>
+
     <div className="max-w-7xl mx-auto px-4 py-8 md:py-12">
       {/* Hero Section */}
       <section className="mb-16">
@@ -51,17 +64,6 @@ export default function Home() {
               <Button href="/shop/" variant="secondary">
                 Browse Hardware
               </Button>
-            </div>
-
-            <div className="mt-8 w-full border border-border-primary overflow-hidden">
-              <Image
-                src="/images/seedlings_sprouting.png"
-                alt="Seedlings sprouting in a garden"
-                width={1600}
-                height={900}
-                className="w-full object-cover"
-                priority
-              />
             </div>
           </div>
         </BrutalistBlock>
@@ -139,5 +141,6 @@ export default function Home() {
         </Typography>
       </section>
     </div>
+    </>
   );
 }
