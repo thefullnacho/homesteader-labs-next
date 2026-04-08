@@ -15,8 +15,8 @@ export const metadata = {
 export default function Home() {
   return (
     <>
-      {/* Full-bleed hero image — outside padded container, directly under nav */}
-      <div className="w-full aspect-[16/9] overflow-hidden">
+      {/* Full-bleed hero image — height-constrained so hero block stays above fold */}
+      <div className="w-full h-[40vh] overflow-hidden">
         <Image
           src="/images/seedlings_sprouting.png"
           alt="Seedlings sprouting in a garden"

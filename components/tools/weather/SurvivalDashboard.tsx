@@ -40,7 +40,7 @@ const SurvivalDashboard = ({ index }: SurvivalDashboardProps) => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {/* FIRE RISK */}
         <BrutalistBlock className="p-5 relative overflow-hidden group" refTag="DEF_CON_FIRE">
-          <Flame className="absolute -right-4 -bottom-4 opacity-[0.07] pointer-events-none" size={100} />
+          <Flame className="absolute -right-4 -bottom-4 opacity-[0.15] pointer-events-none text-red-500" size={100} />
           <div className="flex items-center gap-3 mb-4 opacity-80 group-hover:opacity-100 transition-opacity">
             <Flame size={16} className="text-accent" />
             <Typography variant="small" className="uppercase font-bold text-xs mb-0 tracking-widest font-mono">Thermal Threat Level</Typography>
@@ -53,7 +53,7 @@ const SurvivalDashboard = ({ index }: SurvivalDashboardProps) => {
 
         {/* WATER CATCHMENT */}
         <BrutalistBlock className="p-5 relative overflow-hidden group" refTag="H2O_ACQ_POT">
-          <Droplet className="absolute -right-4 -bottom-4 opacity-[0.07] pointer-events-none" size={100} />
+          <Droplet className="absolute -right-4 -bottom-4 opacity-[0.15] pointer-events-none text-blue-400" size={100} />
           <div className="flex items-center gap-3 mb-4 opacity-80 group-hover:opacity-100 transition-opacity">
             <Droplet size={16} className="text-accent" />
             <Typography variant="small" className="uppercase font-bold text-xs mb-0 tracking-widest font-mono">Catchment Efficiency</Typography>
@@ -70,7 +70,7 @@ const SurvivalDashboard = ({ index }: SurvivalDashboardProps) => {
 
         {/* SOLAR EFFICIENCY */}
         <BrutalistBlock className="p-5 relative overflow-hidden group" refTag="PV_ARRAY_YIELD">
-          <Zap className="absolute -right-4 -bottom-4 opacity-[0.07] pointer-events-none" size={100} />
+          <Zap className="absolute -right-4 -bottom-4 opacity-[0.15] pointer-events-none text-yellow-400" size={100} />
           <div className="flex items-center gap-3 mb-4 opacity-80 group-hover:opacity-100 transition-opacity">
             <Zap size={16} className="text-accent" />
             <Typography variant="small" className="uppercase font-bold text-xs mb-0 tracking-widest font-mono">Solar Energy Capture</Typography>
@@ -86,7 +86,7 @@ const SurvivalDashboard = ({ index }: SurvivalDashboardProps) => {
 
         {/* SPRAY OPERATIONS */}
         <BrutalistBlock className="p-5 relative overflow-hidden group" refTag="AGRI_OPS_SAFE">
-          <Cloud className="absolute -right-4 -bottom-4 opacity-[0.07] pointer-events-none" size={100} />
+          <Cloud className="absolute -right-4 -bottom-4 opacity-[0.15] pointer-events-none text-sky-300" size={100} />
           <div className="flex items-center gap-3 mb-4 opacity-80 group-hover:opacity-100 transition-opacity">
             <Cloud size={16} className="text-accent" />
             <Typography variant="small" className="uppercase font-bold text-xs mb-0 tracking-widest font-mono">Application Suitability</Typography>
@@ -99,7 +99,7 @@ const SurvivalDashboard = ({ index }: SurvivalDashboardProps) => {
 
         {/* LIVESTOCK STRESS */}
         <BrutalistBlock className="p-5 relative overflow-hidden group" refTag="BIO_SENS_LOG">
-          <Beef className="absolute -right-4 -bottom-4 opacity-[0.07] pointer-events-none" size={100} />
+          <Beef className="absolute -right-4 -bottom-4 opacity-[0.15] pointer-events-none text-amber-600" size={100} />
           <div className="flex items-center gap-3 mb-4 opacity-80 group-hover:opacity-100 transition-opacity">
             <Beef size={16} className="text-accent" />
             <Typography variant="small" className="uppercase font-bold text-xs mb-0 tracking-widest font-mono">Livestock Metabolic Load</Typography>
