@@ -28,7 +28,7 @@ const STATUS_CONFIG: Record<ClockStatus, {
   critical:     { color: 'text-red-400',    bgColor: 'bg-red-500/10',    borderColor: 'border-red-500/60',    label: 'Critical',     Icon: AlertTriangle },
   warning:      { color: 'text-yellow-400', bgColor: 'bg-yellow-500/10', borderColor: 'border-yellow-500/60', label: 'Low',          Icon: TrendingDown  },
   stable:       { color: 'text-green-400',  bgColor: 'bg-green-500/10',  borderColor: 'border-green-500/30',  label: 'Stable',       Icon: Shield        },
-  abundant:     { color: 'text-accent',     bgColor: 'bg-accent/10',     borderColor: 'border-accent/40',     label: 'Abundant',     Icon: Shield        },
+  abundant:     { color: 'text-green-400',  bgColor: 'bg-green-500/10',  borderColor: 'border-green-500/40',  label: 'Abundant',     Icon: Shield        },
   unconfigured: { color: 'text-foreground-primary/30', bgColor: 'bg-black/20', borderColor: 'border-border-primary/20', label: 'Unconfigured', Icon: Zap },
 };
 
@@ -49,6 +49,7 @@ interface ClockDisplayProps {
   title:       string;
   systemId:    string;
   icon:        React.ElementType;
+  iconColor?:  string;      // fixed icon color, independent of status
   days:        number | null;
   details:     DetailRow[];
   confidence?: 'high' | 'medium' | 'low';
@@ -57,7 +58,7 @@ interface ClockDisplayProps {
 }
 
 export default function ClockDisplay({
-  title, systemId, icon: Icon, days, details, confidence, warning, children,
+  title, systemId, icon: Icon, iconColor, days, details, confidence, warning, children,
 }: ClockDisplayProps) {
   const status = getClockStatus(days);
   const s      = STATUS_CONFIG[status];
@@ -79,7 +80,7 @@ export default function ClockDisplay({
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
           <div className={`w-8 h-8 border-2 ${s.borderColor} flex items-center justify-center`}>
-            <Icon size={14} className={s.color} />
+            <Icon size={14} className={iconColor ?? s.color} />
           </div>
           <span className="text-xs font-mono font-bold uppercase tracking-widest opacity-70">
             {title}

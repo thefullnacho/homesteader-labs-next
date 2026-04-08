@@ -211,6 +211,7 @@ export default function AutonomyDashboard({
           title="Days of Food"
           systemId="CALORIC_SEC_v1"
           icon={Utensils}
+          iconColor="text-green-400"
           days={caloricTotals?.daysOfFood ?? null}
           details={foodDetails}
         >
@@ -242,6 +243,7 @@ export default function AutonomyDashboard({
           title="Days of Water"
           systemId="HYDRO_SEC_v1"
           icon={Droplets}
+          iconColor="text-blue-400"
           days={waterAutonomy?.daysOfWater ?? null}
           details={waterDetails}
           confidence={waterAutonomy?.confidence}
@@ -259,6 +261,7 @@ export default function AutonomyDashboard({
           title="Days of Energy"
           systemId="ENERGY_SEC_v1"
           icon={Zap}
+          iconColor="text-yellow-400"
           days={energyAutonomy?.daysOfEnergy ?? null}
           details={energyAutonomy ? [
             { label: 'Battery stored',   value: energyAutonomy.storedUsableWh.toFixed(0) + ' Wh' },

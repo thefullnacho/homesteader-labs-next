@@ -28,7 +28,7 @@ export default function LocationSetup({
     setLocalError(null);
 
     if (!zipCode.trim() || !/^\d{5}(-\d{4})?$/.test(zipCode)) {
-      setLocalError("ERR_INVALID_ZIP");
+      setLocalError("Please enter a valid 5-digit ZIP code");
       return;
     }
 
@@ -45,15 +45,14 @@ export default function LocationSetup({
           <Satellite size={20} className="text-white" />
         </div>
         <div>
-          <Typography variant="h4" className="mb-0 uppercase tracking-tighter">Region_Initialization</Typography>
-          <Typography variant="small" className="opacity-40 text-[9px] uppercase font-mono mb-0">Establish_Microclimate_Uplink</Typography>
+          <Typography variant="h4" className="mb-0 uppercase tracking-tighter">Locate My Zone</Typography>
         </div>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="relative">
           <label className="block text-xs font-mono font-bold uppercase opacity-40 mb-2 tracking-widest">
-            Enter_ZIP_Coordinates
+            ZIP Code
           </label>
           <div className="flex gap-2">
             <input
@@ -87,10 +86,6 @@ export default function LocationSetup({
           </div>
         )}
 
-        <div className="text-[9px] font-mono opacity-30 uppercase leading-relaxed border-t border-border-primary/10 pt-4">
-          <p>[•] DATA_SRC: NOAA_HISTORICAL_NORMALS</p>
-          <p>[•] CACHE: LOCAL_STORAGE_PERSISTENT</p>
-        </div>
       </form>
     </BrutalistBlock>
   );
