@@ -49,10 +49,10 @@ export default function ToolsShowcase() {
   return (
     <section className="mb-12">
       <div className="flex justify-between items-end mb-6 border-b-2 border-border-primary pb-2">
-        <Typography variant="h3" className="mb-0">Free Tools</Typography>
+        <Typography variant="h3" className="mb-0">Tools</Typography>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+      <div className="grid grid-cols-2 gap-4">
         {tools.map((tool) => {
           const ToolIcon = IconMap[tool.icon as keyof typeof IconMap];
           return (
@@ -61,12 +61,12 @@ export default function ToolsShowcase() {
               href={tool.href}
               className="group"
             >
-              <BrutalistBlock className="h-full">
-                <div className="flex items-center gap-4">
-                  <div className="shrink-0 w-12 h-12 bg-background-secondary border-2 border-border-primary flex items-center justify-center">
-                    <ToolIcon size={24} className={tool.iconColor} />
+              <BrutalistBlock className="h-full p-4">
+                <div className="flex flex-col sm:flex-row items-center sm:items-center gap-3">
+                  <div className="shrink-0 w-10 h-10 bg-background-secondary border-2 border-border-primary flex items-center justify-center">
+                    <ToolIcon size={20} className={tool.iconColor} />
                   </div>
-                  <Typography variant="h4" className="mb-0 group-hover:text-accent transition-colors">
+                  <Typography variant="h4" className="mb-0 text-sm sm:text-base text-center sm:text-left group-hover:text-accent transition-colors">
                     {tool.name}
                   </Typography>
                 </div>
