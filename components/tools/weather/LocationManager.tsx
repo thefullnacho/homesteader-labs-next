@@ -105,7 +105,7 @@ const LocationManager = ({ locations, activeLocation, growingZone, onSwitch, onA
             {locations.length > 1 && (
               <button
                 onClick={(e) => { e.stopPropagation(); onRemove(loc.id); }}
-                className="absolute right-1 top-1/2 -translate-y-1/2 p-1 opacity-0 group-hover:opacity-100 hover:text-red-500 transition-opacity"
+                className="absolute right-1 top-1/2 -translate-y-1/2 p-1 opacity-30 group-hover:opacity-100 group-hover:text-red-400 transition-all"
               >
                 <Trash2 size={12} />
               </button>
