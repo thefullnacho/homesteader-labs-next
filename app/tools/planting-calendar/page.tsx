@@ -159,7 +159,7 @@ export default function PlantingCalendarPage() {
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
                       <div className="w-8 h-8 bg-background-secondary border-2 border-border-primary flex items-center justify-center shrink-0">
-                        <Moon size={16} className="text-accent opacity-60" />
+                        <Moon size={16} className="text-yellow-200/70" />
                       </div>
                       <div>
                         <Typography variant="h4" className="mb-0 text-xs uppercase tracking-tighter">Lunar Planting</Typography>
