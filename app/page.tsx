@@ -43,18 +43,21 @@ export default function Home() {
           </div>
 
           <div className="relative z-10">
-            {/* Main Heading */}
-            <Typography variant="h1">
-              Tools for those who build
-              <br />
+            {/* Main Heading — clamped to 2 lines on mobile */}
+            <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-bold uppercase tracking-tight mb-6 leading-tight">
+              Tools for those who build{" "}
               <span className="text-accent">their own world.</span>
-            </Typography>
+            </h1>
 
-            {/* Subheading */}
-            <Typography variant="body" className="max-w-2xl mx-auto text-foreground-secondary mb-8">
-              Free planning tools for homesteaders, gardeners, and anyone growing their own food.
-              Know your weather. Plan your season. Track your resilience. No account required.
-            </Typography>
+            {/* Bullet list subheading */}
+            <ul className="flex flex-wrap justify-center gap-x-6 gap-y-1 max-w-xl mx-auto mb-8 text-foreground-secondary text-sm md:text-base font-mono">
+              {["Know your weather", "Plan your season", "Track your resilience", "No account required"].map(item => (
+                <li key={item} className="flex items-center gap-1.5">
+                  <span className="w-1 h-1 bg-accent shrink-0 inline-block" />
+                  {item}
+                </li>
+              ))}
+            </ul>
 
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
