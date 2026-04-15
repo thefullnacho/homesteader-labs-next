@@ -77,6 +77,16 @@ export default function PlantingCalendarPage() {
     return { plantingDates: dates, omittedCrops: omitted, adjustedFrostDates: adjustedFrost };
   }, [selectedCrops, frostDates, seasonExtension, lunarSync, experienceLevel]);
 
+  // Persist crop selection to localStorage so caloric-security can import it
+  useEffect(() => {
+    if (selectedCrops.length > 0) {
+      localStorage.setItem('hl_planting_selection', JSON.stringify({
+        crops: selectedCrops,
+        savedAt: Date.now(),
+      }));
+    }
+  }, [selectedCrops]);
+
   // Auto-show email capture once per session after first schedule is generated
   useEffect(() => {
     if (plantingDates.length > 0 && !sessionStorage.getItem('planting_email_shown')) {

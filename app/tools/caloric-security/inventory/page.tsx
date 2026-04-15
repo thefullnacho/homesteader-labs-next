@@ -1,8 +1,8 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useLiveQuery } from 'dexie-react-hooks';
-import { Plus, Trash2, Edit3, ArrowLeft, Package, Search } from 'lucide-react';
+import { Plus, Trash2, Edit3, ArrowLeft, Package, Search, Download, X, Mail } from 'lucide-react';
 import Link from 'next/link';
 import FieldStationLayout from '@/components/ui/FieldStationLayout';
 import BrutalistBlock from '@/components/ui/BrutalistBlock';
@@ -12,6 +12,7 @@ import { getDB } from '@/lib/caloric-security/db';
 import { putInventoryItem, deleteInventoryItem } from '@/lib/caloric-security/homesteadStore';
 import { getCropById, getAllCrops } from '@/lib/tools/planting-calendar/cropLoader';
 import { calculateItemDecay } from '@/lib/caloric-security/decayCalculations';
+import { useImportFromPlanting } from '@/lib/caloric-security/useImportFromPlanting';
 import type { InventoryItem } from '@/lib/caloric-security/types';
 
 // ============================================================
@@ -58,6 +59,8 @@ function phaseColor(phase: string) {
   return 'opacity-40';
 }
 
+const EMAIL_SESSION_KEY = 'hl_import_email_shown';
+
 export default function InventoryPage() {
   const allCrops = getAllCrops();
 
@@ -70,12 +73,59 @@ export default function InventoryPage() {
     [] as InventoryItem[],
   );
 
+  const { preview, confirm: confirmImport, dismiss } = useImportFromPlanting();
+  const [importing,      setImporting]      = useState(false);
+  const [importSuccess,  setImportSuccess]  = useState(false);
+  const [showEmailModal, setShowEmailModal] = useState(false);
+  const [emailValue,     setEmailValue]     = useState('');
+  const [emailConsent,   setEmailConsent]   = useState(false);
+  const [emailSubmitting,setEmailSubmitting]= useState(false);
+  const [emailSuccess,   setEmailSuccess]   = useState(false);
+
   const [formOpen,      setFormOpen]      = useState(false);
   const [editId,        setEditId]        = useState<string | null>(null);
   const [form,          setForm]          = useState<FormState>(BLANK_FORM);
   const [saving,        setSaving]        = useState(false);
   const [searchQuery,   setSearchQuery]   = useState('');
   const [statusFilter,  setStatusFilter]  = useState<InventoryItem['status'] | 'all'>('all');
+
+  // Session-gated email modal after successful import
+  useEffect(() => {
+    if (importSuccess && !sessionStorage.getItem(EMAIL_SESSION_KEY)) {
+      const t = setTimeout(() => {
+        setShowEmailModal(true);
+        sessionStorage.setItem(EMAIL_SESSION_KEY, 'true');
+      }, 1000);
+      return () => clearTimeout(t);
+    }
+  }, [importSuccess]);
+
+  async function handleImport() {
+    setImporting(true);
+    try {
+      await confirmImport();
+      setImportSuccess(true);
+    } finally {
+      setImporting(false);
+    }
+  }
+
+  async function handleEmailSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (!emailConsent) return;
+    setEmailSubmitting(true);
+    try {
+      await fetch('/api/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: emailValue, type: 'inventory-import' }),
+      });
+      setEmailSuccess(true);
+      setTimeout(() => setShowEmailModal(false), 2500);
+    } finally {
+      setEmailSubmitting(false);
+    }
+  }
 
   const filteredInventory = useMemo(() => {
     return inventory.filter(item => {
@@ -160,6 +210,49 @@ export default function InventoryPage() {
             <Plus size={12} /> Add Item
           </Button>
         </div>
+
+        {/* Planting Calendar import banner */}
+        {preview && preview.items.length > 0 && !importSuccess && (
+          <BrutalistBlock className="p-4 border-l-4 border-accent bg-accent/5" refTag="IMPORT_READY">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div className="flex items-start gap-3">
+                <Download size={14} className="text-accent mt-0.5 shrink-0" />
+                <div>
+                  <p className="text-xs font-mono font-bold uppercase tracking-widest text-accent mb-0.5">
+                    {preview.items.length} crop{preview.items.length !== 1 ? 's' : ''} ready from Planting Calendar
+                  </p>
+                  <p className="text-[9px] font-mono opacity-50 uppercase">
+                    {preview.cropNames.join(' · ')}
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-center gap-2 shrink-0">
+                <button
+                  onClick={dismiss}
+                  className="text-[9px] font-mono uppercase opacity-40 hover:opacity-70 transition-opacity px-2 py-1"
+                >
+                  Dismiss
+                </button>
+                <Button
+                  variant="primary"
+                  size="sm"
+                  onClick={handleImport}
+                  disabled={importing}
+                  className="flex items-center gap-2"
+                >
+                  <Download size={11} />
+                  {importing ? 'Importing...' : `Import ${preview.items.length} Crop${preview.items.length !== 1 ? 's' : ''}`}
+                </Button>
+              </div>
+            </div>
+          </BrutalistBlock>
+        )}
+
+        {importSuccess && (
+          <div className="text-[10px] font-mono uppercase text-green-400 flex items-center gap-2 px-1">
+            <span>✓</span> {preview === null ? 'Crops imported' : ''} Successfully added to inventory as Planned.
+          </div>
+        )}
 
         {/* Search + filter bar */}
         {inventory.length > 0 && (
@@ -286,6 +379,85 @@ export default function InventoryPage() {
           Yield assumptions: bunches ~100g · bulbs ~40g · ears ~90g edible · heads ~300g
         </div>
       </div>
+
+      {/* Post-import email modal */}
+      {showEmailModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60">
+          <BrutalistBlock className="w-full max-w-sm relative" refTag="IMPORT_EMAIL">
+            <button
+              onClick={() => setShowEmailModal(false)}
+              className="absolute top-3 right-3 p-1 opacity-40 hover:opacity-80 transition-opacity"
+            >
+              <X size={14} />
+            </button>
+
+            {emailSuccess ? (
+              <div className="py-6 text-center space-y-2">
+                <div className="text-2xl">✓</div>
+                <p className="text-xs font-mono uppercase font-bold text-green-400">Subscribed</p>
+                <p className="text-[10px] font-mono opacity-40 uppercase">
+                  We&apos;ll remind you when to rotate stock.
+                </p>
+              </div>
+            ) : (
+              <>
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 bg-accent/10 border-2 border-accent flex items-center justify-center shrink-0">
+                    <Mail size={16} className="text-accent" />
+                  </div>
+                  <div>
+                    <Typography variant="h4" className="mb-0 text-sm uppercase tracking-tight">
+                      Preservation Reminders
+                    </Typography>
+                    <p className="text-[9px] font-mono opacity-40 uppercase">
+                      Know when to rotate your stores
+                    </p>
+                  </div>
+                </div>
+                <p className="text-[10px] font-mono opacity-50 uppercase mb-5">
+                  Get monthly alerts when your canned and frozen goods approach their shelf-life limit.
+                </p>
+                <form onSubmit={handleEmailSubmit} className="space-y-4">
+                  <input
+                    type="email"
+                    required
+                    placeholder="homesteader@example.com"
+                    value={emailValue}
+                    onChange={e => setEmailValue(e.target.value)}
+                    className="w-full bg-black/30 border-2 border-border-primary/40 focus:border-accent outline-none px-3 py-2 text-sm font-mono"
+                  />
+                  <label className="flex items-start gap-2 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={emailConsent}
+                      onChange={e => setEmailConsent(e.target.checked)}
+                      className="mt-0.5"
+                      required
+                    />
+                    <span className="text-[9px] font-mono uppercase opacity-50 leading-tight">
+                      Send me preservation reminders for my inventory. Unsubscribe anytime.
+                    </span>
+                  </label>
+                  <div className="flex gap-3 pt-2">
+                    <Button variant="outline" size="sm" onClick={() => setShowEmailModal(false)} className="flex-1" type="button">
+                      Skip
+                    </Button>
+                    <Button
+                      variant="primary"
+                      size="sm"
+                      disabled={!emailConsent || emailSubmitting}
+                      className="flex-1"
+                      type="submit"
+                    >
+                      {emailSubmitting ? 'Subscribing...' : 'Subscribe'}
+                    </Button>
+                  </div>
+                </form>
+              </>
+            )}
+          </BrutalistBlock>
+        </div>
+      )}
 
       {/* Add / Edit modal */}
       {formOpen && (

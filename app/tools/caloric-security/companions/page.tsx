@@ -11,6 +11,7 @@ import Typography from '@/components/ui/Typography';
 import { getDB } from '@/lib/caloric-security/db';
 import { getCropById } from '@/lib/tools/planting-calendar/cropLoader';
 import type { InventoryItem } from '@/lib/caloric-security/types';
+import companionData from '@/content/crops/companion-planting.json';
 
 // ============================================================
 // Companion Advisor  [GATED]
@@ -27,6 +28,18 @@ import type { InventoryItem } from '@/lib/caloric-security/types';
 const GATE_KEY  = 'hl_features_unlocked';
 const FREE_CONFLICTS    = 3;
 const FREE_SUGGESTIONS  = 3;
+
+// Build a description lookup from companion-planting.json
+// Key: "plantId:targetId" → { mechanism, description }
+const COMPANION_DESC: Record<string, { mechanism: string; description: string }> = {};
+for (const entry of companionData) {
+  for (const rel of entry.relationships) {
+    COMPANION_DESC[`${entry.plantId}:${rel.targetId}`] = {
+      mechanism: rel.mechanism,
+      description: rel.description,
+    };
+  }
+}
 
 export default function CompanionsPage() {
   const [unlocked,    setUnlocked]    = useState(false);
@@ -64,6 +77,7 @@ export default function CompanionsPage() {
     iconA: string;
     cropB: string;
     iconB: string;
+    description?: string;
   }
 
   const conflicts: Conflict[] = [];
@@ -72,7 +86,14 @@ export default function CompanionsPage() {
       const a = activeCrops[i]!;
       const b = activeCrops[j]!;
       if (a.antagonists?.includes(b.id) || b.antagonists?.includes(a.id)) {
-        conflicts.push({ cropA: a.name, iconA: a.icon, cropB: b.name, iconB: b.icon });
+        const desc =
+          COMPANION_DESC[`${a.id}:${b.id}`] ??
+          COMPANION_DESC[`${b.id}:${a.id}`];
+        conflicts.push({
+          cropA: a.name, iconA: a.icon,
+          cropB: b.name, iconB: b.icon,
+          description: desc?.description,
+        });
       }
     }
   }
@@ -84,6 +105,7 @@ export default function CompanionsPage() {
     forIcon:    string;
     companion:  string;
     compIcon:   string;
+    description?: string;
   }
 
   const suggestions: Suggestion[] = [];
@@ -93,11 +115,15 @@ export default function CompanionsPage() {
       if (uniqueIds.includes(compId)) continue;  // already in inventory
       const comp = getCropById(compId);
       if (!comp) continue;
+      const desc =
+        COMPANION_DESC[`${crop.id}:${compId}`] ??
+        COMPANION_DESC[`${compId}:${crop.id}`];
       suggestions.push({
-        forCrop:   crop.name,
-        forIcon:   crop.icon,
-        companion: comp.name,
-        compIcon:  comp.icon,
+        forCrop:     crop.name,
+        forIcon:     crop.icon,
+        companion:   comp.name,
+        compIcon:    comp.icon,
+        description: desc?.description,
       });
     }
   }
@@ -185,16 +211,19 @@ export default function CompanionsPage() {
 
             <div className="space-y-2">
               {visibleConflicts.map((c, i) => (
-                <div key={i} className="flex items-center gap-3 p-3 border border-red-500/20 bg-red-500/5 text-[10px] font-mono uppercase">
-                  <AlertTriangle size={10} className="text-red-400 shrink-0" />
-                  <span className="font-bold">
-                    {c.iconA} {c.cropA}
-                  </span>
-                  <span className="opacity-40">antagonises</span>
-                  <span className="font-bold">
-                    {c.iconB} {c.cropB}
-                  </span>
-                  <span className="opacity-30 ml-auto hidden sm:block">Keep separated</span>
+                <div key={i} className="p-3 border border-red-500/20 bg-red-500/5">
+                  <div className="flex items-center gap-3 text-[10px] font-mono uppercase">
+                    <AlertTriangle size={10} className="text-red-400 shrink-0" />
+                    <span className="font-bold">{c.iconA} {c.cropA}</span>
+                    <span className="opacity-40">antagonises</span>
+                    <span className="font-bold">{c.iconB} {c.cropB}</span>
+                    <span className="opacity-30 ml-auto hidden sm:block">Keep separated</span>
+                  </div>
+                  {c.description && (
+                    <p className="mt-1.5 pl-5 text-[9px] font-mono opacity-40 normal-case leading-snug">
+                      {c.description}
+                    </p>
+                  )}
                 </div>
               ))}
             </div>
@@ -226,12 +255,19 @@ export default function CompanionsPage() {
 
             <div className="space-y-2">
               {visibleSuggestions.map((s, i) => (
-                <div key={i} className="flex items-center gap-3 p-3 border border-green-500/20 bg-green-500/5 text-[10px] font-mono uppercase">
-                  <Leaf size={10} className="text-green-400 shrink-0" />
-                  <span className="opacity-50">You have</span>
-                  <span className="font-bold">{s.forIcon} {s.forCrop}</span>
-                  <span className="opacity-50">→ consider adding</span>
-                  <span className="font-bold text-green-400">{s.compIcon} {s.companion}</span>
+                <div key={i} className="p-3 border border-green-500/20 bg-green-500/5">
+                  <div className="flex items-center gap-3 text-[10px] font-mono uppercase flex-wrap">
+                    <Leaf size={10} className="text-green-400 shrink-0" />
+                    <span className="opacity-50">You have</span>
+                    <span className="font-bold">{s.forIcon} {s.forCrop}</span>
+                    <span className="opacity-50">→ consider adding</span>
+                    <span className="font-bold text-green-400">{s.compIcon} {s.companion}</span>
+                  </div>
+                  {s.description && (
+                    <p className="mt-1.5 pl-5 text-[9px] font-mono opacity-40 normal-case leading-snug">
+                      {s.description}
+                    </p>
+                  )}
                 </div>
               ))}
             </div>
