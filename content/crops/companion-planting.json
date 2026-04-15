@@ -132,6 +132,29 @@
     ]
   },
   {
+    "plantId": "thyme",
+    "relationships": [
+      {
+        "targetId": "cabbage",
+        "type": "companion",
+        "mechanism": "pest-deterrent",
+        "description": "Top performer in Iowa State trials — significantly reduced cabbage looper and armyworm damage when interplanted with brassicas. Aromatic oils disrupt cabbage moth oviposition."
+      },
+      {
+        "targetId": "broccoli",
+        "type": "companion",
+        "mechanism": "pest-deterrent",
+        "description": "Aromatic thyme compounds disrupt cabbage moth egg-laying across the brassica family; interplant at 1 thyme per 3 broccoli plants."
+      },
+      {
+        "targetId": "kale",
+        "type": "companion",
+        "mechanism": "pest-deterrent",
+        "description": "Same brassica protection mechanism as with cabbage and broccoli; interplant thyme at bed edges to create an aromatic barrier against cabbage worms."
+      }
+    ]
+  },
+  {
     "plantId": "fennel",
     "relationships": [
       {

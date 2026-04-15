@@ -1,0 +1,338 @@
+[
+  {
+    "cropId": "tomato",
+    "pests": [
+      {
+        "name": "hornworm",
+        "soilTempThreshold": 60,
+        "gddThreshold": 150,
+        "companions": [
+          {
+            "companion": "Basil",
+            "companionId": "basil",
+            "reason": "Aromatic oils mask tomato scent from hornworms; widely observed + some greenhouse studies",
+            "placement": "interplant",
+            "evidenceLevel": "moderate"
+          },
+          {
+            "companion": "Borage",
+            "companionId": "borage",
+            "reason": "Attracts predatory wasps; repels hornworms; edible flowers and leaves are a bonus",
+            "placement": "interplant",
+            "evidenceLevel": "moderate"
+          },
+          {
+            "companion": "Marigold",
+            "reason": "Broad pest deterrent; also provides nematode protection via root exudates",
+            "placement": "border",
+            "evidenceLevel": "moderate"
+          }
+        ]
+      },
+      {
+        "name": "nematode",
+        "soilTempThreshold": 55,
+        "companions": [
+          {
+            "companion": "Marigold",
+            "reason": "French/African marigold roots release alpha-terthienyl — strongest evidence for nematode suppression. Most effective as preceding cover crop tilled in, but interplanting suppresses too.",
+            "placement": "border",
+            "evidenceLevel": "strong"
+          }
+        ]
+      },
+      {
+        "name": "aphid",
+        "soilTempThreshold": 55,
+        "companions": [
+          {
+            "companion": "Nasturtium",
+            "reason": "Classic trap crop — aphids strongly prefer nasturtium; plant at borders and remove/discard when infested",
+            "placement": "border",
+            "evidenceLevel": "strong"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "cropId": "potato",
+    "pests": [
+      {
+        "name": "nematode",
+        "soilTempThreshold": 55,
+        "companions": [
+          {
+            "companion": "Marigold",
+            "reason": "Same alpha-terthienyl mechanism as with tomatoes; dense planting or use as preceding cover crop",
+            "placement": "border",
+            "evidenceLevel": "strong"
+          }
+        ]
+      },
+      {
+        "name": "colorado-beetle",
+        "soilTempThreshold": 59,
+        "gddThreshold": 100,
+        "companions": [
+          {
+            "companion": "Nasturtium",
+            "reason": "Reported to repel Colorado potato beetles and serves as aphid trap crop",
+            "placement": "interplant",
+            "evidenceLevel": "anecdotal"
+          },
+          {
+            "companion": "Marigold",
+            "reason": "Border marigolds reduce potato beetle egg-laying; also suppresses soil nematodes",
+            "placement": "border",
+            "evidenceLevel": "moderate"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "cropId": "cabbage",
+    "pests": [
+      {
+        "name": "cabbage-worm",
+        "soilTempThreshold": 50,
+        "gddThreshold": 100,
+        "companions": [
+          {
+            "companion": "Thyme",
+            "companionId": "thyme",
+            "reason": "Top performer in Iowa State trials — significantly reduced cabbage looper and worm damage when interplanted",
+            "placement": "interplant",
+            "evidenceLevel": "strong"
+          },
+          {
+            "companion": "Sage",
+            "companionId": "sage",
+            "reason": "Aromatic compounds reduce cabbage moth egg-laying; greenhouse studies support diamondback moth reduction",
+            "placement": "interplant",
+            "evidenceLevel": "moderate"
+          }
+        ]
+      },
+      {
+        "name": "aphid",
+        "soilTempThreshold": 55,
+        "companions": [
+          {
+            "companion": "Nasturtium",
+            "reason": "Trap crop at bed borders draws aphids away from brassicas; remove and discard when loaded with pests",
+            "placement": "border",
+            "evidenceLevel": "strong"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "cropId": "broccoli",
+    "pests": [
+      {
+        "name": "cabbage-worm",
+        "soilTempThreshold": 50,
+        "companions": [
+          {
+            "companion": "Thyme",
+            "companionId": "thyme",
+            "reason": "Iowa State trials: thyme was the top herb for reducing looper damage across the brassica family",
+            "placement": "interplant",
+            "evidenceLevel": "strong"
+          }
+        ]
+      },
+      {
+        "name": "aphid",
+        "soilTempThreshold": 55,
+        "companions": [
+          {
+            "companion": "Nasturtium",
+            "reason": "Sacrificial trap crop; aphids strongly prefer it over brassicas; discard when infested",
+            "placement": "border",
+            "evidenceLevel": "strong"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "cropId": "kale",
+    "pests": [
+      {
+        "name": "cabbage-worm",
+        "soilTempThreshold": 50,
+        "companions": [
+          {
+            "companion": "Thyme",
+            "companionId": "thyme",
+            "reason": "Same brassica protection mechanism; interplant at roughly 1 thyme plant per 3 kale plants",
+            "placement": "interplant",
+            "evidenceLevel": "strong"
+          }
+        ]
+      },
+      {
+        "name": "aphid",
+        "soilTempThreshold": 55,
+        "companions": [
+          {
+            "companion": "Nasturtium",
+            "reason": "Trap crop for aphids; border planting intercepts pests before they colonize kale",
+            "placement": "border",
+            "evidenceLevel": "strong"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "cropId": "squash-summer",
+    "pests": [
+      {
+        "name": "squash-bug",
+        "soilTempThreshold": 65,
+        "companions": [
+          {
+            "companion": "Nasturtium",
+            "reason": "Interplanting under squash canopy significantly reduced squash bug damage in zucchini trials",
+            "placement": "interplant",
+            "evidenceLevel": "moderate"
+          },
+          {
+            "companion": "Borage",
+            "companionId": "borage",
+            "reason": "Attracts predatory insects; some evidence of deterring squash vine borers",
+            "placement": "interplant",
+            "evidenceLevel": "anecdotal"
+          }
+        ]
+      },
+      {
+        "name": "cucumber-beetle",
+        "soilTempThreshold": 60,
+        "companions": [
+          {
+            "companion": "Marigold",
+            "reason": "Border marigolds reduced cucumber beetle pressure in squash beds in field trials",
+            "placement": "border",
+            "evidenceLevel": "moderate"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "cropId": "squash-winter",
+    "pests": [
+      {
+        "name": "squash-bug",
+        "soilTempThreshold": 65,
+        "companions": [
+          {
+            "companion": "Nasturtium",
+            "reason": "Plant at vine bases to intercept squash bugs before they reach main stems",
+            "placement": "interplant",
+            "evidenceLevel": "moderate"
+          }
+        ]
+      },
+      {
+        "name": "cucumber-beetle",
+        "soilTempThreshold": 60,
+        "companions": [
+          {
+            "companion": "Marigold",
+            "reason": "French marigold border planting reduces cucumber beetle approach and egg-laying",
+            "placement": "border",
+            "evidenceLevel": "moderate"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "cropId": "cucumber",
+    "pests": [
+      {
+        "name": "cucumber-beetle",
+        "soilTempThreshold": 60,
+        "companions": [
+          {
+            "companion": "Nasturtium",
+            "reason": "Trap crop for cucumber beetles and aphids at high planting density",
+            "placement": "border",
+            "evidenceLevel": "moderate"
+          },
+          {
+            "companion": "Marigold",
+            "reason": "Border French marigolds reduce cucumber beetle approach and egg-laying",
+            "placement": "border",
+            "evidenceLevel": "moderate"
+          }
+        ]
+      },
+      {
+        "name": "aphid",
+        "soilTempThreshold": 55,
+        "companions": [
+          {
+            "companion": "Nasturtium",
+            "reason": "Aphids strongly prefer nasturtium; use as border trap crop around cucumber beds",
+            "placement": "border",
+            "evidenceLevel": "strong"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "cropId": "beans-bush",
+    "pests": [
+      {
+        "name": "aphid",
+        "soilTempThreshold": 55,
+        "companions": [
+          {
+            "companion": "Nasturtium",
+            "reason": "Sacrificial aphid trap crop; plant at bed borders and discard when infested",
+            "placement": "border",
+            "evidenceLevel": "strong"
+          }
+        ]
+      },
+      {
+        "name": "bean-beetle",
+        "soilTempThreshold": 65,
+        "companions": [
+          {
+            "companion": "Marigold",
+            "reason": "French marigolds reported to deter Mexican bean beetles; border planting most effective",
+            "placement": "border",
+            "evidenceLevel": "anecdotal"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "cropId": "beans-pole",
+    "pests": [
+      {
+        "name": "aphid",
+        "soilTempThreshold": 55,
+        "companions": [
+          {
+            "companion": "Nasturtium",
+            "reason": "Plant at base of poles to intercept aphid colonization early in the season",
+            "placement": "interplant",
+            "evidenceLevel": "strong"
+          }
+        ]
+      }
+    ]
+  }
+]
