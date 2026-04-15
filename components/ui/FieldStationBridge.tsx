@@ -50,6 +50,12 @@ const BRIDGE_MAP: Record<"WEATHER" | "PLANT" | "SURVIVAL", BridgeLink[]> = {
       href: "/tools/planting-calendar/",
       code: "Planting",
     },
+    {
+      label: "Monthly resilience checklist",
+      sub: "Season-aware tasks: seeds, harvests, preservation, storage rotation",
+      href: "/tools/caloric-security/checklist/",
+      code: "Checklist",
+    },
   ],
 };
 

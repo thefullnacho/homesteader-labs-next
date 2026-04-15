@@ -5,7 +5,7 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 const audienceId = process.env.RESEND_AUDIENCE_ID!;
 
 export async function POST(req: NextRequest) {
-  const { email, type } = await req.json();
+  const { email, type, metadata } = await req.json();
 
   if (!email || !email.includes("@")) {
     return NextResponse.json({ error: "Invalid email" }, { status: 400 });
@@ -21,6 +21,10 @@ export async function POST(req: NextRequest) {
       audienceId,
       unsubscribed: false,
     });
+
+    if (metadata) {
+      console.log("[subscribe] metadata:", JSON.stringify(metadata));
+    }
 
     return NextResponse.json({ ok: true, type });
   } catch (err) {

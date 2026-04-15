@@ -94,7 +94,8 @@
       "broccoli",
       "corn",
       "potato"
-    ]
+    ],
+    "pestVulnerabilities": ["hornworm", "aphid", "nematode"]
   },
   {
     "id": "pepper-bell",
@@ -337,7 +338,8 @@
     ],
     "antagonists": [
       "potato"
-    ]
+    ],
+    "pestVulnerabilities": ["cucumber-beetle", "aphid"]
   },
   {
     "id": "lettuce",
@@ -500,7 +502,8 @@
       "garlic",
       "pepper-bell",
       "pepper-hot"
-    ]
+    ],
+    "pestVulnerabilities": ["aphid", "bean-beetle"]
   },
   {
     "id": "beans-pole",
@@ -578,7 +581,8 @@
       "pepper-bell",
       "pepper-hot",
       "beets"
-    ]
+    ],
+    "pestVulnerabilities": ["aphid"]
   },
   {
     "id": "squash-summer",
@@ -660,7 +664,8 @@
     ],
     "antagonists": [
       "potato"
-    ]
+    ],
+    "pestVulnerabilities": ["squash-bug", "cucumber-beetle"]
   },
   {
     "id": "squash-winter",
@@ -743,7 +748,8 @@
     ],
     "antagonists": [
       "potato"
-    ]
+    ],
+    "pestVulnerabilities": ["squash-bug"]
   },
   {
     "id": "carrot",
@@ -1048,7 +1054,8 @@
     ],
     "antagonists": [
       "tomato"
-    ]
+    ],
+    "pestVulnerabilities": ["cabbage-worm", "aphid"]
   },
   {
     "id": "broccoli",
@@ -1131,7 +1138,8 @@
     ],
     "antagonists": [
       "tomato"
-    ]
+    ],
+    "pestVulnerabilities": ["cabbage-worm", "aphid"]
   },
   {
     "id": "onion",
@@ -1394,7 +1402,8 @@
       "cucumber",
       "squash-summer",
       "squash-winter"
-    ]
+    ],
+    "pestVulnerabilities": ["nematode", "colorado-beetle"]
   },
   {
     "id": "corn",
@@ -2022,6 +2031,7 @@
     ],
     "uses": ["cooking", "fermentation", "livestock-feed"],
     "companions": ["dill", "onion", "celery", "beets", "thyme", "chamomile", "mint", "rosemary", "sage"],
-    "antagonists": ["tomato", "strawberry", "fennel", "beans-pole", "beans-bush"]
+    "antagonists": ["tomato", "strawberry", "fennel", "beans-pole", "beans-bush"],
+    "pestVulnerabilities": ["cabbage-worm", "aphid", "looper"]
   }
 ]

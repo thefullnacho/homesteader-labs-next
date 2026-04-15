@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useCallback, useMemo } from "react";
-import { Sprout, FileText, AlertTriangle, Printer, Moon } from "lucide-react";
+import { useState, useCallback, useMemo, useEffect } from "react";
+import { Sprout, FileText, AlertTriangle, Printer, Moon, Gauge } from "lucide-react";
 import LocationSetup from "@/components/tools/planting-calendar/LocationSetup";
 import CropSelector from "@/components/tools/planting-calendar/CropSelector";
 import PlantingCalendar from "@/components/tools/planting-calendar/PlantingCalendar";
@@ -25,6 +25,7 @@ export default function PlantingCalendarPage() {
   const [selectedCrops, setSelectedCrops] = useState<SelectedCrop[]>([]);
   const [seasonExtension, setSeasonExtension] = useState<SeasonExtension>('none');
   const [lunarSync, setLunarSync] = useState(false);
+  const [experienceLevel, setExperienceLevel] = useState<'beginner' | 'intermediate' | 'advanced'>('intermediate');
   const [showEmailCapture, setShowEmailCapture] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -41,11 +42,18 @@ export default function PlantingCalendarPage() {
       'greenhouse': 42
     }[seasonExtension];
 
+    // Experience level buffer: beginner plants later (more conservative)
+    const experienceBufferDays = { beginner: 7, intermediate: 3, advanced: 0 }[experienceLevel];
+
     const adjustedFrost = {
       ...frostDates,
-      lastSpringFrost: new Date(frostDates.lastSpringFrost.getTime() - extensionDays * 24 * 60 * 60 * 1000),
-      firstFallFrost: new Date(frostDates.firstFallFrost.getTime() + extensionDays * 24 * 60 * 60 * 1000),
-      frostFreeDays: frostDates.frostFreeDays + (extensionDays * 2),
+      lastSpringFrost: new Date(frostDates.lastSpringFrost.getTime()
+        - extensionDays * 86400000
+        + experienceBufferDays * 86400000),
+      firstFallFrost: new Date(frostDates.firstFallFrost.getTime()
+        + extensionDays * 86400000
+        - experienceBufferDays * 86400000),
+      frostFreeDays: frostDates.frostFreeDays + (extensionDays * 2) - (experienceBufferDays * 2),
     };
 
     const dates: PlantingDate[] = [];
@@ -67,7 +75,28 @@ export default function PlantingCalendarPage() {
     });
 
     return { plantingDates: dates, omittedCrops: omitted, adjustedFrostDates: adjustedFrost };
-  }, [selectedCrops, frostDates, seasonExtension, lunarSync]);
+  }, [selectedCrops, frostDates, seasonExtension, lunarSync, experienceLevel]);
+
+  // Persist crop selection to localStorage so caloric-security can import it
+  useEffect(() => {
+    if (selectedCrops.length > 0) {
+      localStorage.setItem('hl_planting_selection', JSON.stringify({
+        crops: selectedCrops,
+        savedAt: Date.now(),
+      }));
+    }
+  }, [selectedCrops]);
+
+  // Auto-show email capture once per session after first schedule is generated
+  useEffect(() => {
+    if (plantingDates.length > 0 && !sessionStorage.getItem('planting_email_shown')) {
+      const t = setTimeout(() => {
+        setShowEmailCapture(true);
+        sessionStorage.setItem('planting_email_shown', 'true');
+      }, 1500);
+      return () => clearTimeout(t);
+    }
+  }, [plantingDates.length]);
 
   const handleEmailSubmit = useCallback(async (email: string) => {
     setIsSubmitting(true);
@@ -76,7 +105,19 @@ export default function PlantingCalendarPage() {
       const res = await fetch("/api/subscribe", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, type: "planting-reminders" }),
+        body: JSON.stringify({
+          email,
+          type: "planting-reminders",
+          metadata: {
+            zip: frostDates?.zipCode,
+            crops: selectedCrops
+              .map(sc => getCropById(sc.cropId)?.name)
+              .filter(Boolean)
+              .slice(0, 5),
+            frostDate: frostDates?.lastSpringFrost.toISOString().split('T')[0],
+            experienceLevel,
+          },
+        }),
       });
       if (!res.ok) throw new Error("Subscribe failed");
       setIsSuccess(true);
@@ -89,7 +130,7 @@ export default function PlantingCalendarPage() {
     } finally {
       setIsSubmitting(false);
     }
-  }, []);
+  }, [frostDates, selectedCrops, experienceLevel]);
 
   const caloricSummary = useMemo(() => {
     if (!frostDates) return null;
@@ -150,11 +191,42 @@ export default function PlantingCalendarPage() {
 
             {frostDates && (
               <>
-                <SeasonExtensionSelector 
-                  extension={seasonExtension} 
-                  onChange={setSeasonExtension} 
+                <SeasonExtensionSelector
+                  extension={seasonExtension}
+                  onChange={setSeasonExtension}
                 />
-                
+
+                <BrutalistBlock className="p-4 border-dashed border-border-primary/30" variant="default" refTag="EXP_LEVEL">
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="w-8 h-8 bg-background-secondary border-2 border-border-primary flex items-center justify-center shrink-0">
+                      <Gauge size={16} className="text-accent/70" />
+                    </div>
+                    <div>
+                      <Typography variant="h4" className="mb-0 text-xs uppercase tracking-tighter">Experience Level</Typography>
+                      <Typography variant="small" className="opacity-40 text-[8px] uppercase font-mono mb-0">Adjusts planting date buffers</Typography>
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-3 gap-1">
+                    {(['beginner', 'intermediate', 'advanced'] as const).map((level) => {
+                      const labels = { beginner: '+7d safe', intermediate: '+3d buffer', advanced: 'exact' };
+                      return (
+                        <button
+                          key={level}
+                          onClick={() => setExperienceLevel(level)}
+                          className={`py-1.5 px-1 border-2 text-[8px] font-mono font-bold uppercase tracking-tight transition-colors ${
+                            experienceLevel === level
+                              ? 'border-accent bg-accent/10 text-accent'
+                              : 'border-border-primary/20 bg-black/10 opacity-40 hover:opacity-70'
+                          }`}
+                        >
+                          <div>{level.slice(0, 3).toUpperCase()}</div>
+                          <div className="opacity-60 normal-case font-normal">{labels[level]}</div>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </BrutalistBlock>
+
                 <BrutalistBlock className="p-4 border-dashed border-border-primary/30" variant="default" refTag="LUNAR_SYNC">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
@@ -183,6 +255,7 @@ export default function PlantingCalendarPage() {
                 <CropSelector
                   selectedCrops={selectedCrops}
                   onCropsChange={setSelectedCrops}
+                  frostDates={adjustedFrostDates ?? frostDates}
                 />
               </>
             )}
