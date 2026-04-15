@@ -46,19 +46,21 @@ export interface DetailRow {
 }
 
 interface ClockDisplayProps {
-  title:       string;
-  systemId:    string;
-  icon:        React.ElementType;
-  iconColor?:  string;      // fixed icon color, independent of status
-  days:        number | null;
-  details:     DetailRow[];
-  confidence?: 'high' | 'medium' | 'low';
-  warning?:    string;      // yellow advisory note
-  children?:   React.ReactNode;  // extra content below details
+  title:          string;
+  systemId:       string;
+  icon:           React.ElementType;
+  iconColor?:     string;      // fixed icon color, independent of status
+  days:           number | null;
+  details:        DetailRow[];
+  confidence?:    'high' | 'medium' | 'low';
+  warning?:       string;      // yellow advisory note
+  trend?:         'up' | 'down' | 'stable';  // 7-day projection direction
+  projectedLabel?: string;     // e.g. "Harvest in ~23d adds +14d food"
+  children?:      React.ReactNode;  // extra content below details
 }
 
 export default function ClockDisplay({
-  title, systemId, icon: Icon, iconColor, days, details, confidence, warning, children,
+  title, systemId, icon: Icon, iconColor, days, details, confidence, warning, trend, projectedLabel, children,
 }: ClockDisplayProps) {
   const status = getClockStatus(days);
   const s      = STATUS_CONFIG[status];
@@ -102,7 +104,22 @@ export default function ClockDisplay({
           </span>
         )}
         <span className="text-sm font-mono uppercase opacity-40 mb-3 ml-1 leading-none">days</span>
+        {trend && trend !== 'stable' && (
+          <span className={`mb-3 ml-1 text-lg font-mono leading-none ${
+            trend === 'up'   ? 'text-green-400' :
+            trend === 'down' ? 'text-red-400'   : 'opacity-30'
+          }`}>
+            {trend === 'up' ? '↑' : '↓'}
+          </span>
+        )}
       </div>
+
+      {/* Harvest projection label */}
+      {projectedLabel && (
+        <div className="text-[9px] font-mono uppercase text-green-400/70 mb-1 -mt-1">
+          {projectedLabel}
+        </div>
+      )}
 
       {/* Status bar */}
       <div className="h-1 w-full bg-black/30 mb-5">

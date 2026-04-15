@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { getCropById } from '@/lib/tools/planting-calendar/cropLoader';
-import { getInventory, putInventoryItem } from '@/lib/caloric-security/homesteadStore';
+import { getInventory, putInventoryItem, getFrostDates } from '@/lib/caloric-security/homesteadStore';
 import type { InventoryItem } from '@/lib/caloric-security/types';
 import type { SelectedCrop } from '@/lib/tools/planting-calendar/types';
 
@@ -18,6 +18,42 @@ export interface ImportPreview {
   items: InventoryItem[];
   cropNames: string[];
   savedAt: number;
+}
+
+// ============================================================
+// Harvest date estimation
+//
+// Prefers actualActionDate from the planting calendar (the
+// date the user scheduled to transplant or direct-sow).
+// Falls back to frost date + crop timing offsets.
+// Returns undefined if no estimate can be made.
+// ============================================================
+
+function estimateHarvestDate(
+  sc: SelectedCrop,
+  crop: ReturnType<typeof getCropById>,
+  lastSpringFrost: Date | null,
+): Date | undefined {
+  if (!crop) return undefined;
+
+  const daysToMaturity = crop.daysToMaturity;
+  if (!daysToMaturity) return undefined;
+
+  // Path 1: use the scheduled action date from the planting calendar
+  if (sc.actualActionDate?.date) {
+    const actionDate = new Date(sc.actualActionDate.date + 'T12:00:00');
+    const harvest = new Date(actionDate);
+    harvest.setDate(harvest.getDate() + daysToMaturity);
+    return harvest;
+  }
+
+  // Path 2: estimate from last spring frost + crop timing offsets
+  if (!lastSpringFrost) return undefined;
+
+  const offsetDays = crop.transplant ?? crop.directSow ?? 0;
+  const harvest = new Date(lastSpringFrost);
+  harvest.setDate(harvest.getDate() + offsetDays + daysToMaturity);
+  return harvest;
 }
 
 export function useImportFromPlanting(): {
@@ -43,6 +79,10 @@ export function useImportFromPlanting(): {
         const existing = await getInventory();
         const existingCropIds = new Set(existing.map(i => i.cropId));
 
+        // Get frost dates for harvest estimation (best-effort, may be null)
+        const frostDates = await getFrostDates().catch(() => null);
+        const lastSpringFrost = frostDates?.lastSpringFrost ?? null;
+
         const items: InventoryItem[] = [];
         const cropNames: string[] = [];
 
@@ -51,13 +91,16 @@ export function useImportFromPlanting(): {
           const crop = getCropById(sc.cropId);
           if (!crop) continue;
 
+          const expectedHarvestDate = estimateHarvestDate(sc, crop, lastSpringFrost);
+
           items.push({
-            id: crypto.randomUUID(),
-            type: 'crop',
-            cropId: sc.cropId,
-            plantCount: sc.quantity ?? 1,
-            status: 'planned',
-            lastUpdated: new Date(),
+            id:                  crypto.randomUUID(),
+            type:                'crop',
+            cropId:              sc.cropId,
+            plantCount:          sc.quantity ?? 1,
+            status:              'planned',
+            expectedHarvestDate,
+            lastUpdated:         new Date(),
           });
           cropNames.push(crop.name);
         }

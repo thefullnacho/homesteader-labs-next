@@ -56,12 +56,48 @@ function getPestPressure(soilTemp: number | null, threshold: number): PestPressu
   return 'dormant';
 }
 
-const PRESSURE_STYLES: Record<PestPressure, { label: string; border: string; badge: string }> = {
-  peak:    { label: 'PEAK — High risk now',  border: 'border-red-500/40 bg-red-500/5',     badge: 'text-red-400 border-red-400/60' },
-  active:  { label: 'ACTIVE — Act now',       border: 'border-red-500/30 bg-red-500/3',     badge: 'text-red-400 border-red-400/40' },
-  soon:    { label: 'SOON — Plant defenses',  border: 'border-orange-500/30 bg-orange-500/5', badge: 'text-orange-400 border-orange-400/50' },
-  dormant: { label: 'PRE-SEASON',             border: 'border-green-500/20 bg-green-500/3',  badge: 'text-green-400 border-green-400/30' },
-  unknown: { label: '—',                      border: 'border-border-primary/20',             badge: 'text-foreground/30 border-border-primary/30' },
+// ── GDD-based days-until-active estimate ─────────────────────
+function getDaysUntilPestActive(
+  currentGDD:  number,
+  gddThreshold: number,
+  forecastGDD:  number,   // 14-day cumulative from calculatePlantingIndex
+): number | null {
+  const avgDailyGDD = forecastGDD / 14;
+  if (avgDailyGDD <= 0) return null;
+  const remaining = gddThreshold - currentGDD;
+  if (remaining <= 0) return null;
+  return Math.ceil(remaining / avgDailyGDD);
+}
+
+function getPressureLabel(
+  pressure:     PestPressure,
+  gddThreshold: number | undefined,
+  currentGDD:   number,
+  forecastGDD:  number,
+): string {
+  if (pressure === 'peak')    return 'PEAK — High risk now';
+  if (pressure === 'active')  return 'ACTIVE — Act now';
+  if (pressure === 'unknown') return '—';
+
+  // For 'soon' and 'dormant', try to add a GDD-based day estimate
+  if (gddThreshold && forecastGDD > 0) {
+    const days = getDaysUntilPestActive(currentGDD, gddThreshold, forecastGDD);
+    if (days !== null) {
+      return pressure === 'soon'
+        ? `SOON — ~${days}d (GDD)`
+        : `PRE-SEASON — ~${days}d`;
+    }
+  }
+
+  return pressure === 'soon' ? 'SOON — Plant defenses' : 'PRE-SEASON';
+}
+
+const PRESSURE_STYLES: Record<PestPressure, { border: string; badge: string }> = {
+  peak:    { border: 'border-red-500/40 bg-red-500/5',       badge: 'text-red-400 border-red-400/60' },
+  active:  { border: 'border-red-500/30 bg-red-500/3',       badge: 'text-red-400 border-red-400/40' },
+  soon:    { border: 'border-orange-500/30 bg-orange-500/5', badge: 'text-orange-400 border-orange-400/50' },
+  dormant: { border: 'border-green-500/20 bg-green-500/3',   badge: 'text-green-400 border-green-400/30' },
+  unknown: { border: 'border-border-primary/20',             badge: 'text-foreground/30 border-border-primary/30' },
 };
 
 const EVIDENCE_STYLES: Record<string, { label: string; cls: string }> = {
@@ -355,7 +391,8 @@ export default function CompanionsPage() {
                   <div className="space-y-2 pl-2 border-l-2 border-border-primary/20">
                     {block.pests.map(pest => {
                       const pressure = getPestPressure(soilTemp, pest.soilTempThreshold);
-                      const ps = PRESSURE_STYLES[pressure];
+                      const ps    = PRESSURE_STYLES[pressure];
+                      const label = getPressureLabel(pressure, pest.gddThreshold, forecastGDD, forecastGDD);
 
                       return (
                         <div
@@ -369,7 +406,7 @@ export default function CompanionsPage() {
                             </span>
                             {/* Pressure badge (screen only) */}
                             <span className={`print:hidden text-[8px] font-mono border px-1.5 py-0.5 uppercase ${ps.badge}`}>
-                              {ps.label}
+                              {label}
                             </span>
                             <span className="text-[8px] font-mono opacity-30 ml-auto print:hidden">
                               Soil threshold: {pest.soilTempThreshold}°F

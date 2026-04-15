@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import {
   Utensils, Droplets, Zap, Settings, Pencil,
-  LayoutDashboard, RefreshCw, TrendingUp, Leaf,
+  LayoutDashboard, RefreshCw, TrendingUp, Leaf, Plus,
 } from 'lucide-react';
 import Link from 'next/link';
 import Typography from '@/components/ui/Typography';
@@ -15,10 +15,13 @@ import ActualsInput, { type Actuals } from './ActualsInput';
 import FrostGuardAlert from './FrostGuardAlert';
 import DroughtAlert from './DroughtAlert';
 import CanningDayBanner from './CanningDayBanner';
+import DecayAlerts from './DecayAlerts';
+import LogHarvestModal from './LogHarvestModal';
 import { useSurvivalData } from '@/lib/caloric-security/useSurvivalData';
 import { resetConfig, getActuals, saveActuals } from '@/lib/caloric-security/homesteadStore';
 import { getCropById } from '@/lib/tools/planting-calendar/cropLoader';
 import { calculateItemDecay } from '@/lib/caloric-security/decayCalculations';
+import { estimateHarvestContribution, projectFoodDays } from '@/lib/caloric-security/projectionCalculations';
 import type { ForecastDay } from '@/lib/weatherTypes';
 
 // ============================================================
@@ -50,6 +53,7 @@ export default function AutonomyDashboard({
     currentBatteryPct:      100,
   });
   const actualsLoaded = useRef(false);
+  const [showLogHarvest, setShowLogHarvest] = useState(false);
 
   // Load persisted actuals on mount
   useEffect(() => {
@@ -141,6 +145,30 @@ export default function AutonomyDashboard({
     })
     .filter(Boolean) as string[];
 
+  // ── Harvest contribution + food clock trend ─────────────────
+  const harvestContribution = config
+    ? estimateHarvestContribution(inventory, config)
+    : null;
+
+  const currentFoodDays = caloricTotals?.daysOfFood ?? 0;
+
+  const foodTrend: 'up' | 'down' | 'stable' | undefined = (() => {
+    if (!config || currentFoodDays <= 0) return undefined;
+    const projected7 = projectFoodDays(inventory, config, 7);
+    const delta = projected7 - currentFoodDays;
+    if (delta < -0.05 * currentFoodDays) return 'down';
+    if (delta >  0.05 * currentFoodDays) return 'up';
+    return 'stable';
+  })();
+
+  const projectedLabel: string | undefined = (() => {
+    if (!harvestContribution || harvestContribution.foodDays <= 0) return undefined;
+    if (harvestContribution.nearestHarvestDays === null) return undefined;
+    const fd = Math.round(harvestContribution.foodDays);
+    const nd = harvestContribution.nearestHarvestDays;
+    return `Harvest in ~${nd}d adds +${fd}d food`;
+  })();
+
   // ── Loading / error states ──────────────────────────────
   if (isLoading) {
     return (
@@ -214,6 +242,8 @@ export default function AutonomyDashboard({
           iconColor="text-green-400"
           days={caloricTotals?.daysOfFood ?? null}
           details={foodDetails}
+          trend={foodTrend}
+          projectedLabel={projectedLabel}
         >
           {caloricTotals && caloricTotals.cropBreakdown.length === 0 && (
             <div className="text-[9px] font-mono uppercase opacity-40 text-center py-2">
@@ -298,6 +328,9 @@ export default function AutonomyDashboard({
       {/* Canning Day banner — shows when solar surplus is significant */}
       <CanningDayBanner energyAutonomy={energyAutonomy} decliningFreshItems={decliningFreshItems} />
 
+      {/* Decay alerts — stored items entering or in decline phase */}
+      <DecayAlerts inventory={inventory} />
+
       {/* Gated feature nav */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <Link href="/tools/caloric-security/roi" className="group border border-border-primary/20 hover:border-accent/50 px-4 py-3 flex items-center gap-3 transition-colors">
@@ -325,9 +358,17 @@ export default function AutonomyDashboard({
             <Typography variant="h4" className="text-xs uppercase tracking-widest font-mono opacity-60 mb-0 flex items-center gap-2">
               <LayoutDashboard size={12} /> Food Inventory
             </Typography>
-            <Button href="/tools/caloric-security/inventory" variant="ghost" size="sm">
-              Manage →
-            </Button>
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => setShowLogHarvest(true)}
+                className="flex items-center gap-1 text-[9px] font-mono uppercase border border-accent/40 text-accent/70 hover:text-accent hover:border-accent px-2 py-1 transition-colors"
+              >
+                <Plus size={9} /> Log Harvest
+              </button>
+              <Button href="/tools/caloric-security/inventory" variant="ghost" size="sm">
+                Manage →
+              </Button>
+            </div>
           </div>
 
           <table className="w-full text-[10px] font-mono uppercase">
@@ -379,6 +420,11 @@ export default function AutonomyDashboard({
           Data stored locally // IndexedDB // No server sync
         </span>
       </div>
+
+      {/* Log Harvest modal */}
+      {showLogHarvest && (
+        <LogHarvestModal onClose={() => setShowLogHarvest(false)} />
+      )}
     </div>
   );
 }

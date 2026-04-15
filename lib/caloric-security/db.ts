@@ -102,6 +102,10 @@ export class HomesteadDB extends Dexie {
       frostDates: 'id',
       actuals:    'id',
     });
+
+    // Version 3: InventoryItem gains optional weightLbs + expectedHarvestDate.
+    // Both fields are optional — no migration needed; existing rows remain valid.
+    this.version(3).stores({});
   }
 }
 
