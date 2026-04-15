@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 import { Check, Sprout, Settings2, ChevronDown } from "lucide-react";
-import { Crop, SelectedCrop } from "@/lib/tools/planting-calendar/types";
+import { Crop, SelectedCrop, FrostDates } from "@/lib/tools/planting-calendar/types";
 import { getAllCrops } from "@/lib/tools/planting-calendar/crops";
+import { calculateMaxSuccessionPlantings } from "@/lib/tools/planting-calendar/plantingCalculations";
 import Typography from "@/components/ui/Typography";
 import BrutalistBlock from "@/components/ui/BrutalistBlock";
 
@@ -11,6 +12,7 @@ interface CropSelectorProps {
   selectedCrops: SelectedCrop[];
   onCropsChange: (crops: SelectedCrop[]) => void;
   maxCrops?: number;
+  frostDates?: FrostDates | null;
 }
 
 const CATEGORY_COLORS: Record<string, { border: string; badge: string }> = {
@@ -29,7 +31,8 @@ const CATEGORY_LABELS: Record<string, string> = {
 export default function CropSelector({
   selectedCrops,
   onCropsChange,
-  maxCrops = 30
+  maxCrops = 30,
+  frostDates,
 }: CropSelectorProps) {
   const [expandedCrop, setExpandedCrop] = useState<string | null>(null);
   const [openCategories, setOpenCategories] = useState<Set<string>>(new Set());
@@ -94,6 +97,14 @@ export default function CropSelector({
     onCropsChange(
       selectedCrops.map(sc =>
         sc.cropId === cropId ? { ...sc, quantity: Math.max(1, quantity) } : sc
+      )
+    );
+  };
+
+  const updateSuccessionInterval = (cropId: string, weeks: number) => {
+    onCropsChange(
+      selectedCrops.map(sc =>
+        sc.cropId === cropId ? { ...sc, successionInterval: weeks } : sc
       )
     );
   };
@@ -219,22 +230,56 @@ export default function CropSelector({
                             </div>
 
                             {crop.successionEnabled && (
-                              <label className="flex items-center gap-3 cursor-pointer group">
-                                <div className="relative">
-                                  <input
-                                    type="checkbox"
-                                    checked={isSelected.successionEnabled}
-                                    onChange={() => toggleSuccession(crop.id)}
-                                    className="sr-only"
-                                  />
-                                  <div className={`w-8 h-4 border-2 transition-colors ${isSelected.successionEnabled ? 'bg-accent border-accent' : 'border-border-primary/30 bg-black/20'}`}>
-                                    <div className={`absolute top-0.5 w-2 h-2 bg-white transition-all ${isSelected.successionEnabled ? 'left-[1.1rem]' : 'left-0.5'}`} />
+                              <div className="space-y-2">
+                                <label className="flex items-center gap-3 cursor-pointer group">
+                                  <div className="relative">
+                                    <input
+                                      type="checkbox"
+                                      checked={isSelected.successionEnabled}
+                                      onChange={() => toggleSuccession(crop.id)}
+                                      className="sr-only"
+                                    />
+                                    <div className={`w-8 h-4 border-2 transition-colors ${isSelected.successionEnabled ? 'bg-accent border-accent' : 'border-border-primary/30 bg-black/20'}`}>
+                                      <div className={`absolute top-0.5 w-2 h-2 bg-white transition-all ${isSelected.successionEnabled ? 'left-[1.1rem]' : 'left-0.5'}`} />
+                                    </div>
                                   </div>
-                                </div>
-                                <span className="text-[9px] font-mono uppercase opacity-60 group-hover:opacity-100 transition-opacity">
-                                  Succession every {crop.successionInterval}w
-                                </span>
-                              </label>
+                                  <span className="text-[9px] font-mono uppercase opacity-60 group-hover:opacity-100 transition-opacity">
+                                    Succession planting
+                                  </span>
+                                </label>
+
+                                {isSelected.successionEnabled && (
+                                  <div className="pl-11 space-y-2">
+                                    <div className="flex items-center gap-2">
+                                      <label className="text-[8px] font-mono uppercase opacity-40 whitespace-nowrap">Every</label>
+                                      <select
+                                        value={isSelected.successionInterval ?? crop.successionInterval}
+                                        onChange={(e) => updateSuccessionInterval(crop.id, Number(e.target.value))}
+                                        className="text-xs font-mono bg-black/40 border-2 border-border-primary/30 px-2 py-1 outline-none focus:border-accent uppercase"
+                                      >
+                                        {[1, 2, 3, 4].map(w => (
+                                          <option key={w} value={w} className="bg-background-primary">{w}w</option>
+                                        ))}
+                                      </select>
+                                    </div>
+                                    {frostDates && (() => {
+                                      const interval = isSelected.successionInterval ?? crop.successionInterval;
+                                      const variety = crop.varieties.find(v => v.id === isSelected.varietyId) ?? crop.varieties[0];
+                                      const count = calculateMaxSuccessionPlantings(
+                                        crop, variety,
+                                        frostDates.lastSpringFrost,
+                                        frostDates.firstFallFrost,
+                                        interval
+                                      );
+                                      return (
+                                        <p className="text-[8px] font-mono opacity-40 uppercase">
+                                          → {count} sow {count === 1 ? 'window' : 'windows'} this season
+                                        </p>
+                                      );
+                                    })()}
+                                  </div>
+                                )}
+                              </div>
                             )}
 
                             {/* Actual date anchoring */}

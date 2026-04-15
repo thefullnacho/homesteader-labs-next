@@ -161,7 +161,7 @@ function calculateSinglePlanting(
 /**
  * Calculate maximum number of succession plantings possible
  */
-function calculateMaxSuccessionPlantings(
+export function calculateMaxSuccessionPlantings(
   crop: Crop,
   variety: Variety,
   lastFrost: Date,

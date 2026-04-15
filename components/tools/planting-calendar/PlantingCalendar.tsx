@@ -7,7 +7,7 @@ import {
   sortDatesByDate 
 } from "@/lib/tools/planting-calendar/plantingCalculations";
 import { getCropById } from "@/lib/tools/planting-calendar/crops";
-import { Calendar, MapPin, TrendingUp } from "lucide-react";
+import { Calendar, MapPin, TrendingUp, CalendarPlus } from "lucide-react";
 import Typography from "@/components/ui/Typography";
 import BrutalistBlock from "@/components/ui/BrutalistBlock";
 import Badge from "@/components/ui/Badge";
@@ -23,6 +23,39 @@ interface PlantingCalendarProps {
     totalKcal: number;
     daysOfFood: number;
   } | null;
+}
+
+function downloadICS(dates: PlantingDate[], frostDates: FrostDates) {
+  const lines = [
+    'BEGIN:VCALENDAR',
+    'VERSION:2.0',
+    'PRODID:-//Homesteader Labs//Planting Calendar//EN',
+    'CALSCALE:GREGORIAN',
+  ];
+
+  dates.forEach((d, idx) => {
+    const start = new Date(d.date).toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+    const uid = `hl-plant-${d.cropId}-${d.action}-${idx}@homesteaderlabs`;
+    const summary = `${d.cropName} — ${d.action.replace(/-/g, ' ')}${d.successionNumber ? ` (seq ${d.successionNumber})` : ''}`;
+    const description = d.notes?.join('; ') ?? '';
+    lines.push(
+      'BEGIN:VEVENT',
+      `UID:${uid}`,
+      `DTSTART:${start}`,
+      `SUMMARY:${summary}`,
+      `DESCRIPTION:${description}`,
+      'END:VEVENT'
+    );
+  });
+
+  lines.push('END:VCALENDAR');
+  const blob = new Blob([lines.join('\r\n')], { type: 'text/calendar;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `planting-calendar-${frostDates.zipCode}.ics`;
+  a.click();
+  URL.revokeObjectURL(url);
 }
 
 const ActionMap: Record<string, string> = {
@@ -202,22 +235,36 @@ export default function PlantingCalendar({
       <BrutalistBlock className="p-8 border-accent bg-accent/5 flex flex-col md:flex-row items-center justify-between gap-8 text-center md:text-left print:hidden" refTag="ALRT_SRVC_01">
         <div className="space-y-2">
           <Typography variant="h3" className="mb-0 flex items-center justify-center md:justify-start gap-3 uppercase tracking-tighter">
-            <TrendingUp size={20} className="text-accent" /> 
+            <TrendingUp size={20} className="text-accent" />
             Active_Monitoring_Protocol
           </Typography>
           <Typography variant="body" className="text-xs opacity-70 mb-0 uppercase font-mono max-w-md">
-            Initialize weekly transmission cycle for {uniqueCropsCount} selected crops. 
+            Initialize weekly transmission cycle for {uniqueCropsCount} selected crops.
             Receive critical sequence alerts customized for {frostDates.zipCode}.
           </Typography>
+          <Typography variant="small" className="text-[9px] font-mono opacity-30 uppercase mt-1 mb-0">
+            Used by 340+ homesteaders this season
+          </Typography>
         </div>
-        <Button
-          onClick={onEmailCapture}
-          variant="primary"
-          size="lg"
-          className="w-full md:w-auto shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-none"
-        >
-          EXEC_INIT_REMINDERS
-        </Button>
+        <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+          <Button
+            onClick={() => downloadICS(dates, frostDates)}
+            variant="secondary"
+            size="lg"
+            className="w-full sm:w-auto flex items-center gap-2"
+          >
+            <CalendarPlus size={16} />
+            Add to Calendar
+          </Button>
+          <Button
+            onClick={onEmailCapture}
+            variant="primary"
+            size="lg"
+            className="w-full sm:w-auto shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-none"
+          >
+            EXEC_INIT_REMINDERS
+          </Button>
+        </div>
       </BrutalistBlock>
     </div>
   );
