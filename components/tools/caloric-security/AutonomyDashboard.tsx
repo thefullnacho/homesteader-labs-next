@@ -16,6 +16,7 @@ import FrostGuardAlert from './FrostGuardAlert';
 import DroughtAlert from './DroughtAlert';
 import CanningDayBanner from './CanningDayBanner';
 import DecayAlerts from './DecayAlerts';
+import FocusCardDeck from './FocusCardDeck';
 import LogHarvestModal from './LogHarvestModal';
 import { useSurvivalData } from '@/lib/caloric-security/useSurvivalData';
 import { resetConfig, getActuals, saveActuals } from '@/lib/caloric-security/homesteadStore';
@@ -230,6 +231,16 @@ export default function AutonomyDashboard({
           <span>Battery: {config.energy.batteryCapacityAh} Ah</span>
         </div>
       )}
+
+      {/* Focus cards — top scored actions against current system state */}
+      <FocusCardDeck
+        caloricTotals={caloricTotals}
+        waterAutonomy={waterAutonomy}
+        energyAutonomy={energyAutonomy}
+        inventory={inventory}
+        actuals={actuals}
+        forecastDays={forecastDays}
+      />
 
       {/* Three clocks */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

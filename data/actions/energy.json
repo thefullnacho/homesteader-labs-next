@@ -1,0 +1,74 @@
+[
+  {
+    "id": "energy:charge-backup-packs",
+    "title": "Charge backup battery packs",
+    "domain": "energy",
+    "tags": ["energy"],
+    "why_template": "Solar surplus at {energy.surplus_pct}% with battery at {energy.battery_pct}%. Charge secondary packs now — it costs nothing and increases buffer.",
+    "impact": {
+      "resource": "energy",
+      "metric": "wh_stored",
+      "delta": 500,
+      "confidence": "medium"
+    },
+    "preconditions": [
+      { "field": "energy.surplus_pct",  "op": "gt",  "value": 100 },
+      { "field": "energy.battery_pct",  "op": "lt",  "value": 90 }
+    ],
+    "window": {
+      "hours": [9, 15],
+      "months": null,
+      "zone_adjusted": false,
+      "solar_gate": "surplus_above_100pct"
+    },
+    "effort": {
+      "minutes": 5,
+      "intensity": "passive",
+      "requires_presence": false
+    },
+    "recurrence": {
+      "type": "state_triggered",
+      "cooldown_after_completion": 1
+    },
+    "dismissal": {
+      "options": ["done", "skip_today"],
+      "resurface_on_state_change": true,
+      "state_change_threshold": 0.15
+    }
+  },
+  {
+    "id": "energy:battery-health-check",
+    "title": "Check battery bank health",
+    "domain": "energy",
+    "tags": ["energy", "maintenance"],
+    "why_template": "Battery health check due. Inspect terminals, check voltage under load, and verify cells are balanced — degraded capacity won't show until you need it most.",
+    "impact": {
+      "resource": "energy",
+      "metric": "days_of_supply",
+      "delta": 0,
+      "confidence": "high"
+    },
+    "preconditions": [
+      { "field": "energy.days_of_supply", "op": "gt", "value": 0 }
+    ],
+    "window": {
+      "hours": null,
+      "months": null,
+      "zone_adjusted": false
+    },
+    "effort": {
+      "minutes": 20,
+      "intensity": "light",
+      "requires_presence": true
+    },
+    "recurrence": {
+      "type": "periodic",
+      "interval_days": 30,
+      "cooldown_after_completion": 30
+    },
+    "dismissal": {
+      "options": ["done", "skip_today"],
+      "resurface_on_state_change": false
+    }
+  }
+]
