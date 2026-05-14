@@ -2,7 +2,7 @@
 
 import { useState, useMemo, useEffect } from 'react';
 import { useLiveQuery } from 'dexie-react-hooks';
-import { Plus, Trash2, Edit3, ArrowLeft, Package, Search, Download, X, Mail } from 'lucide-react';
+import { Plus, Trash2, Edit3, ArrowLeft, Package, Search, Download, X, Mail, Leaf } from 'lucide-react';
 import Link from 'next/link';
 import FieldStationLayout from '@/components/ui/FieldStationLayout';
 import BrutalistBlock from '@/components/ui/BrutalistBlock';
@@ -13,6 +13,7 @@ import { putInventoryItem, deleteInventoryItem } from '@/lib/caloric-security/ho
 import { getCropById, getAllCrops } from '@/lib/tools/planting-calendar/cropLoader';
 import { calculateItemDecay } from '@/lib/caloric-security/decayCalculations';
 import { useImportFromPlanting } from '@/lib/caloric-security/useImportFromPlanting';
+import LogHarvestModal from '@/components/tools/caloric-security/LogHarvestModal';
 import type { InventoryItem } from '@/lib/caloric-security/types';
 
 // ============================================================
@@ -26,6 +27,7 @@ import type { InventoryItem } from '@/lib/caloric-security/types';
 interface FormState {
   cropId:             string;
   plantCount:         number;
+  weightLbs:          string;  // empty string = not set; string for input binding
   status:             InventoryItem['status'];
   preservationMethod: InventoryItem['preservationMethod'];
   dateHarvested:      string;  // ISO YYYY-MM-DD for <input type="date">
@@ -34,6 +36,7 @@ interface FormState {
 const BLANK_FORM: FormState = {
   cropId:             '',
   plantCount:         1,
+  weightLbs:          '',
   status:             'active',
   preservationMethod: 'fresh',
   dateHarvested:      '',
@@ -82,6 +85,7 @@ export default function InventoryPage() {
   const [emailSubmitting,setEmailSubmitting]= useState(false);
   const [emailSuccess,   setEmailSuccess]   = useState(false);
 
+  const [showLogHarvest, setShowLogHarvest] = useState(false);
   const [formOpen,      setFormOpen]      = useState(false);
   const [editId,        setEditId]        = useState<string | null>(null);
   const [form,          setForm]          = useState<FormState>(BLANK_FORM);
@@ -148,6 +152,7 @@ export default function InventoryPage() {
     setForm({
       cropId:             item.cropId,
       plantCount:         item.plantCount,
+      weightLbs:          item.weightLbs != null ? item.weightLbs.toString() : '',
       status:             item.status,
       preservationMethod: item.preservationMethod ?? 'fresh',
       dateHarvested:      item.dateHarvested
@@ -162,6 +167,7 @@ export default function InventoryPage() {
     if (!form.cropId) return;
     setSaving(true);
     try {
+      const parsedWeight = parseFloat(form.weightLbs);
       const item: InventoryItem = {
         id:                 editId ?? crypto.randomUUID(),
         type:               'crop',
@@ -171,6 +177,9 @@ export default function InventoryPage() {
         preservationMethod: form.status === 'stored' ? form.preservationMethod : undefined,
         dateHarvested:      form.status === 'stored' && form.dateHarvested
           ? new Date(form.dateHarvested + 'T12:00:00')
+          : undefined,
+        weightLbs:          form.status === 'stored' && !isNaN(parsedWeight) && parsedWeight > 0
+          ? parsedWeight
           : undefined,
         lastUpdated: new Date(),
       };
@@ -206,9 +215,19 @@ export default function InventoryPage() {
               Crop inventory // {inventory.length} items tracked
             </Typography>
           </div>
-          <Button variant="primary" size="sm" onClick={openAdd} className="flex items-center gap-2">
-            <Plus size={12} /> Add Item
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setShowLogHarvest(true)}
+              className="flex items-center gap-2"
+            >
+              <Leaf size={12} /> Log Harvest
+            </Button>
+            <Button variant="primary" size="sm" onClick={openAdd} className="flex items-center gap-2">
+              <Plus size={12} /> Add Item
+            </Button>
+          </div>
         </div>
 
         {/* Planting Calendar import banner */}
@@ -380,6 +399,11 @@ export default function InventoryPage() {
         </div>
       </div>
 
+      {/* Log Harvest modal */}
+      {showLogHarvest && (
+        <LogHarvestModal onClose={() => setShowLogHarvest(false)} />
+      )}
+
       {/* Post-import email modal */}
       {showEmailModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60">
@@ -521,6 +545,24 @@ export default function InventoryPage() {
               {/* Stored-only fields */}
               {form.status === 'stored' && (
                 <>
+                  <div>
+                    <label className="block text-xs font-mono uppercase tracking-widest mb-1 opacity-70">
+                      Weight (lbs) <span className="opacity-40 normal-case">— optional</span>
+                    </label>
+                    <input
+                      type="number"
+                      min="0.1"
+                      step="0.1"
+                      placeholder="e.g. 5.5"
+                      value={form.weightLbs}
+                      onChange={e => setForm(f => ({ ...f, weightLbs: e.target.value }))}
+                      className="w-full bg-black/30 border-2 border-border-primary/40 focus:border-accent outline-none px-3 py-2 text-sm font-mono"
+                    />
+                    <p className="text-[9px] font-mono opacity-30 uppercase mt-1">
+                      Actual weight overrides plant-count estimate for caloric math.
+                    </p>
+                  </div>
+
                   <div>
                     <label className="block text-xs font-mono uppercase tracking-widest mb-1 opacity-70">
                       Preservation Method

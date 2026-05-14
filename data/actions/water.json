@@ -1,0 +1,111 @@
+[
+  {
+    "id": "water:audit-draw",
+    "title": "Audit water allocation",
+    "domain": "water",
+    "tags": ["water"],
+    "why_template": "Drawing {water.daily_total} gal/day but household need is {water.daily_household} gal. Gap of {water.unexplained_draw} gal is unexplained. No significant rain forecast for {weather.dry_days_ahead} days.",
+    "impact": {
+      "resource": "water",
+      "metric": "daily_draw",
+      "delta": -1,
+      "confidence": "low"
+    },
+    "preconditions": [
+      { "field": "water.daily_total",              "op": "gt",  "value": 0 },
+      { "field": "water.unexplained_draw",          "op": "gt",  "value": 0.5 },
+      { "field": "weather.precip_forecast_14d",     "op": "lt",  "value": 0.5 }
+    ],
+    "window": {
+      "hours": null,
+      "months": null,
+      "zone_adjusted": false
+    },
+    "effort": {
+      "minutes": 30,
+      "intensity": "light",
+      "requires_presence": true
+    },
+    "recurrence": {
+      "type": "state_triggered",
+      "cooldown_after_completion": 14
+    },
+    "dismissal": {
+      "options": ["done", "already_handled", "not_relevant"],
+      "resurface_on_state_change": true,
+      "state_change_threshold": 0.25
+    }
+  },
+  {
+    "id": "water:check-filter",
+    "title": "Check water filter status",
+    "domain": "water",
+    "tags": ["water", "maintenance"],
+    "why_template": "Filter checked {maintenance.filter_last_checked_days} days ago. A failed filter during a dry period is a crisis — inspect while conditions are good.",
+    "impact": {
+      "resource": "water",
+      "metric": "days_of_supply",
+      "delta": 0,
+      "confidence": "high"
+    },
+    "preconditions": [
+      { "field": "maintenance.filter_last_checked_days", "op": "gte", "value": 7 }
+    ],
+    "window": {
+      "hours": null,
+      "months": null,
+      "zone_adjusted": false
+    },
+    "effort": {
+      "minutes": 10,
+      "intensity": "light",
+      "requires_presence": true
+    },
+    "recurrence": {
+      "type": "periodic",
+      "interval_days": 7,
+      "cooldown_after_completion": 7
+    },
+    "dismissal": {
+      "options": ["done", "skip_today"],
+      "resurface_on_state_change": false
+    }
+  },
+  {
+    "id": "water:reduce-irrigation",
+    "title": "Ease irrigation — rain coming",
+    "domain": "water",
+    "tags": ["water"],
+    "why_template": "Rain forecast within {weather.dry_days_ahead} days. Reducing irrigation now conserves stored water and avoids overwatering.",
+    "impact": {
+      "resource": "water",
+      "metric": "days_of_supply",
+      "delta": 0.5,
+      "confidence": "medium"
+    },
+    "preconditions": [
+      { "field": "water.daily_total",          "op": "gt",  "value": 0 },
+      { "field": "weather.dry_days_ahead",     "op": "lte", "value": 2 },
+      { "field": "weather.precip_forecast_14d","op": "gt",  "value": 0.1 }
+    ],
+    "window": {
+      "hours": null,
+      "months": null,
+      "zone_adjusted": false
+    },
+    "effort": {
+      "minutes": 10,
+      "intensity": "light",
+      "requires_presence": false
+    },
+    "recurrence": {
+      "type": "state_triggered",
+      "cooldown_after_completion": 3
+    },
+    "dismissal": {
+      "options": ["done", "already_handled"],
+      "resurface_on_state_change": true,
+      "state_change_threshold": 0.2
+    }
+  }
+]

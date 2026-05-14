@@ -1,0 +1,188 @@
+[
+  {
+    "id": "food:can-batch",
+    "title": "Start a canning batch",
+    "domain": "food",
+    "tags": ["food", "energy"],
+    "why_template": "Solar surplus at {energy.surplus_pct}% — use it for preservation. Food clock: {food.days}d → est. {food.days_after}d after canning.",
+    "impact": {
+      "resource": "food",
+      "metric": "days_of_supply",
+      "delta": 0.3,
+      "confidence": "medium",
+      "secondary_impacts": [
+        {
+          "resource": "energy",
+          "metric": "wh_stored",
+          "delta": -800,
+          "confidence": "high"
+        }
+      ]
+    },
+    "preconditions": [
+      { "field": "food.days_of_supply",   "op": "lt",  "value": 14 },
+      { "field": "energy.surplus_pct",    "op": "gt",  "value": 100 },
+      { "field": "inventory.canning_jars","op": "gt",  "value": 0 }
+    ],
+    "window": {
+      "hours": [9, 16],
+      "months": null,
+      "zone_adjusted": false,
+      "solar_gate": "surplus_above_100pct"
+    },
+    "effort": {
+      "minutes": 120,
+      "intensity": "moderate",
+      "requires_presence": true
+    },
+    "recurrence": {
+      "type": "state_triggered",
+      "cooldown_after_completion": 3
+    },
+    "dismissal": {
+      "options": ["done", "skip_today", "snooze_days"],
+      "resurface_on_state_change": true,
+      "state_change_threshold": 0.2
+    }
+  },
+  {
+    "id": "food:inventory-audit",
+    "title": "Audit stored food inventory",
+    "domain": "food",
+    "tags": ["food", "maintenance"],
+    "why_template": "Regular audits catch spoilage before it hits the food clock. Update harvest dates and weights to keep the caloric calculation accurate.",
+    "impact": {
+      "resource": "food",
+      "metric": "days_of_supply",
+      "delta": 0,
+      "confidence": "high"
+    },
+    "preconditions": [
+      { "field": "food.days_of_supply", "op": "gt", "value": 0 }
+    ],
+    "window": {
+      "hours": null,
+      "months": null,
+      "zone_adjusted": false
+    },
+    "effort": {
+      "minutes": 20,
+      "intensity": "light",
+      "requires_presence": true
+    },
+    "recurrence": {
+      "type": "periodic",
+      "interval_days": 14,
+      "cooldown_after_completion": 14
+    },
+    "dismissal": {
+      "options": ["done", "skip_today"],
+      "resurface_on_state_change": false
+    }
+  },
+  {
+    "id": "food:harvest-check",
+    "title": "Check crops ready to harvest",
+    "domain": "food",
+    "tags": ["food"],
+    "why_template": "{inventory.upcoming_harvests} crop(s) are within 7 days of their expected harvest date. Log them to update the food clock.",
+    "impact": {
+      "resource": "food",
+      "metric": "days_of_supply",
+      "delta": 1.0,
+      "confidence": "medium"
+    },
+    "preconditions": [
+      { "field": "inventory.upcoming_harvests", "op": "gt", "value": 0 }
+    ],
+    "window": {
+      "hours": null,
+      "months": null,
+      "zone_adjusted": false
+    },
+    "effort": {
+      "minutes": 30,
+      "intensity": "light",
+      "requires_presence": true
+    },
+    "recurrence": {
+      "type": "state_triggered",
+      "cooldown_after_completion": 2
+    },
+    "dismissal": {
+      "options": ["done", "skip_today"],
+      "resurface_on_state_change": true,
+      "state_change_threshold": 0.1
+    }
+  },
+  {
+    "id": "food:reduce-food-waste",
+    "title": "Use or preserve spoiling food",
+    "domain": "food",
+    "tags": ["food"],
+    "why_template": "{inventory.critical_decay} stored item(s) will spoil within 7 days. Use, can, or dehydrate them now — once spoiled they count as zero calories.",
+    "impact": {
+      "resource": "food",
+      "metric": "days_of_supply",
+      "delta": 0.5,
+      "confidence": "high"
+    },
+    "preconditions": [
+      { "field": "inventory.critical_decay_items", "op": "gt", "value": 0 }
+    ],
+    "window": {
+      "hours": null,
+      "months": null,
+      "zone_adjusted": false
+    },
+    "effort": {
+      "minutes": 60,
+      "intensity": "moderate",
+      "requires_presence": true
+    },
+    "recurrence": {
+      "type": "state_triggered",
+      "cooldown_after_completion": 1
+    },
+    "dismissal": {
+      "options": ["done", "already_handled"],
+      "resurface_on_state_change": true,
+      "state_change_threshold": 0.1
+    }
+  },
+  {
+    "id": "food:start-seedlings-tomato",
+    "title": "Start tomato seedlings indoors",
+    "domain": "food",
+    "tags": ["food", "planning"],
+    "why_template": "Last frost est. {calendar.days_to_last_frost} days out. Tomatoes need 6-8 weeks lead time. Window closes in {calendar.seedling_deadline} days.",
+    "impact": {
+      "resource": "food",
+      "metric": "days_of_supply",
+      "delta": 5,
+      "confidence": "low"
+    },
+    "preconditions": [
+      { "field": "calendar.days_to_last_frost",    "op": "gte", "value": 42 },
+      { "field": "calendar.days_to_last_frost",    "op": "lte", "value": 70 },
+      { "field": "inventory.seed_tomato",          "op": "gt",  "value": 0 }
+    ],
+    "window": {
+      "hours": null,
+      "months": [1, 2, 3, 4],
+      "zone_adjusted": true
+    },
+    "effort": {
+      "minutes": 45,
+      "intensity": "light",
+      "requires_presence": true
+    },
+    "recurrence": {
+      "type": "one_shot"
+    },
+    "dismissal": {
+      "options": ["done", "not_relevant"],
+      "resurface_on_state_change": false
+    }
+  }
+]

@@ -1,0 +1,107 @@
+[
+  {
+    "id": "food:start-seedlings-pepper",
+    "title": "Start pepper seedlings indoors",
+    "domain": "food",
+    "tags": ["food", "planning"],
+    "why_template": "Last frost est. {calendar.days_to_last_frost} days out. Peppers need 8-10 weeks lead time. Start now for a full-season harvest.",
+    "impact": {
+      "resource": "food",
+      "metric": "days_of_supply",
+      "delta": 3,
+      "confidence": "low"
+    },
+    "preconditions": [
+      { "field": "calendar.days_to_last_frost", "op": "gte", "value": 56 },
+      { "field": "calendar.days_to_last_frost", "op": "lte", "value": 84 },
+      { "field": "inventory.seed_pepper",       "op": "gt",  "value": 0 }
+    ],
+    "window": {
+      "hours": null,
+      "months": [1, 2, 3, 4],
+      "zone_adjusted": true
+    },
+    "effort": {
+      "minutes": 30,
+      "intensity": "light",
+      "requires_presence": true
+    },
+    "recurrence": {
+      "type": "one_shot"
+    },
+    "dismissal": {
+      "options": ["done", "not_relevant"],
+      "resurface_on_state_change": false
+    }
+  },
+  {
+    "id": "food:start-seedlings-squash",
+    "title": "Start squash seedlings indoors",
+    "domain": "food",
+    "tags": ["food", "planning"],
+    "why_template": "Last frost est. {calendar.days_to_last_frost} days out. Squash transplants 2-4 weeks after last frost. Start indoors now for an early head start.",
+    "impact": {
+      "resource": "food",
+      "metric": "days_of_supply",
+      "delta": 4,
+      "confidence": "low"
+    },
+    "preconditions": [
+      { "field": "calendar.days_to_last_frost", "op": "gte", "value": 14 },
+      { "field": "calendar.days_to_last_frost", "op": "lte", "value": 35 },
+      { "field": "inventory.seed_squash",       "op": "gt",  "value": 0 }
+    ],
+    "window": {
+      "hours": null,
+      "months": [3, 4, 5],
+      "zone_adjusted": true
+    },
+    "effort": {
+      "minutes": 30,
+      "intensity": "light",
+      "requires_presence": true
+    },
+    "recurrence": {
+      "type": "one_shot"
+    },
+    "dismissal": {
+      "options": ["done", "not_relevant"],
+      "resurface_on_state_change": false
+    }
+  },
+  {
+    "id": "planning:review-weather-deltas",
+    "title": "Review forecast — unusual rainfall",
+    "domain": "planning",
+    "tags": ["planning", "water"],
+    "why_template": "{weather.precip_14d} inches of precipitation forecast over the next 14 days. Check catchment overflow capacity and adjust irrigation plans.",
+    "impact": {
+      "resource": "water",
+      "metric": "daily_inflow",
+      "delta": 0,
+      "confidence": "high"
+    },
+    "preconditions": [
+      { "field": "weather.precip_forecast_14d", "op": "gt", "value": 2.0 }
+    ],
+    "window": {
+      "hours": null,
+      "months": null,
+      "zone_adjusted": false
+    },
+    "effort": {
+      "minutes": 10,
+      "intensity": "passive",
+      "requires_presence": false
+    },
+    "recurrence": {
+      "type": "state_triggered",
+      "cooldown_after_completion": 7
+    },
+    "dismissal": {
+      "options": ["done", "already_handled"],
+      "resurface_on_state_change": true,
+      "state_change_threshold": 0.3
+    }
+  }
+]

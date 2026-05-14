@@ -69,6 +69,10 @@ export interface InventoryItem {
   // planned/active items: skillLevel coefficient is applied as a yield modifier
   dateHarvested?: Date;
   preservationMethod?: 'fresh' | 'canned' | 'dehydrated' | 'frozen' | 'cold-storage';
+  // Actual measured weight — overrides plantCount-based estimation for stored items
+  weightLbs?: number;
+  // Estimated harvest date — enables food-clock projections for planned/active crops
+  expectedHarvestDate?: Date;
   lastUpdated: Date;
 }
 

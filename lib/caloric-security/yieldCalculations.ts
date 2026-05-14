@@ -139,6 +139,19 @@ export function calculateTotalCalories(
 
     // Apply decay to stored items; planned/active get modifier 1.0
     if (item.status === 'stored') {
+      // If weightLbs is set, use measured weight for caloric calculation
+      // (overrides the plantCount × avgPerPlant estimate).
+      if (item.weightLbs != null && item.weightLbs > 0 && crop.yield?.caloriesPer100g) {
+        const gramsStored = item.weightLbs * 453.592;
+        result.totalKcal   = crop.yield.caloriesPer100g * (gramsStored / 100);
+        result.totalGrams  = gramsStored;
+        // Recompute macros from actual weight
+        result.macros = {
+          proteinG: (crop.yield.proteinPer100g ?? 0) * (gramsStored / 100),
+          carbsG:   (crop.yield.carbsPer100g   ?? 0) * (gramsStored / 100),
+          fatG:     (crop.yield.fatPer100g     ?? 0) * (gramsStored / 100),
+        };
+      }
       const decay = calculateItemDecay(item, crop);
       result.decayModifier  = decay.modifier;
       result.effectiveKcal  = result.totalKcal * decay.modifier;
