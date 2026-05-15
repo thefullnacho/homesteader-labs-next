@@ -19,7 +19,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${SITE_URL}/tools/caloric-security/companions/`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.6 },
     { url: `${SITE_URL}/tools/fabrication/`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.7 },
     { url: `${SITE_URL}/archive/`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.7 },
-    { url: `${SITE_URL}/requisition/`, lastModified: new Date(), changeFrequency: "yearly", priority: 0.3 },
+    // /requisition/ is the cart route — disallowed in robots.ts, so intentionally omitted here.
     { url: `${SITE_URL}/privacy/`, lastModified: new Date(), changeFrequency: "yearly", priority: 0.2 },
     { url: `${SITE_URL}/warranty/`, lastModified: new Date(), changeFrequency: "yearly", priority: 0.2 },
     { url: `${SITE_URL}/terms-of-fabrication/`, lastModified: new Date(), changeFrequency: "yearly", priority: 0.2 },
