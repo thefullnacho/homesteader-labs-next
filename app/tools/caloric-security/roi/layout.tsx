@@ -1,12 +1,12 @@
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Crop ROI Report",
-  description: "Rank every crop by calories per square foot. Find the highest-yield crops for your garden space — the data-driven way to plan a survival garden.",
-  keywords: "crop ROI, calories per square foot, survival garden, high yield crops, caloric density, garden planning",
+  title: "Calories Per Square Foot — Highest-Yield Crops for a Survival Garden",
+  description: "Rank every crop by calories per square foot. Find the highest-yield survival garden crops — potatoes, corn, winter squash, sweet potatoes — using USDA nutrient data and real spacing requirements.",
+  keywords: "calories per square foot, highest calorie crops, survival garden, caloric density, crop ROI, calories per square foot vegetables",
   openGraph: {
-    title: "Crop ROI Report",
-    description: "Rank every crop by calories per square foot. Data-driven survival garden planning.",
+    title: "Calories Per Square Foot — Highest-Yield Crops for a Survival Garden",
+    description: "Every crop ranked by calories per square foot. Plan a survival garden with real yield + nutrient data.",
     type: "website",
   },
 };
