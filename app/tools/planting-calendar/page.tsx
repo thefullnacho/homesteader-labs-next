@@ -166,7 +166,7 @@ export default function PlantingCalendarPage() {
         {/* HEADER SECTION */}
         <div className="flex flex-col md:flex-row md:items-start justify-between gap-6 border-b-2 border-border-primary pb-6 print:hidden">
           <div>
-            <Typography variant="h2" className="mb-1 uppercase tracking-tight font-mono">Planting_Calendar</Typography>
+            <Typography variant="h1" className="mb-1 uppercase tracking-tight font-mono text-2xl md:text-4xl">Planting_Calendar</Typography>
             <Typography variant="small" className="opacity-40 font-mono text-[11px] uppercase tracking-widest">
               Succession planting // Frost dates via NOAA
             </Typography>

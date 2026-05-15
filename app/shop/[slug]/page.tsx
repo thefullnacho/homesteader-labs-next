@@ -15,13 +15,18 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
   
   if (!product) {
     return {
-      title: "Product Not Found | Homesteader Labs",
+      title: "Product Not Found",
     };
   }
-  
+
   return {
-    title: `${product.name} | Homesteader Labs`,
+    title: product.name,
     description: product.description,
+    openGraph: {
+      type: "website",
+      title: product.name,
+      description: product.description,
+    },
   };
 }
 

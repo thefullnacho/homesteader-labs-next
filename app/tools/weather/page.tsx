@@ -140,7 +140,7 @@ export default function WeatherPage() {
         {/* ── HEADER ─────────────────────────────────────────── */}
         <div className="flex flex-col md:flex-row md:items-start justify-between gap-4 border-b-2 border-border-primary pb-6">
           <div>
-            <Typography variant="h2" className="mb-1 uppercase tracking-tight font-mono">Weather Station</Typography>
+            <Typography variant="h1" className="mb-1 uppercase tracking-tight font-mono text-2xl md:text-4xl">Weather Station</Typography>
             <Typography variant="small" className="opacity-40 font-mono text-[11px] uppercase tracking-widest">
               Multi-source forecast // Open-Meteo
             </Typography>

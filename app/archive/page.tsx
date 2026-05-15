@@ -8,7 +8,7 @@ import Badge from "@/components/ui/Badge";
 import Button from "@/components/ui/Button";
 
 export const metadata = {
-  title: "Archive | Homesteader Labs",
+  title: "Archive",
   description: "Field documentation, foraging guides, and survival knowledge from the community.",
 };
 
@@ -37,7 +37,7 @@ export default function ArchivePage({ searchParams }: { searchParams: { tag?: st
         {/* Header */}
         <div className="flex justify-between items-end mb-8 border-b-2 border-border-primary pb-4">
           <div>
-            <Typography variant="h2" className="mb-0">Field Notes</Typography>
+            <Typography variant="h1" className="mb-0 text-2xl md:text-4xl">Field Notes</Typography>
             <Typography variant="small" className="opacity-60">Documentation & community knowledge base</Typography>
           </div>
           <Typography variant="small" className="font-mono text-xs opacity-40 uppercase mb-0">

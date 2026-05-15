@@ -3,7 +3,7 @@ import BrutalistBlock from "@/components/ui/BrutalistBlock";
 import Typography from "@/components/ui/Typography";
 
 export const metadata: Metadata = {
-  title: "Privacy Hash | Homesteader Labs",
+  title: "Privacy Hash",
   description: "Privacy Protocol - WE DO NOT TRACK YOU. THE NETWORK DOES.",
 };
 

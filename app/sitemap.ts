@@ -15,7 +15,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${SITE_URL}/tools/weather/`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.8 },
     { url: `${SITE_URL}/tools/caloric-security/`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.8 },
     { url: `${SITE_URL}/tools/caloric-security/roi/`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.7 },
-    { url: `${SITE_URL}/tools/caloric-security/inventory/`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.6 },
+    // /tools/caloric-security/inventory/ is noindex — personal-data page; intentionally omitted.
     { url: `${SITE_URL}/tools/caloric-security/companions/`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.6 },
     { url: `${SITE_URL}/tools/fabrication/`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.7 },
     { url: `${SITE_URL}/archive/`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.7 },

@@ -208,7 +208,7 @@ export default function InventoryPage() {
             >
               <ArrowLeft size={10} /> Dashboard
             </Link>
-            <Typography variant="h2" className="mb-1 uppercase tracking-tight font-mono">
+            <Typography variant="h1" className="mb-1 uppercase tracking-tight font-mono text-2xl md:text-4xl">
               Food Inventory
             </Typography>
             <Typography variant="small" className="opacity-40 font-mono text-[11px] uppercase tracking-widest">

@@ -307,7 +307,7 @@ export default function CompanionsPage() {
             >
               <ArrowLeft size={10} /> Dashboard
             </Link>
-            <Typography variant="h2" className="mb-1 uppercase tracking-tight font-mono flex items-center gap-3">
+            <Typography variant="h1" className="mb-1 uppercase tracking-tight font-mono text-2xl md:text-4xl flex items-center gap-3">
               <Leaf size={20} className="opacity-60" />
               Companion Planting
             </Typography>

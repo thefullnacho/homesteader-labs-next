@@ -71,7 +71,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                 <Badge variant="outline">{product.category}</Badge>
               </div>
               
-              <Typography variant="h2" className="mb-2">{product.name}</Typography>
+              <Typography variant="h1" className="mb-2 text-2xl md:text-4xl">{product.name}</Typography>
               
               <Typography variant="h3" className="text-accent mb-6">
                 ${product.price}

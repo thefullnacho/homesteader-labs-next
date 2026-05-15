@@ -28,12 +28,12 @@ export async function generateMetadata({ params }: PageProps) {
 
   if (!post) {
     return {
-      title: "Document Not Found | Homesteader Labs",
+      title: "Document Not Found",
     };
   }
 
   return {
-    title: `${post.title} | Homesteader Labs Archive`,
+    title: post.title,
     description: post.description,
     openGraph: {
       title: post.title,

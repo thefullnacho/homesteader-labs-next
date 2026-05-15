@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Warranty (VOID) | Homesteader Labs",
+  title: "Warranty (VOID)",
   description: "Warranty Status: VOID - All warranties were voided the moment you decided to take production into your own hands",
 };
 
