@@ -16,6 +16,7 @@ import { fetchWeatherData } from '@/lib/weatherApi';
 import { calculatePlantingIndex } from '@/lib/plantingIndex';
 import companionData from '@/content/crops/companion-planting.json';
 import pestCompanionData from '@/content/crops/pest-companions.json';
+import FaqAccordion from '@/components/ui/FaqAccordion';
 
 // ============================================================
 // Companion Advisor  [GATED]
@@ -632,14 +633,7 @@ export default function CompanionsPage() {
           <Typography variant="h3" className="mt-10 mb-4 text-base md:text-lg normal-case font-mono">
             Frequently asked questions
           </Typography>
-          <dl className="space-y-6 font-mono text-sm md:text-base">
-            {FAQS.map((faq) => (
-              <div key={faq.q}>
-                <dt className="font-bold mb-1 opacity-90">{faq.q}</dt>
-                <dd className="opacity-70 leading-relaxed">{faq.a}</dd>
-              </div>
-            ))}
-          </dl>
+          <FaqAccordion faqs={FAQS} prefix="PEST" defaultOpen={0} />
 
           {/* FAQPage JSON-LD — eligible for Google rich results */}
           <script

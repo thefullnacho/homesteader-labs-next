@@ -6,6 +6,7 @@ import FieldStationBridge from '@/components/ui/FieldStationBridge';
 import SetupWizard from '@/components/tools/caloric-security/SetupWizard';
 import AutonomyDashboard from '@/components/tools/caloric-security/AutonomyDashboard';
 import Typography from '@/components/ui/Typography';
+import FaqAccordion from '@/components/ui/FaqAccordion';
 import { isFirstRun, getConfig } from '@/lib/caloric-security/homesteadStore';
 import { useFieldStation } from '@/app/context/FieldStationContext';
 import { fetchWeatherData } from '@/lib/weatherApi';
@@ -122,14 +123,7 @@ export default function CaloricSecurityPage() {
         <Typography variant="h3" className="mt-10 mb-4 text-base md:text-lg normal-case font-mono">
           Frequently asked questions
         </Typography>
-        <dl className="space-y-6 font-mono text-sm md:text-base">
-          {FAQS.map((faq) => (
-            <div key={faq.q}>
-              <dt className="font-bold mb-1 opacity-90">{faq.q}</dt>
-              <dd className="opacity-70 leading-relaxed">{faq.a}</dd>
-            </div>
-          ))}
-        </dl>
+        <FaqAccordion faqs={FAQS} prefix="QUERY" numWidth={3} />
 
         {/* FAQPage JSON-LD — eligible for Google rich results */}
         <script

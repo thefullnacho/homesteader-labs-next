@@ -17,6 +17,7 @@ import Typography from "@/components/ui/Typography";
 import Badge from "@/components/ui/Badge";
 import DymoLabel from "@/components/ui/DymoLabel";
 import EmailCapture from "@/components/weather/EmailCapture";
+import FaqAccordion from "@/components/ui/FaqAccordion";
 
 // Modular Components
 import TelemetryHeader from "@/components/tools/weather/TelemetryHeader";
@@ -407,14 +408,7 @@ export default function WeatherPage() {
           <Typography variant="h3" className="mt-10 mb-4 text-base md:text-lg normal-case font-mono">
             Frequently asked questions
           </Typography>
-          <dl className="space-y-6 font-mono text-sm md:text-base">
-            {FAQS.map((faq) => (
-              <div key={faq.q}>
-                <dt className="font-bold mb-1 opacity-90">{faq.q}</dt>
-                <dd className="opacity-70 leading-relaxed">{faq.a}</dd>
-              </div>
-            ))}
-          </dl>
+          <FaqAccordion faqs={FAQS} prefix="FIELD" numWidth={3} />
 
           {/* FAQPage JSON-LD — eligible for Google rich results */}
           <script

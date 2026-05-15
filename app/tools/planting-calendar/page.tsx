@@ -19,6 +19,7 @@ import Typography from "@/components/ui/Typography";
 import BrutalistBlock from "@/components/ui/BrutalistBlock";
 import Marginalia from "@/components/ui/Marginalia";
 import DymoLabel from "@/components/ui/DymoLabel";
+import FaqAccordion from "@/components/ui/FaqAccordion";
 
 // SEO FAQ — also serialized as FAQPage JSON-LD for rich results
 const FAQS: { q: string; a: string }[] = [
@@ -401,14 +402,7 @@ export default function PlantingCalendarPage() {
           <Typography variant="h3" className="mt-10 mb-4 text-base md:text-lg normal-case font-mono">
             Frequently asked questions
           </Typography>
-          <dl className="space-y-6 font-mono text-sm md:text-base">
-            {FAQS.map((faq) => (
-              <div key={faq.q}>
-                <dt className="font-bold mb-1 opacity-90">{faq.q}</dt>
-                <dd className="opacity-70 leading-relaxed">{faq.a}</dd>
-              </div>
-            ))}
-          </dl>
+          <FaqAccordion faqs={FAQS} prefix="FAQ" defaultOpen={0} />
 
           {/* FAQPage JSON-LD — eligible for Google rich results */}
           <script
