@@ -20,6 +20,30 @@ import BrutalistBlock from "@/components/ui/BrutalistBlock";
 import Marginalia from "@/components/ui/Marginalia";
 import DymoLabel from "@/components/ui/DymoLabel";
 
+// SEO FAQ — also serialized as FAQPage JSON-LD for rich results
+const FAQS: { q: string; a: string }[] = [
+  {
+    q: "When should I plant tomatoes?",
+    a: "Tomatoes need 6–8 weeks indoors before transplant, and transplant goes out 1–2 weeks after your last frost. If your last frost is May 1, that's seeds around March 6 and transplants around May 15. The tool above does this math for every crop you select.",
+  },
+  {
+    q: "What's the difference between \"last frost\" and \"frost-free\"?",
+    a: "Last frost is the average date of the last spring frost in your area — there's still a ~50% chance of frost on that exact day. Frost-free is a high-confidence date (90%+) that frost won't return. Wait for frost-free with cold-sensitive transplants like tomatoes and peppers.",
+  },
+  {
+    q: "How is this different from the back of a seed packet?",
+    a: "Seed packets give you generic months. This calendar uses your ZIP-derived frost date as the anchor, so \"plant after last frost\" becomes a specific date for your garden. It also handles succession — re-sowing every 2–3 weeks for continuous harvest — which packets don't.",
+  },
+  {
+    q: "Does it work for short growing seasons?",
+    a: "Yes. The calendar flags crops that can't complete their lifecycle in your frost-free window. If your season is too short for, say, watermelon, you'll see that in the output rather than getting an over-optimistic schedule.",
+  },
+  {
+    q: "Can I save my schedule?",
+    a: "Yes. Export to .ics — works with Google Calendar, Apple Calendar, and Outlook. Your crop selections and preferences also persist in your browser so the next visit picks up where you left off.",
+  },
+];
+
 export default function PlantingCalendarPage() {
   const { frostDates, loading, error, lookupFrostDates } = useFrostDates();
   const [selectedCrops, setSelectedCrops] = useState<SelectedCrop[]>([]);
@@ -345,6 +369,63 @@ export default function PlantingCalendarPage() {
           isSuccess={isSuccess}
           isError={isEmailError}
         />
+
+        {/* SEO anchor block — body copy + FAQ targeting "planting calendar" cluster */}
+        <section className="mt-16 pt-6 border-t border-border-primary/30 max-w-3xl">
+          <Typography variant="h2" className="mb-4 text-xl md:text-2xl normal-case font-mono">
+            How the Homesteader Labs planting calendar works
+          </Typography>
+          <div className="space-y-4 text-sm md:text-base font-mono opacity-80 leading-relaxed">
+            <p>
+              Most planting calendars give you generic dates: <em>plant tomatoes in May</em>.
+              That works if you live in the same climate as whoever wrote the seed packet.
+              We built something different.
+            </p>
+            <p>
+              The calendar is anchored to your <strong>last spring frost date</strong> —
+              the single most predictive number for when seeds, transplants, and harvest
+              windows should land. Enter your ZIP, pick what you want to grow, and the
+              schedule recalculates from your real local frost date pulled from NOAA.
+              Generic May dates become &quot;start tomatoes indoors March 19, transplant
+              May 14, expect first ripe fruit August 1.&quot;
+            </p>
+            <p>
+              It covers <strong>54 vegetables, herbs, and fruits</strong> with
+              variety-level detail, supports succession planting at a configurable
+              interval, and adjusts for your experience level — adding buffer days for
+              beginners who can&apos;t always plant on the optimal day. Export the full
+              season to .ics for any calendar app. No account, no email required.
+            </p>
+          </div>
+
+          <Typography variant="h3" className="mt-10 mb-4 text-base md:text-lg normal-case font-mono">
+            Frequently asked questions
+          </Typography>
+          <dl className="space-y-6 font-mono text-sm md:text-base">
+            {FAQS.map((faq) => (
+              <div key={faq.q}>
+                <dt className="font-bold mb-1 opacity-90">{faq.q}</dt>
+                <dd className="opacity-70 leading-relaxed">{faq.a}</dd>
+              </div>
+            ))}
+          </dl>
+
+          {/* FAQPage JSON-LD — eligible for Google rich results */}
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": "FAQPage",
+                mainEntity: FAQS.map(({ q, a }) => ({
+                  "@type": "Question",
+                  name: q,
+                  acceptedAnswer: { "@type": "Answer", text: a },
+                })),
+              }),
+            }}
+          />
+        </section>
 
         <FieldStationBridge currentOps="PLANT" />
 
