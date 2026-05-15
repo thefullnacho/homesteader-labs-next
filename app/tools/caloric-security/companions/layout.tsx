@@ -1,12 +1,12 @@
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Companion Planting Advisor",
-  description: "Discover which crops grow best together. Companion planting combinations that boost yield, deter pests, and improve soil health for your homestead garden.",
-  keywords: "companion planting, guild planting, three sisters, pest control, polyculture, homestead garden, companion plants",
+  title: "Pest Emergence Calendar + Companion Planting Advisor",
+  description: "Know when cucumber beetles, squash bugs, and aphids emerge in your garden — driven by live growing degree days and soil temperature, not generic dates. Plus evidence-tagged companion planting suggestions.",
+  keywords: "when do cucumber beetles emerge, squash bug emergence, pest emergence calendar, companion planting advisor, GDD pest timing, soil temperature pests",
   openGraph: {
-    title: "Companion Planting Advisor",
-    description: "Find ideal companion planting combinations for higher yields and natural pest control.",
+    title: "Pest Emergence Calendar + Companion Planting Advisor",
+    description: "Live GDD-based pest emergence timing for your garden plus evidence-tagged companion planting recommendations.",
     type: "website",
   },
 };

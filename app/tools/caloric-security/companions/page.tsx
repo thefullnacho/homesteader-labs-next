@@ -33,6 +33,30 @@ const GATE_KEY  = 'hl_features_unlocked';
 const FREE_CONFLICTS    = 3;
 const FREE_SUGGESTIONS  = 3;
 
+// SEO FAQ — serialized as FAQPage JSON-LD for rich results
+const FAQS: { q: string; a: string }[] = [
+  {
+    q: "When do cucumber beetles emerge?",
+    a: "Striped cucumber beetles overwinter as adults and emerge in spring once soil temperatures cross 50–55°F and growing degree day (GDD) accumulation reaches around 150 (base 50°F). In most of zone 6 that's mid-to-late May; in warmer zones, earlier. The advisor tracks your specific GDD and updates the activity status (DORMANT, PRE-SEASON, ACTIVE, PEAK) in real time.",
+  },
+  {
+    q: "When do squash bugs emerge?",
+    a: "Squash bug adults activate when soil temperatures exceed 65°F at four inches deep — typically one to two weeks after squash transplant. They lay eggs on leaf undersides; first-generation nymphs appear 7–10 days later. The advisor flags this transition automatically once your soil temp crosses the threshold.",
+  },
+  {
+    q: "Does companion planting actually work?",
+    a: "Some pairings have strong evidence (basil with tomatoes, marigolds suppressing nematodes, three sisters mutually supporting each other). Others are folklore. The advisor tags each suggested pairing with an evidence level — peer-reviewed, observational, or traditional — so you can decide what's worth the garden space.",
+  },
+  {
+    q: "Why not just use a static companion planting chart?",
+    a: "Static charts give you the theoretical set of companion pairs. They don't tell you which pests are active in your garden right now, or which deterrent plants are still effective at this point in the season. This advisor adds that real-time layer using your local soil temperature and GDD.",
+  },
+  {
+    q: "What pests are tracked?",
+    a: "Cucumber beetles (striped + spotted), squash bugs, vine borers, aphids, cabbage loopers, tomato hornworm, flea beetles, Colorado potato beetles, Mexican bean beetles, and a handful of regional minor pests. Each one has soil-temp + GDD thresholds calibrated against extension service data.",
+  },
+];
+
 // Build a description lookup from companion-planting.json
 // Key: "plantId:targetId" → { mechanism, description }
 const COMPANION_DESC: Record<string, { mechanism: string; description: string }> = {};
@@ -577,6 +601,62 @@ export default function CompanionsPage() {
             All known companions for your current crops are already in inventory.
           </div>
         )}
+
+        {/* SEO anchor block — targets "when do [pest] emerge" cluster + companion planting */}
+        <section className="mt-16 pt-6 border-t border-border-primary/30 max-w-3xl">
+          <Typography variant="h2" className="mb-4 text-xl md:text-2xl normal-case font-mono">
+            Pest emergence calendar + companion planting — driven by your local GDD
+          </Typography>
+          <div className="space-y-4 text-sm md:text-base font-mono opacity-80 leading-relaxed">
+            <p>
+              Static companion-planting charts and pest-emergence tables are everywhere.
+              The problem: pests don&apos;t read the calendar. Cucumber beetles emerge
+              when <em>your</em> spring crosses ~150 GDD, not on May 15. Squash bugs
+              activate at soil temperatures above 65°F, not at &quot;summer.&quot;
+            </p>
+            <p>
+              This advisor flips the model. It tracks live growing degree days and soil
+              temperature for your location and tells you which pests are emerging
+              <em> right now</em> — not historically average. For each crop in your
+              inventory, it surfaces the relevant pest pressures with current activity
+              status (<strong>DORMANT, PRE-SEASON, ACTIVE, PEAK</strong>) and ranks the
+              companion plants that deter or trap each pest.
+            </p>
+            <p>
+              The result is actionable: &quot;Your cucumber beetles will hit peak
+              activity in 6 days at current heat accumulation. Plant nasturtiums and
+              tansy now to maximize trap-crop and repellent effect.&quot;
+            </p>
+          </div>
+
+          <Typography variant="h3" className="mt-10 mb-4 text-base md:text-lg normal-case font-mono">
+            Frequently asked questions
+          </Typography>
+          <dl className="space-y-6 font-mono text-sm md:text-base">
+            {FAQS.map((faq) => (
+              <div key={faq.q}>
+                <dt className="font-bold mb-1 opacity-90">{faq.q}</dt>
+                <dd className="opacity-70 leading-relaxed">{faq.a}</dd>
+              </div>
+            ))}
+          </dl>
+
+          {/* FAQPage JSON-LD — eligible for Google rich results */}
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": "FAQPage",
+                mainEntity: FAQS.map(({ q, a }) => ({
+                  "@type": "Question",
+                  name: q,
+                  acceptedAnswer: { "@type": "Answer", text: a },
+                })),
+              }),
+            }}
+          />
+        </section>
       </div>
 
       {/* ── Email gate modal ─────────────────────────────────── */}

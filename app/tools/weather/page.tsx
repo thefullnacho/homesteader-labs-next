@@ -34,6 +34,30 @@ import WeatherAlertsBanner from "@/components/tools/weather/WeatherAlertsBanner"
 
 type DashboardMode = "SURVIVAL" | "PLANTING";
 
+// SEO FAQ — serialized as FAQPage JSON-LD for rich results
+const FAQS: { q: string; a: string }[] = [
+  {
+    q: "What are growing degree days and why do I need them?",
+    a: "Growing degree days (GDD) are accumulated heat above a base temperature (50°F is standard for most crops). Plants and insects develop on heat, not calendar days, so GDD predicts crop maturation and pest emergence more accurately than dates. A spring with 200 GDD by April 1 is roughly two weeks ahead of one with 100 GDD on the same date.",
+  },
+  {
+    q: "How is a rainwater catchment calculator useful for a small homestead?",
+    a: "It tells you how many gallons you can store from each storm given your roof area, gutter efficiency, and storage capacity. That number plus a 14-day forecast tells you whether to start rationing now or expand your tanks. The Survival Index uses both to compute a 'days of water' projection.",
+  },
+  {
+    q: "What soil temperature should I plant tomatoes at?",
+    a: "60°F at four inches deep is the conservative threshold for tomatoes; 65°F is ideal. The dashboard reads soil temperature directly from Open-Meteo soil sensor data — meaning instead of a static chart you get your soil right now. Cool-season crops (peas, lettuce, root crops) can germinate at 35–40°F; warm-season crops (tomatoes, peppers, melons) need 60°F+.",
+  },
+  {
+    q: "What's the difference between fire weather and fire danger?",
+    a: "Fire weather is conditions (humidity, wind, dryness). Fire danger is the risk score from combining those conditions with fuel moisture and recent precipitation. The Survival Index uses both to surface a single danger level — useful for deciding whether to do that brush burn this week.",
+  },
+  {
+    q: "Does this work offline?",
+    a: "Once weather data has loaded, the dashboard renders fully from cached data. New forecasts require connectivity, but the latest fetched data and your saved locations persist in your browser.",
+  },
+];
+
 function exportWeatherData(weather: WeatherData, format: 'json' | 'csv') {
   const locationName = weather.location.name.replace(/[^a-zA-Z0-9]/g, '_');
   const timestamp = new Date().toISOString().split('T')[0];
@@ -353,6 +377,61 @@ export default function WeatherPage() {
           isSuccess={isSuccess}
           isError={isError}
         />
+
+        {/* SEO anchor block — targets GDD calculator + rainwater catchment + soil temp cluster */}
+        <section className="mt-16 pt-6 border-t border-border-primary/30 max-w-3xl">
+          <Typography variant="h2" className="mb-4 text-xl md:text-2xl normal-case font-mono">
+            Off-grid weather station — survival index, GDD, and rainwater catchment
+          </Typography>
+          <div className="space-y-4 text-sm md:text-base font-mono opacity-80 leading-relaxed">
+            <p>
+              Most weather apps tell you what the weather will be. They don&apos;t tell
+              you what to do about it. This dashboard cross-references real-time weather
+              data from Open-Meteo against the questions a homesteader actually has:
+              <em> Is it dry enough to burn? Will the soil work tomorrow? How much water
+              can I catch from this storm? When will pest pressure peak?</em>
+            </p>
+            <p>
+              The output is a set of indices computed for your exact location:
+            </p>
+            <ul className="list-disc pl-5 space-y-1">
+              <li><strong>Survival index</strong> — fire danger, water catchment potential, solar generation efficiency, livestock metabolic stress</li>
+              <li><strong>Planting index</strong> — soil workability, frost risk, growing degree days, planting suitability per crop family</li>
+              <li><strong>Growing degree days (GDD)</strong> — accumulated heat units in real time so you can predict crop maturation and pest emergence</li>
+            </ul>
+            <p>
+              No login, no subscription, no ads. Set your ZIP, get every index live.
+            </p>
+          </div>
+
+          <Typography variant="h3" className="mt-10 mb-4 text-base md:text-lg normal-case font-mono">
+            Frequently asked questions
+          </Typography>
+          <dl className="space-y-6 font-mono text-sm md:text-base">
+            {FAQS.map((faq) => (
+              <div key={faq.q}>
+                <dt className="font-bold mb-1 opacity-90">{faq.q}</dt>
+                <dd className="opacity-70 leading-relaxed">{faq.a}</dd>
+              </div>
+            ))}
+          </dl>
+
+          {/* FAQPage JSON-LD — eligible for Google rich results */}
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": "FAQPage",
+                mainEntity: FAQS.map(({ q, a }) => ({
+                  "@type": "Question",
+                  name: q,
+                  acceptedAnswer: { "@type": "Answer", text: a },
+                })),
+              }),
+            }}
+          />
+        </section>
 
         <FieldStationBridge currentOps="WEATHER" />
 

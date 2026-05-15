@@ -1,12 +1,12 @@
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Weather Station",
-  description: "Real-time weather data with survival and planting indices. Fire risk, water catchment potential, solar efficiency, and growing degree days — all offline-ready.",
-  keywords: "weather station, survival index, fire risk, planting index, off-grid weather, homestead weather",
+  title: "Growing Degree Days Calculator + Rainwater Catchment — Weather Station",
+  description: "Free growing degree days calculator, rainwater catchment estimator, soil temperature tracker, and fire risk index for off-grid homesteaders. Real-time data from Open-Meteo, no signup.",
+  keywords: "growing degree days calculator, rainwater catchment calculator, soil temperature for planting, fire danger index, off-grid weather station",
   openGraph: {
-    title: "Weather Station",
-    description: "Real-time survival and planting indices. Fire risk, solar efficiency, water catchment, and growing degree days for your location.",
+    title: "Growing Degree Days Calculator + Rainwater Catchment — Weather Station",
+    description: "Live GDD, rainwater catchment estimates, soil temperature, and fire risk for off-grid homesteaders. No signup.",
     type: "website",
   },
 };
