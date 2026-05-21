@@ -139,6 +139,29 @@ export default function SurvivalGardenPlanLanding() {
           </BrutalistBlock>
         </section>
 
+        {/* Product JSON-LD — eligible for Google product rich results */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Product",
+              name: "Survival Garden Plan",
+              description:
+                "Personalized survival garden plan PDF generated for your USDA zone, household size, available square footage, and goals. Includes crop selection, layout grid, sowing schedule, companion pairings, caloric projection, preservation timeline, and seed shopping list.",
+              brand: { "@type": "Brand", name: "Homesteader Labs" },
+              category: "Digital Garden Planning",
+              offers: {
+                "@type": "Offer",
+                price: "19.00",
+                priceCurrency: "USD",
+                availability: "https://schema.org/InStock",
+                url: "https://homesteaderlabs.com/survival-garden-plan/",
+              },
+            }),
+          }}
+        />
+
         <section>
           <Typography variant="h3" className="uppercase tracking-tight mb-6 text-accent">FAQ</Typography>
           <FaqAccordion faqs={FAQS} prefix="PLAN" defaultOpen={0} />
