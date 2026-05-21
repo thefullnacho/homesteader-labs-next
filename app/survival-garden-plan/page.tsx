@@ -1,9 +1,56 @@
-import { ArrowRight, MapPin, FileText, Sprout, Mail } from 'lucide-react';
+import { ArrowRight, MapPin, FileText, Sprout, Mail, Eye } from 'lucide-react';
 import FieldStationLayout from '@/components/ui/FieldStationLayout';
 import BrutalistBlock from '@/components/ui/BrutalistBlock';
 import Typography from '@/components/ui/Typography';
 import Button from '@/components/ui/Button';
+import FaqAccordion from '@/components/ui/FaqAccordion';
 import PreviewForm from '@/components/survivalPlan/PreviewForm';
+import { encodeInputs } from '@/lib/survivalPlan/inputEncoding';
+
+const SAMPLE_INPUT = {
+  zipCode: '04401',
+  adults: 2,
+  kids: 2,
+  dietaryRestrictions: [] as const,
+  squareFeet: 250,
+  gardenType: 'in-ground' as const,
+  goal: 'max-calories' as const,
+  experience: 'intermediate' as const,
+  excludedCropIds: [] as string[],
+};
+
+const SAMPLE_TOKEN = encodeInputs({ ...SAMPLE_INPUT, dietaryRestrictions: [...SAMPLE_INPUT.dietaryRestrictions] });
+
+const FAQS = [
+  {
+    q: "What exactly is in the PDF?",
+    a: "A multi-page field manual: cover with your zone and frost dates, a ranked crop lineup with rationale per crop, a garden layout grid sized to your sq ft, a week-by-week sowing schedule, companion plant pairings, a caloric/macro projection with days-of-food, a preservation timeline, a seed shopping list with recommended varieties, a frost-risk action card, and field notes pages. Typically 9–12 pages total.",
+  },
+  {
+    q: "How is this different from a generic garden planner?",
+    a: "Most planners are static templates you fill in yourself. This is generated from your inputs: your ZIP determines frost dates and growing zone, your household size sets the calorie target, your goal drives which crops surface (max calories vs balanced vs preservation vs fresh eating), and your space budget allocates plants to actually-available square footage. Every PDF is different because every garden is different.",
+  },
+  {
+    q: "What if my plan isn't quite right? Can I regenerate?",
+    a: "Yes. The PDF includes a QR code that links to a live companion page where you can adjust inputs and see the new plan instantly. The companion page works on any device with a browser — no app install. You can re-render the PDF after changes (Annual Pass tier).",
+  },
+  {
+    q: "Where does the data come from?",
+    a: "Frost normals from NOAA 1991–2020 climate data via api.frost.date. Caloric and macro values from USDA nutrient databases. Yield averages from agricultural extension publications and seed catalog norms. Spacing from standard horticultural references. All calculations are documented and the underlying engine is in our open-source caloric-security toolkit.",
+  },
+  {
+    q: "I'm a beginner — will I be overwhelmed?",
+    a: "The wizard adjusts crop selection by experience level. Beginner mode filters out finicky crops (cauliflower, celery, perennials) and applies a 60% yield-realization coefficient. The PDF includes step-by-step timing for indoor starts, hardening off, and transplanting — anchored to your specific frost dates so you don't have to guess.",
+  },
+  {
+    q: "Do the affiliate links increase the price I pay?",
+    a: "No. Vendor prices are identical whether you use our links or shop direct. The lab earns a small commission on referred sales, which funds continued development. Every vendor is independently vetted for quality and ethos alignment.",
+  },
+  {
+    q: "What's your refund policy?",
+    a: "Because the PDF is generated immediately upon purchase, we don't offer refunds — but if there's a bug or your plan doesn't match your inputs, email us and we'll regenerate or refund at our discretion. Try the free 1-page preview first to see exactly what your zone produces.",
+  },
+];
 
 const FEATURES = [
   { icon: MapPin,   label: 'Zone-specific',          sub: 'Frost dates + GDD computed from your ZIP' },
@@ -32,7 +79,10 @@ export default function SurvivalGardenPlanLanding() {
             <Button variant="primary" size="lg" href="/survival-garden-plan/wizard/">
               Build my plan — $19 <ArrowRight size={18} className="ml-2" />
             </Button>
-            <Button variant="outline" size="lg" href="#preview">
+            <Button variant="outline" size="lg" href={`/survival-garden-plan/companion/?p=${SAMPLE_TOKEN}`}>
+              <Eye size={16} className="mr-2" /> See a sample plan
+            </Button>
+            <Button variant="ghost" size="lg" href="#preview">
               Free 1-page preview
             </Button>
           </div>
@@ -87,6 +137,26 @@ export default function SurvivalGardenPlanLanding() {
               <PreviewForm />
             </div>
           </BrutalistBlock>
+        </section>
+
+        <section>
+          <Typography variant="h3" className="uppercase tracking-tight mb-6 text-accent">FAQ</Typography>
+          <FaqAccordion faqs={FAQS} prefix="PLAN" defaultOpen={0} />
+          {/* FAQPage JSON-LD — eligible for Google rich results */}
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": "FAQPage",
+                mainEntity: FAQS.map(({ q, a }) => ({
+                  "@type": "Question",
+                  name: q,
+                  acceptedAnswer: { "@type": "Answer", text: a },
+                })),
+              }),
+            }}
+          />
         </section>
 
         <section>
