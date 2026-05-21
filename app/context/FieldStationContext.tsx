@@ -30,26 +30,9 @@ const LS_LOCATIONS_KEY  = "homesteader-locations";
 const LS_FROST_KEY      = "homesteader-frost-dates";
 const FROST_API_BASE    = "https://api.frost.date/v1/frost";
 
-// Helper function to estimate growing zone from zip code
-export const getGrowingZoneFromZip = (zipCode: string): string | undefined => {
-  const zipNum = parseInt(zipCode.substring(0, 3), 10);
-
-  if (zipNum >= 0 && zipNum <= 99) return "5b"; // New England
-  if (zipNum >= 100 && zipNum <= 199) return "6b"; // Mid-Atlantic
-  if (zipNum >= 200 && zipNum <= 299) return "7b"; // VA, Carolinas
-  if (zipNum >= 300 && zipNum <= 399) return "8b"; // Deep South
-  if (zipNum >= 400 && zipNum <= 499) return "6a"; // Midwest
-  if (zipNum >= 500 && zipNum <= 599) return "4b"; // Northern Midwest
-  if (zipNum >= 600 && zipNum <= 699) return "5b"; // Central Midwest
-  if (zipNum >= 700 && zipNum <= 799) return "8a"; // South Central
-  if (zipNum >= 800 && zipNum <= 899) return "5b"; // Mountain West
-  if (zipNum >= 900 && zipNum <= 999) {
-    if (zipNum >= 900 && zipNum <= 930) return "10a"; // SoCal
-    return "8b"; // PNW / NorCal
-  }
-
-  return "6a";
-};
+// Re-export from server-safe module so existing imports keep working.
+export { getGrowingZoneFromZip } from "@/lib/zoneLookup";
+import { getGrowingZoneFromZip } from "@/lib/zoneLookup";
 
 export const getMockFrostData = (zipCode: string): FrostDates => {
   const zone = getGrowingZoneFromZip(zipCode) ?? "6a";

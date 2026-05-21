@@ -1,0 +1,95 @@
+{
+  "vendors": {
+    "johnnys": {
+      "name": "Johnny's Selected Seeds",
+      "baseUrl": "https://www.johnnyseeds.com/search/?q=",
+      "affiliateParam": "aff=homesteaderlabs"
+    },
+    "trueleaf": {
+      "name": "True Leaf Market",
+      "baseUrl": "https://www.trueleafmarket.com/search?q=",
+      "affiliateParam": "aff=homesteaderlabs"
+    },
+    "bootstrap": {
+      "name": "Bootstrap Farmer",
+      "baseUrl": "https://www.bootstrapfarmer.com/search?q=",
+      "affiliateParam": "aff=homesteaderlabs"
+    },
+    "hoss": {
+      "name": "Hoss Tools",
+      "baseUrl": "https://hosstools.com/search?q=",
+      "affiliateParam": "aff=homesteaderlabs"
+    }
+  },
+  "crops": {
+    "potato": [
+      { "vendor": "johnnys", "variety": "Kennebec seed potato", "query": "kennebec seed potato" },
+      { "vendor": "hoss",    "variety": "Yukon Gold seed potato", "query": "yukon gold seed potato" }
+    ],
+    "tomato": [
+      { "vendor": "johnnys", "variety": "Roma VF", "query": "roma vf tomato" },
+      { "vendor": "trueleaf", "variety": "Cherokee Purple", "query": "cherokee purple tomato" }
+    ],
+    "pepper-bell": [
+      { "vendor": "johnnys", "variety": "King of the North", "query": "king of the north pepper" },
+      { "vendor": "trueleaf", "variety": "California Wonder", "query": "california wonder pepper" }
+    ],
+    "kale": [
+      { "vendor": "johnnys", "variety": "Lacinato (Dinosaur)", "query": "lacinato kale" },
+      { "vendor": "trueleaf", "variety": "Red Russian", "query": "red russian kale" }
+    ],
+    "bean-bush": [
+      { "vendor": "johnnys", "variety": "Provider", "query": "provider bush bean" },
+      { "vendor": "trueleaf", "variety": "Blue Lake", "query": "blue lake bush bean" }
+    ],
+    "bean-pole": [
+      { "vendor": "johnnys", "variety": "Kentucky Wonder", "query": "kentucky wonder pole bean" }
+    ],
+    "carrot": [
+      { "vendor": "johnnys", "variety": "Danvers 126", "query": "danvers 126 carrot" },
+      { "vendor": "trueleaf", "variety": "Scarlet Nantes", "query": "scarlet nantes carrot" }
+    ],
+    "onion": [
+      { "vendor": "johnnys", "variety": "Yellow Storage", "query": "yellow storage onion" },
+      { "vendor": "hoss", "variety": "Red Storage", "query": "red storage onion" }
+    ],
+    "garlic": [
+      { "vendor": "hoss", "variety": "Hardneck German Red", "query": "german red hardneck garlic" }
+    ],
+    "lettuce": [
+      { "vendor": "johnnys", "variety": "Salanova Mix", "query": "salanova lettuce" },
+      { "vendor": "trueleaf", "variety": "Buttercrunch", "query": "buttercrunch lettuce" }
+    ],
+    "squash-winter": [
+      { "vendor": "johnnys", "variety": "Waltham Butternut", "query": "waltham butternut squash" },
+      { "vendor": "trueleaf", "variety": "Delicata Honeyboat", "query": "delicata squash" }
+    ],
+    "squash-summer": [
+      { "vendor": "johnnys", "variety": "Costata Romanesco", "query": "costata romanesco zucchini" }
+    ],
+    "corn": [
+      { "vendor": "johnnys", "variety": "Country Gentleman", "query": "country gentleman sweet corn" }
+    ],
+    "broccoli": [
+      { "vendor": "johnnys", "variety": "Imperial", "query": "imperial broccoli" }
+    ],
+    "cabbage": [
+      { "vendor": "johnnys", "variety": "Storage No. 4", "query": "storage cabbage" }
+    ],
+    "cucumber": [
+      { "vendor": "johnnys", "variety": "Marketmore 76", "query": "marketmore cucumber" }
+    ],
+    "pea": [
+      { "vendor": "johnnys", "variety": "Sugar Snap", "query": "sugar snap pea" }
+    ],
+    "radish": [
+      { "vendor": "trueleaf", "variety": "French Breakfast", "query": "french breakfast radish" }
+    ],
+    "beet": [
+      { "vendor": "johnnys", "variety": "Detroit Dark Red", "query": "detroit dark red beet" }
+    ],
+    "spinach": [
+      { "vendor": "johnnys", "variety": "Bloomsdale Long Standing", "query": "bloomsdale spinach" }
+    ]
+  }
+}
