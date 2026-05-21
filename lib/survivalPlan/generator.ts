@@ -8,6 +8,7 @@ import { selectCrops } from './cropSelector';
 import { buildLayout } from './layoutBuilder';
 import { buildSchedule, buildPreservationTimeline } from './scheduleBuilder';
 import { buildAffiliateLinks } from './affiliateLinks';
+import { encodeInputs } from './inputEncoding';
 import { SurvivalPlanPdf } from './pdfTemplate';
 import { SurvivalPlanPreviewPdf } from './previewTemplate';
 import type {
@@ -80,7 +81,7 @@ export function buildSurvivalPlan(
   const planId = generatePlanId(input);
   const goal = input.goal;
   const affiliateLinks = buildAffiliateLinks(allocations, planId, goal);
-  const companionUrl = `${SITE_URL}/survival-garden-plan/companion/${planId}/`;
+  const companionUrl = `${SITE_URL}/survival-garden-plan/companion/?p=${encodeInputs(input)}`;
 
   return {
     input,

@@ -9,6 +9,7 @@ import Button from '@/components/ui/Button';
 import Typography from '@/components/ui/Typography';
 import Badge from '@/components/ui/Badge';
 import { useFieldStation } from '@/app/context/FieldStationContext';
+import { decodeInputs } from '@/lib/survivalPlan/inputEncoding';
 import type {
   DietaryRestriction,
   ExperienceLevel,
@@ -431,6 +432,16 @@ export default function Wizard() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    const urlToken = new URLSearchParams(window.location.search).get('p');
+    if (urlToken) {
+      const decoded = decodeInputs(urlToken);
+      if (decoded) {
+        setState({ ...decoded, zoneDetected: null });
+        setStep(6);
+        setHydrated(true);
+        return;
+      }
+    }
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
       if (raw) {

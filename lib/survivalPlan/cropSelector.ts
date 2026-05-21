@@ -9,10 +9,10 @@ import type {
 } from './types';
 
 const DIETARY_BLOCKLIST: Record<string, string[]> = {
-  'no-nightshades': ['tomato', 'pepper-bell', 'pepper-hot', 'potato', 'eggplant'],
-  'no-alliums':     ['onion', 'garlic', 'leek', 'shallot', 'chive', 'chives'],
-  'no-brassicas':   ['broccoli', 'cabbage', 'kale', 'brussels-sprouts', 'cauliflower', 'radish', 'turnip', 'collard', 'mustard'],
-  'no-legumes':     ['bean-bush', 'bean-pole', 'pea', 'lentil', 'soybean', 'peanut'],
+  'no-nightshades': ['tomato', 'pepper-bell', 'pepper-hot', 'potato', 'eggplant', 'groundcherry'],
+  'no-alliums':     ['onion', 'garlic', 'chives'],
+  'no-brassicas':   ['broccoli', 'cabbage', 'kale', 'cauliflower', 'radish', 'kohlrabi'],
+  'no-legumes':     ['beans-bush', 'beans-pole', 'peas'],
 };
 
 const SKILL_BY_EXPERIENCE: Record<ExperienceLevel, number> = {
@@ -105,7 +105,10 @@ function scoreCrop(crop: Crop, goal: PlanGoal, skillLevel: number): ScoredCrop |
 }
 
 const MAX_CROPS = 15;
-const MAX_PLANTS_PER_CROP_MULTIPLIER = 0.4;
+const MAX_SQFT_FRACTION_FIRST_PICK = 0.30;   // first pick gets at most this fraction of total sqft
+const MAX_SQFT_FRACTION_REGULAR    = 0.18;   // subsequent picks
+const PER_CATEGORY_CAP_FRACTION    = 0.45;   // any single category can't exceed this fraction of total sqft
+const TARGET_CROP_COUNT            = 10;     // aim for this many diverse crops before topping up
 
 export function selectCrops(input: SurvivalPlanInput): CropAllocation[] {
   const skillLevel = SKILL_BY_EXPERIENCE[input.experience];
@@ -120,20 +123,33 @@ export function selectCrops(input: SurvivalPlanInput): CropAllocation[] {
     .sort((a, b) => b.score - a.score);
 
   const allocations: CropAllocation[] = [];
+  const categoryUsedSqFt: Record<string, number> = {};
+  const categoryCap = input.squareFeet * PER_CATEGORY_CAP_FRACTION;
   let sqFtRemaining = input.squareFeet;
-  const perCropCap = Math.max(1, Math.floor(input.squareFeet * MAX_PLANTS_PER_CROP_MULTIPLIER));
 
   for (const candidate of candidates) {
     if (allocations.length >= MAX_CROPS) break;
     if (sqFtRemaining < candidate.sqFtPerPlant) continue;
 
-    const sqFtBudgetForCrop = Math.min(
-      perCropCap,
-      sqFtRemaining * (allocations.length === 0 ? 0.35 : 0.2),
+    const category = candidate.crop.category;
+    const categoryUsed = categoryUsedSqFt[category] ?? 0;
+    const categoryRemaining = categoryCap - categoryUsed;
+    if (categoryRemaining < candidate.sqFtPerPlant) continue;
+
+    const fraction = allocations.length === 0
+      ? MAX_SQFT_FRACTION_FIRST_PICK
+      : MAX_SQFT_FRACTION_REGULAR;
+    const sqFtBudget = Math.min(
+      input.squareFeet * fraction,
+      sqFtRemaining,
+      categoryRemaining,
     );
-    const plantCount = Math.max(1, Math.floor(sqFtBudgetForCrop / candidate.sqFtPerPlant));
+
+    if (sqFtBudget < candidate.sqFtPerPlant) continue;
+
+    const plantCount = Math.max(1, Math.floor(sqFtBudget / candidate.sqFtPerPlant));
     const sqFtUsed = plantCount * candidate.sqFtPerPlant;
-    if (sqFtUsed > sqFtRemaining) continue;
+    if (sqFtUsed > sqFtRemaining || sqFtUsed > categoryRemaining) continue;
 
     const yieldResult = calculateCropYield(candidate.crop, plantCount, skillLevel);
     if (!yieldResult) continue;
@@ -153,6 +169,10 @@ export function selectCrops(input: SurvivalPlanInput): CropAllocation[] {
     });
 
     sqFtRemaining -= sqFtUsed;
+    categoryUsedSqFt[category] = categoryUsed + sqFtUsed;
+
+    // Once we've hit our target crop count, stop unless we have meaningful sqft left.
+    if (allocations.length >= TARGET_CROP_COUNT && sqFtRemaining < input.squareFeet * 0.05) break;
   }
 
   return allocations;

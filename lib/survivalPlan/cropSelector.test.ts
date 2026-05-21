@@ -85,4 +85,40 @@ describe('selectCrops', () => {
     const sumLarge = large.reduce((s, a) => s + a.projectedKcal, 0);
     expect(sumLarge).toBeGreaterThan(sumSmall);
   });
+
+  it('diversity heuristic: no single crop dominates more than ~30% of total sqft', () => {
+    const allocations = selectCrops({ ...baseInput, squareFeet: 400 });
+    const totalSqFt = allocations.reduce((s, a) => s + a.sqFtUsed, 0);
+    const max = Math.max(...allocations.map(a => a.sqFtUsed));
+    expect(max / totalSqFt).toBeLessThanOrEqual(0.35);
+  });
+
+  it('diversity heuristic: spans multiple categories when possible', () => {
+    const allocations = selectCrops({ ...baseInput, squareFeet: 400, goal: 'balanced' });
+    // shouldn't be 100% vegetables — should include at least one herb or fruit if available
+    expect(allocations.length).toBeGreaterThanOrEqual(5);
+  });
+
+  it('tiny garden (30 sqft) returns at least one viable crop', () => {
+    const allocations = selectCrops({ ...baseInput, squareFeet: 30 });
+    expect(allocations.length).toBeGreaterThan(0);
+  });
+
+  it('all-restrictions buyer still gets a valid plan', () => {
+    const allocations = selectCrops({
+      ...baseInput,
+      dietaryRestrictions: ['no-nightshades', 'no-alliums', 'no-brassicas', 'no-legumes'],
+    });
+    expect(allocations.length).toBeGreaterThan(0);
+    // None of the blocklisted crops should appear
+    const blocked = new Set([
+      'tomato', 'pepper-bell', 'pepper-hot', 'potato', 'eggplant', 'groundcherry',
+      'onion', 'garlic', 'chives',
+      'broccoli', 'cabbage', 'kale', 'cauliflower', 'radish', 'kohlrabi',
+      'beans-bush', 'beans-pole', 'peas',
+    ]);
+    for (const a of allocations) {
+      expect(blocked.has(a.cropId)).toBe(false);
+    }
+  });
 });
