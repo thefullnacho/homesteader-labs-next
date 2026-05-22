@@ -18,6 +18,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     // /tools/caloric-security/inventory/ is noindex — personal-data page; intentionally omitted.
     { url: `${SITE_URL}/tools/caloric-security/companions/`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.6 },
     { url: `${SITE_URL}/tools/fabrication/`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.7 },
+    { url: `${SITE_URL}/tools/forager-game/`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.85 },
     { url: `${SITE_URL}/survival-garden-plan/`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.9 },
     // /survival-garden-plan/wizard/ and /success/[orderId]/ are noindex — gated pages, intentionally omitted.
     { url: `${SITE_URL}/archive/`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.7 },
