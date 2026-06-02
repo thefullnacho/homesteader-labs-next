@@ -187,7 +187,7 @@ export default function AutonomyDashboard({
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 border-b-2 border-border-primary pb-6">
         <div>
-          <Typography variant="h2" className="mb-1 uppercase tracking-tight font-mono">
+          <Typography variant="h1" className="mb-1 uppercase tracking-tight font-mono text-2xl md:text-4xl">
             Resilience Dashboard
           </Typography>
           <Typography variant="small" className="opacity-40 font-mono text-[11px] uppercase tracking-widest">

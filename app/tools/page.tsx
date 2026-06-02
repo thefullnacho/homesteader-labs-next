@@ -1,11 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { Cloud, Sprout, Shield, Compass, ArrowRight, MapPin } from "lucide-react";
+import { Cloud, Sprout, Shield, Compass, ArrowRight, MapPin, ScanLine, FileText } from "lucide-react";
 import FieldStationLayout from "@/components/ui/FieldStationLayout";
 import BrutalistBlock from "@/components/ui/BrutalistBlock";
 import Typography from "@/components/ui/Typography";
 import { useFieldStation } from "@/app/context/FieldStationContext";
+import { isSurvivalPlanPublic } from "@/lib/survivalPlan/visibility";
 
 const ops = [
   {
@@ -62,6 +63,24 @@ const ops = [
       "Solar & catchment integration",
     ],
   },
+  {
+    id: "forager",
+    code: "Forager Game",
+    mission: "Can you out-identify the AI? Play the field-ID game.",
+    href: "/tools/forager-game/",
+    icon: ScanLine,
+    status: "ONLINE" as const,
+    capabilities: [
+      "Can You Beat the AI?",
+      "109 rounds",
+      "4 expert domains",
+      "Deadly lookalikes",
+      "Offline-trained models",
+      "No account",
+      "Score vs. the machine",
+      "Built on WALKING MAN PRO",
+    ],
+  },
 ];
 
 export default function FieldStationPage() {
@@ -111,8 +130,8 @@ export default function FieldStationPage() {
         </div>
       </div>
 
-      {/* Triptych — three OPS panels */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+      {/* OPS panels — free field tools */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
         {ops.map((op) => {
           const Icon = op.icon;
           return (
@@ -155,6 +174,39 @@ export default function FieldStationPage() {
           );
         })}
       </div>
+
+      {/* Survival Garden Plan — paid, personalized PDF (hidden until launch) */}
+      {isSurvivalPlanPublic() && (
+      <div className="mb-10">
+        <BrutalistBlock refTag="SURVIVAL_PLAN">
+          <div className="flex items-center justify-between flex-wrap gap-4">
+            <div className="flex items-center gap-4">
+              <div className="w-10 h-10 bg-accent/10 border border-accent/30 flex items-center justify-center shrink-0">
+                <FileText size={20} className="text-accent" />
+              </div>
+              <div>
+                <div className="text-[10px] font-mono uppercase tracking-[0.3em] text-accent mb-1">
+                  Personalized Plan · $19
+                </div>
+                <h2 className="text-lg font-bold font-mono">Survival Garden Plan</h2>
+                <p className="text-xs font-mono opacity-60 mt-1 max-w-lg">
+                  Answer a few questions about your zip, household, and space — get a
+                  zone-calibrated, printable PDF: what to grow, when to plant, and a
+                  vetted seed-vendor list. Yours forever.
+                </p>
+              </div>
+            </div>
+            <Link
+              href="/survival-garden-plan/"
+              className="flex items-center justify-between gap-3 px-4 py-3 bg-accent text-white text-sm font-bold font-mono uppercase tracking-wider hover:bg-accent/90 transition-colors shadow-brutalist-sm hover:shadow-brutalist shrink-0"
+            >
+              <span>Build mine</span>
+              <ArrowRight size={16} />
+            </Link>
+          </div>
+        </BrutalistBlock>
+      </div>
+      )}
 
       {/* FIELD_OPS — future fourth mode teaser */}
       <div className="mb-10">

@@ -132,7 +132,7 @@ export default function FabricationPage() {
         <BrutalistBlock className="mb-8 p-6" variant="default">
           <div className="flex justify-between items-end">
             <div>
-              <Typography variant="h2" className="mb-0">Fabrication_Workbench</Typography>
+              <Typography variant="h1" className="mb-0">Fabrication_Workbench</Typography>
               <Typography variant="small" className="opacity-60">STL Viewer & Precise Print Estimation Matrix</Typography>
             </div>
             <div className="text-right flex flex-col items-end gap-2">
@@ -371,7 +371,7 @@ export default function FabricationPage() {
                   <div className="flex justify-between items-end">
                     <div>
                       <Typography variant="small" className="opacity-40 mb-0 font-mono uppercase text-[11px]">Total</Typography>
-                      <Typography variant="h1" className="mb-0 text-accent text-4xl">${estimate.totalCost.toFixed(2)}</Typography>
+                      <Typography variant="h2" className="mb-0 text-accent text-4xl">${estimate.totalCost.toFixed(2)}</Typography>
                     </div>
                     <Badge variant="status" className="mb-1">ESTIMATE</Badge>
                   </div>

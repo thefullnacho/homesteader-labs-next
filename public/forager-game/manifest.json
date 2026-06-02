@@ -1,0 +1,4392 @@
+{
+  "version": 1,
+  "generatedAt": "2026-05-22T09:45:03Z",
+  "modelMeta": {
+    "architecture": "EfficientNet Lite2",
+    "device": "Hailo 8L (4 TOPS int8)",
+    "deviceTimingMs": 187,
+    "browserTimingMs": 540
+  },
+  "domains": {
+    "berry": {
+      "label": "Wild Berries",
+      "rounds": [
+        {
+          "id": "663841858",
+          "imageUrl": "/forager-game/images/berry/663841858.jpg",
+          "trueClass": "bittersweet_nightshade_toxic",
+          "trueLabel": "Bittersweet Nightshade",
+          "options": [
+            "staghorn_sumac",
+            "canada_moonseed_deadly",
+            "bittersweet_nightshade_toxic",
+            "blueberry_wild"
+          ],
+          "optionLabels": {
+            "staghorn_sumac": "Staghorn Sumac",
+            "canada_moonseed_deadly": "Canada Moonseed",
+            "bittersweet_nightshade_toxic": "Bittersweet Nightshade",
+            "blueberry_wild": "Blueberry Wild"
+          },
+          "ai": {
+            "predictedClass": "bittersweet_nightshade_toxic",
+            "confidence": 0.9547,
+            "topProbs": {
+              "staghorn_sumac": 0.0108,
+              "canada_moonseed_deadly": 0.0246,
+              "bittersweet_nightshade_toxic": 0.9547,
+              "blueberry_wild": 0.0099
+            },
+            "correct": true
+          },
+          "metadata": {
+            "safety": "DEADLY",
+            "scientific": "Solanum dulcamara",
+            "lookalike": "N/A",
+            "keyDiff": "Purple flowers, red-to-black berries \u2014 avoid"
+          },
+          "attribution": {
+            "observer": "betsyyyy",
+            "license": "cc-by",
+            "observationUrl": "https://www.inaturalist.org/observations/363660665"
+          }
+        },
+        {
+          "id": "664069557",
+          "imageUrl": "/forager-game/images/berry/664069557.jpg",
+          "trueClass": "bittersweet_nightshade_toxic",
+          "trueLabel": "Bittersweet Nightshade",
+          "options": [
+            "bittersweet_nightshade_toxic",
+            "staghorn_sumac",
+            "blueberry_wild",
+            "poison_ivy"
+          ],
+          "optionLabels": {
+            "bittersweet_nightshade_toxic": "Bittersweet Nightshade",
+            "staghorn_sumac": "Staghorn Sumac",
+            "blueberry_wild": "Blueberry Wild",
+            "poison_ivy": "Poison Ivy"
+          },
+          "ai": {
+            "predictedClass": "bittersweet_nightshade_toxic",
+            "confidence": 0.9737,
+            "topProbs": {
+              "bittersweet_nightshade_toxic": 0.9737,
+              "staghorn_sumac": 0.0098,
+              "blueberry_wild": 0.0084,
+              "poison_ivy": 0.0082
+            },
+            "correct": true
+          },
+          "metadata": {
+            "safety": "DEADLY",
+            "scientific": "Solanum dulcamara",
+            "lookalike": "N/A",
+            "keyDiff": "Purple flowers, red-to-black berries \u2014 avoid"
+          },
+          "attribution": {
+            "observer": "martin_roger_halac",
+            "license": "cc-by",
+            "observationUrl": "https://www.inaturalist.org/observations/363781031"
+          }
+        },
+        {
+          "id": "661690633",
+          "imageUrl": "/forager-game/images/berry/661690633.jpg",
+          "trueClass": "blackberry_common",
+          "trueLabel": "Blackberry Common",
+          "options": [
+            "poison_ivy",
+            "wild_grape_riverbank",
+            "pokeweed_toxic",
+            "blackberry_common"
+          ],
+          "optionLabels": {
+            "poison_ivy": "Poison Ivy",
+            "wild_grape_riverbank": "Wild Grape Riverbank",
+            "pokeweed_toxic": "Pokeweed",
+            "blackberry_common": "Blackberry Common"
+          },
+          "ai": {
+            "predictedClass": "blackberry_common",
+            "confidence": 0.9704,
+            "topProbs": {
+              "poison_ivy": 0.0098,
+              "wild_grape_riverbank": 0.0092,
+              "pokeweed_toxic": 0.0107,
+              "blackberry_common": 0.9704
+            },
+            "correct": true
+          },
+          "metadata": {
+            "safety": "SAFE",
+            "scientific": "Rubus allegheniensis",
+            "lookalike": "Pokeweed (young)",
+            "keyDiff": "Pokeweed has smooth stems, white flowers"
+          },
+          "attribution": {
+            "observer": "joepye0490",
+            "license": "cc0",
+            "observationUrl": "https://www.inaturalist.org/observations/362533805"
+          }
+        },
+        {
+          "id": "663675569",
+          "imageUrl": "/forager-game/images/berry/663675569.jpg",
+          "trueClass": "blackberry_common",
+          "trueLabel": "Blackberry Common",
+          "options": [
+            "blackberry_common",
+            "pokeweed_toxic",
+            "staghorn_sumac",
+            "blueberry_wild"
+          ],
+          "optionLabels": {
+            "blackberry_common": "Blackberry Common",
+            "pokeweed_toxic": "Pokeweed",
+            "staghorn_sumac": "Staghorn Sumac",
+            "blueberry_wild": "Blueberry Wild"
+          },
+          "ai": {
+            "predictedClass": "blackberry_common",
+            "confidence": 0.9891,
+            "topProbs": {
+              "blackberry_common": 0.9891,
+              "pokeweed_toxic": 0.0055,
+              "staghorn_sumac": 0.0028,
+              "blueberry_wild": 0.0026
+            },
+            "correct": true
+          },
+          "metadata": {
+            "safety": "SAFE",
+            "scientific": "Rubus allegheniensis",
+            "lookalike": "Pokeweed (young)",
+            "keyDiff": "Pokeweed has smooth stems, white flowers"
+          },
+          "attribution": {
+            "observer": "daughterdad",
+            "license": "cc-by",
+            "observationUrl": "https://www.inaturalist.org/observations/363570651"
+          }
+        },
+        {
+          "id": "659786604",
+          "imageUrl": "/forager-game/images/berry/659786604.jpg",
+          "trueClass": "blueberry_highbush",
+          "trueLabel": "Blueberry Highbush",
+          "options": [
+            "virginia_creeper_toxic",
+            "elderberry_american",
+            "canada_moonseed_deadly",
+            "blueberry_highbush"
+          ],
+          "optionLabels": {
+            "virginia_creeper_toxic": "Virginia Creeper",
+            "elderberry_american": "Elderberry American",
+            "canada_moonseed_deadly": "Canada Moonseed",
+            "blueberry_highbush": "Blueberry Highbush"
+          },
+          "ai": {
+            "predictedClass": "blueberry_highbush",
+            "confidence": 0.9658,
+            "topProbs": {
+              "virginia_creeper_toxic": 0.0117,
+              "elderberry_american": 0.0121,
+              "canada_moonseed_deadly": 0.0104,
+              "blueberry_highbush": 0.9658
+            },
+            "correct": true
+          },
+          "metadata": {
+            "safety": "SAFE",
+            "scientific": "Vaccinium corymbosum",
+            "lookalike": "Canada moonseed",
+            "keyDiff": "Moonseed has one crescent seed, no true drupelets"
+          },
+          "attribution": {
+            "observer": "bdthomas",
+            "license": "cc-by",
+            "observationUrl": "https://www.inaturalist.org/observations/361524446"
+          }
+        },
+        {
+          "id": "656939917",
+          "imageUrl": "/forager-game/images/berry/656939917.jpg",
+          "trueClass": "blueberry_highbush",
+          "trueLabel": "Blueberry Highbush",
+          "options": [
+            "bittersweet_nightshade_toxic",
+            "blueberry_highbush",
+            "elderberry_american",
+            "canada_moonseed_deadly"
+          ],
+          "optionLabels": {
+            "bittersweet_nightshade_toxic": "Bittersweet Nightshade",
+            "blueberry_highbush": "Blueberry Highbush",
+            "elderberry_american": "Elderberry American",
+            "canada_moonseed_deadly": "Canada Moonseed"
+          },
+          "ai": {
+            "predictedClass": "blueberry_highbush",
+            "confidence": 0.9677,
+            "topProbs": {
+              "bittersweet_nightshade_toxic": 0.0108,
+              "blueberry_highbush": 0.9677,
+              "elderberry_american": 0.0143,
+              "canada_moonseed_deadly": 0.0073
+            },
+            "correct": true
+          },
+          "metadata": {
+            "safety": "SAFE",
+            "scientific": "Vaccinium corymbosum",
+            "lookalike": "Canada moonseed",
+            "keyDiff": "Moonseed has one crescent seed, no true drupelets"
+          },
+          "attribution": {
+            "observer": "mythical_mold",
+            "license": "cc-by",
+            "observationUrl": "https://www.inaturalist.org/observations/360037674"
+          }
+        },
+        {
+          "id": "664134387",
+          "imageUrl": "/forager-game/images/berry/664134387.jpg",
+          "trueClass": "blueberry_wild",
+          "trueLabel": "Blueberry Wild",
+          "options": [
+            "canada_moonseed_deadly",
+            "bittersweet_nightshade_toxic",
+            "virginia_creeper_toxic",
+            "blueberry_wild"
+          ],
+          "optionLabels": {
+            "canada_moonseed_deadly": "Canada Moonseed",
+            "bittersweet_nightshade_toxic": "Bittersweet Nightshade",
+            "virginia_creeper_toxic": "Virginia Creeper",
+            "blueberry_wild": "Blueberry Wild"
+          },
+          "ai": {
+            "predictedClass": "blueberry_wild",
+            "confidence": 0.9672,
+            "topProbs": {
+              "canada_moonseed_deadly": 0.0114,
+              "bittersweet_nightshade_toxic": 0.0095,
+              "virginia_creeper_toxic": 0.0119,
+              "blueberry_wild": 0.9672
+            },
+            "correct": true
+          },
+          "metadata": {
+            "safety": "SAFE",
+            "scientific": "Vaccinium angustifolium",
+            "lookalike": "Canada moonseed",
+            "keyDiff": "Moonseed has one crescent seed, no true drupelets"
+          },
+          "attribution": {
+            "observer": "brandoncorder",
+            "license": "cc-by",
+            "observationUrl": "https://www.inaturalist.org/observations/363817539"
+          }
+        },
+        {
+          "id": "663334594",
+          "imageUrl": "/forager-game/images/berry/663334594.jpg",
+          "trueClass": "blueberry_wild",
+          "trueLabel": "Blueberry Wild",
+          "options": [
+            "blueberry_wild",
+            "canada_moonseed_deadly",
+            "wild_grape_riverbank",
+            "virginia_creeper_toxic"
+          ],
+          "optionLabels": {
+            "blueberry_wild": "Blueberry Wild",
+            "canada_moonseed_deadly": "Canada Moonseed",
+            "wild_grape_riverbank": "Wild Grape Riverbank",
+            "virginia_creeper_toxic": "Virginia Creeper"
+          },
+          "ai": {
+            "predictedClass": "blueberry_wild",
+            "confidence": 0.9567,
+            "topProbs": {
+              "blueberry_wild": 0.9567,
+              "canada_moonseed_deadly": 0.014,
+              "wild_grape_riverbank": 0.0153,
+              "virginia_creeper_toxic": 0.0139
+            },
+            "correct": true
+          },
+          "metadata": {
+            "safety": "SAFE",
+            "scientific": "Vaccinium angustifolium",
+            "lookalike": "Canada moonseed",
+            "keyDiff": "Moonseed has one crescent seed, no true drupelets"
+          },
+          "attribution": {
+            "observer": "seanrigney",
+            "license": "cc-by",
+            "observationUrl": "https://www.inaturalist.org/observations/363433207"
+          }
+        },
+        {
+          "id": "663961744",
+          "imageUrl": "/forager-game/images/berry/663961744.jpg",
+          "trueClass": "canada_moonseed_deadly",
+          "trueLabel": "Canada Moonseed",
+          "options": [
+            "bittersweet_nightshade_toxic",
+            "canada_moonseed_deadly",
+            "wild_grape_riverbank",
+            "pokeweed_toxic"
+          ],
+          "optionLabels": {
+            "bittersweet_nightshade_toxic": "Bittersweet Nightshade",
+            "canada_moonseed_deadly": "Canada Moonseed",
+            "wild_grape_riverbank": "Wild Grape Riverbank",
+            "pokeweed_toxic": "Pokeweed"
+          },
+          "ai": {
+            "predictedClass": "canada_moonseed_deadly",
+            "confidence": 0.9686,
+            "topProbs": {
+              "bittersweet_nightshade_toxic": 0.0097,
+              "canada_moonseed_deadly": 0.9686,
+              "wild_grape_riverbank": 0.0119,
+              "pokeweed_toxic": 0.0098
+            },
+            "correct": true
+          },
+          "metadata": {
+            "safety": "DEADLY",
+            "scientific": "Menispermum canadense",
+            "lookalike": "Wild grape",
+            "keyDiff": "Crescent-shaped seed, no tendrils"
+          },
+          "attribution": {
+            "observer": "dominiquejoy",
+            "license": "cc-by",
+            "observationUrl": "https://www.inaturalist.org/observations/363723986"
+          }
+        },
+        {
+          "id": "663602154",
+          "imageUrl": "/forager-game/images/berry/663602154.jpg",
+          "trueClass": "canada_moonseed_deadly",
+          "trueLabel": "Canada Moonseed",
+          "options": [
+            "wild_grape_riverbank",
+            "canada_moonseed_deadly",
+            "blueberry_wild",
+            "elderberry_american"
+          ],
+          "optionLabels": {
+            "wild_grape_riverbank": "Wild Grape Riverbank",
+            "canada_moonseed_deadly": "Canada Moonseed",
+            "blueberry_wild": "Blueberry Wild",
+            "elderberry_american": "Elderberry American"
+          },
+          "ai": {
+            "predictedClass": "canada_moonseed_deadly",
+            "confidence": 0.9483,
+            "topProbs": {
+              "wild_grape_riverbank": 0.0346,
+              "canada_moonseed_deadly": 0.9483,
+              "blueberry_wild": 0.0082,
+              "elderberry_american": 0.0089
+            },
+            "correct": true
+          },
+          "metadata": {
+            "safety": "DEADLY",
+            "scientific": "Menispermum canadense",
+            "lookalike": "Wild grape",
+            "keyDiff": "Crescent-shaped seed, no tendrils"
+          },
+          "attribution": {
+            "observer": "liren",
+            "license": "cc-by",
+            "observationUrl": "https://www.inaturalist.org/observations/363534751"
+          }
+        },
+        {
+          "id": "664283918",
+          "imageUrl": "/forager-game/images/berry/664283918.jpg",
+          "trueClass": "elderberry_american",
+          "trueLabel": "Elderberry American",
+          "options": [
+            "elderberry_american",
+            "pokeweed_toxic",
+            "blueberry_wild",
+            "blackberry_common"
+          ],
+          "optionLabels": {
+            "elderberry_american": "Elderberry American",
+            "pokeweed_toxic": "Pokeweed",
+            "blueberry_wild": "Blueberry Wild",
+            "blackberry_common": "Blackberry Common"
+          },
+          "ai": {
+            "predictedClass": "elderberry_american",
+            "confidence": 0.9635,
+            "topProbs": {
+              "elderberry_american": 0.9635,
+              "pokeweed_toxic": 0.0075,
+              "blueberry_wild": 0.0073,
+              "blackberry_common": 0.0217
+            },
+            "correct": true
+          },
+          "metadata": {
+            "safety": "CAUTION",
+            "scientific": "Sambucus canadensis",
+            "lookalike": "Pokeweed",
+            "keyDiff": "Elderberry has compound leaves; must be cooked"
+          },
+          "attribution": {
+            "observer": "nenp_ns",
+            "license": "cc0",
+            "observationUrl": "https://www.inaturalist.org/observations/363892492"
+          }
+        },
+        {
+          "id": "663907785",
+          "imageUrl": "/forager-game/images/berry/663907785.jpg",
+          "trueClass": "elderberry_american",
+          "trueLabel": "Elderberry American",
+          "options": [
+            "virginia_creeper_toxic",
+            "pokeweed_toxic",
+            "staghorn_sumac",
+            "elderberry_american"
+          ],
+          "optionLabels": {
+            "virginia_creeper_toxic": "Virginia Creeper",
+            "pokeweed_toxic": "Pokeweed",
+            "staghorn_sumac": "Staghorn Sumac",
+            "elderberry_american": "Elderberry American"
+          },
+          "ai": {
+            "predictedClass": "elderberry_american",
+            "confidence": 0.9779,
+            "topProbs": {
+              "virginia_creeper_toxic": 0.0079,
+              "pokeweed_toxic": 0.0067,
+              "staghorn_sumac": 0.0074,
+              "elderberry_american": 0.9779
+            },
+            "correct": true
+          },
+          "metadata": {
+            "safety": "CAUTION",
+            "scientific": "Sambucus canadensis",
+            "lookalike": "Pokeweed",
+            "keyDiff": "Elderberry has compound leaves; must be cooked"
+          },
+          "attribution": {
+            "observer": "aberkov",
+            "license": "cc-by",
+            "observationUrl": "https://www.inaturalist.org/observations/363696309"
+          }
+        },
+        {
+          "id": "663831350",
+          "imageUrl": "/forager-game/images/berry/663831350.jpg",
+          "trueClass": "poison_ivy",
+          "trueLabel": "Poison Ivy",
+          "options": [
+            "wild_grape_riverbank",
+            "elderberry_american",
+            "poison_ivy",
+            "pokeweed_toxic"
+          ],
+          "optionLabels": {
+            "wild_grape_riverbank": "Wild Grape Riverbank",
+            "elderberry_american": "Elderberry American",
+            "poison_ivy": "Poison Ivy",
+            "pokeweed_toxic": "Pokeweed"
+          },
+          "ai": {
+            "predictedClass": "poison_ivy",
+            "confidence": 0.9218,
+            "topProbs": {
+              "wild_grape_riverbank": 0.0134,
+              "elderberry_american": 0.0175,
+              "poison_ivy": 0.9218,
+              "pokeweed_toxic": 0.0473
+            },
+            "correct": true
+          },
+          "metadata": {
+            "safety": "DEADLY",
+            "scientific": "Toxicodendron radicans",
+            "lookalike": "N/A",
+            "keyDiff": "Leaves of three, let it be"
+          },
+          "attribution": {
+            "observer": "dirtychai10",
+            "license": "cc0",
+            "observationUrl": "https://www.inaturalist.org/observations/363654959"
+          }
+        },
+        {
+          "id": "663506123",
+          "imageUrl": "/forager-game/images/berry/663506123.jpg",
+          "trueClass": "poison_ivy",
+          "trueLabel": "Poison Ivy",
+          "options": [
+            "blueberry_highbush",
+            "staghorn_sumac",
+            "wild_grape_riverbank",
+            "poison_ivy"
+          ],
+          "optionLabels": {
+            "blueberry_highbush": "Blueberry Highbush",
+            "staghorn_sumac": "Staghorn Sumac",
+            "wild_grape_riverbank": "Wild Grape Riverbank",
+            "poison_ivy": "Poison Ivy"
+          },
+          "ai": {
+            "predictedClass": "poison_ivy",
+            "confidence": 0.3437,
+            "topProbs": {
+              "blueberry_highbush": 0.2243,
+              "staghorn_sumac": 0.2148,
+              "wild_grape_riverbank": 0.2172,
+              "poison_ivy": 0.3437
+            },
+            "correct": true
+          },
+          "metadata": {
+            "safety": "DEADLY",
+            "scientific": "Toxicodendron radicans",
+            "lookalike": "N/A",
+            "keyDiff": "Leaves of three, let it be"
+          },
+          "attribution": {
+            "observer": "vegansociologist",
+            "license": "cc0",
+            "observationUrl": "https://www.inaturalist.org/observations/363484948"
+          }
+        },
+        {
+          "id": "664255213",
+          "imageUrl": "/forager-game/images/berry/664255213.jpg",
+          "trueClass": "pokeweed_toxic",
+          "trueLabel": "Pokeweed",
+          "options": [
+            "pokeweed_toxic",
+            "poison_ivy",
+            "elderberry_american",
+            "blackberry_common"
+          ],
+          "optionLabels": {
+            "pokeweed_toxic": "Pokeweed",
+            "poison_ivy": "Poison Ivy",
+            "elderberry_american": "Elderberry American",
+            "blackberry_common": "Blackberry Common"
+          },
+          "ai": {
+            "predictedClass": "pokeweed_toxic",
+            "confidence": 0.9731,
+            "topProbs": {
+              "pokeweed_toxic": 0.9731,
+              "poison_ivy": 0.009,
+              "elderberry_american": 0.0081,
+              "blackberry_common": 0.0098
+            },
+            "correct": true
+          },
+          "metadata": {
+            "safety": "DEADLY",
+            "scientific": "Phytolacca americana",
+            "lookalike": "Elderberry",
+            "keyDiff": "Pink-red stems, hollow; all parts toxic"
+          },
+          "attribution": {
+            "observer": "phma",
+            "license": "cc-by",
+            "observationUrl": "https://www.inaturalist.org/observations/363880887"
+          }
+        },
+        {
+          "id": "663960132",
+          "imageUrl": "/forager-game/images/berry/663960132.jpg",
+          "trueClass": "pokeweed_toxic",
+          "trueLabel": "Pokeweed",
+          "options": [
+            "blueberry_wild",
+            "pokeweed_toxic",
+            "blueberry_highbush",
+            "elderberry_american"
+          ],
+          "optionLabels": {
+            "blueberry_wild": "Blueberry Wild",
+            "pokeweed_toxic": "Pokeweed",
+            "blueberry_highbush": "Blueberry Highbush",
+            "elderberry_american": "Elderberry American"
+          },
+          "ai": {
+            "predictedClass": "pokeweed_toxic",
+            "confidence": 0.9748,
+            "topProbs": {
+              "blueberry_wild": 0.0086,
+              "pokeweed_toxic": 0.9748,
+              "blueberry_highbush": 0.0079,
+              "elderberry_american": 0.0086
+            },
+            "correct": true
+          },
+          "metadata": {
+            "safety": "DEADLY",
+            "scientific": "Phytolacca americana",
+            "lookalike": "Elderberry",
+            "keyDiff": "Pink-red stems, hollow; all parts toxic"
+          },
+          "attribution": {
+            "observer": "samk",
+            "license": "cc0",
+            "observationUrl": "https://www.inaturalist.org/observations/363722990"
+          }
+        },
+        {
+          "id": "664305710",
+          "imageUrl": "/forager-game/images/berry/664305710.jpg",
+          "trueClass": "staghorn_sumac",
+          "trueLabel": "Staghorn Sumac",
+          "options": [
+            "staghorn_sumac",
+            "poison_ivy",
+            "canada_moonseed_deadly",
+            "blueberry_wild"
+          ],
+          "optionLabels": {
+            "staghorn_sumac": "Staghorn Sumac",
+            "poison_ivy": "Poison Ivy",
+            "canada_moonseed_deadly": "Canada Moonseed",
+            "blueberry_wild": "Blueberry Wild"
+          },
+          "ai": {
+            "predictedClass": "staghorn_sumac",
+            "confidence": 0.9724,
+            "topProbs": {
+              "staghorn_sumac": 0.9724,
+              "poison_ivy": 0.0088,
+              "canada_moonseed_deadly": 0.0094,
+              "blueberry_wild": 0.0093
+            },
+            "correct": true
+          },
+          "metadata": {
+            "safety": "SAFE",
+            "scientific": "Rhus typhina",
+            "lookalike": "Poison sumac",
+            "keyDiff": "Poison sumac has white berries, swampy habitat"
+          },
+          "attribution": {
+            "observer": "bruno77495",
+            "license": "cc-by",
+            "observationUrl": "https://www.inaturalist.org/observations/363904438"
+          }
+        },
+        {
+          "id": "659338180",
+          "imageUrl": "/forager-game/images/berry/659338180.jpg",
+          "trueClass": "staghorn_sumac",
+          "trueLabel": "Staghorn Sumac",
+          "options": [
+            "poison_ivy",
+            "pokeweed_toxic",
+            "staghorn_sumac",
+            "blackberry_common"
+          ],
+          "optionLabels": {
+            "poison_ivy": "Poison Ivy",
+            "pokeweed_toxic": "Pokeweed",
+            "staghorn_sumac": "Staghorn Sumac",
+            "blackberry_common": "Blackberry Common"
+          },
+          "ai": {
+            "predictedClass": "staghorn_sumac",
+            "confidence": 0.9727,
+            "topProbs": {
+              "poison_ivy": 0.009,
+              "pokeweed_toxic": 0.0095,
+              "staghorn_sumac": 0.9727,
+              "blackberry_common": 0.0088
+            },
+            "correct": true
+          },
+          "metadata": {
+            "safety": "SAFE",
+            "scientific": "Rhus typhina",
+            "lookalike": "Poison sumac",
+            "keyDiff": "Poison sumac has white berries, swampy habitat"
+          },
+          "attribution": {
+            "observer": "brandoncorder",
+            "license": "cc-by",
+            "observationUrl": "https://www.inaturalist.org/observations/361288887"
+          }
+        },
+        {
+          "id": "663903823",
+          "imageUrl": "/forager-game/images/berry/663903823.jpg",
+          "trueClass": "virginia_creeper_toxic",
+          "trueLabel": "Virginia Creeper",
+          "options": [
+            "blueberry_highbush",
+            "canada_moonseed_deadly",
+            "wild_grape_riverbank",
+            "virginia_creeper_toxic"
+          ],
+          "optionLabels": {
+            "blueberry_highbush": "Blueberry Highbush",
+            "canada_moonseed_deadly": "Canada Moonseed",
+            "wild_grape_riverbank": "Wild Grape Riverbank",
+            "virginia_creeper_toxic": "Virginia Creeper"
+          },
+          "ai": {
+            "predictedClass": "virginia_creeper_toxic",
+            "confidence": 0.9624,
+            "topProbs": {
+              "blueberry_highbush": 0.0116,
+              "canada_moonseed_deadly": 0.0152,
+              "wild_grape_riverbank": 0.0108,
+              "virginia_creeper_toxic": 0.9624
+            },
+            "correct": true
+          },
+          "metadata": {
+            "safety": "CAUTION",
+            "scientific": "Parthenocissus quinquefolia",
+            "lookalike": "N/A",
+            "keyDiff": "5-leaflet vine; berries toxic"
+          },
+          "attribution": {
+            "observer": "patricklm35",
+            "license": "cc0",
+            "observationUrl": "https://www.inaturalist.org/observations/363707799"
+          }
+        },
+        {
+          "id": "663627760",
+          "imageUrl": "/forager-game/images/berry/663627760.jpg",
+          "trueClass": "virginia_creeper_toxic",
+          "trueLabel": "Virginia Creeper",
+          "options": [
+            "elderberry_american",
+            "virginia_creeper_toxic",
+            "blueberry_highbush",
+            "bittersweet_nightshade_toxic"
+          ],
+          "optionLabels": {
+            "elderberry_american": "Elderberry American",
+            "virginia_creeper_toxic": "Virginia Creeper",
+            "blueberry_highbush": "Blueberry Highbush",
+            "bittersweet_nightshade_toxic": "Bittersweet Nightshade"
+          },
+          "ai": {
+            "predictedClass": "virginia_creeper_toxic",
+            "confidence": 0.9712,
+            "topProbs": {
+              "elderberry_american": 0.0086,
+              "virginia_creeper_toxic": 0.9712,
+              "blueberry_highbush": 0.0096,
+              "bittersweet_nightshade_toxic": 0.0106
+            },
+            "correct": true
+          },
+          "metadata": {
+            "safety": "CAUTION",
+            "scientific": "Parthenocissus quinquefolia",
+            "lookalike": "N/A",
+            "keyDiff": "5-leaflet vine; berries toxic"
+          },
+          "attribution": {
+            "observer": "sofiv",
+            "license": "cc-by",
+            "observationUrl": "https://www.inaturalist.org/observations/363545736"
+          }
+        },
+        {
+          "id": "663917028",
+          "imageUrl": "/forager-game/images/berry/663917028.jpg",
+          "trueClass": "wild_grape_riverbank",
+          "trueLabel": "Wild Grape Riverbank",
+          "options": [
+            "wild_grape_riverbank",
+            "staghorn_sumac",
+            "blueberry_highbush",
+            "canada_moonseed_deadly"
+          ],
+          "optionLabels": {
+            "wild_grape_riverbank": "Wild Grape Riverbank",
+            "staghorn_sumac": "Staghorn Sumac",
+            "blueberry_highbush": "Blueberry Highbush",
+            "canada_moonseed_deadly": "Canada Moonseed"
+          },
+          "ai": {
+            "predictedClass": "canada_moonseed_deadly",
+            "confidence": 0.7144,
+            "topProbs": {
+              "wild_grape_riverbank": 0.1658,
+              "staghorn_sumac": 0.071,
+              "blueberry_highbush": 0.0487,
+              "canada_moonseed_deadly": 0.7144
+            },
+            "correct": false
+          },
+          "metadata": {
+            "safety": "SAFE",
+            "scientific": "Vitis riparia",
+            "lookalike": "Canada moonseed",
+            "keyDiff": "Grape has tendrils and true seeds"
+          },
+          "attribution": {
+            "observer": "erininmd",
+            "license": "cc-by",
+            "observationUrl": "https://www.inaturalist.org/observations/363701118"
+          }
+        },
+        {
+          "id": "663580476",
+          "imageUrl": "/forager-game/images/berry/663580476.jpg",
+          "trueClass": "wild_grape_riverbank",
+          "trueLabel": "Wild Grape Riverbank",
+          "options": [
+            "wild_grape_riverbank",
+            "blueberry_highbush",
+            "canada_moonseed_deadly",
+            "elderberry_american"
+          ],
+          "optionLabels": {
+            "wild_grape_riverbank": "Wild Grape Riverbank",
+            "blueberry_highbush": "Blueberry Highbush",
+            "canada_moonseed_deadly": "Canada Moonseed",
+            "elderberry_american": "Elderberry American"
+          },
+          "ai": {
+            "predictedClass": "wild_grape_riverbank",
+            "confidence": 0.9763,
+            "topProbs": {
+              "wild_grape_riverbank": 0.9763,
+              "blueberry_highbush": 0.0081,
+              "canada_moonseed_deadly": 0.0097,
+              "elderberry_american": 0.0058
+            },
+            "correct": true
+          },
+          "metadata": {
+            "safety": "SAFE",
+            "scientific": "Vitis riparia",
+            "lookalike": "Canada moonseed",
+            "keyDiff": "Grape has tendrils and true seeds"
+          },
+          "attribution": {
+            "observer": "rnheld",
+            "license": "cc-by",
+            "observationUrl": "https://www.inaturalist.org/observations/363522160"
+          }
+        }
+      ]
+    },
+    "mushroom_mycologist": {
+      "label": "Psilocybes & Lookalikes",
+      "rounds": [
+        {
+          "id": "663607779",
+          "imageUrl": "/forager-game/images/mushroom_mycologist/663607779.jpg",
+          "trueClass": "amanita_muscaria_toxic",
+          "trueLabel": "Amanita Muscaria",
+          "options": [
+            "panax_quinquefolius_ginseng_conservation",
+            "psilocybe_cyanescens",
+            "psilocybe_azurescens",
+            "amanita_muscaria_toxic"
+          ],
+          "optionLabels": {
+            "panax_quinquefolius_ginseng_conservation": "Panax Quinquefolius Ginseng Conservation",
+            "psilocybe_cyanescens": "Psilocybe Cyanescens",
+            "psilocybe_azurescens": "Psilocybe Azurescens",
+            "amanita_muscaria_toxic": "Amanita Muscaria"
+          },
+          "ai": {
+            "predictedClass": "amanita_muscaria_toxic",
+            "confidence": 0.6324,
+            "topProbs": {
+              "panax_quinquefolius_ginseng_conservation": 0.0323,
+              "psilocybe_cyanescens": 0.0458,
+              "psilocybe_azurescens": 0.2895,
+              "amanita_muscaria_toxic": 0.6324
+            },
+            "correct": true
+          },
+          "metadata": {
+            "safety": "DEADLY",
+            "scientific": "Amanita muscaria",
+            "lookalike": "N/A",
+            "keyDiff": "Red cap with white warts \u2014 highly toxic"
+          },
+          "attribution": {
+            "observer": "gvppy",
+            "license": "cc-by",
+            "observationUrl": "https://www.inaturalist.org/observations/363535679"
+          }
+        },
+        {
+          "id": "663574575",
+          "imageUrl": "/forager-game/images/mushroom_mycologist/663574575.jpg",
+          "trueClass": "amanita_muscaria_toxic",
+          "trueLabel": "Amanita Muscaria",
+          "options": [
+            "gymnopilus_junonius",
+            "amanita_muscaria_toxic",
+            "psilocybe_cyanescens",
+            "psilocybe_azurescens"
+          ],
+          "optionLabels": {
+            "gymnopilus_junonius": "Gymnopilus Junonius",
+            "amanita_muscaria_toxic": "Amanita Muscaria",
+            "psilocybe_cyanescens": "Psilocybe Cyanescens",
+            "psilocybe_azurescens": "Psilocybe Azurescens"
+          },
+          "ai": {
+            "predictedClass": "amanita_muscaria_toxic",
+            "confidence": 0.9773,
+            "topProbs": {
+              "gymnopilus_junonius": 0.0078,
+              "amanita_muscaria_toxic": 0.9773,
+              "psilocybe_cyanescens": 0.0084,
+              "psilocybe_azurescens": 0.0066
+            },
+            "correct": true
+          },
+          "metadata": {
+            "safety": "DEADLY",
+            "scientific": "Amanita muscaria",
+            "lookalike": "N/A",
+            "keyDiff": "Red cap with white warts \u2014 highly toxic"
+          },
+          "attribution": {
+            "observer": "georgecox",
+            "license": "cc0",
+            "observationUrl": "https://www.inaturalist.org/observations/363518411"
+          }
+        },
+        {
+          "id": "662489265",
+          "imageUrl": "/forager-game/images/mushroom_mycologist/662489265.jpg",
+          "trueClass": "amanita_phalloides_deadly",
+          "trueLabel": "Amanita Phalloides",
+          "options": [
+            "psilocybe_caerulipes",
+            "psilocybe_azurescens",
+            "amanita_phalloides_deadly",
+            "psilocybe_cubensis"
+          ],
+          "optionLabels": {
+            "psilocybe_caerulipes": "Psilocybe Caerulipes",
+            "psilocybe_azurescens": "Psilocybe Azurescens",
+            "amanita_phalloides_deadly": "Amanita Phalloides",
+            "psilocybe_cubensis": "Psilocybe Cubensis"
+          },
+          "ai": {
+            "predictedClass": "amanita_phalloides_deadly",
+            "confidence": 0.9848,
+            "topProbs": {
+              "psilocybe_caerulipes": 0.0061,
+              "psilocybe_azurescens": 0.0034,
+              "amanita_phalloides_deadly": 0.9848,
+              "psilocybe_cubensis": 0.0057
+            },
+            "correct": true
+          },
+          "metadata": {
+            "safety": "DEADLY",
+            "scientific": "Amanita phalloides",
+            "lookalike": "Puffball (young)",
+            "keyDiff": "Death cap has volva at base, white gills, ring"
+          },
+          "attribution": {
+            "observer": "karenoffereins",
+            "license": "cc-by",
+            "observationUrl": "https://www.inaturalist.org/observations/362949436"
+          }
+        },
+        {
+          "id": "662221770",
+          "imageUrl": "/forager-game/images/mushroom_mycologist/662221770.jpg",
+          "trueClass": "amanita_phalloides_deadly",
+          "trueLabel": "Amanita Phalloides",
+          "options": [
+            "conocybe_filaris_deadly",
+            "psilocybe_semilanceata",
+            "psilocybe_cubensis",
+            "amanita_phalloides_deadly"
+          ],
+          "optionLabels": {
+            "conocybe_filaris_deadly": "Conocybe Filaris",
+            "psilocybe_semilanceata": "Psilocybe Semilanceata",
+            "psilocybe_cubensis": "Psilocybe Cubensis",
+            "amanita_phalloides_deadly": "Amanita Phalloides"
+          },
+          "ai": {
+            "predictedClass": "amanita_phalloides_deadly",
+            "confidence": 0.986,
+            "topProbs": {
+              "conocybe_filaris_deadly": 0.0046,
+              "psilocybe_semilanceata": 0.0046,
+              "psilocybe_cubensis": 0.0048,
+              "amanita_phalloides_deadly": 0.986
+            },
+            "correct": true
+          },
+          "metadata": {
+            "safety": "DEADLY",
+            "scientific": "Amanita phalloides",
+            "lookalike": "Puffball (young)",
+            "keyDiff": "Death cap has volva at base, white gills, ring"
+          },
+          "attribution": {
+            "observer": "reago",
+            "license": "cc-by",
+            "observationUrl": "https://www.inaturalist.org/observations/362813449"
+          }
+        },
+        {
+          "id": "626857115",
+          "imageUrl": "/forager-game/images/mushroom_mycologist/626857115.jpg",
+          "trueClass": "conocybe_filaris_deadly",
+          "trueLabel": "Conocybe Filaris",
+          "options": [
+            "psilocybe_azurescens",
+            "conocybe_filaris_deadly",
+            "gymnopilus_junonius",
+            "psilocybe_caerulipes"
+          ],
+          "optionLabels": {
+            "psilocybe_azurescens": "Psilocybe Azurescens",
+            "conocybe_filaris_deadly": "Conocybe Filaris",
+            "gymnopilus_junonius": "Gymnopilus Junonius",
+            "psilocybe_caerulipes": "Psilocybe Caerulipes"
+          },
+          "ai": {
+            "predictedClass": "conocybe_filaris_deadly",
+            "confidence": 0.9716,
+            "topProbs": {
+              "psilocybe_azurescens": 0.012,
+              "conocybe_filaris_deadly": 0.9716,
+              "gymnopilus_junonius": 0.0096,
+              "psilocybe_caerulipes": 0.0068
+            },
+            "correct": true
+          },
+          "metadata": {
+            "safety": "DEADLY",
+            "scientific": "Conocybe filaris",
+            "lookalike": "Psilocybe species",
+            "keyDiff": "Rusty-brown spores; tiny ring on stem"
+          },
+          "attribution": {
+            "observer": "mandymushii",
+            "license": "cc-by",
+            "observationUrl": "https://www.inaturalist.org/observations/344065220"
+          }
+        },
+        {
+          "id": "620976799",
+          "imageUrl": "/forager-game/images/mushroom_mycologist/620976799.jpg",
+          "trueClass": "conocybe_filaris_deadly",
+          "trueLabel": "Conocybe Filaris",
+          "options": [
+            "gymnopilus_junonius",
+            "conocybe_filaris_deadly",
+            "psilocybe_azurescens",
+            "psilocybe_caerulipes"
+          ],
+          "optionLabels": {
+            "gymnopilus_junonius": "Gymnopilus Junonius",
+            "conocybe_filaris_deadly": "Conocybe Filaris",
+            "psilocybe_azurescens": "Psilocybe Azurescens",
+            "psilocybe_caerulipes": "Psilocybe Caerulipes"
+          },
+          "ai": {
+            "predictedClass": "conocybe_filaris_deadly",
+            "confidence": 0.9748,
+            "topProbs": {
+              "gymnopilus_junonius": 0.0088,
+              "conocybe_filaris_deadly": 0.9748,
+              "psilocybe_azurescens": 0.0082,
+              "psilocybe_caerulipes": 0.0082
+            },
+            "correct": true
+          },
+          "metadata": {
+            "safety": "DEADLY",
+            "scientific": "Conocybe filaris",
+            "lookalike": "Psilocybe species",
+            "keyDiff": "Rusty-brown spores; tiny ring on stem"
+          },
+          "attribution": {
+            "observer": "mandymushii",
+            "license": "cc-by",
+            "observationUrl": "https://www.inaturalist.org/observations/341150659"
+          }
+        },
+        {
+          "id": "648542618",
+          "imageUrl": "/forager-game/images/mushroom_mycologist/648542618.jpg",
+          "trueClass": "galerina_marginata_toxic",
+          "trueLabel": "Galerina Marginata",
+          "options": [
+            "psilocybe_caerulipes",
+            "psilocybe_cubensis",
+            "psilocybe_azurescens",
+            "galerina_marginata_toxic"
+          ],
+          "optionLabels": {
+            "psilocybe_caerulipes": "Psilocybe Caerulipes",
+            "psilocybe_cubensis": "Psilocybe Cubensis",
+            "psilocybe_azurescens": "Psilocybe Azurescens",
+            "galerina_marginata_toxic": "Galerina Marginata"
+          },
+          "ai": {
+            "predictedClass": "galerina_marginata_toxic",
+            "confidence": 0.909,
+            "topProbs": {
+              "psilocybe_caerulipes": 0.0313,
+              "psilocybe_cubensis": 0.0317,
+              "psilocybe_azurescens": 0.028,
+              "galerina_marginata_toxic": 0.909
+            },
+            "correct": true
+          },
+          "metadata": {
+            "safety": "DEADLY",
+            "scientific": "Galerina marginata",
+            "lookalike": "Psilocybe species",
+            "keyDiff": "Rusty brown spore print; ring present \u2014 deadly lookalike"
+          },
+          "attribution": {
+            "observer": "kristinpiston",
+            "license": "cc0",
+            "observationUrl": "https://www.inaturalist.org/observations/355627521"
+          }
+        },
+        {
+          "id": "635658527",
+          "imageUrl": "/forager-game/images/mushroom_mycologist/635658527.jpg",
+          "trueClass": "galerina_marginata_toxic",
+          "trueLabel": "Galerina Marginata",
+          "options": [
+            "amanita_phalloides_deadly",
+            "galerina_marginata_toxic",
+            "psilocybe_caerulipes",
+            "psilocybe_azurescens"
+          ],
+          "optionLabels": {
+            "amanita_phalloides_deadly": "Amanita Phalloides",
+            "galerina_marginata_toxic": "Galerina Marginata",
+            "psilocybe_caerulipes": "Psilocybe Caerulipes",
+            "psilocybe_azurescens": "Psilocybe Azurescens"
+          },
+          "ai": {
+            "predictedClass": "galerina_marginata_toxic",
+            "confidence": 0.9766,
+            "topProbs": {
+              "amanita_phalloides_deadly": 0.0074,
+              "galerina_marginata_toxic": 0.9766,
+              "psilocybe_caerulipes": 0.008,
+              "psilocybe_azurescens": 0.008
+            },
+            "correct": true
+          },
+          "metadata": {
+            "safety": "DEADLY",
+            "scientific": "Galerina marginata",
+            "lookalike": "Psilocybe species",
+            "keyDiff": "Rusty brown spore print; ring present \u2014 deadly lookalike"
+          },
+          "attribution": {
+            "observer": "smpbiologist-jwilliams",
+            "license": "cc-by",
+            "observationUrl": "https://www.inaturalist.org/observations/348541874"
+          }
+        },
+        {
+          "id": "659781290",
+          "imageUrl": "/forager-game/images/mushroom_mycologist/659781290.jpg",
+          "trueClass": "gymnopilus_junonius",
+          "trueLabel": "Gymnopilus Junonius",
+          "options": [
+            "psilocybe_azurescens",
+            "psilocybe_semilanceata",
+            "gymnopilus_junonius",
+            "other_mushroom"
+          ],
+          "optionLabels": {
+            "psilocybe_azurescens": "Psilocybe Azurescens",
+            "psilocybe_semilanceata": "Psilocybe Semilanceata",
+            "gymnopilus_junonius": "Gymnopilus Junonius",
+            "other_mushroom": "Other Mushroom"
+          },
+          "ai": {
+            "predictedClass": "gymnopilus_junonius",
+            "confidence": 0.9102,
+            "topProbs": {
+              "psilocybe_azurescens": 0.0197,
+              "psilocybe_semilanceata": 0.0113,
+              "gymnopilus_junonius": 0.9102,
+              "other_mushroom": 0.0588
+            },
+            "correct": true
+          },
+          "metadata": {
+            "safety": "CAUTION",
+            "scientific": "Gymnopilus junonius",
+            "lookalike": "Chanterelle",
+            "keyDiff": "Very bitter taste; yellow-orange gills"
+          },
+          "attribution": {
+            "observer": "opanukuexplorer",
+            "license": "cc0",
+            "observationUrl": "https://www.inaturalist.org/observations/361521776"
+          }
+        },
+        {
+          "id": "659712567",
+          "imageUrl": "/forager-game/images/mushroom_mycologist/659712567.jpg",
+          "trueClass": "gymnopilus_junonius",
+          "trueLabel": "Gymnopilus Junonius",
+          "options": [
+            "galerina_marginata_toxic",
+            "conocybe_filaris_deadly",
+            "gymnopilus_junonius",
+            "amanita_muscaria_toxic"
+          ],
+          "optionLabels": {
+            "galerina_marginata_toxic": "Galerina Marginata",
+            "conocybe_filaris_deadly": "Conocybe Filaris",
+            "gymnopilus_junonius": "Gymnopilus Junonius",
+            "amanita_muscaria_toxic": "Amanita Muscaria"
+          },
+          "ai": {
+            "predictedClass": "gymnopilus_junonius",
+            "confidence": 0.9713,
+            "topProbs": {
+              "galerina_marginata_toxic": 0.0107,
+              "conocybe_filaris_deadly": 0.0104,
+              "gymnopilus_junonius": 0.9713,
+              "amanita_muscaria_toxic": 0.0077
+            },
+            "correct": true
+          },
+          "metadata": {
+            "safety": "CAUTION",
+            "scientific": "Gymnopilus junonius",
+            "lookalike": "Chanterelle",
+            "keyDiff": "Very bitter taste; yellow-orange gills"
+          },
+          "attribution": {
+            "observer": "massmaruja",
+            "license": "cc-by",
+            "observationUrl": "https://www.inaturalist.org/observations/361486126"
+          }
+        },
+        {
+          "id": "664274773",
+          "imageUrl": "/forager-game/images/mushroom_mycologist/664274773.jpg",
+          "trueClass": "other_mushroom",
+          "trueLabel": "Other Mushroom",
+          "options": [
+            "psilocybe_cyanescens",
+            "psilocybe_caerulipes",
+            "other_mushroom",
+            "conocybe_filaris_deadly"
+          ],
+          "optionLabels": {
+            "psilocybe_cyanescens": "Psilocybe Cyanescens",
+            "psilocybe_caerulipes": "Psilocybe Caerulipes",
+            "other_mushroom": "Other Mushroom",
+            "conocybe_filaris_deadly": "Conocybe Filaris"
+          },
+          "ai": {
+            "predictedClass": "psilocybe_cyanescens",
+            "confidence": 0.9682,
+            "topProbs": {
+              "psilocybe_cyanescens": 0.9682,
+              "psilocybe_caerulipes": 0.006,
+              "other_mushroom": 0.0051,
+              "conocybe_filaris_deadly": 0.0208
+            },
+            "correct": false
+          },
+          "metadata": {
+            "safety": "UNKNOWN",
+            "scientific": "Unknown",
+            "lookalike": "N/A",
+            "keyDiff": "Cannot identify \u2014 do not consume"
+          },
+          "attribution": {
+            "observer": "termeszet1",
+            "license": "cc0",
+            "observationUrl": "https://www.inaturalist.org/observations/363887937"
+          }
+        },
+        {
+          "id": "664283700",
+          "imageUrl": "/forager-game/images/mushroom_mycologist/664283700.jpg",
+          "trueClass": "other_mushroom",
+          "trueLabel": "Other Mushroom",
+          "options": [
+            "psilocybe_cyanescens",
+            "conocybe_filaris_deadly",
+            "psilocybe_azurescens",
+            "other_mushroom"
+          ],
+          "optionLabels": {
+            "psilocybe_cyanescens": "Psilocybe Cyanescens",
+            "conocybe_filaris_deadly": "Conocybe Filaris",
+            "psilocybe_azurescens": "Psilocybe Azurescens",
+            "other_mushroom": "Other Mushroom"
+          },
+          "ai": {
+            "predictedClass": "other_mushroom",
+            "confidence": 0.9837,
+            "topProbs": {
+              "psilocybe_cyanescens": 0.0063,
+              "conocybe_filaris_deadly": 0.0049,
+              "psilocybe_azurescens": 0.0051,
+              "other_mushroom": 0.9837
+            },
+            "correct": true
+          },
+          "metadata": {
+            "safety": "UNKNOWN",
+            "scientific": "Unknown",
+            "lookalike": "N/A",
+            "keyDiff": "Cannot identify \u2014 do not consume"
+          },
+          "attribution": {
+            "observer": "jhatfield",
+            "license": "cc-by",
+            "observationUrl": "https://www.inaturalist.org/observations/363892381"
+          }
+        },
+        {
+          "id": "663339770",
+          "imageUrl": "/forager-game/images/mushroom_mycologist/663339770.jpg",
+          "trueClass": "panax_quinquefolius_ginseng_conservation",
+          "trueLabel": "Panax Quinquefolius Ginseng Conservation",
+          "options": [
+            "galerina_marginata_toxic",
+            "psilocybe_caerulipes",
+            "gymnopilus_junonius",
+            "panax_quinquefolius_ginseng_conservation"
+          ],
+          "optionLabels": {
+            "galerina_marginata_toxic": "Galerina Marginata",
+            "psilocybe_caerulipes": "Psilocybe Caerulipes",
+            "gymnopilus_junonius": "Gymnopilus Junonius",
+            "panax_quinquefolius_ginseng_conservation": "Panax Quinquefolius Ginseng Conservation"
+          },
+          "ai": {
+            "predictedClass": "gymnopilus_junonius",
+            "confidence": 0.2838,
+            "topProbs": {
+              "galerina_marginata_toxic": 0.2703,
+              "psilocybe_caerulipes": 0.2207,
+              "gymnopilus_junonius": 0.2838,
+              "panax_quinquefolius_ginseng_conservation": 0.2252
+            },
+            "correct": false
+          },
+          "metadata": {
+            "safety": "SAFE",
+            "scientific": "Panax quinquefolius",
+            "lookalike": "N/A",
+            "keyDiff": "Protected \u2014 observe only, do not harvest"
+          },
+          "attribution": {
+            "observer": "mikewenger",
+            "license": "cc0",
+            "observationUrl": "https://www.inaturalist.org/observations/363397560"
+          }
+        },
+        {
+          "id": "662214208",
+          "imageUrl": "/forager-game/images/mushroom_mycologist/662214208.jpg",
+          "trueClass": "panax_quinquefolius_ginseng_conservation",
+          "trueLabel": "Panax Quinquefolius Ginseng Conservation",
+          "options": [
+            "psilocybe_cubensis",
+            "amanita_muscaria_toxic",
+            "psilocybe_cyanescens",
+            "panax_quinquefolius_ginseng_conservation"
+          ],
+          "optionLabels": {
+            "psilocybe_cubensis": "Psilocybe Cubensis",
+            "amanita_muscaria_toxic": "Amanita Muscaria",
+            "psilocybe_cyanescens": "Psilocybe Cyanescens",
+            "panax_quinquefolius_ginseng_conservation": "Panax Quinquefolius Ginseng Conservation"
+          },
+          "ai": {
+            "predictedClass": "amanita_muscaria_toxic",
+            "confidence": 0.2797,
+            "topProbs": {
+              "psilocybe_cubensis": 0.2276,
+              "amanita_muscaria_toxic": 0.2797,
+              "psilocybe_cyanescens": 0.2447,
+              "panax_quinquefolius_ginseng_conservation": 0.2481
+            },
+            "correct": false
+          },
+          "metadata": {
+            "safety": "SAFE",
+            "scientific": "Panax quinquefolius",
+            "lookalike": "N/A",
+            "keyDiff": "Protected \u2014 observe only, do not harvest"
+          },
+          "attribution": {
+            "observer": "mickicolbeck",
+            "license": "cc-by",
+            "observationUrl": "https://www.inaturalist.org/observations/362809631"
+          }
+        },
+        {
+          "id": "596375868",
+          "imageUrl": "/forager-game/images/mushroom_mycologist/596375868.jpg",
+          "trueClass": "psilocybe_azurescens",
+          "trueLabel": "Psilocybe Azurescens",
+          "options": [
+            "psilocybe_azurescens",
+            "psilocybe_cyanescens",
+            "galerina_marginata_toxic",
+            "psilocybe_cubensis"
+          ],
+          "optionLabels": {
+            "psilocybe_azurescens": "Psilocybe Azurescens",
+            "psilocybe_cyanescens": "Psilocybe Cyanescens",
+            "galerina_marginata_toxic": "Galerina Marginata",
+            "psilocybe_cubensis": "Psilocybe Cubensis"
+          },
+          "ai": {
+            "predictedClass": "psilocybe_azurescens",
+            "confidence": 0.3229,
+            "topProbs": {
+              "psilocybe_azurescens": 0.3229,
+              "psilocybe_cyanescens": 0.1975,
+              "galerina_marginata_toxic": 0.2357,
+              "psilocybe_cubensis": 0.244
+            },
+            "correct": true
+          },
+          "metadata": {
+            "safety": "CAUTION",
+            "scientific": "Psilocybe azurescens",
+            "lookalike": "Galerina marginata",
+            "keyDiff": "Caramel cap, very potent blue bruising"
+          },
+          "attribution": {
+            "observer": "dschack",
+            "license": "cc-by",
+            "observationUrl": "https://www.inaturalist.org/observations/328974204"
+          }
+        },
+        {
+          "id": "448082123",
+          "imageUrl": "/forager-game/images/mushroom_mycologist/448082123.jpg",
+          "trueClass": "psilocybe_azurescens",
+          "trueLabel": "Psilocybe Azurescens",
+          "options": [
+            "galerina_marginata_toxic",
+            "psilocybe_azurescens",
+            "amanita_muscaria_toxic",
+            "psilocybe_semilanceata"
+          ],
+          "optionLabels": {
+            "galerina_marginata_toxic": "Galerina Marginata",
+            "psilocybe_azurescens": "Psilocybe Azurescens",
+            "amanita_muscaria_toxic": "Amanita Muscaria",
+            "psilocybe_semilanceata": "Psilocybe Semilanceata"
+          },
+          "ai": {
+            "predictedClass": "psilocybe_semilanceata",
+            "confidence": 0.511,
+            "topProbs": {
+              "galerina_marginata_toxic": 0.1402,
+              "psilocybe_azurescens": 0.1625,
+              "amanita_muscaria_toxic": 0.1863,
+              "psilocybe_semilanceata": 0.511
+            },
+            "correct": false
+          },
+          "metadata": {
+            "safety": "CAUTION",
+            "scientific": "Psilocybe azurescens",
+            "lookalike": "Galerina marginata",
+            "keyDiff": "Caramel cap, very potent blue bruising"
+          },
+          "attribution": {
+            "observer": "fungee",
+            "license": "cc0",
+            "observationUrl": "https://www.inaturalist.org/observations/250528285"
+          }
+        },
+        {
+          "id": "565232187",
+          "imageUrl": "/forager-game/images/mushroom_mycologist/565232187.jpg",
+          "trueClass": "psilocybe_caerulipes",
+          "trueLabel": "Psilocybe Caerulipes",
+          "options": [
+            "galerina_marginata_toxic",
+            "psilocybe_caerulipes",
+            "amanita_muscaria_toxic",
+            "psilocybe_cubensis"
+          ],
+          "optionLabels": {
+            "galerina_marginata_toxic": "Galerina Marginata",
+            "psilocybe_caerulipes": "Psilocybe Caerulipes",
+            "amanita_muscaria_toxic": "Amanita Muscaria",
+            "psilocybe_cubensis": "Psilocybe Cubensis"
+          },
+          "ai": {
+            "predictedClass": "psilocybe_cubensis",
+            "confidence": 0.6403,
+            "topProbs": {
+              "galerina_marginata_toxic": 0.3319,
+              "psilocybe_caerulipes": 0.0158,
+              "amanita_muscaria_toxic": 0.012,
+              "psilocybe_cubensis": 0.6403
+            },
+            "correct": false
+          },
+          "metadata": {
+            "safety": "CAUTION",
+            "scientific": "Psilocybe caerulipes",
+            "lookalike": "Galerina marginata",
+            "keyDiff": "Blue stem base; deciduous wood debris habitat"
+          },
+          "attribution": {
+            "observer": "alan_rockefeller",
+            "license": "cc-by",
+            "observationUrl": "https://www.inaturalist.org/observations/313023091"
+          }
+        },
+        {
+          "id": "565223144",
+          "imageUrl": "/forager-game/images/mushroom_mycologist/565223144.jpg",
+          "trueClass": "psilocybe_caerulipes",
+          "trueLabel": "Psilocybe Caerulipes",
+          "options": [
+            "galerina_marginata_toxic",
+            "amanita_muscaria_toxic",
+            "psilocybe_caerulipes",
+            "psilocybe_cyanescens"
+          ],
+          "optionLabels": {
+            "galerina_marginata_toxic": "Galerina Marginata",
+            "amanita_muscaria_toxic": "Amanita Muscaria",
+            "psilocybe_caerulipes": "Psilocybe Caerulipes",
+            "psilocybe_cyanescens": "Psilocybe Cyanescens"
+          },
+          "ai": {
+            "predictedClass": "psilocybe_caerulipes",
+            "confidence": 0.4,
+            "topProbs": {
+              "galerina_marginata_toxic": 0.1582,
+              "amanita_muscaria_toxic": 0.2065,
+              "psilocybe_caerulipes": 0.4,
+              "psilocybe_cyanescens": 0.2352
+            },
+            "correct": true
+          },
+          "metadata": {
+            "safety": "CAUTION",
+            "scientific": "Psilocybe caerulipes",
+            "lookalike": "Galerina marginata",
+            "keyDiff": "Blue stem base; deciduous wood debris habitat"
+          },
+          "attribution": {
+            "observer": "alan_rockefeller",
+            "license": "cc-by",
+            "observationUrl": "https://www.inaturalist.org/observations/313018320"
+          }
+        },
+        {
+          "id": "642067233",
+          "imageUrl": "/forager-game/images/mushroom_mycologist/642067233.jpg",
+          "trueClass": "psilocybe_cubensis",
+          "trueLabel": "Psilocybe Cubensis",
+          "options": [
+            "psilocybe_cubensis",
+            "psilocybe_semilanceata",
+            "galerina_marginata_toxic",
+            "other_mushroom"
+          ],
+          "optionLabels": {
+            "psilocybe_cubensis": "Psilocybe Cubensis",
+            "psilocybe_semilanceata": "Psilocybe Semilanceata",
+            "galerina_marginata_toxic": "Galerina Marginata",
+            "other_mushroom": "Other Mushroom"
+          },
+          "ai": {
+            "predictedClass": "other_mushroom",
+            "confidence": 0.2883,
+            "topProbs": {
+              "psilocybe_cubensis": 0.2512,
+              "psilocybe_semilanceata": 0.2721,
+              "galerina_marginata_toxic": 0.1884,
+              "other_mushroom": 0.2883
+            },
+            "correct": false
+          },
+          "metadata": {
+            "safety": "CAUTION",
+            "scientific": "Psilocybe cubensis",
+            "lookalike": "Galerina marginata",
+            "keyDiff": "Bruises blue; purple-black spore print \u2014 Galerina does not bruise"
+          },
+          "attribution": {
+            "observer": "adriana_machado",
+            "license": "cc-by",
+            "observationUrl": "https://www.inaturalist.org/observations/351815202"
+          }
+        },
+        {
+          "id": "638595995",
+          "imageUrl": "/forager-game/images/mushroom_mycologist/638595995.jpg",
+          "trueClass": "psilocybe_cubensis",
+          "trueLabel": "Psilocybe Cubensis",
+          "options": [
+            "galerina_marginata_toxic",
+            "other_mushroom",
+            "psilocybe_caerulipes",
+            "psilocybe_cubensis"
+          ],
+          "optionLabels": {
+            "galerina_marginata_toxic": "Galerina Marginata",
+            "other_mushroom": "Other Mushroom",
+            "psilocybe_caerulipes": "Psilocybe Caerulipes",
+            "psilocybe_cubensis": "Psilocybe Cubensis"
+          },
+          "ai": {
+            "predictedClass": "galerina_marginata_toxic",
+            "confidence": 0.6293,
+            "topProbs": {
+              "galerina_marginata_toxic": 0.6293,
+              "other_mushroom": 0.1214,
+              "psilocybe_caerulipes": 0.1021,
+              "psilocybe_cubensis": 0.1472
+            },
+            "correct": false
+          },
+          "metadata": {
+            "safety": "CAUTION",
+            "scientific": "Psilocybe cubensis",
+            "lookalike": "Galerina marginata",
+            "keyDiff": "Bruises blue; purple-black spore print \u2014 Galerina does not bruise"
+          },
+          "attribution": {
+            "observer": "mili_valverde",
+            "license": "cc-by",
+            "observationUrl": "https://www.inaturalist.org/observations/350028508"
+          }
+        },
+        {
+          "id": "609243088",
+          "imageUrl": "/forager-game/images/mushroom_mycologist/609243088.jpg",
+          "trueClass": "psilocybe_cyanescens",
+          "trueLabel": "Psilocybe Cyanescens",
+          "options": [
+            "amanita_muscaria_toxic",
+            "galerina_marginata_toxic",
+            "psilocybe_cyanescens",
+            "psilocybe_semilanceata"
+          ],
+          "optionLabels": {
+            "amanita_muscaria_toxic": "Amanita Muscaria",
+            "galerina_marginata_toxic": "Galerina Marginata",
+            "psilocybe_cyanescens": "Psilocybe Cyanescens",
+            "psilocybe_semilanceata": "Psilocybe Semilanceata"
+          },
+          "ai": {
+            "predictedClass": "psilocybe_semilanceata",
+            "confidence": 0.9713,
+            "topProbs": {
+              "amanita_muscaria_toxic": 0.0093,
+              "galerina_marginata_toxic": 0.0084,
+              "psilocybe_cyanescens": 0.0111,
+              "psilocybe_semilanceata": 0.9713
+            },
+            "correct": false
+          },
+          "metadata": {
+            "safety": "CAUTION",
+            "scientific": "Psilocybe cyanescens",
+            "lookalike": "Galerina marginata",
+            "keyDiff": "Wavy cap edge; strong blue bruising"
+          },
+          "attribution": {
+            "observer": "bryce_john",
+            "license": "cc-by",
+            "observationUrl": "https://www.inaturalist.org/observations/335374394"
+          }
+        },
+        {
+          "id": "609243578",
+          "imageUrl": "/forager-game/images/mushroom_mycologist/609243578.jpg",
+          "trueClass": "psilocybe_cyanescens",
+          "trueLabel": "Psilocybe Cyanescens",
+          "options": [
+            "conocybe_filaris_deadly",
+            "galerina_marginata_toxic",
+            "amanita_muscaria_toxic",
+            "psilocybe_cyanescens"
+          ],
+          "optionLabels": {
+            "conocybe_filaris_deadly": "Conocybe Filaris",
+            "galerina_marginata_toxic": "Galerina Marginata",
+            "amanita_muscaria_toxic": "Amanita Muscaria",
+            "psilocybe_cyanescens": "Psilocybe Cyanescens"
+          },
+          "ai": {
+            "predictedClass": "galerina_marginata_toxic",
+            "confidence": 0.2852,
+            "topProbs": {
+              "conocybe_filaris_deadly": 0.282,
+              "galerina_marginata_toxic": 0.2852,
+              "amanita_muscaria_toxic": 0.2519,
+              "psilocybe_cyanescens": 0.181
+            },
+            "correct": false
+          },
+          "metadata": {
+            "safety": "CAUTION",
+            "scientific": "Psilocybe cyanescens",
+            "lookalike": "Galerina marginata",
+            "keyDiff": "Wavy cap edge; strong blue bruising"
+          },
+          "attribution": {
+            "observer": "bryce_john",
+            "license": "cc-by",
+            "observationUrl": "https://www.inaturalist.org/observations/335374656"
+          }
+        },
+        {
+          "id": "593728432",
+          "imageUrl": "/forager-game/images/mushroom_mycologist/593728432.jpg",
+          "trueClass": "psilocybe_semilanceata",
+          "trueLabel": "Psilocybe Semilanceata",
+          "options": [
+            "psilocybe_azurescens",
+            "psilocybe_semilanceata",
+            "psilocybe_cyanescens",
+            "conocybe_filaris_deadly"
+          ],
+          "optionLabels": {
+            "psilocybe_azurescens": "Psilocybe Azurescens",
+            "psilocybe_semilanceata": "Psilocybe Semilanceata",
+            "psilocybe_cyanescens": "Psilocybe Cyanescens",
+            "conocybe_filaris_deadly": "Conocybe Filaris"
+          },
+          "ai": {
+            "predictedClass": "psilocybe_azurescens",
+            "confidence": 0.2646,
+            "topProbs": {
+              "psilocybe_azurescens": 0.2646,
+              "psilocybe_semilanceata": 0.2359,
+              "psilocybe_cyanescens": 0.2446,
+              "conocybe_filaris_deadly": 0.2549
+            },
+            "correct": false
+          },
+          "metadata": {
+            "safety": "CAUTION",
+            "scientific": "Psilocybe semilanceata",
+            "lookalike": "Conocybe filaris",
+            "keyDiff": "Pointed nipple-cap; deep blue bruising"
+          },
+          "attribution": {
+            "observer": "addshore",
+            "license": "cc-by",
+            "observationUrl": "https://www.inaturalist.org/observations/327702567"
+          }
+        },
+        {
+          "id": "591898314",
+          "imageUrl": "/forager-game/images/mushroom_mycologist/591898314.jpg",
+          "trueClass": "psilocybe_semilanceata",
+          "trueLabel": "Psilocybe Semilanceata",
+          "options": [
+            "conocybe_filaris_deadly",
+            "psilocybe_semilanceata",
+            "psilocybe_cyanescens",
+            "psilocybe_caerulipes"
+          ],
+          "optionLabels": {
+            "conocybe_filaris_deadly": "Conocybe Filaris",
+            "psilocybe_semilanceata": "Psilocybe Semilanceata",
+            "psilocybe_cyanescens": "Psilocybe Cyanescens",
+            "psilocybe_caerulipes": "Psilocybe Caerulipes"
+          },
+          "ai": {
+            "predictedClass": "psilocybe_semilanceata",
+            "confidence": 0.279,
+            "topProbs": {
+              "conocybe_filaris_deadly": 0.2516,
+              "psilocybe_semilanceata": 0.279,
+              "psilocybe_cyanescens": 0.2279,
+              "psilocybe_caerulipes": 0.2414
+            },
+            "correct": true
+          },
+          "metadata": {
+            "safety": "CAUTION",
+            "scientific": "Psilocybe semilanceata",
+            "lookalike": "Conocybe filaris",
+            "keyDiff": "Pointed nipple-cap; deep blue bruising"
+          },
+          "attribution": {
+            "observer": "james_ferns_etc",
+            "license": "cc-by",
+            "observationUrl": "https://www.inaturalist.org/observations/326778171"
+          }
+        }
+      ]
+    },
+    "mushroom_highvalue": {
+      "label": "Edible Mushrooms",
+      "rounds": [
+        {
+          "id": "659171298",
+          "imageUrl": "/forager-game/images/mushroom_highvalue/659171298.jpg",
+          "trueClass": "chaga_medicinal",
+          "trueLabel": "Chaga",
+          "options": [
+            "reishi_northeast",
+            "lions_mane",
+            "chaga_medicinal",
+            "chicken_of_the_woods"
+          ],
+          "optionLabels": {
+            "reishi_northeast": "Reishi Northeast",
+            "lions_mane": "Lions Mane",
+            "chaga_medicinal": "Chaga",
+            "chicken_of_the_woods": "Chicken Of The Woods"
+          },
+          "ai": {
+            "predictedClass": "chaga_medicinal",
+            "confidence": 0.9737,
+            "topProbs": {
+              "reishi_northeast": 0.0081,
+              "lions_mane": 0.0091,
+              "chaga_medicinal": 0.9737,
+              "chicken_of_the_woods": 0.0091
+            },
+            "correct": true
+          },
+          "metadata": {
+            "safety": "SAFE",
+            "scientific": "Inonotus obliquus",
+            "lookalike": "Burnt wood knot",
+            "keyDiff": "Orange-yellow interior when cut"
+          },
+          "attribution": {
+            "observer": "el-kizi-1204",
+            "license": "cc-by",
+            "observationUrl": "https://www.inaturalist.org/observations/361205795"
+          }
+        },
+        {
+          "id": "659171614",
+          "imageUrl": "/forager-game/images/mushroom_highvalue/659171614.jpg",
+          "trueClass": "chaga_medicinal",
+          "trueLabel": "Chaga",
+          "options": [
+            "reishi_northeast",
+            "lions_mane",
+            "morels_edible",
+            "chaga_medicinal"
+          ],
+          "optionLabels": {
+            "reishi_northeast": "Reishi Northeast",
+            "lions_mane": "Lions Mane",
+            "morels_edible": "Morels",
+            "chaga_medicinal": "Chaga"
+          },
+          "ai": {
+            "predictedClass": "chaga_medicinal",
+            "confidence": 0.9716,
+            "topProbs": {
+              "reishi_northeast": 0.0085,
+              "lions_mane": 0.0087,
+              "morels_edible": 0.0112,
+              "chaga_medicinal": 0.9716
+            },
+            "correct": true
+          },
+          "metadata": {
+            "safety": "SAFE",
+            "scientific": "Inonotus obliquus",
+            "lookalike": "Burnt wood knot",
+            "keyDiff": "Orange-yellow interior when cut"
+          },
+          "attribution": {
+            "observer": "el-kizi-1204",
+            "license": "cc-by",
+            "observationUrl": "https://www.inaturalist.org/observations/361205805"
+          }
+        },
+        {
+          "id": "658122046",
+          "imageUrl": "/forager-game/images/mushroom_highvalue/658122046.jpg",
+          "trueClass": "chanterelles_edible",
+          "trueLabel": "Chanterelles",
+          "options": [
+            "lions_mane",
+            "morels_edible",
+            "chanterelles_edible",
+            "ramps_wild_leek"
+          ],
+          "optionLabels": {
+            "lions_mane": "Lions Mane",
+            "morels_edible": "Morels",
+            "chanterelles_edible": "Chanterelles",
+            "ramps_wild_leek": "Ramps Wild Leek"
+          },
+          "ai": {
+            "predictedClass": "chanterelles_edible",
+            "confidence": 0.9674,
+            "topProbs": {
+              "lions_mane": 0.0108,
+              "morels_edible": 0.0111,
+              "chanterelles_edible": 0.9674,
+              "ramps_wild_leek": 0.0106
+            },
+            "correct": true
+          },
+          "metadata": {
+            "safety": "SAFE",
+            "scientific": "Cantharellus cibarius",
+            "lookalike": "Jack-o'-lantern",
+            "keyDiff": "Jack-o'-lantern has true gills, grows in clusters"
+          },
+          "attribution": {
+            "observer": "daniel_castanhal",
+            "license": "cc-by",
+            "observationUrl": "https://www.inaturalist.org/observations/360661188"
+          }
+        },
+        {
+          "id": "597704356",
+          "imageUrl": "/forager-game/images/mushroom_highvalue/597704356.jpg",
+          "trueClass": "chanterelles_edible",
+          "trueLabel": "Chanterelles",
+          "options": [
+            "reishi_northeast",
+            "chicken_of_the_woods",
+            "lions_mane",
+            "chanterelles_edible"
+          ],
+          "optionLabels": {
+            "reishi_northeast": "Reishi Northeast",
+            "chicken_of_the_woods": "Chicken Of The Woods",
+            "lions_mane": "Lions Mane",
+            "chanterelles_edible": "Chanterelles"
+          },
+          "ai": {
+            "predictedClass": "chanterelles_edible",
+            "confidence": 0.9682,
+            "topProbs": {
+              "reishi_northeast": 0.0106,
+              "chicken_of_the_woods": 0.0107,
+              "lions_mane": 0.0106,
+              "chanterelles_edible": 0.9682
+            },
+            "correct": true
+          },
+          "metadata": {
+            "safety": "SAFE",
+            "scientific": "Cantharellus cibarius",
+            "lookalike": "Jack-o'-lantern",
+            "keyDiff": "Jack-o'-lantern has true gills, grows in clusters"
+          },
+          "attribution": {
+            "observer": "andrejus",
+            "license": "cc-by",
+            "observationUrl": "https://www.inaturalist.org/observations/329708478"
+          }
+        },
+        {
+          "id": "663980506",
+          "imageUrl": "/forager-game/images/mushroom_highvalue/663980506.jpg",
+          "trueClass": "chicken_of_the_woods",
+          "trueLabel": "Chicken Of The Woods",
+          "options": [
+            "high_value_toxics",
+            "chicken_of_the_woods",
+            "ginseng_american",
+            "lions_mane"
+          ],
+          "optionLabels": {
+            "high_value_toxics": "High Values",
+            "chicken_of_the_woods": "Chicken Of The Woods",
+            "ginseng_american": "Ginseng American",
+            "lions_mane": "Lions Mane"
+          },
+          "ai": {
+            "predictedClass": "chicken_of_the_woods",
+            "confidence": 0.978,
+            "topProbs": {
+              "high_value_toxics": 0.0077,
+              "chicken_of_the_woods": 0.978,
+              "ginseng_american": 0.0075,
+              "lions_mane": 0.0068
+            },
+            "correct": true
+          },
+          "metadata": {
+            "safety": "SAFE",
+            "scientific": "Laetiporus sulphureus",
+            "lookalike": "N/A",
+            "keyDiff": "Unmistakable orange shelf; avoid on conifers"
+          },
+          "attribution": {
+            "observer": "rangerluke",
+            "license": "cc-by",
+            "observationUrl": "https://www.inaturalist.org/observations/363734517"
+          }
+        },
+        {
+          "id": "663925638",
+          "imageUrl": "/forager-game/images/mushroom_highvalue/663925638.jpg",
+          "trueClass": "chicken_of_the_woods",
+          "trueLabel": "Chicken Of The Woods",
+          "options": [
+            "chaga_medicinal",
+            "chicken_of_the_woods",
+            "lions_mane",
+            "reishi_northeast"
+          ],
+          "optionLabels": {
+            "chaga_medicinal": "Chaga",
+            "chicken_of_the_woods": "Chicken Of The Woods",
+            "lions_mane": "Lions Mane",
+            "reishi_northeast": "Reishi Northeast"
+          },
+          "ai": {
+            "predictedClass": "chicken_of_the_woods",
+            "confidence": 0.973,
+            "topProbs": {
+              "chaga_medicinal": 0.0089,
+              "chicken_of_the_woods": 0.973,
+              "lions_mane": 0.008,
+              "reishi_northeast": 0.0101
+            },
+            "correct": true
+          },
+          "metadata": {
+            "safety": "SAFE",
+            "scientific": "Laetiporus sulphureus",
+            "lookalike": "N/A",
+            "keyDiff": "Unmistakable orange shelf; avoid on conifers"
+          },
+          "attribution": {
+            "observer": "matthewwilkinson",
+            "license": "cc0",
+            "observationUrl": "https://www.inaturalist.org/observations/363705515"
+          }
+        },
+        {
+          "id": "663339770",
+          "imageUrl": "/forager-game/images/mushroom_highvalue/663339770.jpg",
+          "trueClass": "ginseng_american",
+          "trueLabel": "Ginseng American",
+          "options": [
+            "chanterelles_edible",
+            "chicken_of_the_woods",
+            "reishi_northeast",
+            "ginseng_american"
+          ],
+          "optionLabels": {
+            "chanterelles_edible": "Chanterelles",
+            "chicken_of_the_woods": "Chicken Of The Woods",
+            "reishi_northeast": "Reishi Northeast",
+            "ginseng_american": "Ginseng American"
+          },
+          "ai": {
+            "predictedClass": "ginseng_american",
+            "confidence": 0.9747,
+            "topProbs": {
+              "chanterelles_edible": 0.0077,
+              "chicken_of_the_woods": 0.0093,
+              "reishi_northeast": 0.0084,
+              "ginseng_american": 0.9747
+            },
+            "correct": true
+          },
+          "metadata": {
+            "safety": "SAFE",
+            "scientific": "Panax quinquefolius",
+            "lookalike": "N/A",
+            "keyDiff": "Protected species \u2014 observe, don't harvest"
+          },
+          "attribution": {
+            "observer": "mikewenger",
+            "license": "cc0",
+            "observationUrl": "https://www.inaturalist.org/observations/363397560"
+          }
+        },
+        {
+          "id": "662214208",
+          "imageUrl": "/forager-game/images/mushroom_highvalue/662214208.jpg",
+          "trueClass": "ginseng_american",
+          "trueLabel": "Ginseng American",
+          "options": [
+            "high_value_toxics",
+            "morels_edible",
+            "ginseng_american",
+            "ramps_wild_leek"
+          ],
+          "optionLabels": {
+            "high_value_toxics": "High Values",
+            "morels_edible": "Morels",
+            "ginseng_american": "Ginseng American",
+            "ramps_wild_leek": "Ramps Wild Leek"
+          },
+          "ai": {
+            "predictedClass": "ginseng_american",
+            "confidence": 0.977,
+            "topProbs": {
+              "high_value_toxics": 0.0065,
+              "morels_edible": 0.0078,
+              "ginseng_american": 0.977,
+              "ramps_wild_leek": 0.0087
+            },
+            "correct": true
+          },
+          "metadata": {
+            "safety": "SAFE",
+            "scientific": "Panax quinquefolius",
+            "lookalike": "N/A",
+            "keyDiff": "Protected species \u2014 observe, don't harvest"
+          },
+          "attribution": {
+            "observer": "mickicolbeck",
+            "license": "cc-by",
+            "observationUrl": "https://www.inaturalist.org/observations/362809631"
+          }
+        },
+        {
+          "id": "663530396",
+          "imageUrl": "/forager-game/images/mushroom_highvalue/663530396.jpg",
+          "trueClass": "high_value_toxics",
+          "trueLabel": "High Values",
+          "options": [
+            "reishi_northeast",
+            "chanterelles_edible",
+            "high_value_toxics",
+            "lions_mane"
+          ],
+          "optionLabels": {
+            "reishi_northeast": "Reishi Northeast",
+            "chanterelles_edible": "Chanterelles",
+            "high_value_toxics": "High Values",
+            "lions_mane": "Lions Mane"
+          },
+          "ai": {
+            "predictedClass": "high_value_toxics",
+            "confidence": 0.2737,
+            "topProbs": {
+              "reishi_northeast": 0.2447,
+              "chanterelles_edible": 0.2102,
+              "high_value_toxics": 0.2737,
+              "lions_mane": 0.2714
+            },
+            "correct": true
+          },
+          "metadata": {
+            "safety": "DEADLY",
+            "scientific": "Various",
+            "lookalike": "N/A",
+            "keyDiff": "High-value toxic lookalike class \u2014 do not consume"
+          },
+          "attribution": {
+            "observer": "cback",
+            "license": "cc-by",
+            "observationUrl": "https://www.inaturalist.org/observations/363497697"
+          }
+        },
+        {
+          "id": "662489265",
+          "imageUrl": "/forager-game/images/mushroom_highvalue/662489265.jpg",
+          "trueClass": "high_value_toxics",
+          "trueLabel": "High Values",
+          "options": [
+            "chanterelles_edible",
+            "chaga_medicinal",
+            "morels_edible",
+            "high_value_toxics"
+          ],
+          "optionLabels": {
+            "chanterelles_edible": "Chanterelles",
+            "chaga_medicinal": "Chaga",
+            "morels_edible": "Morels",
+            "high_value_toxics": "High Values"
+          },
+          "ai": {
+            "predictedClass": "high_value_toxics",
+            "confidence": 0.9674,
+            "topProbs": {
+              "chanterelles_edible": 0.0117,
+              "chaga_medicinal": 0.01,
+              "morels_edible": 0.0109,
+              "high_value_toxics": 0.9674
+            },
+            "correct": true
+          },
+          "metadata": {
+            "safety": "DEADLY",
+            "scientific": "Various",
+            "lookalike": "N/A",
+            "keyDiff": "High-value toxic lookalike class \u2014 do not consume"
+          },
+          "attribution": {
+            "observer": "karenoffereins",
+            "license": "cc-by",
+            "observationUrl": "https://www.inaturalist.org/observations/362949436"
+          }
+        },
+        {
+          "id": "650334427",
+          "imageUrl": "/forager-game/images/mushroom_highvalue/650334427.jpg",
+          "trueClass": "lions_mane",
+          "trueLabel": "Lions Mane",
+          "options": [
+            "lions_mane",
+            "chanterelles_edible",
+            "morels_edible",
+            "high_value_toxics"
+          ],
+          "optionLabels": {
+            "lions_mane": "Lions Mane",
+            "chanterelles_edible": "Chanterelles",
+            "morels_edible": "Morels",
+            "high_value_toxics": "High Values"
+          },
+          "ai": {
+            "predictedClass": "lions_mane",
+            "confidence": 0.9727,
+            "topProbs": {
+              "lions_mane": 0.9727,
+              "chanterelles_edible": 0.0093,
+              "morels_edible": 0.009,
+              "high_value_toxics": 0.009
+            },
+            "correct": true
+          },
+          "metadata": {
+            "safety": "SAFE",
+            "scientific": "Hericium erinaceus",
+            "lookalike": "N/A",
+            "keyDiff": "White cascade of teeth \u2014 no true lookalike"
+          },
+          "attribution": {
+            "observer": "jeffnoh",
+            "license": "cc-by",
+            "observationUrl": "https://www.inaturalist.org/observations/356611515"
+          }
+        },
+        {
+          "id": "647010833",
+          "imageUrl": "/forager-game/images/mushroom_highvalue/647010833.jpg",
+          "trueClass": "lions_mane",
+          "trueLabel": "Lions Mane",
+          "options": [
+            "chicken_of_the_woods",
+            "lions_mane",
+            "ginseng_american",
+            "saffron_crocus"
+          ],
+          "optionLabels": {
+            "chicken_of_the_woods": "Chicken Of The Woods",
+            "lions_mane": "Lions Mane",
+            "ginseng_american": "Ginseng American",
+            "saffron_crocus": "Saffron Crocus"
+          },
+          "ai": {
+            "predictedClass": "lions_mane",
+            "confidence": 0.9666,
+            "topProbs": {
+              "chicken_of_the_woods": 0.0119,
+              "lions_mane": 0.9666,
+              "ginseng_american": 0.0112,
+              "saffron_crocus": 0.0103
+            },
+            "correct": true
+          },
+          "metadata": {
+            "safety": "SAFE",
+            "scientific": "Hericium erinaceus",
+            "lookalike": "N/A",
+            "keyDiff": "White cascade of teeth \u2014 no true lookalike"
+          },
+          "attribution": {
+            "observer": "brandonjjohnson",
+            "license": "cc-by",
+            "observationUrl": "https://www.inaturalist.org/observations/354695157"
+          }
+        },
+        {
+          "id": "663751955",
+          "imageUrl": "/forager-game/images/mushroom_highvalue/663751955.jpg",
+          "trueClass": "morels_edible",
+          "trueLabel": "Morels",
+          "options": [
+            "morels_edible",
+            "chanterelles_edible",
+            "high_value_toxics",
+            "ginseng_american"
+          ],
+          "optionLabels": {
+            "morels_edible": "Morels",
+            "chanterelles_edible": "Chanterelles",
+            "high_value_toxics": "High Values",
+            "ginseng_american": "Ginseng American"
+          },
+          "ai": {
+            "predictedClass": "morels_edible",
+            "confidence": 0.9726,
+            "topProbs": {
+              "morels_edible": 0.9726,
+              "chanterelles_edible": 0.0091,
+              "high_value_toxics": 0.0091,
+              "ginseng_american": 0.0091
+            },
+            "correct": true
+          },
+          "metadata": {
+            "safety": "SAFE",
+            "scientific": "Morchella esculenta",
+            "lookalike": "False morel",
+            "keyDiff": "True morel is fully hollow; false morel has cottony interior"
+          },
+          "attribution": {
+            "observer": "jilldevito",
+            "license": "cc0",
+            "observationUrl": "https://www.inaturalist.org/observations/363612194"
+          }
+        },
+        {
+          "id": "662399046",
+          "imageUrl": "/forager-game/images/mushroom_highvalue/662399046.jpg",
+          "trueClass": "morels_edible",
+          "trueLabel": "Morels",
+          "options": [
+            "morels_edible",
+            "chanterelles_edible",
+            "chaga_medicinal",
+            "ostrich_fern_fiddlehead"
+          ],
+          "optionLabels": {
+            "morels_edible": "Morels",
+            "chanterelles_edible": "Chanterelles",
+            "chaga_medicinal": "Chaga",
+            "ostrich_fern_fiddlehead": "Ostrich Fern Fiddlehead"
+          },
+          "ai": {
+            "predictedClass": "morels_edible",
+            "confidence": 0.9704,
+            "topProbs": {
+              "morels_edible": 0.9704,
+              "chanterelles_edible": 0.0094,
+              "chaga_medicinal": 0.0092,
+              "ostrich_fern_fiddlehead": 0.0109
+            },
+            "correct": true
+          },
+          "metadata": {
+            "safety": "SAFE",
+            "scientific": "Morchella esculenta",
+            "lookalike": "False morel",
+            "keyDiff": "True morel is fully hollow; false morel has cottony interior"
+          },
+          "attribution": {
+            "observer": "siphonophoreslinger",
+            "license": "cc-by",
+            "observationUrl": "https://www.inaturalist.org/observations/362903424"
+          }
+        },
+        {
+          "id": "663657638",
+          "imageUrl": "/forager-game/images/mushroom_highvalue/663657638.jpg",
+          "trueClass": "ostrich_fern_fiddlehead",
+          "trueLabel": "Ostrich Fern Fiddlehead",
+          "options": [
+            "ostrich_fern_fiddlehead",
+            "morels_edible",
+            "ramps_wild_leek",
+            "lions_mane"
+          ],
+          "optionLabels": {
+            "ostrich_fern_fiddlehead": "Ostrich Fern Fiddlehead",
+            "morels_edible": "Morels",
+            "ramps_wild_leek": "Ramps Wild Leek",
+            "lions_mane": "Lions Mane"
+          },
+          "ai": {
+            "predictedClass": "ostrich_fern_fiddlehead",
+            "confidence": 0.9714,
+            "topProbs": {
+              "ostrich_fern_fiddlehead": 0.9714,
+              "morels_edible": 0.0111,
+              "ramps_wild_leek": 0.0083,
+              "lions_mane": 0.0092
+            },
+            "correct": true
+          },
+          "metadata": {
+            "safety": "CAUTION",
+            "scientific": "Matteuccia struthiopteris",
+            "lookalike": "Bracken fern",
+            "keyDiff": "Ostrich fern has deep U-shaped groove on stem"
+          },
+          "attribution": {
+            "observer": "open_a_ir",
+            "license": "cc-by",
+            "observationUrl": "https://www.inaturalist.org/observations/363560696"
+          }
+        },
+        {
+          "id": "663152774",
+          "imageUrl": "/forager-game/images/mushroom_highvalue/663152774.jpg",
+          "trueClass": "ostrich_fern_fiddlehead",
+          "trueLabel": "Ostrich Fern Fiddlehead",
+          "options": [
+            "ramps_wild_leek",
+            "chaga_medicinal",
+            "ostrich_fern_fiddlehead",
+            "reishi_northeast"
+          ],
+          "optionLabels": {
+            "ramps_wild_leek": "Ramps Wild Leek",
+            "chaga_medicinal": "Chaga",
+            "ostrich_fern_fiddlehead": "Ostrich Fern Fiddlehead",
+            "reishi_northeast": "Reishi Northeast"
+          },
+          "ai": {
+            "predictedClass": "ostrich_fern_fiddlehead",
+            "confidence": 0.969,
+            "topProbs": {
+              "ramps_wild_leek": 0.0099,
+              "chaga_medicinal": 0.0105,
+              "ostrich_fern_fiddlehead": 0.969,
+              "reishi_northeast": 0.0106
+            },
+            "correct": true
+          },
+          "metadata": {
+            "safety": "CAUTION",
+            "scientific": "Matteuccia struthiopteris",
+            "lookalike": "Bracken fern",
+            "keyDiff": "Ostrich fern has deep U-shaped groove on stem"
+          },
+          "attribution": {
+            "observer": "svitlana-kyiak",
+            "license": "cc0",
+            "observationUrl": "https://www.inaturalist.org/observations/363294522"
+          }
+        },
+        {
+          "id": "663600661",
+          "imageUrl": "/forager-game/images/mushroom_highvalue/663600661.jpg",
+          "trueClass": "ramps_wild_leek",
+          "trueLabel": "Ramps Wild Leek",
+          "options": [
+            "ramps_wild_leek",
+            "chanterelles_edible",
+            "morels_edible",
+            "ostrich_fern_fiddlehead"
+          ],
+          "optionLabels": {
+            "ramps_wild_leek": "Ramps Wild Leek",
+            "chanterelles_edible": "Chanterelles",
+            "morels_edible": "Morels",
+            "ostrich_fern_fiddlehead": "Ostrich Fern Fiddlehead"
+          },
+          "ai": {
+            "predictedClass": "ramps_wild_leek",
+            "confidence": 0.9711,
+            "topProbs": {
+              "ramps_wild_leek": 0.9711,
+              "chanterelles_edible": 0.0095,
+              "morels_edible": 0.009,
+              "ostrich_fern_fiddlehead": 0.0104
+            },
+            "correct": true
+          },
+          "metadata": {
+            "safety": "SAFE",
+            "scientific": "Allium tricoccum",
+            "lookalike": "Lily of the valley",
+            "keyDiff": "Lily of the valley has no garlic smell \u2014 critical check"
+          },
+          "attribution": {
+            "observer": "nickbedard",
+            "license": "cc0",
+            "observationUrl": "https://www.inaturalist.org/observations/363532019"
+          }
+        },
+        {
+          "id": "662075586",
+          "imageUrl": "/forager-game/images/mushroom_highvalue/662075586.jpg",
+          "trueClass": "ramps_wild_leek",
+          "trueLabel": "Ramps Wild Leek",
+          "options": [
+            "saffron_crocus",
+            "chanterelles_edible",
+            "morels_edible",
+            "ramps_wild_leek"
+          ],
+          "optionLabels": {
+            "saffron_crocus": "Saffron Crocus",
+            "chanterelles_edible": "Chanterelles",
+            "morels_edible": "Morels",
+            "ramps_wild_leek": "Ramps Wild Leek"
+          },
+          "ai": {
+            "predictedClass": "ramps_wild_leek",
+            "confidence": 0.9711,
+            "topProbs": {
+              "saffron_crocus": 0.0114,
+              "chanterelles_edible": 0.0093,
+              "morels_edible": 0.0081,
+              "ramps_wild_leek": 0.9711
+            },
+            "correct": true
+          },
+          "metadata": {
+            "safety": "SAFE",
+            "scientific": "Allium tricoccum",
+            "lookalike": "Lily of the valley",
+            "keyDiff": "Lily of the valley has no garlic smell \u2014 critical check"
+          },
+          "attribution": {
+            "observer": "lynnharper",
+            "license": "cc0",
+            "observationUrl": "https://www.inaturalist.org/observations/362868035"
+          }
+        },
+        {
+          "id": "662301033",
+          "imageUrl": "/forager-game/images/mushroom_highvalue/662301033.jpg",
+          "trueClass": "reishi_northeast",
+          "trueLabel": "Reishi Northeast",
+          "options": [
+            "reishi_northeast",
+            "ostrich_fern_fiddlehead",
+            "lions_mane",
+            "ramps_wild_leek"
+          ],
+          "optionLabels": {
+            "reishi_northeast": "Reishi Northeast",
+            "ostrich_fern_fiddlehead": "Ostrich Fern Fiddlehead",
+            "lions_mane": "Lions Mane",
+            "ramps_wild_leek": "Ramps Wild Leek"
+          },
+          "ai": {
+            "predictedClass": "reishi_northeast",
+            "confidence": 0.9727,
+            "topProbs": {
+              "reishi_northeast": 0.9727,
+              "ostrich_fern_fiddlehead": 0.0087,
+              "lions_mane": 0.0096,
+              "ramps_wild_leek": 0.0089
+            },
+            "correct": true
+          },
+          "metadata": {
+            "safety": "SAFE",
+            "scientific": "Ganoderma tsugae",
+            "lookalike": "N/A",
+            "keyDiff": "Shiny lacquered cap, white pore surface"
+          },
+          "attribution": {
+            "observer": "judekesl",
+            "license": "cc-by",
+            "observationUrl": "https://www.inaturalist.org/observations/362854162"
+          }
+        },
+        {
+          "id": "661724917",
+          "imageUrl": "/forager-game/images/mushroom_highvalue/661724917.jpg",
+          "trueClass": "reishi_northeast",
+          "trueLabel": "Reishi Northeast",
+          "options": [
+            "chanterelles_edible",
+            "reishi_northeast",
+            "ginseng_american",
+            "chicken_of_the_woods"
+          ],
+          "optionLabels": {
+            "chanterelles_edible": "Chanterelles",
+            "reishi_northeast": "Reishi Northeast",
+            "ginseng_american": "Ginseng American",
+            "chicken_of_the_woods": "Chicken Of The Woods"
+          },
+          "ai": {
+            "predictedClass": "reishi_northeast",
+            "confidence": 0.9707,
+            "topProbs": {
+              "chanterelles_edible": 0.0095,
+              "reishi_northeast": 0.9707,
+              "ginseng_american": 0.0099,
+              "chicken_of_the_woods": 0.0099
+            },
+            "correct": true
+          },
+          "metadata": {
+            "safety": "SAFE",
+            "scientific": "Ganoderma tsugae",
+            "lookalike": "N/A",
+            "keyDiff": "Shiny lacquered cap, white pore surface"
+          },
+          "attribution": {
+            "observer": "bromine_17",
+            "license": "cc-by",
+            "observationUrl": "https://www.inaturalist.org/observations/362577950"
+          }
+        },
+        {
+          "id": "594057320",
+          "imageUrl": "/forager-game/images/mushroom_highvalue/594057320.jpg",
+          "trueClass": "saffron_crocus",
+          "trueLabel": "Saffron Crocus",
+          "options": [
+            "ostrich_fern_fiddlehead",
+            "saffron_crocus",
+            "ramps_wild_leek",
+            "morels_edible"
+          ],
+          "optionLabels": {
+            "ostrich_fern_fiddlehead": "Ostrich Fern Fiddlehead",
+            "saffron_crocus": "Saffron Crocus",
+            "ramps_wild_leek": "Ramps Wild Leek",
+            "morels_edible": "Morels"
+          },
+          "ai": {
+            "predictedClass": "saffron_crocus",
+            "confidence": 0.9879,
+            "topProbs": {
+              "ostrich_fern_fiddlehead": 0.0054,
+              "saffron_crocus": 0.9879,
+              "ramps_wild_leek": 0.0022,
+              "morels_edible": 0.0044
+            },
+            "correct": true
+          },
+          "metadata": {
+            "safety": "SAFE",
+            "scientific": "Crocus sativus",
+            "lookalike": "Autumn crocus",
+            "keyDiff": "Autumn crocus is highly toxic \u2014 3 stigmas only in saffron"
+          },
+          "attribution": {
+            "observer": "amonsalvesr",
+            "license": "cc-by",
+            "observationUrl": "https://www.inaturalist.org/observations/327878109"
+          }
+        }
+      ]
+    },
+    "medicinal": {
+      "label": "Wild Medicinals",
+      "rounds": [
+        {
+          "id": "664132945",
+          "imageUrl": "/forager-game/images/medicinal/664132945.jpg",
+          "trueClass": "boneset",
+          "trueLabel": "Boneset",
+          "options": [
+            "plantain_broadleaf",
+            "white_snakeroot_toxic",
+            "st_johns_wort",
+            "boneset"
+          ],
+          "optionLabels": {
+            "plantain_broadleaf": "Plantain Broadleaf",
+            "white_snakeroot_toxic": "White Snakeroot",
+            "st_johns_wort": "St Johns Wort",
+            "boneset": "Boneset"
+          },
+          "ai": {
+            "predictedClass": "boneset",
+            "confidence": 0.9322,
+            "topProbs": {
+              "plantain_broadleaf": 0.0124,
+              "white_snakeroot_toxic": 0.0326,
+              "st_johns_wort": 0.0228,
+              "boneset": 0.9322
+            },
+            "correct": true
+          },
+          "metadata": {
+            "safety": "CAUTION",
+            "scientific": "Eupatorium perfoliatum",
+            "lookalike": "White snakeroot",
+            "keyDiff": "White snakeroot has heart-shaped leaves, highly toxic"
+          },
+          "attribution": {
+            "observer": "brandoncorder",
+            "license": "cc-by",
+            "observationUrl": "https://www.inaturalist.org/observations/363817474"
+          }
+        },
+        {
+          "id": "654606182",
+          "imageUrl": "/forager-game/images/medicinal/654606182.jpg",
+          "trueClass": "boneset",
+          "trueLabel": "Boneset",
+          "options": [
+            "white_snakeroot_toxic",
+            "coltsfoot",
+            "boneset",
+            "red_clover"
+          ],
+          "optionLabels": {
+            "white_snakeroot_toxic": "White Snakeroot",
+            "coltsfoot": "Coltsfoot",
+            "boneset": "Boneset",
+            "red_clover": "Red Clover"
+          },
+          "ai": {
+            "predictedClass": "boneset",
+            "confidence": 0.9635,
+            "topProbs": {
+              "white_snakeroot_toxic": 0.0211,
+              "coltsfoot": 0.0071,
+              "boneset": 0.9635,
+              "red_clover": 0.0082
+            },
+            "correct": true
+          },
+          "metadata": {
+            "safety": "CAUTION",
+            "scientific": "Eupatorium perfoliatum",
+            "lookalike": "White snakeroot",
+            "keyDiff": "White snakeroot has heart-shaped leaves, highly toxic"
+          },
+          "attribution": {
+            "observer": "kemper",
+            "license": "cc0",
+            "observationUrl": "https://www.inaturalist.org/observations/358813669"
+          }
+        },
+        {
+          "id": "655929414",
+          "imageUrl": "/forager-game/images/medicinal/655929414.jpg",
+          "trueClass": "burdock",
+          "trueLabel": "Burdock",
+          "options": [
+            "burdock",
+            "poison_hemlock_deadly",
+            "motherwort",
+            "white_snakeroot_toxic"
+          ],
+          "optionLabels": {
+            "burdock": "Burdock",
+            "poison_hemlock_deadly": "Poison Hemlock",
+            "motherwort": "Motherwort",
+            "white_snakeroot_toxic": "White Snakeroot"
+          },
+          "ai": {
+            "predictedClass": "burdock",
+            "confidence": 0.8851,
+            "topProbs": {
+              "burdock": 0.8851,
+              "poison_hemlock_deadly": 0.042,
+              "motherwort": 0.0221,
+              "white_snakeroot_toxic": 0.0508
+            },
+            "correct": true
+          },
+          "metadata": {
+            "safety": "SAFE",
+            "scientific": "Arctium lappa",
+            "lookalike": "Rhubarb (leaves)",
+            "keyDiff": "Rhubarb leaves are highly toxic; burdock has burr seedheads"
+          },
+          "attribution": {
+            "observer": "pete_gateley",
+            "license": "cc0",
+            "observationUrl": "https://www.inaturalist.org/observations/359506848"
+          }
+        },
+        {
+          "id": "652914440",
+          "imageUrl": "/forager-game/images/medicinal/652914440.jpg",
+          "trueClass": "burdock",
+          "trueLabel": "Burdock",
+          "options": [
+            "water_hemlock_deadly",
+            "burdock",
+            "st_johns_wort",
+            "poison_hemlock_deadly"
+          ],
+          "optionLabels": {
+            "water_hemlock_deadly": "Water Hemlock",
+            "burdock": "Burdock",
+            "st_johns_wort": "St Johns Wort",
+            "poison_hemlock_deadly": "Poison Hemlock"
+          },
+          "ai": {
+            "predictedClass": "burdock",
+            "confidence": 0.9435,
+            "topProbs": {
+              "water_hemlock_deadly": 0.0288,
+              "burdock": 0.9435,
+              "st_johns_wort": 0.0068,
+              "poison_hemlock_deadly": 0.0208
+            },
+            "correct": true
+          },
+          "metadata": {
+            "safety": "SAFE",
+            "scientific": "Arctium lappa",
+            "lookalike": "Rhubarb (leaves)",
+            "keyDiff": "Rhubarb leaves are highly toxic; burdock has burr seedheads"
+          },
+          "attribution": {
+            "observer": "janewilcock",
+            "license": "cc0",
+            "observationUrl": "https://www.inaturalist.org/observations/357945317"
+          }
+        },
+        {
+          "id": "661074118",
+          "imageUrl": "/forager-game/images/medicinal/661074118.jpg",
+          "trueClass": "catnip",
+          "trueLabel": "Catnip",
+          "options": [
+            "yarrow",
+            "catnip",
+            "poison_hemlock_deadly",
+            "burdock"
+          ],
+          "optionLabels": {
+            "yarrow": "Yarrow",
+            "catnip": "Catnip",
+            "poison_hemlock_deadly": "Poison Hemlock",
+            "burdock": "Burdock"
+          },
+          "ai": {
+            "predictedClass": "catnip",
+            "confidence": 0.9423,
+            "topProbs": {
+              "yarrow": 0.0136,
+              "catnip": 0.9423,
+              "poison_hemlock_deadly": 0.0364,
+              "burdock": 0.0076
+            },
+            "correct": true
+          },
+          "metadata": {
+            "safety": "SAFE",
+            "scientific": "Nepeta cataria",
+            "lookalike": "N/A",
+            "keyDiff": "Square stem, grey-green downy leaves, minty-musty scent"
+          },
+          "attribution": {
+            "observer": "jfgaskin",
+            "license": "cc0",
+            "observationUrl": "https://www.inaturalist.org/observations/362208242"
+          }
+        },
+        {
+          "id": "659305791",
+          "imageUrl": "/forager-game/images/medicinal/659305791.jpg",
+          "trueClass": "catnip",
+          "trueLabel": "Catnip",
+          "options": [
+            "st_johns_wort",
+            "boneset",
+            "catnip",
+            "stinging_nettle"
+          ],
+          "optionLabels": {
+            "st_johns_wort": "St Johns Wort",
+            "boneset": "Boneset",
+            "catnip": "Catnip",
+            "stinging_nettle": "Stinging Nettle"
+          },
+          "ai": {
+            "predictedClass": "stinging_nettle",
+            "confidence": 0.8457,
+            "topProbs": {
+              "st_johns_wort": 0.0247,
+              "boneset": 0.0255,
+              "catnip": 0.104,
+              "stinging_nettle": 0.8457
+            },
+            "correct": false
+          },
+          "metadata": {
+            "safety": "SAFE",
+            "scientific": "Nepeta cataria",
+            "lookalike": "N/A",
+            "keyDiff": "Square stem, grey-green downy leaves, minty-musty scent"
+          },
+          "attribution": {
+            "observer": "jared_lincenberg",
+            "license": "cc-by",
+            "observationUrl": "https://www.inaturalist.org/observations/361272293"
+          }
+        },
+        {
+          "id": "663834127",
+          "imageUrl": "/forager-game/images/medicinal/663834127.jpg",
+          "trueClass": "coltsfoot",
+          "trueLabel": "Coltsfoot",
+          "options": [
+            "goldenrod",
+            "coltsfoot",
+            "water_hemlock_deadly",
+            "burdock"
+          ],
+          "optionLabels": {
+            "goldenrod": "Goldenrod",
+            "coltsfoot": "Coltsfoot",
+            "water_hemlock_deadly": "Water Hemlock",
+            "burdock": "Burdock"
+          },
+          "ai": {
+            "predictedClass": "coltsfoot",
+            "confidence": 0.9527,
+            "topProbs": {
+              "goldenrod": 0.0064,
+              "coltsfoot": 0.9527,
+              "water_hemlock_deadly": 0.0315,
+              "burdock": 0.0095
+            },
+            "correct": true
+          },
+          "metadata": {
+            "safety": "CAUTION",
+            "scientific": "Tussilago farfara",
+            "lookalike": "Dandelion (flower)",
+            "keyDiff": "Coltsfoot flowers appear before leaves; contains pyrrolizidine alkaloids"
+          },
+          "attribution": {
+            "observer": "lindalotjonen",
+            "license": "cc-by",
+            "observationUrl": "https://www.inaturalist.org/observations/363656162"
+          }
+        },
+        {
+          "id": "663784606",
+          "imageUrl": "/forager-game/images/medicinal/663784606.jpg",
+          "trueClass": "coltsfoot",
+          "trueLabel": "Coltsfoot",
+          "options": [
+            "poison_hemlock_deadly",
+            "echinacea",
+            "white_snakeroot_toxic",
+            "coltsfoot"
+          ],
+          "optionLabels": {
+            "poison_hemlock_deadly": "Poison Hemlock",
+            "echinacea": "Echinacea",
+            "white_snakeroot_toxic": "White Snakeroot",
+            "coltsfoot": "Coltsfoot"
+          },
+          "ai": {
+            "predictedClass": "coltsfoot",
+            "confidence": 0.7225,
+            "topProbs": {
+              "poison_hemlock_deadly": 0.1209,
+              "echinacea": 0.0257,
+              "white_snakeroot_toxic": 0.1309,
+              "coltsfoot": 0.7225
+            },
+            "correct": true
+          },
+          "metadata": {
+            "safety": "CAUTION",
+            "scientific": "Tussilago farfara",
+            "lookalike": "Dandelion (flower)",
+            "keyDiff": "Coltsfoot flowers appear before leaves; contains pyrrolizidine alkaloids"
+          },
+          "attribution": {
+            "observer": "konstantinseliverstov",
+            "license": "cc-by",
+            "observationUrl": "https://www.inaturalist.org/observations/363631973"
+          }
+        },
+        {
+          "id": "663545894",
+          "imageUrl": "/forager-game/images/medicinal/663545894.jpg",
+          "trueClass": "echinacea",
+          "trueLabel": "Echinacea",
+          "options": [
+            "yarrow",
+            "plantain_broadleaf",
+            "white_snakeroot_toxic",
+            "echinacea"
+          ],
+          "optionLabels": {
+            "yarrow": "Yarrow",
+            "plantain_broadleaf": "Plantain Broadleaf",
+            "white_snakeroot_toxic": "White Snakeroot",
+            "echinacea": "Echinacea"
+          },
+          "ai": {
+            "predictedClass": "echinacea",
+            "confidence": 0.9537,
+            "topProbs": {
+              "yarrow": 0.0077,
+              "plantain_broadleaf": 0.0082,
+              "white_snakeroot_toxic": 0.0304,
+              "echinacea": 0.9537
+            },
+            "correct": true
+          },
+          "metadata": {
+            "safety": "SAFE",
+            "scientific": "Echinacea purpurea",
+            "lookalike": "N/A",
+            "keyDiff": "Spiny orange-brown cone with drooping purple rays"
+          },
+          "attribution": {
+            "observer": "michaelthaibinh",
+            "license": "cc-by",
+            "observationUrl": "https://www.inaturalist.org/observations/363504336"
+          }
+        },
+        {
+          "id": "646942562",
+          "imageUrl": "/forager-game/images/medicinal/646942562.jpg",
+          "trueClass": "echinacea",
+          "trueLabel": "Echinacea",
+          "options": [
+            "white_snakeroot_toxic",
+            "echinacea",
+            "coltsfoot",
+            "wood_nettle"
+          ],
+          "optionLabels": {
+            "white_snakeroot_toxic": "White Snakeroot",
+            "echinacea": "Echinacea",
+            "coltsfoot": "Coltsfoot",
+            "wood_nettle": "Wood Nettle"
+          },
+          "ai": {
+            "predictedClass": "echinacea",
+            "confidence": 0.9504,
+            "topProbs": {
+              "white_snakeroot_toxic": 0.0318,
+              "echinacea": 0.9504,
+              "coltsfoot": 0.0063,
+              "wood_nettle": 0.0116
+            },
+            "correct": true
+          },
+          "metadata": {
+            "safety": "SAFE",
+            "scientific": "Echinacea purpurea",
+            "lookalike": "N/A",
+            "keyDiff": "Spiny orange-brown cone with drooping purple rays"
+          },
+          "attribution": {
+            "observer": "michaelthaibinh",
+            "license": "cc-by",
+            "observationUrl": "https://www.inaturalist.org/observations/354656310"
+          }
+        },
+        {
+          "id": "664010673",
+          "imageUrl": "/forager-game/images/medicinal/664010673.jpg",
+          "trueClass": "foxglove_toxic",
+          "trueLabel": "Foxglove",
+          "options": [
+            "boneset",
+            "foxglove_toxic",
+            "echinacea",
+            "st_johns_wort"
+          ],
+          "optionLabels": {
+            "boneset": "Boneset",
+            "foxglove_toxic": "Foxglove",
+            "echinacea": "Echinacea",
+            "st_johns_wort": "St Johns Wort"
+          },
+          "ai": {
+            "predictedClass": "foxglove_toxic",
+            "confidence": 0.9941,
+            "topProbs": {
+              "boneset": 0.001,
+              "foxglove_toxic": 0.9941,
+              "echinacea": 0.0022,
+              "st_johns_wort": 0.0026
+            },
+            "correct": true
+          },
+          "metadata": {
+            "safety": "DEADLY",
+            "scientific": "Digitalis purpurea",
+            "lookalike": "Comfrey (rosette)",
+            "keyDiff": "Tubular spotted flowers; all parts highly toxic \u2014 cardiac glycosides"
+          },
+          "attribution": {
+            "observer": "brewbooks",
+            "license": "cc-by",
+            "observationUrl": "https://www.inaturalist.org/observations/363749416"
+          }
+        },
+        {
+          "id": "663870228",
+          "imageUrl": "/forager-game/images/medicinal/663870228.jpg",
+          "trueClass": "foxglove_toxic",
+          "trueLabel": "Foxglove",
+          "options": [
+            "goldenrod",
+            "boneset",
+            "foxglove_toxic",
+            "wild_bergamot"
+          ],
+          "optionLabels": {
+            "goldenrod": "Goldenrod",
+            "boneset": "Boneset",
+            "foxglove_toxic": "Foxglove",
+            "wild_bergamot": "Wild Bergamot"
+          },
+          "ai": {
+            "predictedClass": "foxglove_toxic",
+            "confidence": 0.988,
+            "topProbs": {
+              "goldenrod": 0.0033,
+              "boneset": 0.0046,
+              "foxglove_toxic": 0.988,
+              "wild_bergamot": 0.0041
+            },
+            "correct": true
+          },
+          "metadata": {
+            "safety": "DEADLY",
+            "scientific": "Digitalis purpurea",
+            "lookalike": "Comfrey (rosette)",
+            "keyDiff": "Tubular spotted flowers; all parts highly toxic \u2014 cardiac glycosides"
+          },
+          "attribution": {
+            "observer": "patricklm35",
+            "license": "cc0",
+            "observationUrl": "https://www.inaturalist.org/observations/363690646"
+          }
+        },
+        {
+          "id": "662045544",
+          "imageUrl": "/forager-game/images/medicinal/662045544.jpg",
+          "trueClass": "goldenrod",
+          "trueLabel": "Goldenrod",
+          "options": [
+            "catnip",
+            "goldenrod",
+            "mullein",
+            "yarrow"
+          ],
+          "optionLabels": {
+            "catnip": "Catnip",
+            "goldenrod": "Goldenrod",
+            "mullein": "Mullein",
+            "yarrow": "Yarrow"
+          },
+          "ai": {
+            "predictedClass": "goldenrod",
+            "confidence": 0.9346,
+            "topProbs": {
+              "catnip": 0.0246,
+              "goldenrod": 0.9346,
+              "mullein": 0.0204,
+              "yarrow": 0.0204
+            },
+            "correct": true
+          },
+          "metadata": {
+            "safety": "SAFE",
+            "scientific": "Solidago canadensis",
+            "lookalike": "N/A",
+            "keyDiff": "Arching plumes of small yellow flowers in late summer"
+          },
+          "attribution": {
+            "observer": "igor117",
+            "license": "cc-by",
+            "observationUrl": "https://www.inaturalist.org/observations/362717908"
+          }
+        },
+        {
+          "id": "658737923",
+          "imageUrl": "/forager-game/images/medicinal/658737923.jpg",
+          "trueClass": "goldenrod",
+          "trueLabel": "Goldenrod",
+          "options": [
+            "goldenrod",
+            "boneset",
+            "red_clover",
+            "mullein"
+          ],
+          "optionLabels": {
+            "goldenrod": "Goldenrod",
+            "boneset": "Boneset",
+            "red_clover": "Red Clover",
+            "mullein": "Mullein"
+          },
+          "ai": {
+            "predictedClass": "goldenrod",
+            "confidence": 0.9499,
+            "topProbs": {
+              "goldenrod": 0.9499,
+              "boneset": 0.0136,
+              "red_clover": 0.017,
+              "mullein": 0.0194
+            },
+            "correct": true
+          },
+          "metadata": {
+            "safety": "SAFE",
+            "scientific": "Solidago canadensis",
+            "lookalike": "N/A",
+            "keyDiff": "Arching plumes of small yellow flowers in late summer"
+          },
+          "attribution": {
+            "observer": "smpbiologist-jwilliams",
+            "license": "cc-by",
+            "observationUrl": "https://www.inaturalist.org/observations/360983876"
+          }
+        },
+        {
+          "id": "663602887",
+          "imageUrl": "/forager-game/images/medicinal/663602887.jpg",
+          "trueClass": "motherwort",
+          "trueLabel": "Motherwort",
+          "options": [
+            "motherwort",
+            "wild_bergamot",
+            "white_snakeroot_toxic",
+            "poison_hemlock_deadly"
+          ],
+          "optionLabels": {
+            "motherwort": "Motherwort",
+            "wild_bergamot": "Wild Bergamot",
+            "white_snakeroot_toxic": "White Snakeroot",
+            "poison_hemlock_deadly": "Poison Hemlock"
+          },
+          "ai": {
+            "predictedClass": "motherwort",
+            "confidence": 0.9166,
+            "topProbs": {
+              "motherwort": 0.9166,
+              "wild_bergamot": 0.0179,
+              "white_snakeroot_toxic": 0.0347,
+              "poison_hemlock_deadly": 0.0308
+            },
+            "correct": true
+          },
+          "metadata": {
+            "safety": "CAUTION",
+            "scientific": "Leonurus cardiaca",
+            "lookalike": "N/A",
+            "keyDiff": "Square stem, deeply lobed leaves, pink-purple flowers"
+          },
+          "attribution": {
+            "observer": "liren",
+            "license": "cc-by",
+            "observationUrl": "https://www.inaturalist.org/observations/363534776"
+          }
+        },
+        {
+          "id": "663048981",
+          "imageUrl": "/forager-game/images/medicinal/663048981.jpg",
+          "trueClass": "motherwort",
+          "trueLabel": "Motherwort",
+          "options": [
+            "echinacea",
+            "water_hemlock_deadly",
+            "valerian",
+            "motherwort"
+          ],
+          "optionLabels": {
+            "echinacea": "Echinacea",
+            "water_hemlock_deadly": "Water Hemlock",
+            "valerian": "Valerian",
+            "motherwort": "Motherwort"
+          },
+          "ai": {
+            "predictedClass": "motherwort",
+            "confidence": 0.9368,
+            "topProbs": {
+              "echinacea": 0.0091,
+              "water_hemlock_deadly": 0.0443,
+              "valerian": 0.0098,
+              "motherwort": 0.9368
+            },
+            "correct": true
+          },
+          "metadata": {
+            "safety": "CAUTION",
+            "scientific": "Leonurus cardiaca",
+            "lookalike": "N/A",
+            "keyDiff": "Square stem, deeply lobed leaves, pink-purple flowers"
+          },
+          "attribution": {
+            "observer": "kodiakgarden",
+            "license": "cc-by",
+            "observationUrl": "https://www.inaturalist.org/observations/363242080"
+          }
+        },
+        {
+          "id": "663907038",
+          "imageUrl": "/forager-game/images/medicinal/663907038.jpg",
+          "trueClass": "mullein",
+          "trueLabel": "Mullein",
+          "options": [
+            "burdock",
+            "st_johns_wort",
+            "mullein",
+            "valerian"
+          ],
+          "optionLabels": {
+            "burdock": "Burdock",
+            "st_johns_wort": "St Johns Wort",
+            "mullein": "Mullein",
+            "valerian": "Valerian"
+          },
+          "ai": {
+            "predictedClass": "mullein",
+            "confidence": 0.9346,
+            "topProbs": {
+              "burdock": 0.0359,
+              "st_johns_wort": 0.0131,
+              "mullein": 0.9346,
+              "valerian": 0.0163
+            },
+            "correct": true
+          },
+          "metadata": {
+            "safety": "SAFE",
+            "scientific": "Verbascum thapsus",
+            "lookalike": "N/A",
+            "keyDiff": "Distinctive tall spike, large velvety basal rosette leaves"
+          },
+          "attribution": {
+            "observer": "peterq",
+            "license": "cc-by",
+            "observationUrl": "https://www.inaturalist.org/observations/363695958"
+          }
+        },
+        {
+          "id": "663347324",
+          "imageUrl": "/forager-game/images/medicinal/663347324.jpg",
+          "trueClass": "mullein",
+          "trueLabel": "Mullein",
+          "options": [
+            "poison_hemlock_deadly",
+            "catnip",
+            "stinging_nettle",
+            "mullein"
+          ],
+          "optionLabels": {
+            "poison_hemlock_deadly": "Poison Hemlock",
+            "catnip": "Catnip",
+            "stinging_nettle": "Stinging Nettle",
+            "mullein": "Mullein"
+          },
+          "ai": {
+            "predictedClass": "mullein",
+            "confidence": 0.9231,
+            "topProbs": {
+              "poison_hemlock_deadly": 0.0427,
+              "catnip": 0.0179,
+              "stinging_nettle": 0.0163,
+              "mullein": 0.9231
+            },
+            "correct": true
+          },
+          "metadata": {
+            "safety": "SAFE",
+            "scientific": "Verbascum thapsus",
+            "lookalike": "N/A",
+            "keyDiff": "Distinctive tall spike, large velvety basal rosette leaves"
+          },
+          "attribution": {
+            "observer": "crowwithapen",
+            "license": "cc-by",
+            "observationUrl": "https://www.inaturalist.org/observations/363401727"
+          }
+        },
+        {
+          "id": "664083246",
+          "imageUrl": "/forager-game/images/medicinal/664083246.jpg",
+          "trueClass": "plantain_broadleaf",
+          "trueLabel": "Plantain Broadleaf",
+          "options": [
+            "motherwort",
+            "stinging_nettle",
+            "mullein",
+            "plantain_broadleaf"
+          ],
+          "optionLabels": {
+            "motherwort": "Motherwort",
+            "stinging_nettle": "Stinging Nettle",
+            "mullein": "Mullein",
+            "plantain_broadleaf": "Plantain Broadleaf"
+          },
+          "ai": {
+            "predictedClass": "plantain_broadleaf",
+            "confidence": 0.9365,
+            "topProbs": {
+              "motherwort": 0.0214,
+              "stinging_nettle": 0.022,
+              "mullein": 0.02,
+              "plantain_broadleaf": 0.9365
+            },
+            "correct": true
+          },
+          "metadata": {
+            "safety": "SAFE",
+            "scientific": "Plantago major",
+            "lookalike": "N/A",
+            "keyDiff": "Oval ribbed leaves, parallel veins, narrow seedhead spike"
+          },
+          "attribution": {
+            "observer": "catricat",
+            "license": "cc-by",
+            "observationUrl": "https://www.inaturalist.org/observations/363788185"
+          }
+        },
+        {
+          "id": "663685213",
+          "imageUrl": "/forager-game/images/medicinal/663685213.jpg",
+          "trueClass": "plantain_broadleaf",
+          "trueLabel": "Plantain Broadleaf",
+          "options": [
+            "wood_nettle",
+            "water_hemlock_deadly",
+            "white_snakeroot_toxic",
+            "plantain_broadleaf"
+          ],
+          "optionLabels": {
+            "wood_nettle": "Wood Nettle",
+            "water_hemlock_deadly": "Water Hemlock",
+            "white_snakeroot_toxic": "White Snakeroot",
+            "plantain_broadleaf": "Plantain Broadleaf"
+          },
+          "ai": {
+            "predictedClass": "plantain_broadleaf",
+            "confidence": 0.8574,
+            "topProbs": {
+              "wood_nettle": 0.0202,
+              "water_hemlock_deadly": 0.0653,
+              "white_snakeroot_toxic": 0.057,
+              "plantain_broadleaf": 0.8574
+            },
+            "correct": true
+          },
+          "metadata": {
+            "safety": "SAFE",
+            "scientific": "Plantago major",
+            "lookalike": "N/A",
+            "keyDiff": "Oval ribbed leaves, parallel veins, narrow seedhead spike"
+          },
+          "attribution": {
+            "observer": "guywallbanks",
+            "license": "cc-by",
+            "observationUrl": "https://www.inaturalist.org/observations/363576237"
+          }
+        },
+        {
+          "id": "664070149",
+          "imageUrl": "/forager-game/images/medicinal/664070149.jpg",
+          "trueClass": "poison_hemlock_deadly",
+          "trueLabel": "Poison Hemlock",
+          "options": [
+            "poison_hemlock_deadly",
+            "wild_bergamot",
+            "wild_carrot",
+            "yarrow"
+          ],
+          "optionLabels": {
+            "poison_hemlock_deadly": "Poison Hemlock",
+            "wild_bergamot": "Wild Bergamot",
+            "wild_carrot": "Wild Carrot",
+            "yarrow": "Yarrow"
+          },
+          "ai": {
+            "predictedClass": "poison_hemlock_deadly",
+            "confidence": 0.9882,
+            "topProbs": {
+              "poison_hemlock_deadly": 0.9882,
+              "wild_bergamot": 0.0045,
+              "wild_carrot": 0.0033,
+              "yarrow": 0.004
+            },
+            "correct": true
+          },
+          "metadata": {
+            "safety": "DEADLY",
+            "scientific": "Conium maculatum",
+            "lookalike": "Wild carrot",
+            "keyDiff": "Purple-blotched hollow stem, musty smell \u2014 ALL parts deadly"
+          },
+          "attribution": {
+            "observer": "grnleaf",
+            "license": "cc0",
+            "observationUrl": "https://www.inaturalist.org/observations/363781314"
+          }
+        },
+        {
+          "id": "663501882",
+          "imageUrl": "/forager-game/images/medicinal/663501882.jpg",
+          "trueClass": "poison_hemlock_deadly",
+          "trueLabel": "Poison Hemlock",
+          "options": [
+            "poison_hemlock_deadly",
+            "foxglove_toxic",
+            "wild_bergamot",
+            "wild_carrot"
+          ],
+          "optionLabels": {
+            "poison_hemlock_deadly": "Poison Hemlock",
+            "foxglove_toxic": "Foxglove",
+            "wild_bergamot": "Wild Bergamot",
+            "wild_carrot": "Wild Carrot"
+          },
+          "ai": {
+            "predictedClass": "poison_hemlock_deadly",
+            "confidence": 0.9783,
+            "topProbs": {
+              "poison_hemlock_deadly": 0.9783,
+              "foxglove_toxic": 0.0134,
+              "wild_bergamot": 0.0045,
+              "wild_carrot": 0.0038
+            },
+            "correct": true
+          },
+          "metadata": {
+            "safety": "DEADLY",
+            "scientific": "Conium maculatum",
+            "lookalike": "Wild carrot",
+            "keyDiff": "Purple-blotched hollow stem, musty smell \u2014 ALL parts deadly"
+          },
+          "attribution": {
+            "observer": "hh525",
+            "license": "cc-by",
+            "observationUrl": "https://www.inaturalist.org/observations/363482680"
+          }
+        },
+        {
+          "id": "664129087",
+          "imageUrl": "/forager-game/images/medicinal/664129087.jpg",
+          "trueClass": "red_clover",
+          "trueLabel": "Red Clover",
+          "options": [
+            "red_clover",
+            "yarrow",
+            "plantain_broadleaf",
+            "coltsfoot"
+          ],
+          "optionLabels": {
+            "red_clover": "Red Clover",
+            "yarrow": "Yarrow",
+            "plantain_broadleaf": "Plantain Broadleaf",
+            "coltsfoot": "Coltsfoot"
+          },
+          "ai": {
+            "predictedClass": "red_clover",
+            "confidence": 0.962,
+            "topProbs": {
+              "red_clover": 0.962,
+              "yarrow": 0.0177,
+              "plantain_broadleaf": 0.0102,
+              "coltsfoot": 0.01
+            },
+            "correct": true
+          },
+          "metadata": {
+            "safety": "SAFE",
+            "scientific": "Trifolium pratense",
+            "lookalike": "N/A",
+            "keyDiff": "Pink-purple globe flowers, trifoliate leaves with pale V-chevron"
+          },
+          "attribution": {
+            "observer": "edmcnierney",
+            "license": "cc0",
+            "observationUrl": "https://www.inaturalist.org/observations/363811219"
+          }
+        },
+        {
+          "id": "664080133",
+          "imageUrl": "/forager-game/images/medicinal/664080133.jpg",
+          "trueClass": "red_clover",
+          "trueLabel": "Red Clover",
+          "options": [
+            "foxglove_toxic",
+            "red_clover",
+            "valerian",
+            "water_hemlock_deadly"
+          ],
+          "optionLabels": {
+            "foxglove_toxic": "Foxglove",
+            "red_clover": "Red Clover",
+            "valerian": "Valerian",
+            "water_hemlock_deadly": "Water Hemlock"
+          },
+          "ai": {
+            "predictedClass": "red_clover",
+            "confidence": 0.8467,
+            "topProbs": {
+              "foxglove_toxic": 0.057,
+              "red_clover": 0.8467,
+              "valerian": 0.0216,
+              "water_hemlock_deadly": 0.0747
+            },
+            "correct": true
+          },
+          "metadata": {
+            "safety": "SAFE",
+            "scientific": "Trifolium pratense",
+            "lookalike": "N/A",
+            "keyDiff": "Pink-purple globe flowers, trifoliate leaves with pale V-chevron"
+          },
+          "attribution": {
+            "observer": "peakaytea",
+            "license": "cc0",
+            "observationUrl": "https://www.inaturalist.org/observations/363786508"
+          }
+        },
+        {
+          "id": "663794138",
+          "imageUrl": "/forager-game/images/medicinal/663794138.jpg",
+          "trueClass": "st_johns_wort",
+          "trueLabel": "St Johns Wort",
+          "options": [
+            "burdock",
+            "goldenrod",
+            "motherwort",
+            "st_johns_wort"
+          ],
+          "optionLabels": {
+            "burdock": "Burdock",
+            "goldenrod": "Goldenrod",
+            "motherwort": "Motherwort",
+            "st_johns_wort": "St Johns Wort"
+          },
+          "ai": {
+            "predictedClass": "st_johns_wort",
+            "confidence": 0.9576,
+            "topProbs": {
+              "burdock": 0.0154,
+              "goldenrod": 0.0104,
+              "motherwort": 0.0167,
+              "st_johns_wort": 0.9576
+            },
+            "correct": true
+          },
+          "metadata": {
+            "safety": "CAUTION",
+            "scientific": "Hypericum perforatum",
+            "lookalike": "N/A",
+            "keyDiff": "Yellow 5-petalled flowers with black dots; photosensitizing"
+          },
+          "attribution": {
+            "observer": "konstantinseliverstov",
+            "license": "cc-by",
+            "observationUrl": "https://www.inaturalist.org/observations/363636097"
+          }
+        },
+        {
+          "id": "662217849",
+          "imageUrl": "/forager-game/images/medicinal/662217849.jpg",
+          "trueClass": "st_johns_wort",
+          "trueLabel": "St Johns Wort",
+          "options": [
+            "st_johns_wort",
+            "catnip",
+            "yarrow",
+            "coltsfoot"
+          ],
+          "optionLabels": {
+            "st_johns_wort": "St Johns Wort",
+            "catnip": "Catnip",
+            "yarrow": "Yarrow",
+            "coltsfoot": "Coltsfoot"
+          },
+          "ai": {
+            "predictedClass": "st_johns_wort",
+            "confidence": 0.9528,
+            "topProbs": {
+              "st_johns_wort": 0.9528,
+              "catnip": 0.0163,
+              "yarrow": 0.0152,
+              "coltsfoot": 0.0157
+            },
+            "correct": true
+          },
+          "metadata": {
+            "safety": "CAUTION",
+            "scientific": "Hypericum perforatum",
+            "lookalike": "N/A",
+            "keyDiff": "Yellow 5-petalled flowers with black dots; photosensitizing"
+          },
+          "attribution": {
+            "observer": "duarte",
+            "license": "cc-by",
+            "observationUrl": "https://www.inaturalist.org/observations/362813397"
+          }
+        },
+        {
+          "id": "664007842",
+          "imageUrl": "/forager-game/images/medicinal/664007842.jpg",
+          "trueClass": "stinging_nettle",
+          "trueLabel": "Stinging Nettle",
+          "options": [
+            "wood_nettle",
+            "poison_hemlock_deadly",
+            "plantain_broadleaf",
+            "stinging_nettle"
+          ],
+          "optionLabels": {
+            "wood_nettle": "Wood Nettle",
+            "poison_hemlock_deadly": "Poison Hemlock",
+            "plantain_broadleaf": "Plantain Broadleaf",
+            "stinging_nettle": "Stinging Nettle"
+          },
+          "ai": {
+            "predictedClass": "stinging_nettle",
+            "confidence": 0.9541,
+            "topProbs": {
+              "wood_nettle": 0.013,
+              "poison_hemlock_deadly": 0.0246,
+              "plantain_broadleaf": 0.0084,
+              "stinging_nettle": 0.9541
+            },
+            "correct": true
+          },
+          "metadata": {
+            "safety": "SAFE",
+            "scientific": "Urtica dioica",
+            "lookalike": "Wood nettle",
+            "keyDiff": "Cook or dry to neutralize sting; serrated leaves, opposite pairs"
+          },
+          "attribution": {
+            "observer": "gwheelereb",
+            "license": "cc0",
+            "observationUrl": "https://www.inaturalist.org/observations/363747901"
+          }
+        },
+        {
+          "id": "664055795",
+          "imageUrl": "/forager-game/images/medicinal/664055795.jpg",
+          "trueClass": "stinging_nettle",
+          "trueLabel": "Stinging Nettle",
+          "options": [
+            "coltsfoot",
+            "red_clover",
+            "wood_nettle",
+            "stinging_nettle"
+          ],
+          "optionLabels": {
+            "coltsfoot": "Coltsfoot",
+            "red_clover": "Red Clover",
+            "wood_nettle": "Wood Nettle",
+            "stinging_nettle": "Stinging Nettle"
+          },
+          "ai": {
+            "predictedClass": "stinging_nettle",
+            "confidence": 0.7815,
+            "topProbs": {
+              "coltsfoot": 0.0594,
+              "red_clover": 0.0601,
+              "wood_nettle": 0.0989,
+              "stinging_nettle": 0.7815
+            },
+            "correct": true
+          },
+          "metadata": {
+            "safety": "SAFE",
+            "scientific": "Urtica dioica",
+            "lookalike": "Wood nettle",
+            "keyDiff": "Cook or dry to neutralize sting; serrated leaves, opposite pairs"
+          },
+          "attribution": {
+            "observer": "guywallbanks",
+            "license": "cc-by",
+            "observationUrl": "https://www.inaturalist.org/observations/363774133"
+          }
+        },
+        {
+          "id": "663497787",
+          "imageUrl": "/forager-game/images/medicinal/663497787.jpg",
+          "trueClass": "valerian",
+          "trueLabel": "Valerian",
+          "options": [
+            "motherwort",
+            "water_hemlock_deadly",
+            "plantain_broadleaf",
+            "valerian"
+          ],
+          "optionLabels": {
+            "motherwort": "Motherwort",
+            "water_hemlock_deadly": "Water Hemlock",
+            "plantain_broadleaf": "Plantain Broadleaf",
+            "valerian": "Valerian"
+          },
+          "ai": {
+            "predictedClass": "valerian",
+            "confidence": 0.9485,
+            "topProbs": {
+              "motherwort": 0.007,
+              "water_hemlock_deadly": 0.035,
+              "plantain_broadleaf": 0.0095,
+              "valerian": 0.9485
+            },
+            "correct": true
+          },
+          "metadata": {
+            "safety": "CAUTION",
+            "scientific": "Valeriana officinalis",
+            "lookalike": "Water hemlock",
+            "keyDiff": "Water hemlock has purple-streaked hollow stem; valerian has pinnate leaves"
+          },
+          "attribution": {
+            "observer": "scottshanks",
+            "license": "cc-by",
+            "observationUrl": "https://www.inaturalist.org/observations/363480058"
+          }
+        },
+        {
+          "id": "663262244",
+          "imageUrl": "/forager-game/images/medicinal/663262244.jpg",
+          "trueClass": "valerian",
+          "trueLabel": "Valerian",
+          "options": [
+            "mullein",
+            "goldenrod",
+            "valerian",
+            "water_hemlock_deadly"
+          ],
+          "optionLabels": {
+            "mullein": "Mullein",
+            "goldenrod": "Goldenrod",
+            "valerian": "Valerian",
+            "water_hemlock_deadly": "Water Hemlock"
+          },
+          "ai": {
+            "predictedClass": "water_hemlock_deadly",
+            "confidence": 0.7193,
+            "topProbs": {
+              "mullein": 0.0095,
+              "goldenrod": 0.0156,
+              "valerian": 0.2556,
+              "water_hemlock_deadly": 0.7193
+            },
+            "correct": false
+          },
+          "metadata": {
+            "safety": "CAUTION",
+            "scientific": "Valeriana officinalis",
+            "lookalike": "Water hemlock",
+            "keyDiff": "Water hemlock has purple-streaked hollow stem; valerian has pinnate leaves"
+          },
+          "attribution": {
+            "observer": "viktorstrenada",
+            "license": "cc-by",
+            "observationUrl": "https://www.inaturalist.org/observations/363355938"
+          }
+        },
+        {
+          "id": "663601237",
+          "imageUrl": "/forager-game/images/medicinal/663601237.jpg",
+          "trueClass": "water_hemlock_deadly",
+          "trueLabel": "Water Hemlock",
+          "options": [
+            "wild_bergamot",
+            "water_hemlock_deadly",
+            "boneset",
+            "valerian"
+          ],
+          "optionLabels": {
+            "wild_bergamot": "Wild Bergamot",
+            "water_hemlock_deadly": "Water Hemlock",
+            "boneset": "Boneset",
+            "valerian": "Valerian"
+          },
+          "ai": {
+            "predictedClass": "water_hemlock_deadly",
+            "confidence": 0.9848,
+            "topProbs": {
+              "wild_bergamot": 0.005,
+              "water_hemlock_deadly": 0.9848,
+              "boneset": 0.0051,
+              "valerian": 0.0051
+            },
+            "correct": true
+          },
+          "metadata": {
+            "safety": "DEADLY",
+            "scientific": "Cicuta maculata",
+            "lookalike": "Wild carrot / Valerian",
+            "keyDiff": "Chambered root, purple-streaked hollow stem \u2014 most violently toxic plant in NA"
+          },
+          "attribution": {
+            "observer": "brandoncorder",
+            "license": "cc-by",
+            "observationUrl": "https://www.inaturalist.org/observations/363532769"
+          }
+        },
+        {
+          "id": "663372642",
+          "imageUrl": "/forager-game/images/medicinal/663372642.jpg",
+          "trueClass": "water_hemlock_deadly",
+          "trueLabel": "Water Hemlock",
+          "options": [
+            "valerian",
+            "water_hemlock_deadly",
+            "wild_bergamot",
+            "coltsfoot"
+          ],
+          "optionLabels": {
+            "valerian": "Valerian",
+            "water_hemlock_deadly": "Water Hemlock",
+            "wild_bergamot": "Wild Bergamot",
+            "coltsfoot": "Coltsfoot"
+          },
+          "ai": {
+            "predictedClass": "water_hemlock_deadly",
+            "confidence": 0.9916,
+            "topProbs": {
+              "valerian": 0.0031,
+              "water_hemlock_deadly": 0.9916,
+              "wild_bergamot": 0.0031,
+              "coltsfoot": 0.0021
+            },
+            "correct": true
+          },
+          "metadata": {
+            "safety": "DEADLY",
+            "scientific": "Cicuta maculata",
+            "lookalike": "Wild carrot / Valerian",
+            "keyDiff": "Chambered root, purple-streaked hollow stem \u2014 most violently toxic plant in NA"
+          },
+          "attribution": {
+            "observer": "peterq",
+            "license": "cc-by",
+            "observationUrl": "https://www.inaturalist.org/observations/363416202"
+          }
+        },
+        {
+          "id": "663558231",
+          "imageUrl": "/forager-game/images/medicinal/663558231.jpg",
+          "trueClass": "white_snakeroot_toxic",
+          "trueLabel": "White Snakeroot",
+          "options": [
+            "white_snakeroot_toxic",
+            "wild_carrot",
+            "boneset",
+            "plantain_broadleaf"
+          ],
+          "optionLabels": {
+            "white_snakeroot_toxic": "White Snakeroot",
+            "wild_carrot": "Wild Carrot",
+            "boneset": "Boneset",
+            "plantain_broadleaf": "Plantain Broadleaf"
+          },
+          "ai": {
+            "predictedClass": "white_snakeroot_toxic",
+            "confidence": 0.9898,
+            "topProbs": {
+              "white_snakeroot_toxic": 0.9898,
+              "wild_carrot": 0.0031,
+              "boneset": 0.0039,
+              "plantain_broadleaf": 0.0032
+            },
+            "correct": true
+          },
+          "metadata": {
+            "safety": "DEADLY",
+            "scientific": "Ageratina altissima",
+            "lookalike": "Boneset",
+            "keyDiff": "Heart-shaped leaves, flat-topped white flowers; causes milk sickness"
+          },
+          "attribution": {
+            "observer": "olistr",
+            "license": "cc-by",
+            "observationUrl": "https://www.inaturalist.org/observations/363510209"
+          }
+        },
+        {
+          "id": "662262356",
+          "imageUrl": "/forager-game/images/medicinal/662262356.jpg",
+          "trueClass": "white_snakeroot_toxic",
+          "trueLabel": "White Snakeroot",
+          "options": [
+            "white_snakeroot_toxic",
+            "catnip",
+            "coltsfoot",
+            "boneset"
+          ],
+          "optionLabels": {
+            "white_snakeroot_toxic": "White Snakeroot",
+            "catnip": "Catnip",
+            "coltsfoot": "Coltsfoot",
+            "boneset": "Boneset"
+          },
+          "ai": {
+            "predictedClass": "white_snakeroot_toxic",
+            "confidence": 0.989,
+            "topProbs": {
+              "white_snakeroot_toxic": 0.989,
+              "catnip": 0.0037,
+              "coltsfoot": 0.0033,
+              "boneset": 0.0041
+            },
+            "correct": true
+          },
+          "metadata": {
+            "safety": "DEADLY",
+            "scientific": "Ageratina altissima",
+            "lookalike": "Boneset",
+            "keyDiff": "Heart-shaped leaves, flat-topped white flowers; causes milk sickness"
+          },
+          "attribution": {
+            "observer": "betsyyyy",
+            "license": "cc-by",
+            "observationUrl": "https://www.inaturalist.org/observations/362833932"
+          }
+        },
+        {
+          "id": "663615659",
+          "imageUrl": "/forager-game/images/medicinal/663615659.jpg",
+          "trueClass": "wild_bergamot",
+          "trueLabel": "Wild Bergamot",
+          "options": [
+            "wild_bergamot",
+            "motherwort",
+            "white_snakeroot_toxic",
+            "coltsfoot"
+          ],
+          "optionLabels": {
+            "wild_bergamot": "Wild Bergamot",
+            "motherwort": "Motherwort",
+            "white_snakeroot_toxic": "White Snakeroot",
+            "coltsfoot": "Coltsfoot"
+          },
+          "ai": {
+            "predictedClass": "wild_bergamot",
+            "confidence": 0.8114,
+            "topProbs": {
+              "wild_bergamot": 0.8114,
+              "motherwort": 0.022,
+              "white_snakeroot_toxic": 0.1429,
+              "coltsfoot": 0.0237
+            },
+            "correct": true
+          },
+          "metadata": {
+            "safety": "SAFE",
+            "scientific": "Monarda fistulosa",
+            "lookalike": "N/A",
+            "keyDiff": "Lavender ragged flowers, square stem, oregano-like scent"
+          },
+          "attribution": {
+            "observer": "brandoncorder",
+            "license": "cc-by",
+            "observationUrl": "https://www.inaturalist.org/observations/363539653"
+          }
+        },
+        {
+          "id": "661189689",
+          "imageUrl": "/forager-game/images/medicinal/661189689.jpg",
+          "trueClass": "wild_bergamot",
+          "trueLabel": "Wild Bergamot",
+          "options": [
+            "yarrow",
+            "coltsfoot",
+            "wild_bergamot",
+            "wood_nettle"
+          ],
+          "optionLabels": {
+            "yarrow": "Yarrow",
+            "coltsfoot": "Coltsfoot",
+            "wild_bergamot": "Wild Bergamot",
+            "wood_nettle": "Wood Nettle"
+          },
+          "ai": {
+            "predictedClass": "wild_bergamot",
+            "confidence": 0.9679,
+            "topProbs": {
+              "yarrow": 0.0083,
+              "coltsfoot": 0.0086,
+              "wild_bergamot": 0.9679,
+              "wood_nettle": 0.0152
+            },
+            "correct": true
+          },
+          "metadata": {
+            "safety": "SAFE",
+            "scientific": "Monarda fistulosa",
+            "lookalike": "N/A",
+            "keyDiff": "Lavender ragged flowers, square stem, oregano-like scent"
+          },
+          "attribution": {
+            "observer": "briggsarmstrong",
+            "license": "cc-by",
+            "observationUrl": "https://www.inaturalist.org/observations/362264019"
+          }
+        },
+        {
+          "id": "663896730",
+          "imageUrl": "/forager-game/images/medicinal/663896730.jpg",
+          "trueClass": "wild_carrot",
+          "trueLabel": "Wild Carrot",
+          "options": [
+            "wild_carrot",
+            "poison_hemlock_deadly",
+            "boneset",
+            "st_johns_wort"
+          ],
+          "optionLabels": {
+            "wild_carrot": "Wild Carrot",
+            "poison_hemlock_deadly": "Poison Hemlock",
+            "boneset": "Boneset",
+            "st_johns_wort": "St Johns Wort"
+          },
+          "ai": {
+            "predictedClass": "wild_carrot",
+            "confidence": 0.9225,
+            "topProbs": {
+              "wild_carrot": 0.9225,
+              "poison_hemlock_deadly": 0.0464,
+              "boneset": 0.0151,
+              "st_johns_wort": 0.0161
+            },
+            "correct": true
+          },
+          "metadata": {
+            "safety": "CAUTION",
+            "scientific": "Daucus carota",
+            "lookalike": "Poison hemlock",
+            "keyDiff": "Hairy stem, central purple floret, carroty smell"
+          },
+          "attribution": {
+            "observer": "grysumi",
+            "license": "cc0",
+            "observationUrl": "https://www.inaturalist.org/observations/363690287"
+          }
+        },
+        {
+          "id": "663646397",
+          "imageUrl": "/forager-game/images/medicinal/663646397.jpg",
+          "trueClass": "wild_carrot",
+          "trueLabel": "Wild Carrot",
+          "options": [
+            "poison_hemlock_deadly",
+            "wild_bergamot",
+            "wild_carrot",
+            "burdock"
+          ],
+          "optionLabels": {
+            "poison_hemlock_deadly": "Poison Hemlock",
+            "wild_bergamot": "Wild Bergamot",
+            "wild_carrot": "Wild Carrot",
+            "burdock": "Burdock"
+          },
+          "ai": {
+            "predictedClass": "wild_carrot",
+            "confidence": 0.8699,
+            "topProbs": {
+              "poison_hemlock_deadly": 0.057,
+              "wild_bergamot": 0.0205,
+              "wild_carrot": 0.8699,
+              "burdock": 0.0526
+            },
+            "correct": true
+          },
+          "metadata": {
+            "safety": "CAUTION",
+            "scientific": "Daucus carota",
+            "lookalike": "Poison hemlock",
+            "keyDiff": "Hairy stem, central purple floret, carroty smell"
+          },
+          "attribution": {
+            "observer": "gaudettelaura",
+            "license": "cc-by",
+            "observationUrl": "https://www.inaturalist.org/observations/363556012"
+          }
+        },
+        {
+          "id": "663823067",
+          "imageUrl": "/forager-game/images/medicinal/663823067.jpg",
+          "trueClass": "wood_nettle",
+          "trueLabel": "Wood Nettle",
+          "options": [
+            "stinging_nettle",
+            "red_clover",
+            "wood_nettle",
+            "st_johns_wort"
+          ],
+          "optionLabels": {
+            "stinging_nettle": "Stinging Nettle",
+            "red_clover": "Red Clover",
+            "wood_nettle": "Wood Nettle",
+            "st_johns_wort": "St Johns Wort"
+          },
+          "ai": {
+            "predictedClass": "wood_nettle",
+            "confidence": 0.9614,
+            "topProbs": {
+              "stinging_nettle": 0.0178,
+              "red_clover": 0.0092,
+              "wood_nettle": 0.9614,
+              "st_johns_wort": 0.0116
+            },
+            "correct": true
+          },
+          "metadata": {
+            "safety": "SAFE",
+            "scientific": "Laportea canadensis",
+            "lookalike": "Stinging nettle",
+            "keyDiff": "Alternate leaves (vs opposite in stinging nettle); forested habitat"
+          },
+          "attribution": {
+            "observer": "dionaea_nc",
+            "license": "cc-by",
+            "observationUrl": "https://www.inaturalist.org/observations/363650732"
+          }
+        },
+        {
+          "id": "662697618",
+          "imageUrl": "/forager-game/images/medicinal/662697618.jpg",
+          "trueClass": "wood_nettle",
+          "trueLabel": "Wood Nettle",
+          "options": [
+            "stinging_nettle",
+            "valerian",
+            "st_johns_wort",
+            "wood_nettle"
+          ],
+          "optionLabels": {
+            "stinging_nettle": "Stinging Nettle",
+            "valerian": "Valerian",
+            "st_johns_wort": "St Johns Wort",
+            "wood_nettle": "Wood Nettle"
+          },
+          "ai": {
+            "predictedClass": "wood_nettle",
+            "confidence": 0.9494,
+            "topProbs": {
+              "stinging_nettle": 0.0181,
+              "valerian": 0.0181,
+              "st_johns_wort": 0.0144,
+              "wood_nettle": 0.9494
+            },
+            "correct": true
+          },
+          "metadata": {
+            "safety": "SAFE",
+            "scientific": "Laportea canadensis",
+            "lookalike": "Stinging nettle",
+            "keyDiff": "Alternate leaves (vs opposite in stinging nettle); forested habitat"
+          },
+          "attribution": {
+            "observer": "bobvirag",
+            "license": "cc-by",
+            "observationUrl": "https://www.inaturalist.org/observations/363059592"
+          }
+        },
+        {
+          "id": "664283608",
+          "imageUrl": "/forager-game/images/medicinal/664283608.jpg",
+          "trueClass": "yarrow",
+          "trueLabel": "Yarrow",
+          "options": [
+            "mullein",
+            "yarrow",
+            "poison_hemlock_deadly",
+            "wild_carrot"
+          ],
+          "optionLabels": {
+            "mullein": "Mullein",
+            "yarrow": "Yarrow",
+            "poison_hemlock_deadly": "Poison Hemlock",
+            "wild_carrot": "Wild Carrot"
+          },
+          "ai": {
+            "predictedClass": "yarrow",
+            "confidence": 0.9294,
+            "topProbs": {
+              "mullein": 0.0113,
+              "yarrow": 0.9294,
+              "poison_hemlock_deadly": 0.0465,
+              "wild_carrot": 0.0128
+            },
+            "correct": true
+          },
+          "metadata": {
+            "safety": "CAUTION",
+            "scientific": "Achillea millefolium",
+            "lookalike": "Poison hemlock (leaf)",
+            "keyDiff": "Flat-topped white flower clusters, ferny aromatic leaves"
+          },
+          "attribution": {
+            "observer": "vladimir_dvorkin",
+            "license": "cc-by",
+            "observationUrl": "https://www.inaturalist.org/observations/363892257"
+          }
+        },
+        {
+          "id": "663956374",
+          "imageUrl": "/forager-game/images/medicinal/663956374.jpg",
+          "trueClass": "yarrow",
+          "trueLabel": "Yarrow",
+          "options": [
+            "echinacea",
+            "catnip",
+            "poison_hemlock_deadly",
+            "yarrow"
+          ],
+          "optionLabels": {
+            "echinacea": "Echinacea",
+            "catnip": "Catnip",
+            "poison_hemlock_deadly": "Poison Hemlock",
+            "yarrow": "Yarrow"
+          },
+          "ai": {
+            "predictedClass": "yarrow",
+            "confidence": 0.9177,
+            "topProbs": {
+              "echinacea": 0.0145,
+              "catnip": 0.0173,
+              "poison_hemlock_deadly": 0.0506,
+              "yarrow": 0.9177
+            },
+            "correct": true
+          },
+          "metadata": {
+            "safety": "CAUTION",
+            "scientific": "Achillea millefolium",
+            "lookalike": "Poison hemlock (leaf)",
+            "keyDiff": "Flat-topped white flower clusters, ferny aromatic leaves"
+          },
+          "attribution": {
+            "observer": "aspidoscelis",
+            "license": "cc0",
+            "observationUrl": "https://www.inaturalist.org/observations/363720861"
+          }
+        }
+      ]
+    }
+  }
+}

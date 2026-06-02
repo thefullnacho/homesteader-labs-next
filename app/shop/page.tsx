@@ -4,6 +4,17 @@ import FieldStationLayout from "@/components/ui/FieldStationLayout";
 import BrutalistBlock from "@/components/ui/BrutalistBlock";
 import Typography from "@/components/ui/Typography";
 import Badge from "@/components/ui/Badge";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Hardware Catalog — Off-Grid Survival & Mesh Networking Equipment",
+  description: "Authorized hardware for self-reliant homesteaders. Off-grid electronics, mesh networking gear, and custom-fabricated survival equipment.",
+  openGraph: {
+    title: "Hardware Catalog — Off-Grid Survival & Mesh Networking Equipment",
+    description: "Authorized hardware for self-reliant homesteaders. Off-grid electronics, mesh networking gear, and custom-fabricated survival equipment.",
+    type: "website",
+  },
+};
 
 export default function ShopPage() {
   const allProducts = getAllProducts();
@@ -15,7 +26,7 @@ export default function ShopPage() {
         <BrutalistBlock className="mb-8 p-6" variant="default">
           <div className="flex justify-between items-end">
             <div>
-              <Typography variant="h2" className="mb-0">Hardware_Index</Typography>
+              <Typography variant="h1" className="mb-0 text-2xl md:text-4xl">Hardware_Index</Typography>
               <Typography variant="small" className="opacity-60">Authorized Equipment & Digital Schematics</Typography>
             </div>
             

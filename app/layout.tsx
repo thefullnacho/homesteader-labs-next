@@ -15,13 +15,22 @@ const caveat = Caveat({
 });
 
 export const metadata: Metadata = {
-  title: "Homesteader Labs | Off-Grid Hardware & Fabrication Tools",
+  metadataBase: new URL("https://homesteaderlabs.com"),
+  title: {
+    default: "Homesteader Labs | Off-Grid Hardware & Fabrication Tools",
+    template: "%s | Homesteader Labs",
+  },
   description: "Tools for those who build their own world. Off-grid hardware, fabrication tools, and survival tech for homesteaders and self-reliant builders.",
-  keywords: "homesteading, off-grid, fabrication, 3D printing, survival gear, DIY electronics, LoRa, mesh networks",
   openGraph: {
+    type: "website",
+    siteName: "Homesteader Labs",
     title: "Homesteader Labs | Off-Grid Hardware & Fabrication Tools",
     description: "Tools for those who build their own world. Off-grid hardware, fabrication tools, and survival tech for homesteaders.",
-    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Homesteader Labs | Off-Grid Hardware & Fabrication Tools",
+    description: "Tools for those who build their own world. Off-grid hardware, fabrication tools, and survival tech for homesteaders.",
   },
 };
 

@@ -1,5 +1,6 @@
 import { getAllProducts } from "@/lib/products";
 import Link from "next/link";
+import Image from "next/image";
 import { Cpu, ChevronRight } from "lucide-react";
 import BrutalistBlock from "@/components/ui/BrutalistBlock";
 import DymoLabel from "@/components/ui/DymoLabel";
@@ -24,11 +25,21 @@ export default function FeaturedProducts() {
             className="group"
           >
             <BrutalistBlock className="p-4 hover:shadow-brutalist-lg transition-all">
-              {/* Product Image Placeholder */}
+              {/* Product Image */}
               <div className="h-32 bg-background-secondary border-b border-border-primary mb-4 flex items-center justify-center relative overflow-hidden">
-                <div className="w-16 h-16 border border-dashed border-border-primary rounded-full flex items-center justify-center">
-                  <Cpu size={32} className="text-foreground-primary opacity-50" />
-                </div>
+                {product.image && product.image.startsWith("/") ? (
+                  <Image
+                    src={product.image}
+                    alt={product.name}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 33vw"
+                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                ) : (
+                  <div className="w-16 h-16 border border-dashed border-border-primary rounded-full flex items-center justify-center">
+                    <Cpu size={32} className="text-foreground-primary opacity-50" />
+                  </div>
+                )}
               </div>
 
               {/* Product Info */}

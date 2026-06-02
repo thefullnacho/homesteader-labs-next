@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Terms of Fabrication | Homesteader Labs",
+  title: "Terms of Fabrication",
   description: "Agreement Protocol V.1.0 - Read before building",
 };
 
