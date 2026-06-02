@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { ChevronLeft, ArrowRight, Lock } from "lucide-react";
 import type { Product } from "@/lib/products";
 import FieldStationLayout from "@/components/ui/FieldStationLayout";
@@ -163,8 +164,20 @@ export default function WalkingManDetail({ product }: WalkingManDetailProps) {
               </div>
             </div>
 
-            {/* Right: hardware manifest terminal block */}
-            <div className="flex-1 min-w-0">
+            {/* Right: product photo + hardware manifest terminal block */}
+            <div className="flex-1 min-w-0 flex flex-col gap-4">
+              <BrutalistBlock variant="default" className="p-2">
+                <div className="relative aspect-[4/3] w-full overflow-hidden">
+                  <Image
+                    src="/images/WalkingMan_hero_shot.jpg"
+                    alt="WALKING MAN PRO field research instrument — e-ink display and camera module"
+                    fill
+                    sizes="(max-width: 768px) 100vw, 480px"
+                    className="object-cover"
+                    priority
+                  />
+                </div>
+              </BrutalistBlock>
               <BrutalistBlock variant="terminal" className="p-5 font-mono text-xs leading-relaxed">
                 <div className="text-accent/50 mb-3 text-[10px] tracking-widest">HARDWARE_MANIFEST // WLK-MN-PRO</div>
                 {HW_SPECS.map((s) => (
@@ -177,6 +190,22 @@ export default function WalkingManDetail({ product }: WalkingManDetailProps) {
               </BrutalistBlock>
             </div>
 
+          </div>
+        </BrutalistBlock>
+
+        {/* ── Field shot ── */}
+        <BrutalistBlock variant="default" className="p-2">
+          <div className="relative aspect-[16/9] w-full overflow-hidden">
+            <Image
+              src="/images/WalkingMan_dutch_angle.jpg"
+              alt="WALKING MAN PRO in the field"
+              fill
+              sizes="(max-width: 1024px) 100vw, 960px"
+              className="object-cover"
+            />
+            <div className="absolute bottom-0 left-0 bg-background-primary/80 px-3 py-1 font-mono text-[10px] uppercase tracking-widest">
+              FIELD_UNIT // WLK-MN-PRO
+            </div>
           </div>
         </BrutalistBlock>
 
@@ -215,6 +244,30 @@ export default function WalkingManDetail({ product }: WalkingManDetailProps) {
               Deadly lookalike species exist across every cartridge domain. Treat AI confidence scores as
               a starting point, not a final answer.
             </Typography>
+          </div>
+        </BrutalistBlock>
+
+        {/* ── Game funnel: prove the claim ── */}
+        <BrutalistBlock variant="terminal" className="p-6 md:p-10">
+          <div className="flex flex-col md:flex-row md:items-center gap-6">
+            <div className="flex-1">
+              <div className="text-accent/50 text-[10px] font-mono tracking-widest uppercase mb-2">
+                Interactive // Forager_Game
+              </div>
+              <Typography variant="h3" className="uppercase tracking-tight text-accent mb-2">
+                Can You Beat the AI?
+              </Typography>
+              <Typography variant="body" className="text-sm text-accent/70 max-w-md">
+                Don&apos;t take the 95% on faith. Play ten rounds against the exact model that runs on the
+                Walking Man — same photo, same four options. See where it wins, and where deadly
+                lookalikes fool the model (and you).
+              </Typography>
+            </div>
+            <div className="shrink-0">
+              <Button variant="primary" size="lg" href="/tools/forager-game/">
+                Play the Game <ArrowRight size={16} className="ml-2" />
+              </Button>
+            </div>
           </div>
         </BrutalistBlock>
 
