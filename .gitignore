@@ -36,3 +36,17 @@ certificates
 
 # Design exploration / mockups not part of the app
 design-prototypes/
+
+# Personal voice/content drafts — local AI-writing instructions + generated drafts, not app code
+about-me.md
+voice.md
+newsletter-voice.md
+roadmap-decloudify-series.md
+roadmap-fuck-your-inputs-series.md
+post-convenience-manifesto.md
+post-digital-dirt.md
+graphic-convenience-manifesto.html
+graphic-convenience-manifesto-warm.html
+
+# Local Claude Code settings (machine-specific)
+.claude/settings.local.json
