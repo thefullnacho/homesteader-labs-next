@@ -1,5 +1,7 @@
 import Link from 'next/link';
+import { notFound } from 'next/navigation';
 import { AlertTriangle } from 'lucide-react';
+import { isSurvivalPlanPublic } from '@/lib/survivalPlan/visibility';
 import FieldStationLayout from '@/components/ui/FieldStationLayout';
 import BrutalistBlock from '@/components/ui/BrutalistBlock';
 import Typography from '@/components/ui/Typography';
@@ -20,6 +22,8 @@ interface PageProps {
 }
 
 export default function CompanionPage({ searchParams }: PageProps) {
+  if (!isSurvivalPlanPublic()) notFound();
+
   const token = searchParams.p ?? '';
 
   if (!token) {

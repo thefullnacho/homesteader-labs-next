@@ -31,7 +31,7 @@ export default function RevealView({ round, userPick, responseMs, onNext, isLast
         <div className="flex items-start justify-between gap-3">
           <div>
             <p className="text-[10px] font-mono uppercase opacity-60 tracking-widest">Correct answer</p>
-            <p className="text-xl font-mono font-bold text-accent mt-1">{round.trueLabel}</p>
+            <p className="text-xl font-mono font-bold text-white mt-1">{round.trueLabel}</p>
             <p className="text-xs font-mono opacity-70 italic mt-1">{round.metadata.scientific}</p>
           </div>
           <SafetyBadge level={round.metadata.safety} />

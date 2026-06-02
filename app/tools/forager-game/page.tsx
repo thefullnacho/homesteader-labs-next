@@ -106,7 +106,7 @@ export default function ForagerGameLanding() {
               <p className="text-sm font-mono opacity-80 max-w-md mx-auto leading-relaxed">
                 You just played against the brain. The body is WALKING MAN PRO — a 5&quot; field tool that runs the same model in your pocket, offline, at 187 ms per scan.
               </p>
-              <Button variant="primary" size="lg" href="/shop/wlk-mn-pro/">
+              <Button variant="secondary" size="lg" href="/shop/wlk-mn-pro/">
                 See WALKING MAN PRO <ArrowRight size={18} className="ml-2" />
               </Button>
             </div>

@@ -3,14 +3,16 @@ import { renderSurvivalPlanPdf } from '@/lib/survivalPlan/generator';
 import { getFrostDatesByZone } from '@/lib/frostNormals';
 import { getGrowingZoneFromZip } from '@/lib/zoneLookup';
 import type { SurvivalPlanInput } from '@/lib/survivalPlan/types';
+import {
+  stripe,
+  STRIPE_PRICE_ID,
+  SITE_URL,
+  PLAN_INPUT_METADATA_KEY,
+  encodePlanInputForMetadata,
+} from '@/lib/survivalPlan/stripe';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
-
-const LS_API_KEY      = process.env.LEMONSQUEEZY_API_KEY;
-const LS_STORE_ID     = process.env.LEMONSQUEEZY_STORE_ID;
-const LS_VARIANT_ID   = process.env.LEMONSQUEEZY_VARIANT_ID;
-const SITE_URL        = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://homesteaderlabs.com';
 
 function validateInput(input: unknown): input is SurvivalPlanInput {
   if (!input || typeof input !== 'object') return false;
@@ -28,48 +30,22 @@ function validateInput(input: unknown): input is SurvivalPlanInput {
   );
 }
 
-async function createLemonSqueezyCheckout(input: SurvivalPlanInput) {
-  if (!LS_API_KEY || !LS_STORE_ID || !LS_VARIANT_ID) return null;
+async function createStripeCheckout(input: SurvivalPlanInput) {
+  if (!stripe || !STRIPE_PRICE_ID) return null;
 
-  const payload = {
-    data: {
-      type: 'checkouts',
-      attributes: {
-        checkout_data: {
-          custom: {
-            plan_input: JSON.stringify(input),
-          },
-        },
-        product_options: {
-          redirect_url: `${SITE_URL}/survival-garden-plan/success/{order_id}/`,
-          receipt_button_text: 'Download your plan',
-          receipt_link_url: `${SITE_URL}/survival-garden-plan/success/{order_id}/`,
-        },
-      },
-      relationships: {
-        store:   { data: { type: 'stores',   id: LS_STORE_ID } },
-        variant: { data: { type: 'variants', id: LS_VARIANT_ID } },
-      },
+  // {CHECKOUT_SESSION_ID} is substituted by Stripe on redirect — it becomes the
+  // orderId used by the success page + regenerate download link.
+  const session = await stripe.checkout.sessions.create({
+    mode: 'payment',
+    line_items: [{ price: STRIPE_PRICE_ID, quantity: 1 }],
+    metadata: {
+      [PLAN_INPUT_METADATA_KEY]: encodePlanInputForMetadata(input),
     },
-  };
-
-  const res = await fetch('https://api.lemonsqueezy.com/v1/checkouts', {
-    method: 'POST',
-    headers: {
-      'Accept':        'application/vnd.api+json',
-      'Content-Type':  'application/vnd.api+json',
-      'Authorization': `Bearer ${LS_API_KEY}`,
-    },
-    body: JSON.stringify(payload),
+    success_url: `${SITE_URL}/survival-garden-plan/success/{CHECKOUT_SESSION_ID}/`,
+    cancel_url: `${SITE_URL}/survival-garden-plan/wizard/`,
   });
 
-  if (!res.ok) {
-    const body = await res.text();
-    throw new Error(`LS checkout failed: ${res.status} ${body}`);
-  }
-
-  const json = await res.json();
-  return json?.data?.attributes?.url as string | undefined;
+  return session.url ?? undefined;
 }
 
 export async function POST(req: NextRequest) {
@@ -81,7 +57,7 @@ export async function POST(req: NextRequest) {
   const input = body.input as SurvivalPlanInput;
 
   try {
-    const checkoutUrl = await createLemonSqueezyCheckout(input);
+    const checkoutUrl = await createStripeCheckout(input);
     if (checkoutUrl) {
       return NextResponse.json({ checkoutUrl });
     }

@@ -1,67 +1,43 @@
 import { NextRequest, NextResponse } from 'next/server';
-import crypto from 'crypto';
+import type Stripe from 'stripe';
 import { Resend } from 'resend';
 import { renderSurvivalPlanPdf } from '@/lib/survivalPlan/generator';
 import { getFrostDatesByZone } from '@/lib/frostNormals';
 import { getGrowingZoneFromZip } from '@/lib/zoneLookup';
-import type { SurvivalPlanInput } from '@/lib/survivalPlan/types';
+import { stripe, STRIPE_WEBHOOK_SECRET, decodePlanInputFromMetadata } from '@/lib/survivalPlan/stripe';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
-const LS_WEBHOOK_SECRET = process.env.LEMONSQUEEZY_WEBHOOK_SECRET;
 const FROM_EMAIL = process.env.SGP_FROM_EMAIL ?? 'orders@homesteaderlabs.com';
 const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
 
-function verifySignature(secret: string, body: string, signature: string | null): boolean {
-  if (!signature) return false;
-  const digest = crypto.createHmac('sha256', secret).update(body).digest('hex');
-  try {
-    return crypto.timingSafeEqual(Buffer.from(digest, 'hex'), Buffer.from(signature, 'hex'));
-  } catch {
-    return false;
-  }
-}
-
 export async function POST(req: NextRequest) {
-  if (!LS_WEBHOOK_SECRET) {
+  if (!stripe || !STRIPE_WEBHOOK_SECRET) {
     return NextResponse.json({ error: 'Webhook not configured' }, { status: 503 });
   }
 
   const raw = await req.text();
-  const signature = req.headers.get('x-signature');
+  const signature = req.headers.get('stripe-signature');
 
-  if (!verifySignature(LS_WEBHOOK_SECRET, raw, signature)) {
+  let evt: Stripe.Event;
+  try {
+    evt = stripe.webhooks.constructEvent(raw, signature ?? '', STRIPE_WEBHOOK_SECRET);
+  } catch (err) {
+    console.error('[webhook] signature verification failed', err);
     return NextResponse.json({ error: 'Invalid signature' }, { status: 401 });
   }
 
-  let payload: { meta?: { event_name?: string }; data?: { attributes?: Record<string, unknown> } };
-  try {
-    payload = JSON.parse(raw);
-  } catch {
-    return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 });
+  if (evt.type !== 'checkout.session.completed') {
+    return NextResponse.json({ ok: true, skipped: evt.type });
   }
 
-  const event = payload.meta?.event_name;
-  if (event !== 'order_created') {
-    return NextResponse.json({ ok: true, skipped: event });
-  }
+  const session = evt.data.object as Stripe.Checkout.Session;
+  const customerEmail = session.customer_details?.email ?? session.customer_email ?? undefined;
+  const input = decodePlanInputFromMetadata(session.metadata);
 
-  const attrs = payload.data?.attributes ?? {};
-  const customerEmail = (attrs.user_email ?? attrs.customer_email) as string | undefined;
-  const firstOrderItem = (attrs.first_order_item ?? {}) as Record<string, unknown>;
-  const customData = (firstOrderItem.custom_data ?? attrs['checkout_data'] ?? {}) as Record<string, unknown>;
-  const planInputRaw = (customData.custom as Record<string, unknown>)?.plan_input ?? customData.plan_input;
-
-  if (!customerEmail || !planInputRaw || typeof planInputRaw !== 'string') {
+  if (!customerEmail || !input) {
     return NextResponse.json({ error: 'Missing email or plan input' }, { status: 400 });
-  }
-
-  let input: SurvivalPlanInput;
-  try {
-    input = JSON.parse(planInputRaw);
-  } catch {
-    return NextResponse.json({ error: 'Invalid plan input JSON' }, { status: 400 });
   }
 
   try {
@@ -74,7 +50,7 @@ export async function POST(req: NextRequest) {
         from: FROM_EMAIL,
         to: customerEmail,
         subject: 'Your Survival Garden Plan',
-        text: `Thanks for ordering. Your personalized survival garden plan is attached.\n\nDownload anytime at: https://homesteaderlabs.com/survival-garden-plan/success/${attrs.id ?? ''}/`,
+        text: `Thanks for ordering. Your personalized survival garden plan is attached.\n\nDownload anytime at: https://homesteaderlabs.com/survival-garden-plan/success/${session.id}/`,
         attachments: [
           {
             filename: 'survival-garden-plan.pdf',

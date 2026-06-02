@@ -3,37 +3,25 @@ import { renderSurvivalPlanPdf } from '@/lib/survivalPlan/generator';
 import { getFrostDatesByZone } from '@/lib/frostNormals';
 import { getGrowingZoneFromZip } from '@/lib/zoneLookup';
 import type { SurvivalPlanInput } from '@/lib/survivalPlan/types';
+import { stripe, decodePlanInputFromMetadata } from '@/lib/survivalPlan/stripe';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
-const LS_API_KEY = process.env.LEMONSQUEEZY_API_KEY;
-
 async function fetchOrderInputs(orderId: string): Promise<SurvivalPlanInput | null> {
-  if (!LS_API_KEY) return null;
-
-  const res = await fetch(`https://api.lemonsqueezy.com/v1/orders/${orderId}`, {
-    headers: {
-      'Accept':        'application/vnd.api+json',
-      'Authorization': `Bearer ${LS_API_KEY}`,
-    },
-  });
-
-  if (!res.ok) {
-    if (res.status === 404) return null;
-    throw new Error(`LS order fetch failed: ${res.status}`);
-  }
-
-  const json = await res.json();
-  const customData = json?.data?.attributes?.first_order_item?.custom_data
-    ?? json?.data?.attributes?.checkout_data?.custom;
-  const planInputRaw = customData?.plan_input;
-  if (!planInputRaw) return null;
+  if (!stripe) return null;
 
   try {
-    return JSON.parse(planInputRaw) as SurvivalPlanInput;
-  } catch {
-    return null;
+    const session = await stripe.checkout.sessions.retrieve(orderId);
+    // Only honor downloads for completed payments.
+    if (session.payment_status !== 'paid') return null;
+    return decodePlanInputFromMetadata(session.metadata);
+  } catch (err) {
+    // Invalid/unknown session id → treat as not found.
+    if (err && typeof err === 'object' && (err as { statusCode?: number }).statusCode === 404) {
+      return null;
+    }
+    throw err;
   }
 }
 

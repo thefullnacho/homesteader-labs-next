@@ -67,9 +67,9 @@ export default function EndScreen({ result, onReplay }: Props) {
       <BrutalistBlock variant="accent" refTag="RESULT">
         <div className="text-center space-y-3 py-2">
           {result.verdict === 'you-win' ? (
-            <Trophy size={36} className="mx-auto text-accent" />
+            <Trophy size={36} className="mx-auto text-white" />
           ) : (
-            <Bot size={36} className="mx-auto text-accent" />
+            <Bot size={36} className="mx-auto text-white" />
           )}
           <Typography variant="h2" className="uppercase tracking-tight">{verdictText}</Typography>
           <div className="flex items-center justify-center gap-6 text-lg font-mono">
@@ -80,7 +80,7 @@ export default function EndScreen({ result, onReplay }: Props) {
             <span className="opacity-40">vs</span>
             <div>
               <span className="text-[10px] font-mono uppercase opacity-60 block">AI</span>
-              <span className="text-3xl font-bold tabular-nums text-accent">{result.aiScore}</span>
+              <span className="text-3xl font-bold tabular-nums text-white">{result.aiScore}</span>
             </div>
           </div>
           <p className="text-[10px] font-mono opacity-50 uppercase tracking-widest">
@@ -165,7 +165,7 @@ export default function EndScreen({ result, onReplay }: Props) {
           </p>
           <Link
             href="/shop/wlk-mn-pro/"
-            className="inline-flex items-center justify-center gap-2 font-bold uppercase bg-accent text-white border-2 border-accent px-6 py-3 text-sm shadow-brutalist"
+            className="inline-flex items-center justify-center gap-2 font-bold uppercase bg-white text-accent border-2 border-white px-6 py-3 text-sm shadow-brutalist hover:bg-white/90"
           >
             See WALKING MAN PRO <ArrowRight size={16} />
           </Link>

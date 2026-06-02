@@ -1,5 +1,7 @@
 import Link from 'next/link';
+import { notFound } from 'next/navigation';
 import { CheckCircle, Download } from 'lucide-react';
+import { isSurvivalPlanPublic } from '@/lib/survivalPlan/visibility';
 import FieldStationLayout from '@/components/ui/FieldStationLayout';
 import BrutalistBlock from '@/components/ui/BrutalistBlock';
 import Typography from '@/components/ui/Typography';
@@ -14,6 +16,8 @@ interface PageProps {
 }
 
 export default function SuccessPage({ params }: PageProps) {
+  if (!isSurvivalPlanPublic()) notFound();
+
   const downloadUrl = `/api/survival-garden-plan/regenerate/?orderId=${encodeURIComponent(params.orderId)}`;
 
   return (
