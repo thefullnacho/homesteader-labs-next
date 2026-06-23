@@ -2,6 +2,15 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Part of the Forager constellation
+
+This repo is one of four projects in the Forager / Homesteader Labs constellation (with
+`forager_ml`, `forager-field-station`, and `hestia`). It owns the brand, voice, product catalog,
+and content. Cross-project knowledge — how the repos relate, the shared model registry, the
+hardware it sells, brand/voice, and known cross-repo divergences — lives in the **Forager wiki**
+at `~/Documents/Forager/forager-wiki/` (start at `index.md`; its `CLAUDE.md` is the maintenance
+schema). Update the wiki when a change crosses repos.
+
 ## Commands
 
 ```bash
