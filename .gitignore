@@ -50,3 +50,6 @@ graphic-convenience-manifesto-warm.html
 
 # Local Claude Code settings (machine-specific)
 .claude/settings.local.json
+
+# /brag launch video output (generated, not app code)
+brag-output/
