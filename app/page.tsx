@@ -8,8 +8,8 @@ import Typography from "@/components/ui/Typography";
 import Image from "next/image";
 
 export const metadata = {
-  title: "Homesteader Labs | Off-Grid Hardware & Fabrication Tools",
-  description: "Tools for those who build their own world. Off-grid hardware, fabrication tools, and survival tech for homesteaders and self-reliant builders.",
+  title: "Homesteader Labs | Off-Grid Planning Tools & Hardware",
+  description: "Free tools for self-reliant homesteaders: frost & weather risk, zone-calibrated planting calendars, caloric-security planning, 3D-printable fabrication, plus field-tested off-grid hardware.",
 };
 
 export default function Home() {

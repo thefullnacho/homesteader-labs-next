@@ -17,20 +17,20 @@ const caveat = Caveat({
 export const metadata: Metadata = {
   metadataBase: new URL("https://homesteaderlabs.com"),
   title: {
-    default: "Homesteader Labs | Off-Grid Hardware & Fabrication Tools",
+    default: "Homesteader Labs | Off-Grid Planning Tools & Hardware",
     template: "%s | Homesteader Labs",
   },
-  description: "Tools for those who build their own world. Off-grid hardware, fabrication tools, and survival tech for homesteaders and self-reliant builders.",
+  description: "Free tools for self-reliant homesteaders: frost & weather risk, zone-calibrated planting calendars, caloric-security planning, 3D-printable fabrication, plus field-tested off-grid hardware.",
   openGraph: {
     type: "website",
     siteName: "Homesteader Labs",
-    title: "Homesteader Labs | Off-Grid Hardware & Fabrication Tools",
-    description: "Tools for those who build their own world. Off-grid hardware, fabrication tools, and survival tech for homesteaders.",
+    title: "Homesteader Labs | Off-Grid Planning Tools & Hardware",
+    description: "Free tools for self-reliant homesteaders: frost & weather risk, planting calendars, caloric-security planning, 3D-printable fabrication, plus field-tested off-grid hardware.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Homesteader Labs | Off-Grid Hardware & Fabrication Tools",
-    description: "Tools for those who build their own world. Off-grid hardware, fabrication tools, and survival tech for homesteaders.",
+    title: "Homesteader Labs | Off-Grid Planning Tools & Hardware",
+    description: "Free tools for self-reliant homesteaders: frost & weather risk, planting calendars, caloric-security planning, 3D-printable fabrication, plus field-tested off-grid hardware.",
   },
 };
 
