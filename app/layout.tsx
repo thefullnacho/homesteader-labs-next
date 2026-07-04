@@ -21,6 +21,9 @@ export const metadata: Metadata = {
     template: "%s | Homesteader Labs",
   },
   description: "Free tools for self-reliant homesteaders: frost & weather risk, zone-calibrated planting calendars, caloric-security planning, 3D-printable fabrication, plus field-tested off-grid hardware.",
+  alternates: {
+    canonical: "./",
+  },
   openGraph: {
     type: "website",
     siteName: "Homesteader Labs",
