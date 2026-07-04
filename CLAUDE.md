@@ -35,7 +35,7 @@ npx vitest run lib/plantingIndex.test.ts
 |--------|----------|---------|
 | Crop database | `content/crops/*.json` | Vegetables, herbs, fruits with varieties, timing, caloric data, companion planting |
 | Product catalog | `lib/products.ts` | Hardcoded hardware product list (WALKING MAN PRO, HELTEC V3) |
-| Blog/archive posts | `content/blog/*.mdx`, `content/archive/*.mdx` | Field guides and articles parsed by `lib/posts.ts` via gray-matter |
+| Archive posts | `content/archive/*.mdx` | Field guides and articles parsed by `lib/posts.ts` via gray-matter |
 | Weather data | Open-Meteo API (free, no auth) | Fetched in `lib/weatherApi.ts` |
 | Cart & preferences | localStorage | Cart key: `homesteader_requisition_data`, locations key: `homesteader-locations` |
 
@@ -76,7 +76,7 @@ Add entries to the relevant JSON in `content/crops/` following the existing sche
 
 ### MDX Content
 
-Archive and blog posts use MDX with gray-matter frontmatter. Required fields: `title`, `description`, `date`, `author`. Optional: `tags`, `category`, `excerpt`. Pages are file-based routed under `content/archive/` and `content/blog/`.
+Archive posts use MDX with gray-matter frontmatter. Required fields: `title`, `description`, `date`, `author`. Optional: `tags`, `category`, `excerpt`. Pages are file-based routed under `content/archive/`.
 
 ### next.config.mjs Notes
 

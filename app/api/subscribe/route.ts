@@ -1,8 +1,8 @@
 import { Resend } from "resend";
 import { NextRequest, NextResponse } from "next/server";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-const audienceId = process.env.RESEND_AUDIENCE_ID!;
+const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
+const audienceId = process.env.RESEND_AUDIENCE_ID;
 
 export async function POST(req: NextRequest) {
   const { email, type, metadata } = await req.json();
@@ -11,7 +11,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Invalid email" }, { status: 400 });
   }
 
-  if (!audienceId) {
+  if (!resend || !audienceId) {
     return NextResponse.json({ error: "Server misconfiguration" }, { status: 500 });
   }
 
