@@ -206,6 +206,7 @@
     "slug": "anise-hyssop",
     "name": "anise hyssop",
     "binomialName": "agastache foeniculum",
+    "description": "Anise hyssop is an upright perennial herb with soft licorice-scented leaves and spikes of purple flowers that bees adore. The leaves and flowers make a sweet herbal tea and season baked goods and salads. Easy to grow and drought-tolerant, it is one of the best pollinator plants for the homestead garden.",
     "source": {
       "origin": "OpenFarm.cc",
       "license": "CC0-1.0",
@@ -558,6 +559,7 @@
     "slug": "black-cherry",
     "name": "Black Cherry",
     "binomialName": "Prunus serotina",
+    "description": "The black cherry is a large native North American tree bearing small, dark, astringent fruit used for preserves, wine, and flavoring. Foragers and wildlife prize the fruit, and the wood is a premium furniture timber. Note that its leaves and pits contain cyanide compounds and are toxic to livestock.",
     "companions": [
       "st-johns-wort"
     ],
@@ -1010,9 +1012,6 @@
     "spreadCm": 150,
     "rowSpacingCm": 45,
     "heightCm": 40,
-    "companions": [
-      "wild-tansy"
-    ],
     "calculatorCropId": "cantaloupe",
     "source": {
       "origin": "OpenFarm.cc",
@@ -1148,23 +1147,6 @@
       "license": "CC0-1.0",
       "waybackUrl": "https://web.archive.org/web/20221006172229/https://openfarm.cc/en/crops/cauliflower",
       "captured": "20221006"
-    }
-  },
-  {
-    "slug": "cauliflower-1",
-    "name": "cauliflower",
-    "binomialName": "brassica oleracea var. botrytis",
-    "companions": [
-      "cucumber-straight-eight",
-      "german-chamomile",
-      "kohlrabi"
-    ],
-    "calculatorCropId": "cauliflower",
-    "source": {
-      "origin": "OpenFarm.cc",
-      "license": "CC0-1.0",
-      "waybackUrl": "https://web.archive.org/web/20240519132350/https://openfarm.cc/en/crops/cauliflower-1",
-      "captured": "20240519"
     }
   },
   {
@@ -1435,20 +1417,6 @@
     }
   },
   {
-    "slug": "chilli-pepper",
-    "name": "You Can Grow Anything",
-    "binomialName": "Capsicum",
-    "description": "http://en.wikipedia.org/wiki/Capsicum_annuum",
-    "sun": "Add this information",
-    "sowingMethod": "Add this information",
-    "source": {
-      "origin": "OpenFarm.cc",
-      "license": "CC0-1.0",
-      "waybackUrl": "https://web.archive.org/web/20160818002424/https://openfarm.cc/en/crops/chilli-pepper",
-      "captured": "20160818"
-    }
-  },
-  {
     "slug": "chinese-cabbage",
     "name": "Chinese cabbage",
     "binomialName": "Brassica rapa",
@@ -1577,6 +1545,7 @@
     "slug": "common-hop",
     "name": "common hop",
     "binomialName": "Humulus lupulus",
+    "description": "The common hop is a vigorous perennial climbing vine grown for its cone-shaped flowers, which give beer its bitterness and aroma. Bines can climb twenty feet or more in a season and die back to the crown each winter. Hops prefer full sun, deep soil, and sturdy vertical support.",
     "source": {
       "origin": "OpenFarm.cc",
       "license": "CC0-1.0",
@@ -1664,9 +1633,6 @@
     "growingDegreeDays": 58,
     "spreadCm": 8,
     "rowSpacingCm": 90,
-    "companions": [
-      "cauliflower-1"
-    ],
     "source": {
       "origin": "OpenFarm.cc",
       "license": "CC0-1.0",
@@ -1714,6 +1680,7 @@
     "slug": "curly-dock",
     "name": "You Can Grow Anything",
     "binomialName": "Rumex crispus",
+    "description": "Curly dock is a hardy perennial wild green with tangy, lemony young leaves eaten cooked or raw in small amounts. A common forageable across much of the world, it also throws up rust-colored seed stalks used in dried arrangements. Older leaves turn bitter and high in oxalic acid, so tender young growth is preferred.",
     "source": {
       "origin": "OpenFarm.cc",
       "license": "CC0-1.0",
@@ -1946,7 +1913,6 @@
       "black-walnut",
       "common-fig",
       "english-walnut",
-      "hindss-black-walnut",
       "walnut"
     ],
     "calculatorCropId": "elderflower",
@@ -1997,21 +1963,6 @@
     }
   },
   {
-    "slug": "english-marigold",
-    "name": "english marigold",
-    "binomialName": "calendula officinalis",
-    "companions": [
-      "feijoa",
-      "gooseberry"
-    ],
-    "source": {
-      "origin": "OpenFarm.cc",
-      "license": "CC0-1.0",
-      "waybackUrl": "https://web.archive.org/web/20240615200948/https://openfarm.cc/en/crops/english-marigold",
-      "captured": "20240615"
-    }
-  },
-  {
     "slug": "english-walnut",
     "name": "English Walnut",
     "binomialName": "Juglans regia",
@@ -2030,23 +1981,6 @@
       "license": "CC0-1.0",
       "waybackUrl": "https://web.archive.org/web/20221207054758/https://openfarm.cc/en/crops/english-walnut",
       "captured": "20221207"
-    }
-  },
-  {
-    "slug": "everest-broccoli",
-    "name": "Everest Broccoli",
-    "binomialName": "Brocoli hybride",
-    "sun": "Partial Sun",
-    "growingDegreeDays": 83,
-    "spreadCm": 15,
-    "companions": [
-      "broccoli"
-    ],
-    "source": {
-      "origin": "OpenFarm.cc",
-      "license": "CC0-1.0",
-      "waybackUrl": "https://web.archive.org/web/20211127075702/https://openfarm.cc/en/crops/everest-broccoli",
-      "captured": "20211127"
     }
   },
   {
@@ -2183,6 +2117,7 @@
     "slug": "feverfew",
     "name": "feverfew",
     "binomialName": "chrysanthemum parthenium",
+    "description": "Feverfew is a bushy short-lived perennial herb with small daisy-like flowers, used traditionally to prevent migraines and reduce fever. It self-seeds freely and grows easily in full sun to part shade. The bitter, aromatic leaves are the medicinal part, taken fresh or dried.",
     "companions": [
       "rose"
     ],
@@ -2254,6 +2189,7 @@
     "name": "Galangal",
     "binomialName": "alpinia galanga",
     "taxon": "Species",
+    "description": "Galangal is a tropical rhizome in the ginger family, sharper and more citrusy than common ginger. It is a foundational aromatic in Thai, Indonesian, and Malaysian cooking, used fresh in curry pastes and soups. Like ginger, it grows from rhizome pieces and needs warmth, humidity, and a long growing season.",
     "source": {
       "origin": "OpenFarm.cc",
       "license": "CC0-1.0",
@@ -2319,7 +2255,6 @@
       "kamille"
     ],
     "companions": [
-      "cauliflower-1",
       "choy-sum",
       "green-bartlett-pear",
       "kohlrabi",
@@ -2414,9 +2349,6 @@
     "spreadCm": 150,
     "rowSpacingCm": 150,
     "heightCm": 150,
-    "companions": [
-      "english-marigold"
-    ],
     "source": {
       "origin": "OpenFarm.cc",
       "license": "CC0-1.0",
@@ -2503,17 +2435,6 @@
       "license": "CC0-1.0",
       "waybackUrl": "https://web.archive.org/web/20191016095928/https://openfarm.cc/en/crops/grapes",
       "captured": "20191016"
-    }
-  },
-  {
-    "slug": "grass",
-    "name": "Grass",
-    "binomialName": "Cannabis sativa",
-    "source": {
-      "origin": "OpenFarm.cc",
-      "license": "CC0-1.0",
-      "waybackUrl": "https://web.archive.org/web/20241105214209/https://openfarm.cc/en/crops/grass",
-      "captured": "20241105"
     }
   },
   {
@@ -2640,6 +2561,7 @@
     "slug": "groundnut",
     "name": "groundnut",
     "binomialName": "Apios americana",
+    "description": "Groundnut, or hopniss, is a native North American perennial vine that produces strings of edible, protein-rich tubers along its roots. A traditional Indigenous food and a permaculture favorite, it fixes nitrogen and thrives in moist soils and along pond edges. Tubers are dug in fall and cooked like potatoes.",
     "source": {
       "origin": "OpenFarm.cc",
       "license": "CC0-1.0",
@@ -2800,17 +2722,6 @@
       "license": "CC0-1.0",
       "waybackUrl": "https://web.archive.org/web/20250329183904/https://openfarm.cc/en/crops/hibiscus",
       "captured": "20250329"
-    }
-  },
-  {
-    "slug": "hindss-black-walnut",
-    "name": "You Can Grow Anything",
-    "binomialName": "Juglans hindsii",
-    "source": {
-      "origin": "OpenFarm.cc",
-      "license": "CC0-1.0",
-      "waybackUrl": "https://web.archive.org/web/20150317170945/https://openfarm.cc/en/crops/hindss-black-walnut",
-      "captured": "20150317"
     }
   },
   {
@@ -2982,31 +2893,6 @@
     }
   },
   {
-    "slug": "indian-bean",
-    "name": "indian bean",
-    "binomialName": "catalpa",
-    "source": {
-      "origin": "OpenFarm.cc",
-      "license": "CC0-1.0",
-      "waybackUrl": "https://web.archive.org/web/20220625074452/https://openfarm.cc/en/crops/indian-bean",
-      "captured": "20220625"
-    }
-  },
-  {
-    "slug": "indian-chili",
-    "name": "indian chili",
-    "binomialName": "capsicum chinense",
-    "companions": [
-      "tomatillo"
-    ],
-    "source": {
-      "origin": "OpenFarm.cc",
-      "license": "CC0-1.0",
-      "waybackUrl": "https://web.archive.org/web/20250318003357/https://openfarm.cc/en/crops/indian-chili",
-      "captured": "20250318"
-    }
-  },
-  {
     "slug": "jalapeno-pepper",
     "name": "Jalapeño Pepper",
     "binomialName": "Capsicum annum",
@@ -3022,20 +2908,6 @@
       "license": "CC0-1.0",
       "waybackUrl": "https://web.archive.org/web/20220809171648/https://openfarm.cc/en/crops/jalapeno-pepper",
       "captured": "20220809"
-    }
-  },
-  {
-    "slug": "japanese-maple",
-    "name": "japanese maple",
-    "binomialName": "acer palmatum",
-    "companions": [
-      "bamboo"
-    ],
-    "source": {
-      "origin": "OpenFarm.cc",
-      "license": "CC0-1.0",
-      "waybackUrl": "https://web.archive.org/web/20250318002223/https://openfarm.cc/en/crops/japanese-maple",
-      "captured": "20250318"
     }
   },
   {
@@ -3062,6 +2934,7 @@
     "slug": "kai-lan",
     "name": "kai-lan",
     "binomialName": "brassica oleracea var. alboglabra",
+    "description": "Kai-lan, or Chinese broccoli, is a leafy brassica grown for its thick, crisp stems, glossy blue-green leaves, and small flower buds. It has a mild, sweet-bitter flavor and is a staple of Cantonese stir-fries, often blanched and served with oyster sauce. It grows quickly in cool weather.",
     "source": {
       "origin": "OpenFarm.cc",
       "license": "CC0-1.0",
@@ -3160,7 +3033,6 @@
     "rowSpacingCm": 10,
     "heightCm": 20,
     "companions": [
-      "cauliflower-1",
       "german-chamomile"
     ],
     "calculatorCropId": "kohlrabi",
@@ -3175,6 +3047,7 @@
     "slug": "komatsuna",
     "name": "komatsuna",
     "binomialName": "brassica rapa (pervidis / komatsuna)",
+    "description": "Komatsuna, or Japanese mustard spinach, is a fast-growing leafy brassica harvested for its mild, tender greens. It shrugs off both heat and frost better than true spinach, making it a productive cut-and-come-again crop across much of the year. Sow directly and harvest leaves young or let plants mature.",
     "source": {
       "origin": "OpenFarm.cc",
       "license": "CC0-1.0",
@@ -3251,6 +3124,7 @@
     "slug": "lemon",
     "name": "You Can Grow Anything",
     "binomialName": "citrus × limon",
+    "description": "The lemon is a small evergreen citrus tree bearing tart, aromatic yellow fruit used for juice, zest, and preserving. In mild climates trees flower and fruit nearly year-round; in colder zones they grow well in containers brought indoors for winter. They want full sun, well-drained soil, and protection from frost.",
     "source": {
       "origin": "OpenFarm.cc",
       "license": "CC0-1.0",
@@ -3408,6 +3282,7 @@
     "slug": "lowbush-blueberry",
     "name": "lowbush blueberry",
     "binomialName": "Vaccinium angustifolium",
+    "description": "The lowbush blueberry is a low, spreading perennial shrub native to northeastern North America, producing small, intensely sweet berries. Cold-hardy and rhizomatous, it forms dense mats and thrives in acidic, well-drained soil. This is the wild blueberry of commerce, more often managed than planted.",
     "source": {
       "origin": "OpenFarm.cc",
       "license": "CC0-1.0",
@@ -3556,17 +3431,6 @@
       "license": "CC0-1.0",
       "waybackUrl": "https://web.archive.org/web/20250218033704/https://openfarm.cc/en/crops/melon",
       "captured": "20250218"
-    }
-  },
-  {
-    "slug": "mexican-orange",
-    "name": "mexican orange",
-    "binomialName": "choisya dumosa",
-    "source": {
-      "origin": "OpenFarm.cc",
-      "license": "CC0-1.0",
-      "waybackUrl": "https://web.archive.org/web/20240519151051/https://openfarm.cc/en/crops/mexican-orange",
-      "captured": "20240519"
     }
   },
   {
@@ -4139,7 +4003,6 @@
     "companions": [
       "english-walnut",
       "goumi-berry",
-      "hindss-black-walnut",
       "walnut"
     ],
     "source": {
@@ -4279,7 +4142,6 @@
       "brussels-sprouts",
       "cabbage",
       "carrot",
-      "cauliflower-1",
       "kale-1",
       "kohlrabi",
       "strawberry",
@@ -4461,6 +4323,7 @@
     "slug": "purple-amaranth",
     "name": "purple amaranth",
     "binomialName": "amaranthus cruentus",
+    "description": "Purple amaranth is a fast-growing annual grown both as a leafy vegetable and a protein-rich pseudo-grain. Young leaves are cooked like spinach, while the tall seed heads yield tiny, nutritious grains. Heat-loving and drought-tolerant, it is among the most productive crops in hot climates.",
     "source": {
       "origin": "OpenFarm.cc",
       "license": "CC0-1.0",
@@ -4635,23 +4498,6 @@
       "license": "CC0-1.0",
       "waybackUrl": "https://web.archive.org/web/20221006163825/https://openfarm.cc/en/crops/radish",
       "captured": "20221006"
-    }
-  },
-  {
-    "slug": "rainbow-carrot",
-    "name": "Rainbow Carrot",
-    "description": "A mix of different coloured carrots, sold in one seed pack.",
-    "sun": "Partial Sun",
-    "growingDegreeDays": 60,
-    "heightCm": 20,
-    "tags": [
-      "carrot"
-    ],
-    "source": {
-      "origin": "OpenFarm.cc",
-      "license": "CC0-1.0",
-      "waybackUrl": "https://web.archive.org/web/20230608011751/https://openfarm.cc/en/crops/rainbow-carrot",
-      "captured": "20230608"
     }
   },
   {
@@ -5578,6 +5424,7 @@
     "slug": "sugar-maple",
     "name": "sugar maple",
     "binomialName": "acer saccharum",
+    "description": "The sugar maple is a large, long-lived hardwood famous as the primary source of maple syrup, tapped in late winter for its sweet rising sap. It also yields prized timber and brilliant fall color. Trees take decades to reach tapping size but then produce for generations, making them a classic long-horizon homestead planting.",
     "companions": [
       "st-johns-wort"
     ],
@@ -5877,9 +5724,6 @@
     "spreadCm": 90,
     "rowSpacingCm": 60,
     "heightCm": 100,
-    "companions": [
-      "indian-chili"
-    ],
     "source": {
       "origin": "OpenFarm.cc",
       "license": "CC0-1.0",
@@ -5925,6 +5769,7 @@
     "slug": "turmeric",
     "name": "turmeric",
     "binomialName": "curcuma longa",
+    "description": "Turmeric is a rhizomatous perennial in the ginger family, grown for its bright orange underground stems. The rhizomes are boiled, dried, and ground into the warm, earthy yellow spice central to South Asian cooking, and are prized for the anti-inflammatory compound curcumin. It needs a long, frost-free season and rich, consistently moist soil.",
     "source": {
       "origin": "OpenFarm.cc",
       "license": "CC0-1.0",
@@ -5969,20 +5814,6 @@
       "license": "CC0-1.0",
       "waybackUrl": "https://web.archive.org/web/20250218033819/https://openfarm.cc/en/crops/uf-micro-tom-tomato",
       "captured": "20250218"
-    }
-  },
-  {
-    "slug": "umbrella-plant",
-    "name": "umbrella plant",
-    "binomialName": "Eriogonum annuum",
-    "companions": [
-      "bamboo"
-    ],
-    "source": {
-      "origin": "OpenFarm.cc",
-      "license": "CC0-1.0",
-      "waybackUrl": "https://web.archive.org/web/20250318012418/https://openfarm.cc/en/crops/umbrella-plant",
-      "captured": "20250318"
     }
   },
   {
@@ -6306,20 +6137,6 @@
       "license": "CC0-1.0",
       "waybackUrl": "https://web.archive.org/web/20240911124956/https://openfarm.cc/en/crops/white-onion",
       "captured": "20240911"
-    }
-  },
-  {
-    "slug": "wild-tansy",
-    "name": "wild tansy",
-    "binomialName": "ambrosia artemisiifolia",
-    "companions": [
-      "cantaloupe"
-    ],
-    "source": {
-      "origin": "OpenFarm.cc",
-      "license": "CC0-1.0",
-      "waybackUrl": "https://web.archive.org/web/20250318014000/https://openfarm.cc/en/crops/wild-tansy",
-      "captured": "20250318"
     }
   },
   {
