@@ -77,7 +77,9 @@
     ],
     "uses": ["cooking"],
     "companions": ["corn", "radish", "beans-bush"],
-    "antagonists": ["potato"]
+    "antagonists": ["potato"],
+    "binomialName": "Cucumis melo var. cantalupo",
+    "description": "Cantaloupes are round melons that grow on vines and have sweet, firm, juicy, orange flesh. The rind is light-grey and reticulated (or covered in a \"net-like\" pattern)."
   },
   {
     "id": "groundcherry",
@@ -158,7 +160,9 @@
     ],
     "uses": ["cooking", "livestock-feed", "companion"],
     "companions": ["corn", "beans-bush", "beans-pole", "marigold", "nasturtium"],
-    "antagonists": ["potato"]
+    "antagonists": ["potato"],
+    "binomialName": "Cucurbita pepo",
+    "description": "Pumpkins are squash cultivars that are round to oval in shape with thick, slightly ribbed skin that varies from deep yellow to orange in color. Their flesh ranges from yellow to gold and has large seeds. Like other members of the Cucurbitaceae family, they grow on sprawling vines. Different varieties of pumpkins are grown for food or decoration."
   },
   {
     "id": "melon",
@@ -199,6 +203,8 @@
     ],
     "uses": ["cooking"],
     "companions": ["corn", "radish"],
-    "antagonists": ["potato"]
+    "antagonists": ["potato"],
+    "binomialName": "Cucumis melo",
+    "description": "Melons are a group of species in the Cucurbitaceae family. They produce sweet fruits that grow on sprawling vines. Types of melons include: watermelons, cantaloupe, honeydew, casaba, and crenshaw. More growing information is available in individual species entries."
   }
 ]

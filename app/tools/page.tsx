@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Cloud, Sprout, Shield, Compass, ArrowRight, MapPin, ScanLine, FileText } from "lucide-react";
+import { Cloud, Sprout, Shield, Compass, ArrowRight, MapPin, ScanLine, FileText, Database } from "lucide-react";
 import FieldStationLayout from "@/components/ui/FieldStationLayout";
 import BrutalistBlock from "@/components/ui/BrutalistBlock";
 import Typography from "@/components/ui/Typography";
@@ -43,6 +43,24 @@ const ops = [
       "54 crops",
       "Row cover → greenhouse extension",
       "Deployment recommendations",
+    ],
+  },
+  {
+    id: "kb",
+    code: "Knowledge Base",
+    mission: "Look up how to grow it — 350+ crops, botanical names, sun and spacing.",
+    href: "/kb/",
+    icon: Database,
+    status: "ONLINE" as const,
+    capabilities: [
+      "353 crops",
+      "Botanical names",
+      "Sun & spacing data",
+      "Sowing methods",
+      "Companion crops",
+      "Links into planting calendar",
+      "Open public-domain dataset",
+      "Recovered from OpenFarm.cc",
     ],
   },
   {

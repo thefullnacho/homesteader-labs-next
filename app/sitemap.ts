@@ -1,6 +1,7 @@
 import { MetadataRoute } from "next";
 import { getAllProducts } from "@/lib/products";
 import { getAllPosts } from "@/lib/posts";
+import { getAllKbCrops } from "@/lib/kb";
 import { isSurvivalPlanPublic } from "@/lib/survivalPlan/visibility";
 
 const SITE_URL = "https://homesteaderlabs.com";
@@ -20,6 +21,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${SITE_URL}/tools/caloric-security/companions/`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.6 },
     { url: `${SITE_URL}/tools/fabrication/`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.7 },
     { url: `${SITE_URL}/tools/forager-game/`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.85 },
+    { url: `${SITE_URL}/kb/`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.8 },
     // Survival Garden Plan landing — only listed when the funnel is public (NEXT_PUBLIC_SURVIVAL_PLAN_PUBLIC=true).
     // /survival-garden-plan/wizard/ and /success/[orderId]/ are noindex — gated pages, intentionally omitted.
     ...(isSurvivalPlanPublic()
@@ -46,5 +48,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.6,
   }));
 
-  return [...staticRoutes, ...productRoutes, ...archiveRoutes];
+  const kbRoutes: MetadataRoute.Sitemap = getAllKbCrops().map((crop) => ({
+    url: `${SITE_URL}/kb/${crop.slug}/`,
+    lastModified: new Date(),
+    changeFrequency: "monthly",
+    priority: 0.5,
+  }));
+
+  return [...staticRoutes, ...productRoutes, ...archiveRoutes, ...kbRoutes];
 }

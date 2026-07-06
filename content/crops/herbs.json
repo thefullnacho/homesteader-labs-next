@@ -39,7 +39,8 @@
     ],
     "uses": ["cooking", "companion", "pest-deterrent"],
     "companions": ["tomato", "pepper-bell", "pepper-hot"],
-    "antagonists": ["sage"]
+    "antagonists": ["sage"],
+    "binomialName": "Ocimum basilicum"
   },
   {
     "id": "cilantro",
@@ -78,7 +79,9 @@
     ],
     "uses": ["cooking", "companion"],
     "companions": ["tomato", "spinach", "peas"],
-    "antagonists": ["fennel"]
+    "antagonists": ["fennel"],
+    "binomialName": "Coriandrum sativum",
+    "description": "Coriander is the English (UK) name for Cilantro. In America, Coriander is used to refer to the dried round seeds of the Cilantro plant, which have a warm, spicy flavor and are used in curries, pickles, sausages, soups, and stews. The essential oil of the seeds is used in herbal remedies and dietary supplements, and to flavor liqueurs, gin, vermouth, tobacco, and perfumes. Cilantro is an annual herb in the Apiaceae family with soft leaves that are broadly lobed at the base of the plant and become slender and feathery higher up the stems. The leaves will be ready to harvest within 50-55 days, the seeds take up to 100 days to mature and then need to be dried."
   },
   {
     "id": "dill",
@@ -117,7 +120,9 @@
     ],
     "uses": ["cooking", "companion", "pollinator"],
     "companions": ["cabbage", "onion", "corn"],
-    "antagonists": ["carrot", "tomato"]
+    "antagonists": ["carrot", "tomato"],
+    "binomialName": "Anethum graveolens",
+    "description": "Dill is an herb wth slender green stems and feathery, delicate leaves. It's flowers are white to yellow. Fresh and dried dill leaves are used to season fish, borscht, and to make pickles. Dill is best when used fresh. It loses its flavor rapidly if dried. Dill seed is also used as a spice."
   },
   {
     "id": "parsley",
@@ -157,7 +162,8 @@
     ],
     "uses": ["cooking", "companion"],
     "companions": ["tomato", "asparagus", "rose"],
-    "antagonists": ["lettuce"]
+    "antagonists": ["lettuce"],
+    "binomialName": "Petroselinum crispum"
   },
   {
     "id": "rosemary",
@@ -197,7 +203,9 @@
     ],
     "uses": ["cooking", "medicinal", "aromatherapy", "pest-deterrent"],
     "companions": ["sage", "cabbage", "carrot"],
-    "antagonists": ["pumpkin", "cucumber"]
+    "antagonists": ["pumpkin", "cucumber"],
+    "binomialName": "Rosmarinus officinalis",
+    "description": "Rosmarinus officinalis, commonly known as rosemary, is a woody, perennial herb with fragrant, evergreen, needle-like leaves and white, pink, purple, or blue flowers, native to the Mediterranean region. It is a member of the mint family Lamiaceae, which includes many other herbs. The name \"rosemary\" derives from the Latin for \"dew\" (ros) and \"sea\" (marinus), or \"dew of the sea\". The plant is also sometimes called 'anthos', from the ancient Greek word ἄνθος, meaning \"flower\". Rosemary has a fibrous root system."
   },
   {
     "id": "thyme",
@@ -237,7 +245,9 @@
     ],
     "uses": ["cooking", "medicinal", "companion", "pest-deterrent"],
     "companions": ["cabbage", "eggplant", "strawberry"],
-    "antagonists": []
+    "antagonists": [],
+    "binomialName": "Thymus vulgaris",
+    "description": "Thyme is a perennial evergreen herb in the Lamiaceae (Mint) family. It is related to Oregano. Thyme is cold-hardy to -28.8 °C and a perennial in US Hardiness zones 5-8. Thyme can live for 5-6 years but needs to be divided or replaced after 3-4 years. It can be used fresh or dried to season dishes."
   },
   {
     "id": "oregano",
@@ -317,7 +327,9 @@
     ],
     "uses": ["cooking", "medicinal", "companion"],
     "companions": ["cabbage", "carrot", "rosemary"],
-    "antagonists": ["onion", "cucumber", "basil"]
+    "antagonists": ["onion", "cucumber", "basil"],
+    "binomialName": "Salvia officinalis",
+    "description": "Sage is an evergreen shrub with woody stems, soft green-gray leaves, and blue to purplish flowers. It is in the Mint family (Lamiaceae), and is perennial in Zones 4-8. It can be used fresh or dried, and has culinary and medicinal uses."
   },
   {
     "id": "chives",
@@ -357,7 +369,9 @@
     ],
     "uses": ["cooking", "companion", "pest-deterrent"],
     "companions": ["carrot", "tomato", "rose"],
-    "antagonists": ["beans-bush", "beans-pole", "peas"]
+    "antagonists": ["beans-bush", "beans-pole", "peas"],
+    "binomialName": "Allium schoenoprasum",
+    "description": "Chives are a perennial herb in the Allium genus related to garlic, shallots, leeks, scallions, and Chinese onions. They are grown for culinary and ornamental purposes. The scapes or stems are hollow and tubular and have a mild onion taste. They are one of the fines herbes of French cuisine and commonly used fresh. The plant forms dense clusters of slender 2-3cm bulbs, which can be cooked. Chive flowers are edible, star-shaped, and pale purple. Chives are a good companion plant because their sulfur compounds repel negative insects, and their flowers attract bees."
   },
   {
     "id": "tarragon",
@@ -397,7 +411,9 @@
     ],
     "uses": ["cooking", "companion"],
     "companions": ["eggplant"],
-    "antagonists": []
+    "antagonists": [],
+    "binomialName": "Artemisia dracunculus var. sativa",
+    "description": "French Tarragon (Artemisia dracunculus var. sativa) is a deciduous perennial herb in the Daisy (Asteraceae) family cultivated for culinary use. It's leaves have a pungent anise flavor and will make the mouth feel numb. Fresh leaves are preferred for culinary use. It's leaves can also be harvested in mid-summer and dried. Tarragon is commonly used to season meat, egg, poultry, and seafood dishes, and added to salad dressings, marinades, and sauces. The plant requires well-drained soil and is susceptible to root rot in wet conditions. It is drought tolerant. French Tarragon seldom flowers, and any seeds it might produce are sterile, so it must be propagated through cuttings. French Tarragon can also sometimes be confused with Russian Tarragon (A. dracunculoides L.), which is a hardier, larger plant that is not as desirable for culinary use and becomes less flavorful as it matures. Wild Tarragon (Artemisia dracunculus) produces viable seed. However, because it is a polymorphic species, the flavor and aroma of it's leaves is variable, making it poorly suited for culinary use. Wild Tarragon has a long history of medicinal use."
   },
   {
     "id": "mint",
@@ -437,7 +453,9 @@
     ],
     "uses": ["cooking", "tea", "medicinal", "pest-deterrent", "aromatherapy"],
     "companions": ["cabbage", "tomato", "peas"],
-    "antagonists": ["chamomile"]
+    "antagonists": ["chamomile"],
+    "binomialName": "Mentha spicata / Mentha viridis",
+    "description": "Mint is a perennial herb with a distinctive taste. It's stems are square-shaped and it has pink, purple, or white flowers. Peppermint, ginger mint, and large apple mint are hybrids of mint. Mint is often grown in pots to prevent it from overtaking the garden with its invasive, spreading rhizome root structure. It's leaves are most aromatic before the plant flowers and can be used fresh, dried, or frozen. Mint's strongly scented leaves confuse the pests of carrots, tomatoes, alliums, and brassicas, and deter flea beetles."
   },
   {
     "id": "chamomile",
@@ -596,7 +614,9 @@
     ],
     "uses": ["tea", "medicinal", "pollinator", "aromatherapy"],
     "companions": ["squash-summer", "melon", "tomato"],
-    "antagonists": []
+    "antagonists": [],
+    "binomialName": "Melissa officinalis",
+    "description": "Lemon Balm is a perennial herb in the mint family that flowers during the summer and gives off a strong lemon scent. In hot climates, a little shade can be beneficial, helping the plant to produce larger and more flavorful leaves. Lemon Balm is used in teas, salads, as an ornamental, and in aromatherapy. Like mint, Lemon Balm can aggressively spread throughout the garden - planting it in a container can keep this in check."
   },
   {
     "id": "calendula",
@@ -799,7 +819,9 @@
     ],
     "uses": ["medicinal", "tea", "cooking", "pollinator"],
     "companions": ["mint", "comfrey"],
-    "antagonists": []
+    "antagonists": [],
+    "binomialName": "Sambucus",
+    "description": "Elderberry is a group of closely related species in the Sambucus genus native to Europe and North America. The varying species are small, perennial deciduous trees and shrubs that produce large clusters of small berries. European elderberry (Sambucus nigra) and the American elderberry (Sambucus canadensis) are among the most common species. The berries of the Red Elderberry (Sambucus racemosa) are poisonous. The plants produce bunches of white, hermaphrodite flowers that are pollinated by flies. Elderberries require cross-pollination with another variety within 15 meters. The glossy, dark purple to black berries are 3–5 mm diameter and grow in drooping clusters. Shrubs should be covered with netting to prevent birds from eating all the berries, and the fruit should be left on the plant to ripen until they are dark purple. Once ripened, prune the entire cluster. Berries should be kept refrigerated after harvest. All green parts of the plant are poisonous, and the berries are bitter and very mildly poisonous when raw. The berries can be used to make jam, jelly, and chutney. Syrup, tea, infusions, cordials, and fritters are made with the flowers. Elderberry wine can be made from the flowers and berries. Elderberries are very high in Vitamins A, B, and C, potassium, iron, and antioxidants and have been used to boost the immune system and treat the flu, bronchitis, upper respiratory infections and fever. Elderberries are propagated through cuttings and suckers. Their shallow roots do not like to be disturbed once they are established, and the plants are drought-sensitive. They will produce berries in the second year, and should be pruned in the spring of their third year."
   },
   {
     "id": "holy-basil",
@@ -879,7 +901,9 @@
     ],
     "uses": ["cooking", "tea", "medicinal", "pollinator"],
     "companions": ["dill"],
-    "antagonists": ["tomato", "beans-bush", "kohlrabi", "cilantro"]
+    "antagonists": ["tomato", "beans-bush", "kohlrabi", "cilantro"],
+    "binomialName": "Foeniculum vulgare",
+    "description": "Fennel is a flowering plant species with yellow flowers and feathery leaves. It is grown primarily for its bulbous white base and green leaf stalks, which have a mild, fresh licorice flavor. It's base and stalks are delicious roasted, grilled, or eaten fresh. Do not let fennel go to seed: it can become invasive."
   },
   {
     "id": "borage",
@@ -918,7 +942,9 @@
     ],
     "uses": ["cooking", "medicinal", "companion", "pollinator"],
     "companions": ["tomato", "strawberry", "squash-summer"],
-    "antagonists": []
+    "antagonists": [],
+    "binomialName": "Borago officinalis",
+    "description": "Borage, or Starflower, is an annual flowering herb with blue, pink, or white flowers and bristly stems and leaves. It is a popular companion plant, particularly for tomatoes, as it is thought to confuse mother moths of tomato hornworms looking for a place to lay their eggs. It also attracts many pollinators. It's edible leaves can be used as a fresh vegetable or dried herb. When fresh, it has a cucumber-like taste and is used in salads, lemonade, or as a garnish. It's flowers have a sweet honey-like taste and can be used to decorate desserts or cocktails or candied. It is also cultivated for the borage seed oil extracted from it's seeds."
   },
   {
     "id": "st-johns-wort",
@@ -959,7 +985,9 @@
     ],
     "uses": ["medicinal", "tea", "dye"],
     "companions": ["yarrow", "echinacea"],
-    "antagonists": []
+    "antagonists": [],
+    "binomialName": "Hypericum perforatum",
+    "description": "St. John's Wort is a perennial, herbaceous to woody flowering plant native to Europe and Asia that is used as a medicinal herb to treat depression, inflammation, and wounds. Plants have erect stems with narrow, oblong leaves and yellow, star-shaped flowers. St. John's Wort will bloom the second year after planting, but can easily become invasive because it spreads through underground rhizomes and seeds. A single plant can produce 100,000 seeds that can remain viable for 10 years. Remove berries before they ripen to prevent seeds from forming. St. John's Wort should not be taken by pregnant women."
   },
   {
     "id": "stevia",
@@ -999,6 +1027,8 @@
     ],
     "uses": ["tea", "cooking", "medicinal"],
     "companions": ["marjoram", "thyme"],
-    "antagonists": []
+    "antagonists": [],
+    "binomialName": "Stevia rebaudiana",
+    "description": "Stevia is tender, semi-tropical shrub in the Asteraceae (Sunflower) family that is native to Brazil and Paraguay. It is grown for it's sweet leaves, which can be used fresh or dried and ground into a powder also known as Stevia. Dried leaves are sweeter than fresh, and the powder is used as a sugar substitute. Stevia contains compounds that are 200-300 times sweeter than sugar, but pass through the digestive system without being broken down and absorbed. The plant has weak, floppy stems, slender, oblong leaves, and tubular, white, hermaphrodite flowers. Stevia does best in humid, wet environments. It is a perennial in regions where the temperature range is 21 to 43° C, but can be grown as an annual or in containers in colder regions. Stevia cannot survive temperatures below 7° C. The entire plant can be harvested in the fall once flower buds have appeared but not opened (the plant has a bitter aftertaste after flowers have opened). Cooler temperatures and shorter days increase the sweetness of the leaves."
   }
 ]

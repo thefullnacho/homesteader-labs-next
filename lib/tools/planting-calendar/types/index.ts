@@ -85,6 +85,10 @@ export interface Crop {
   notes: string[];
   lunarAffinity?: 'waxing' | 'waning';
 
+  // Botanical identity (CC0 data recovered from OpenFarm.cc)
+  binomialName?: string;
+  description?: string;
+
   // Growth lifecycle (NEW)
   growthHabit?: GrowthHabit;
   yearsToFirstHarvest?: number;     // 0 for annuals, 2-7 for perennials

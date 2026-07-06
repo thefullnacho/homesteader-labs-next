@@ -38,7 +38,9 @@
     ],
     "uses": ["cooking", "companion"],
     "companions": ["beans-bush", "spinach", "borage", "thyme"],
-    "antagonists": ["cabbage", "broccoli", "cauliflower"]
+    "antagonists": ["cabbage", "broccoli", "cauliflower"],
+    "binomialName": "Fragaria × ananassa",
+    "description": "Strawberries are a hybrid species of the genus Fragaria that produce sweet, bright red fruits. There are three main types of strawberries: 1) summer-fruiting: produce a single, large crop of fruit the year after planting. To grow, transplant plugs or crowns in early spring in rows spaced at least 120cm apart. Pinch off all flowers the first season and train the plant's runners, pressing them into the soil 15-22cm apart from the mother plant. Mulch with straw or pine needles in the fall when the plants have died back. When the plants start to grow back in the spring, move the mulch aside. After harvest the second season, set a lawnmower to about 10cm high and mow, being sure not to damage crowns. The other two types are 2) Ever-bearing and 3) Day Neutral, both of which send out less runners and bear several crops of smaller fruit throughout the season. These two types can be grown using raised beds about 20cm high and 60cm wide. Transplant crowns or plugs in staggered double rows, about 30cm apart. Remove runners and flowers until July of the first year to give the roots time to develop, and then allow plants to produce fruit. All types of strawberries begin to produce fewer and less sweet fruit once they are two years or older. Because strawberries are a hybrid, seeds will not breed true. Strawberries are predominantly propagated using bare root plugs or crowns or dividing runners. Make sure not to bury the crown when transplanting plugs."
   },
   {
     "id": "blueberry",
@@ -79,7 +81,9 @@
     ],
     "uses": ["cooking", "medicinal"],
     "companions": ["rhododendron", "azalea", "pine", "oak"],
-    "antagonists": ["tomato", "brassicas"]
+    "antagonists": ["tomato", "brassicas"],
+    "binomialName": "Vaccinium sect. Cyanococcus",
+    "description": "Perennial flowering plants with sweet, indigo-colored berries. Blueberry plants are usually erect, prostrate shrubs that range in height from 10cm to 4m high, depending on the cultivar."
   },
   {
     "id": "raspberry",
@@ -160,7 +164,9 @@
     ],
     "uses": ["cooking", "livestock-feed"],
     "companions": ["comfrey", "chives", "nasturtium", "daffodil"],
-    "antagonists": ["cedar", "walnut"]
+    "antagonists": ["cedar", "walnut"],
+    "binomialName": "Malus pumila",
+    "description": "The apple is a deciduous tree in the Rose family grown for it's sweet fruit. The apple originated in Central Asia and has spread across the world. There are now over 7,500 cultivars bred for a variety of climates and characteristics. Apples are propagated through grafting because seeds do not breed true."
   },
   {
     "id": "blackberry",
@@ -202,6 +208,8 @@
     ],
     "uses": ["cooking", "medicinal"],
     "companions": ["mint", "chives"],
-    "antagonists": ["raspberry"]
+    "antagonists": ["raspberry"],
+    "binomialName": "Rubus fruticosus",
+    "description": "Deeply colored, sweet, clustered berries. The blackberry plant is a perennial plant that bears biennial stems or canes. The plant often has thorns, though some cultivars do not. Most varieties have greater berry yields from the second year on. In peak season, expect to harvest twice a week."
   }
 ]
