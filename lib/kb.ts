@@ -68,6 +68,28 @@ export function getKbCompanions(slug: string): KbCrop[] {
     .filter((c): c is KbCrop => c !== undefined && c.slug !== slug);
 }
 
+/**
+ * Whether a KB page has enough substance to be worth indexing.
+ *
+ * Recovered entries vary wildly in completeness. Thin, near-empty pages (a name
+ * and little else) read as scaled/thin content to search engines, so we keep
+ * them live for browsing and internal linking but mark them `noindex` and omit
+ * them from the sitemap until they gain real content. A crop qualifies with
+ * either a substantive description or a solid set of structured growing specs.
+ */
+export function isKbCropIndexable(crop: KbCrop): boolean {
+  const hasDescription = !!crop.description && crop.description.length >= 80;
+  const specCount = [
+    crop.sun,
+    crop.sowingMethod,
+    crop.growingDegreeDays,
+    crop.spreadCm,
+    crop.rowSpacingCm,
+    crop.heightCm,
+  ].filter((v) => v != null && v !== "").length;
+  return hasDescription || specCount >= 4;
+}
+
 /** Case-insensitive search across name, binomial name, and description. */
 export function searchKbCrops(query: string): KbCrop[] {
   const q = query.trim().toLowerCase();

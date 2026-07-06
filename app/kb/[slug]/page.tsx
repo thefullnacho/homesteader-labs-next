@@ -6,7 +6,7 @@ import FieldStationLayout from "@/components/ui/FieldStationLayout";
 import BrutalistBlock from "@/components/ui/BrutalistBlock";
 import Typography from "@/components/ui/Typography";
 import Badge from "@/components/ui/Badge";
-import { getKbCrop, getKbSlugs, getKbCompanions } from "@/lib/kb";
+import { getKbCrop, getKbSlugs, getKbCompanions, isKbCropIndexable } from "@/lib/kb";
 
 interface PageProps {
   params: { slug: string };
@@ -29,6 +29,9 @@ export function generateMetadata({ params }: PageProps): Metadata {
     title,
     description: desc.slice(0, 300),
     openGraph: { title, description: desc.slice(0, 300), type: "article" },
+    // Thin, near-empty entries stay live for browsing but out of the index
+    // until they gain real content (avoids scaled/thin-content signals).
+    robots: isKbCropIndexable(crop) ? undefined : { index: false, follow: true },
   };
 }
 

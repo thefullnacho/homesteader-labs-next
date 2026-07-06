@@ -1,7 +1,7 @@
 import { MetadataRoute } from "next";
 import { getAllProducts } from "@/lib/products";
 import { getAllPosts } from "@/lib/posts";
-import { getAllKbCrops } from "@/lib/kb";
+import { getAllKbCrops, isKbCropIndexable } from "@/lib/kb";
 import { isSurvivalPlanPublic } from "@/lib/survivalPlan/visibility";
 
 const SITE_URL = "https://homesteaderlabs.com";
@@ -48,12 +48,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.6,
   }));
 
-  const kbRoutes: MetadataRoute.Sitemap = getAllKbCrops().map((crop) => ({
-    url: `${SITE_URL}/kb/${crop.slug}/`,
-    lastModified: new Date(),
-    changeFrequency: "monthly",
-    priority: 0.5,
-  }));
+  // Thin/near-empty KB entries are noindex; keep them out of the sitemap too.
+  const kbRoutes: MetadataRoute.Sitemap = getAllKbCrops()
+    .filter(isKbCropIndexable)
+    .map((crop) => ({
+      url: `${SITE_URL}/kb/${crop.slug}/`,
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.5,
+    }));
 
   return [...staticRoutes, ...productRoutes, ...archiveRoutes, ...kbRoutes];
 }
