@@ -1,0 +1,56 @@
+---
+title: "We Didn't Win the Build Small Hackathon"
+description: "The Build Small results are in and Forager's Field Station didn't place. Here's an honest look at what won, why we'd build the same thing again, and what we're keeping from the loss."
+date: "2026-07-10"
+author: "Eli Rowe"
+tags: ["build-log", "foraging", "machine-learning", "hackathon", "off-grid"]
+category: "build-log"
+excerpt: "The hackathon results came out this week. We won nothing. This is the post-mortem, no sour grapes, just an honest accounting of what won, what we built instead, and why we're keeping the forager exactly as it is."
+---
+
+# We didn't win the Build Small Hackathon
+
+The results came out this week. We won nothing.
+
+Not the track, not a special award, not a judges' wildcard. If you read the [build post](/archive/forager-field-station-hackathon/) from a few weeks back and were quietly rooting for the little forager, thank you, and, well. Here we are.
+
+We promised you the honest version of everything on this site, and that has to include the part where we lose. So this is the post-mortem. No sour grapes. Some actual lessons.
+
+## What won
+
+Look at the winners in our track and a pattern jumps out immediately: a tutoring app. A scam-call-and-text defender. Home camera monitoring. A fitness coach that watches your posture. A tool that reads local government agendas and tells you what your town is actually about to vote on.
+
+Every one of those is a small, local model standing guard over a piece of ordinary life: your kid's homework, your grandmother's phone, your front door, your spine, your city council. That's a genuinely good vision of where small AI should go, and the judges picked well by it. If a hackathon exists to reward the tools that will help the most people, those tools will help the most people. No argument from us.
+
+Ours helps the person standing two miles past the last cell tower, wondering about a mushroom.
+
+That is not most people. It was never going to be most people. We knew that when we entered, and pretending otherwise now would be rewriting history to feel better about a scoreboard.
+
+## The trade we made on purpose
+
+Here's the thing about building for everyone: you have to hedge. A tool with a hundred million potential users gets sanded down until it can't offend, confuse, or fail any of them too badly. That's not a criticism, it's just physics. Breadth costs edges.
+
+We went the other way. The forager exists because one specific person walks out the back door with a basket and comes back with things she intends to eat. Building for her, one real user with one real problem, is what let us make the weird, spiky choices that define the thing: it refuses by default, a deadly warning always outranks a confident "safe," and it will flatly shrug at your photo rather than guess. A mass-market product could never ship "when in doubt, shut up" as its headline feature. Users would churn. Reviewers would call it broken.
+
+A tool for everyone has to always have an answer. A tool for *someone* gets to be honest.
+
+We'd make that trade again this afternoon. It just doesn't win hackathons, and that's a fair price.
+
+## What we're keeping
+
+Here's the part that makes this a cheap loss: the prize was never the only thing on the table, and everything else we came for, we got.
+
+- **The forager shipped.** [It's still live in your browser](https://build-small-hackathon-forager-field-notes.hf.space/), still refusing to identify your shoe as a chanterelle.
+- **The models are out.** [Open weights, Apache-2.0](https://huggingface.co/HomesteaderLabs/forager-field-station-models), free forever, no strings. That doesn't get un-published because a judging panel went another way.
+- **The deadline did its job.** Ten days of forced focus produced a safety architecture, a [full engineering write-up](https://huggingface.co/spaces/build-small-hackathon/Forager-Field-Notes/blob/main/FIELD_NOTES.md), and a working demo that strangers have been cheerfully trying to break ever since. We'd have dragged that out for months on our own.
+- **The proof stands.** The whole point was to show that small, offline, honest AI is good enough to trust your feet to. Nothing about the results changes a single benchmark.
+
+A hackathon is a forcing function with a lottery ticket stapled to it. The ticket didn't hit. The forcing function paid out in full.
+
+## Where this goes
+
+The handheld keeps moving, same brain, little box, no cloud. The next models on the bench point at the garden instead of the forest. And the refuse-by-default rule stays the house style for every one of them, because the lesson we're taking from this isn't "build broader."
+
+It's that somebody should be building the narrow, stubborn tools for the small crowd out past the cell towers. The big stuff has plenty of builders. The woods don't.
+
+Congratulations to the winners, genuinely. Now if you'll excuse us, there's a basket by the back door.
