@@ -1,5 +1,7 @@
 # Infographic brief: Wild Berries Safe to Eat
 
+**PRODUCED 2026-07-16.** Rendered chart lives at `public/images/wild-berry-field-chart.png`, embedded in the post. Editable source is `infographic-wild-berries.html` at repo root (self-contained, Caveat font inlined): edit, render at 1000x1700 in headless Chrome, crop to 1000x1500. Field Chart No. 001; number future charts sequentially.
+
 Companion graphic for `content/archive/wild-berry-guide.mdx`. Placeholder comment already sits in the post after the "no test" section.
 
 ## Job

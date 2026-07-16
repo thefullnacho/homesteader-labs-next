@@ -1,0 +1,52 @@
+---
+title: "Data Sovereignty Is Seed Saving"
+description: "Homesteaders already know why you save seeds: you don't let a catalog company own your food supply. The same logic applies to knowledge. Here's the case for treating data like a seed bank, and the story of a crop database we pulled back from the dead."
+date: "2026-07-16"
+author: "Alex de Brantes"
+tags: ["essay", "open-data", "self-reliance", "de-cloudify", "gardening"]
+category: "field-guide"
+excerpt: "You don't let a catalog company own the genetics of your food supply. So why do we let dead websites own the knowledge of how to grow it? An argument for saving data the way we save seeds."
+---
+
+# Data sovereignty is seed saving
+
+Every homesteader understands seed saving, even the ones who don't do it yet. The logic is in the bones of the whole project: if the only place your food can come from is a catalog, you don't have a food supply, you have a subscription. So you save seed from the plants that did well. You trade envelopes with neighbors. You keep varieties alive that no company has a reason to sell. Not because the catalog is evil, but because a thing you depend on shouldn't have a single point of failure that isn't you.
+
+Now hold that logic and look at where your growing knowledge lives.
+
+The spacing chart you bookmarked. The companion-planting table on that one blog. The variety notes in a forum thread from 2014. The frost dates on some university extension page that got "redesigned" into oblivion. Almost none of it is on paper, almost none of it is on your machines, and all of it sits on servers owned by someone whose budget, attention, or business model can vanish without asking you. We treat knowledge the way we'd never treat seed: entirely dependent on somebody else's warehouse staying open.
+
+## A seed bank burned down last year and almost nobody noticed
+
+Here's the case study that radicalized me.
+
+OpenFarm was an open-source growing-guide wiki, hundreds of crops, community-written, and the data was CC0. Public domain. Legally, it belonged to everyone on earth. In April 2025 the site shut down, and here's the part that should bother you: no data dump was ever published. People had asked for one on GitHub for eight years. When the servers went dark, data that belonged to everyone became data that existed nowhere. The license said "this is yours." The infrastructure said "not anymore."
+
+That's a seed bank burning down. Nobody meant for it to happen. It happened because a license is not a copy, and a copy on someone else's server is not your copy.
+
+So I did the only thing left. I went through the Wayback Machine's captures of the crop pages and rebuilt structured records from everything the archive had caught: descriptions, binomial names, spacing, sun requirements, companions. After pruning the junk (community wikis accumulate junk, ragweed filed under tansy, I have seen things) and cross-checking every scientific name, about 340 crops came back. They're [browsable here](/kb/), and the raw data is [on GitHub](https://github.com/thefullnacho/openfarm-crops-rescue), CC0, with every record linking to the archived page it was rebuilt from.
+
+When I mentioned this in a permaculture forum, someone asked for the raw files, and publishing them took a few hours. That's the whole point. Once the data is actually free, sharing it is trivial. It was only ever hard because it was trapped.
+
+## What seed savers already know that the internet forgot
+
+Seed saving isn't hoarding. That's the part people get wrong about it, and it's the part that matters for data too. A seed saver with a sealed vault and no garden has nothing; seeds stay alive by being grown out, selected, and passed along. The practice only works as a network: grow, save, trade, repeat.
+
+Knowledge is the same. The rescued crop data isn't valuable because I have it. It's valuable because now anyone can have it, correct it, and build on it. The morning after I published the dump, a stranger was already asking how to wire it into their home automation setup. That's a seed getting planted in somebody else's garden. That's the system working.
+
+So here's the practice, translated:
+
+- **Grow it out:** use the knowledge, and write down what your ground actually taught you, because your notes from your dirt are a landrace variety no company will ever sell.
+- **Save your copy:** if a resource matters to your operation, get it onto machines you control. A PDF, a scraped table, a printout in a binder. The Wayback Machine saved 340 crops this time; it caught maybe two-thirds of what existed. Archives are gleaning, not harvest.
+- **Trade envelopes:** when you clean up a dataset or write up what works, license it so it can travel (the rescue is CC0 for exactly this reason) and put it somewhere people can fork it, not just read it.
+- **Favor living varieties:** support the projects that keep their data open while they're alive. The difference between a resource you can export and one you can only visit is the difference between seed and produce.
+
+## Convenience is how they get you, part forty-seven
+
+The reason all our knowledge lives on other people's servers is the same reason most people don't save seed: the catalog is easier. Of course it is. It's supposed to be. Every stranglehold starts as a convenience, that's how it gets invited in. The cloud didn't take your data, you handed it over because uploading was one click and backups are a chore.
+
+I'm not going to tell you to get all of it back. I couldn't get OpenFarm back, not all of it. Two-thirds, with scorch marks. What I'll tell you is what seed savers tell beginners: start with one envelope. Pick the one resource your homestead actually leans on, the planting chart, the breed notes, the well log, and make a copy that's yours, on your shelf or your hard drive, where no shutdown announcement can touch it.
+
+You already believe in this. You believe it every time you shake seeds out of a paper bag some neighbor handed you, from a variety that officially stopped existing decades ago. The knowledge wants to live the same way the seeds do.
+
+Save both.
