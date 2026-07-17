@@ -1,4 +1,5 @@
 import createMDX from '@next/mdx';
+import remarkFrontmatter from 'remark-frontmatter';
 import remarkGfm from 'remark-gfm';
 
 /** @type {import('next').NextConfig} */
@@ -36,7 +37,9 @@ const nextConfig = {
 const withMDX = createMDX({
   extension: /\.mdx?$/,
   options: {
-    remarkPlugins: [remarkGfm],
+    // remark-frontmatter keeps the YAML block (read separately by gray-matter
+    // in lib/posts.ts) from rendering as page text.
+    remarkPlugins: [remarkFrontmatter, remarkGfm],
     rehypePlugins: [],
   },
 });
