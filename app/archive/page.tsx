@@ -12,7 +12,8 @@ export const metadata = {
   description: "Field documentation, foraging guides, and survival knowledge from the community.",
 };
 
-export default function ArchivePage({ searchParams }: { searchParams: { tag?: string } }) {
+export default async function ArchivePage(props: { searchParams: Promise<{ tag?: string }> }) {
+  const searchParams = await props.searchParams;
   const allPosts = getAllPosts();
   const tags = getAllTags();
   const activeTag = searchParams.tag;

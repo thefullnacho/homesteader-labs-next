@@ -3,6 +3,9 @@ import remarkGfm from 'remark-gfm';
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Webpack (via --webpack in scripts) until the MDX pipeline is Turbopack-ready:
+  // @next/mdx remark plugins are JS functions, which Turbopack can't serialize.
+  outputFileTracingRoot: import.meta.dirname,
   trailingSlash: true,
   pageExtensions: ['js', 'jsx', 'mdx', 'ts', 'tsx'],
   async headers() {
