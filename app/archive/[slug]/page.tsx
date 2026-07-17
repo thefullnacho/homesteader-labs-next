@@ -10,9 +10,9 @@ import Badge from "@/components/ui/Badge";
 import DymoLabel from "@/components/ui/DymoLabel";
 
 interface PageProps {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 }
 
 export async function generateStaticParams() {
@@ -22,7 +22,8 @@ export async function generateStaticParams() {
   }));
 }
 
-export async function generateMetadata({ params }: PageProps) {
+export async function generateMetadata(props: PageProps) {
+  const params = await props.params;
   const { slug } = params;
   const post = getPostBySlug(slug);
 
@@ -46,7 +47,8 @@ export async function generateMetadata({ params }: PageProps) {
   };
 }
 
-export default async function ArchivePostPage({ params }: PageProps) {
+export default async function ArchivePostPage(props: PageProps) {
+  const params = await props.params;
   const { slug } = params;
   const post = getPostBySlug(slug);
 

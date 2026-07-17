@@ -12,10 +12,11 @@ export const metadata = {
 };
 
 interface PageProps {
-  params: { orderId: string };
+  params: Promise<{ orderId: string }>;
 }
 
-export default function SuccessPage({ params }: PageProps) {
+export default async function SuccessPage(props: PageProps) {
+  const params = await props.params;
   if (!isSurvivalPlanPublic()) notFound();
 
   const downloadUrl = `/api/survival-garden-plan/regenerate/?orderId=${encodeURIComponent(params.orderId)}`;

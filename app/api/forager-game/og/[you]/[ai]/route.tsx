@@ -3,7 +3,8 @@ import { NextRequest } from 'next/server';
 
 export const runtime = 'edge';
 
-export async function GET(_req: NextRequest, { params }: { params: { you: string; ai: string } }) {
+export async function GET(_req: NextRequest, props: { params: Promise<{ you: string; ai: string }> }) {
+  const params = await props.params;
   const youScore = Math.max(0, Math.min(99, parseInt(params.you, 10) || 0));
   const aiScore  = Math.max(0, Math.min(99, parseInt(params.ai,  10) || 0));
   const verdict = youScore > aiScore ? 'I beat the AI' : aiScore > youScore ? 'AI got me' : 'Tied with the AI';
