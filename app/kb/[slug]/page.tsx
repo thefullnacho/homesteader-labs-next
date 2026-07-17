@@ -9,14 +9,15 @@ import Badge from "@/components/ui/Badge";
 import { getKbCrop, getKbSlugs, getKbCompanions, isKbCropIndexable } from "@/lib/kb";
 
 interface PageProps {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }
 
 export function generateStaticParams() {
   return getKbSlugs().map((slug) => ({ slug }));
 }
 
-export function generateMetadata({ params }: PageProps): Metadata {
+export async function generateMetadata(props: PageProps): Promise<Metadata> {
+  const params = await props.params;
   const crop = getKbCrop(params.slug);
   if (!crop) return { title: "Crop Not Found" };
 
@@ -55,7 +56,8 @@ function SpecRow({
   );
 }
 
-export default function KbCropPage({ params }: PageProps) {
+export default async function KbCropPage(props: PageProps) {
+  const params = await props.params;
   const crop = getKbCrop(params.slug);
   if (!crop) notFound();
 

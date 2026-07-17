@@ -119,7 +119,7 @@ export async function renderSurvivalPlanPdf(
   const buffer = await renderToBuffer(
     // @react-pdf/renderer's ReactPDF.DocumentProps inference is overly strict here;
     // the element returns a Document at runtime.
-    React.createElement(SurvivalPlanPdf, { plan, qrCodeDataUrl }) as React.ReactElement,
+    React.createElement(SurvivalPlanPdf, { plan, qrCodeDataUrl }) as React.ReactElement<import("@react-pdf/renderer").DocumentProps>,
   );
   return { buffer, plan };
 }
@@ -130,7 +130,7 @@ export async function renderSurvivalPlanPreviewPdf(
 ): Promise<{ buffer: Buffer; plan: SurvivalPlanOutput }> {
   const plan = buildSurvivalPlan(input, frostDates);
   const buffer = await renderToBuffer(
-    React.createElement(SurvivalPlanPreviewPdf, { plan }) as React.ReactElement,
+    React.createElement(SurvivalPlanPreviewPdf, { plan }) as React.ReactElement<import("@react-pdf/renderer").DocumentProps>,
   );
   return { buffer, plan };
 }

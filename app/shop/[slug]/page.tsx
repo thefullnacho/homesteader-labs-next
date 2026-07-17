@@ -5,14 +5,15 @@ import ProductDetail from "./ProductDetail";
 import WalkingManDetail from "./WalkingManDetail";
 
 interface ProductPageProps {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 }
 
-export async function generateMetadata({ params }: ProductPageProps): Promise<Metadata> {
+export async function generateMetadata(props: ProductPageProps): Promise<Metadata> {
+  const params = await props.params;
   const product = getProductBySlug(params.slug);
-  
+
   if (!product) {
     return {
       title: "Product Not Found",
@@ -37,7 +38,8 @@ export async function generateStaticParams() {
   }));
 }
 
-export default function ProductPage({ params }: ProductPageProps) {
+export default async function ProductPage(props: ProductPageProps) {
+  const params = await props.params;
   const product = getProductBySlug(params.slug);
 
   if (!product) {

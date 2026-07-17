@@ -18,10 +18,11 @@ export const metadata = {
 };
 
 interface PageProps {
-  searchParams: { p?: string };
+  searchParams: Promise<{ p?: string }>;
 }
 
-export default function CompanionPage({ searchParams }: PageProps) {
+export default async function CompanionPage(props: PageProps) {
+  const searchParams = await props.searchParams;
   if (!isSurvivalPlanPublic()) notFound();
 
   const token = searchParams.p ?? '';

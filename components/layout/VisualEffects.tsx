@@ -17,7 +17,7 @@ const VisualEffects = () => {
       <div 
         className="fixed inset-0 pointer-events-none z-[-1] opacity-[0.04] mix-blend-multiply"
         style={{
-          backgroundImage: "url('/textures/subtle-concrete-mildev.jpg')",
+          backgroundImage: "url('/textures/subtle-concrete-mildew.jpg')",
           backgroundRepeat: 'repeat'
         }}
       />
