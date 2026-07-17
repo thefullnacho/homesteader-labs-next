@@ -7,6 +7,9 @@ const nextConfig = {
   // Webpack (via --webpack in scripts) until the MDX pipeline is Turbopack-ready:
   // @next/mdx remark plugins are JS functions, which Turbopack can't serialize.
   outputFileTracingRoot: import.meta.dirname,
+  // Dev binds 0.0.0.0; allow the browser to reach dev resources via 127.0.0.1
+  // (Next blocks cross-origin /_next requests by default since 15.2).
+  allowedDevOrigins: ['127.0.0.1'],
   trailingSlash: true,
   pageExtensions: ['js', 'jsx', 'mdx', 'ts', 'tsx'],
   async headers() {
