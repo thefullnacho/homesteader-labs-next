@@ -44,7 +44,12 @@ type ClockState = 'short' | 'thin' | 'slack';
 
 function outDate(days: number) {
   const d = new Date(Date.now() + days * 86_400_000);
-  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+  const sameYear = d.getFullYear() === new Date().getFullYear();
+  return d.toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    ...(sameYear ? {} : { year: 'numeric' }),
+  });
 }
 
 function clockDays(days: number | null): string {
@@ -192,6 +197,7 @@ export default function AutonomyDashboard({
     days: number | null;
     breakdown: string;
     note: string;
+    sustaining?: boolean;   // solar covers the draw — the clock isn't counting down
   }[] = [
     {
       name: 'Food',
@@ -217,14 +223,15 @@ export default function AutonomyDashboard({
     {
       name: 'Power',
       days: energyAutonomy ? energyAutonomy.daysOfEnergy : null,
+      sustaining: energyAutonomy?.solarCoversBaseload ?? false,
       breakdown: energyAutonomy
-        ? `${energyAutonomy.storedUsableWh.toFixed(0)} Wh banked ÷ ${energyAutonomy.dailyDrawWh.toFixed(0)} Wh/day draw`
+        ? `${energyAutonomy.storedUsableWh.toFixed(0)} Wh usable of the ${energyAutonomy.batteryCapWh.toFixed(0)} Wh bank ÷ ${energyAutonomy.dailyDrawWh.toFixed(0)} Wh/day draw`
         : 'No energy system configured',
       note: energyAutonomy?.solarCoversBaseload
-        ? 'Clock stops while the panels cover the baseload. Most clear days, they do.'
+        ? 'The panels out-produce the draw, so the clock only counts down when the weather turns. Usable is half the bank, the safe discharge floor for lead-acid.'
         : energyAutonomy && energyAutonomy.averageDailySolarWh > 0
-          ? 'Forecast solar is below the baseload, so the battery is depleting.'
-          : 'Battery only. Wire in a forecast by adding a location above.',
+          ? 'Forecast solar is below the baseload, so the battery is depleting. Usable is half the bank, the safe discharge floor for lead-acid.'
+          : 'Battery only, counted at half the bank (safe discharge). Wire in a forecast by adding a location above.',
     },
   ];
 
@@ -297,12 +304,14 @@ export default function AutonomyDashboard({
                       st === 'short' ? 'text-marker' : st === 'thin' ? 'text-rust' : ''
                     }`}
                   >
-                    {clockDays(c.days)}
+                    {c.sustaining ? '60+' : clockDays(c.days)}
                   </span>
                   <span className="font-mono text-[0.72rem] uppercase tracking-wider text-ink/60">
-                    {c.days !== null
-                      ? `days · runs out ${outDate(c.days)}`
-                      : 'days'}
+                    {c.sustaining
+                      ? 'days · sun-fed, no run-out on the sheet'
+                      : c.days !== null
+                        ? `days · runs out ${outDate(c.days)}`
+                        : 'days'}
                   </span>
                 </div>
                 {/* 60-day reach bar */}
@@ -330,7 +339,7 @@ export default function AutonomyDashboard({
           })}
         </div>
         {/* the one handwritten note allowed on a working page */}
-        {weakest && minDays !== null && (
+        {weakest && minDays !== null && !weakest.sustaining && (
           <p className="font-hand font-semibold text-marker text-2xl mt-6 -rotate-1">
             ✎ {weakest.name.toLowerCase()} runs dry first, {outDate(minDays)}. that&apos;s your
             next project, not the garden.

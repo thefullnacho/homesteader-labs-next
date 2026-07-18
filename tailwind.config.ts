@@ -10,16 +10,19 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        // Paper field-notebook palette
-        paper: 'var(--paper)',
-        kraft: 'var(--kraft)',
-        manila: 'var(--manila)',
-        ink: 'var(--ink)',
-        soil: 'var(--soil)',
-        marker: 'var(--marker)',
-        moss: 'var(--moss)',
-        rust: 'var(--rust)',
-        slateblue: 'var(--slateblue)',
+        // Paper field-notebook palette. Hex literals, not var() refs:
+        // Tailwind can't inject alpha into var() colors, so opacity
+        // modifiers (text-ink/60, bg-moss/50) silently generate nothing.
+        // Keep in sync with the :root block in globals.css.
+        paper: '#f5f0e2',
+        kraft: '#e9ddc1',
+        manila: '#efe5cc',
+        ink: '#26221a',
+        soil: '#5a4630',
+        marker: '#e4571f',
+        moss: '#5c6b3c',
+        rust: '#a8442a',
+        slateblue: '#3f5d6b',
         // Legacy tokens, mapped onto the paper palette in globals.css.
         // Unported pages keep working; remove once every page uses the
         // palette names above.

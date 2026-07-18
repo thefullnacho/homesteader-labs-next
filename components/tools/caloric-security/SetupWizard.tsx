@@ -337,7 +337,7 @@ function StepEnergy({ state, set }: { state: WizardState; set: (k: keyof WizardS
 
       <FieldInput
         label="Battery bank" unit="Ah"
-        sub="Total amp-hours at 12V. Multiply 24V systems by 2, 48V by 4"
+        sub="Total amp-hours at 12V. Multiply 24V systems by 2, 48V by 4. The clock counts half as safely usable (lead-acid discharge floor)"
         value={state.batteryCapacityAh}
         onChange={v => set('batteryCapacityAh', v)}
         placeholder="e.g. 400"
