@@ -7,10 +7,22 @@ const config: Config = {
     './components/**/*.{js,ts,jsx,tsx,mdx}',
     './app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
-  darkMode: 'class',
   theme: {
     extend: {
       colors: {
+        // Paper field-notebook palette
+        paper: 'var(--paper)',
+        kraft: 'var(--kraft)',
+        manila: 'var(--manila)',
+        ink: 'var(--ink)',
+        soil: 'var(--soil)',
+        marker: 'var(--marker)',
+        moss: 'var(--moss)',
+        rust: 'var(--rust)',
+        slateblue: 'var(--slateblue)',
+        // Legacy tokens, mapped onto the paper palette in globals.css.
+        // Unported pages keep working; remove once every page uses the
+        // palette names above.
         background: {
           primary: 'var(--bg-primary)',
           secondary: 'var(--bg-secondary)',
@@ -28,7 +40,9 @@ const config: Config = {
         },
       },
       fontFamily: {
-        mono: ['var(--font-mono)', 'Courier New', 'Courier', 'monospace'],
+        display: ['var(--font-display)', 'sans-serif'],
+        serif: ['var(--font-serif)', 'Georgia', 'serif'],
+        mono: ['var(--font-plex-mono)', 'Courier New', 'Courier', 'monospace'],
         hand: ['var(--font-hand)', 'Caveat', 'cursive'],
       },
       boxShadow: {

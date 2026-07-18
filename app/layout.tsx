@@ -1,15 +1,36 @@
 import type { Metadata } from "next";
-import { Caveat } from "next/font/google";
+import { Archivo_Black, Caveat, IBM_Plex_Mono, Newsreader } from "next/font/google";
 import "./globals.css";
 import Navigation from "@/components/layout/Navigation";
 import Footer from "@/components/layout/Footer";
 import TerminalOverlay from "@/components/terminal/TerminalOverlay";
-import VisualEffects from "@/components/layout/VisualEffects";
 import { Providers } from "@/components/providers";
+
+const archivo = Archivo_Black({
+  subsets: ["latin"],
+  weight: "400",
+  variable: "--font-display",
+  display: "swap",
+});
+
+const newsreader = Newsreader({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  style: ["normal", "italic"],
+  variable: "--font-serif",
+  display: "swap",
+});
+
+const plexMono = IBM_Plex_Mono({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-plex-mono",
+  display: "swap",
+});
 
 const caveat = Caveat({
   subsets: ["latin"],
-  weight: ["400", "700"],
+  weight: ["400", "500", "600", "700"],
   variable: "--font-hand",
   display: "swap",
 });
@@ -43,10 +64,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${caveat.variable} dark`}>
-      <body className="min-h-screen bg-background-primary text-foreground-primary font-mono flex flex-col relative overflow-x-hidden transition-colors duration-300">
+    <html lang="en" className={`${archivo.variable} ${newsreader.variable} ${plexMono.variable} ${caveat.variable}`}>
+      <body className="min-h-screen bg-paper text-ink font-serif flex flex-col relative overflow-x-hidden">
         <Providers>
-          <VisualEffects />
           <Navigation />
           <main id="main-content" className="flex-grow relative z-10" role="main">
             {children}

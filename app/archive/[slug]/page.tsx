@@ -1,13 +1,7 @@
-import { getAllSlugs, getPostBySlug } from "@/lib/posts";
+import { getAllSlugs, getPostBySlug, getAllPosts } from "@/lib/posts";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { ChevronLeft, Calendar, User, Tag } from "lucide-react";
-import FieldStationLayout from "@/components/ui/FieldStationLayout";
-import BrutalistBlock from "@/components/ui/BrutalistBlock";
-import Typography from "@/components/ui/Typography";
-import Button from "@/components/ui/Button";
-import Badge from "@/components/ui/Badge";
-import DymoLabel from "@/components/ui/DymoLabel";
+import { PaperClip, Stamp } from "@/components/field/kit";
 
 interface PageProps {
   params: Promise<{
@@ -59,98 +53,108 @@ export default async function ArchivePostPage(props: PageProps) {
   // Dynamically import the MDX content
   const { default: MDXContent } = await import(`../../../content/archive/${slug}.mdx`);
 
+  // Two neighbors from the same drawer for the footer
+  const related = getAllPosts()
+    .filter((p) => p.slug !== post.slug)
+    .sort((a, b) =>
+      a.category === post.category && b.category !== post.category ? -1 : 1
+    )
+    .slice(0, 2);
+
   return (
-    <FieldStationLayout stationId={`HL_DOC_${post.slug.toUpperCase().replace(/-/g, '_')}`}>
-      <div className="max-w-4xl mx-auto">
-        {/* Back Link */}
-        <div className="mb-6">
-          <Link 
-            href="/archive/"
-            className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-tighter hover:text-accent transition-colors"
-          >
-            <ChevronLeft size={14} />
-            <span>Back_to_Archive</span>
-          </Link>
+    <article>
+      {/* Note header band */}
+      <section className="bg-kraft grain border-b-2 border-ink torn-top relative">
+        <div className="max-w-6xl mx-auto px-4 pt-10 pb-12 relative z-[2]">
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-2 font-mono text-[0.68rem] uppercase tracking-[0.18em] text-ink/60 mb-5">
+            <Link href="/archive/" className="hover:text-marker underline underline-offset-4">
+              Field Notes
+            </Link>
+            <span>/</span>
+            <span className="bg-paper border border-ink/40 px-1.5 py-0.5">{post.category}</span>
+            <span className="ml-auto">
+              {post.date} · {post.author}
+            </span>
+          </div>
+          {post.tags.length > 0 && (
+            <div className="flex flex-wrap gap-2 mb-5">
+              {post.tags.slice(0, 3).map((tag, i) => (
+                <Stamp
+                  key={tag}
+                  color={i === 0 ? "text-moss" : i === 1 ? "text-slateblue" : "text-rust"}
+                  rotate={i === 1 ? "1.8deg" : i === 2 ? "-2.2deg" : undefined}
+                >
+                  {tag}
+                </Stamp>
+              ))}
+            </div>
+          )}
+          <h1 className="font-display uppercase text-3xl sm:text-5xl leading-[0.98] max-w-3xl text-balance">
+            {post.title}
+          </h1>
+          <p className="mt-5 text-xl md:text-2xl leading-relaxed max-w-2xl text-ink/85 italic">
+            {post.description}
+          </p>
+        </div>
+      </section>
+
+      {/* Body: working surface, zero degrees */}
+      <section className="max-w-3xl mx-auto px-4 pt-12">
+        <div className="relative">
+          <MDXContent />
         </div>
 
-        {/* Article */}
-        <BrutalistBlock className="p-0 overflow-hidden" variant="default" refTag={`DOC_REF_${post.date.replace(/-/g, '')}`}>
-          {/* Header */}
-          <div className="border-b-2 border-border-primary p-6 md:p-10 bg-background-primary/30">
-            {/* Meta */}
-            <div className="flex flex-wrap items-center gap-4 mb-6">
-              <DymoLabel>{post.category}</DymoLabel>
-              <div className="flex items-center gap-4 text-xs font-mono opacity-50 uppercase">
-                <span className="flex items-center gap-1.5">
-                  <Calendar size={12} className="text-accent" />
-                  {post.date}
-                </span>
-                <span className="flex items-center gap-1.5">
-                  <User size={12} className="text-accent" />
-                  {post.author}
-                </span>
-              </div>
-            </div>
-
-            {/* Title */}
-            <Typography variant="h1" className="mb-4 text-3xl md:text-5xl leading-tight">
-              {post.title}
-            </Typography>
-
-            {/* Description */}
-            <Typography variant="body" className="opacity-70 text-lg md:text-xl leading-relaxed italic border-l-2 border-accent pl-4">
-              {post.description}
-            </Typography>
-
-            {/* Tags */}
-            {post.tags.length > 0 && (
-              <div className="flex flex-wrap gap-2 mt-8">
-                {post.tags.map((tag) => (
-                  <Badge 
-                    key={tag}
-                    variant="status"
-                    className="text-xs"
-                  >
-                    <Tag size={10} className="mr-1 text-accent" />
-                    {tag}
-                  </Badge>
-                ))}
-              </div>
-            )}
+        {/* Document footer */}
+        <div className="mt-12 border-t-2 border-ink pt-4 flex flex-col sm:flex-row justify-between gap-4 font-mono text-[0.68rem] uppercase tracking-wider text-ink/60">
+          <div>
+            <p>Document: {post.slug.replace(/-/g, "_")}</p>
+            <p>Operator: {post.author}</p>
           </div>
+          <p className="text-ink/50 max-w-xs sm:text-right">
+            Educational purposes only. Field-verify before you rely on it.
+          </p>
+        </div>
 
-          {/* Content */}
-          <div className="p-6 md:p-10 prose prose-invert max-w-none prose-headings:uppercase prose-headings:tracking-tight prose-headings:font-bold prose-p:leading-relaxed prose-a:text-accent hover:prose-a:brightness-110 prose-code:text-accent prose-code:bg-background-secondary prose-code:px-1 prose-code:rounded-sm">
-            <MDXContent />
-          </div>
-
-          {/* Footer */}
-          <div className="border-t-2 border-border-primary p-6 md:p-10 bg-background-secondary/50">
-            <div className="flex flex-col sm:flex-row justify-between items-center gap-6">
-              <div className="text-xs font-mono opacity-40 uppercase tracking-tighter">
-                <p>DOCUMENT_ID: {post.slug.toUpperCase().replace(/-/g, '_')}</p>
-                <p>OPERATOR: {post.author}</p>
-                <p>STATUS: FIELD_VERIFIED</p>
-              </div>
-              <Button 
+        {/* Filed next to this one: browsing cards, tilts allowed */}
+        {related.length > 0 && (
+          <div className="mt-16 pb-16 no-print">
+            <div className="flex items-end justify-between border-b-2 border-ink pb-2 mb-6">
+              <h2 className="font-display uppercase text-xl">Filed next to this one</h2>
+              <Link
                 href="/archive/"
-                variant="secondary"
-                size="sm"
+                className="font-mono text-[0.7rem] uppercase tracking-wider underline decoration-marker decoration-2 underline-offset-4 hover:text-marker"
               >
-                Return_to_Archive
-              </Button>
+                ← All field notes
+              </Link>
+            </div>
+            <div className="grid sm:grid-cols-2 gap-6 max-w-3xl">
+              {related.map((n, i) => (
+                <Link
+                  key={n.slug}
+                  href={`/archive/${n.slug}/`}
+                  className={`relative card-paper grain p-5 pt-6 block hover:-translate-y-1 transition-transform group ${
+                    i % 2 ? "rotate-slight-r" : "rotate-slight"
+                  }`}
+                >
+                  <PaperClip className="absolute -top-4 right-8 w-5 h-12 -rotate-6" />
+                  <div className="flex items-center justify-between font-mono text-[0.64rem] uppercase tracking-[0.18em] text-ink/55 mb-2 relative z-[2]">
+                    <span className="bg-kraft px-1.5 py-0.5 border border-ink/40">
+                      {n.category}
+                    </span>
+                    <span>{n.date}</span>
+                  </div>
+                  <h3 className="font-display uppercase text-base leading-tight group-hover:text-marker transition-colors relative z-[2]">
+                    {n.title}
+                  </h3>
+                  <p className="mt-1.5 text-[0.92rem] text-ink/80 line-clamp-2 relative z-[2]">
+                    {n.excerpt || n.description}
+                  </p>
+                </Link>
+              ))}
             </div>
           </div>
-        </BrutalistBlock>
-
-        {/* Technical Notice */}
-        <div className="mt-8 text-center px-4">
-          <Typography variant="small" className="opacity-20 font-mono text-[11px] uppercase tracking-[0.2em] leading-loose">
-            Warning: The information contained in this field manual is for educational purposes only. 
-            Homesteader Labs assumes no responsibility for actions taken based on this documentation.
-          </Typography>
-        </div>
-      </div>
-    </FieldStationLayout>
+        )}
+      </section>
+    </article>
   );
 }

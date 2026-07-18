@@ -2,28 +2,40 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --bg-primary: #2d3336;
-  --bg-secondary: #373e42;
-  --text-primary: #E8D3BE;
-  --text-secondary: #E8D3BE;
-  --border-primary: #7a3f1a;
-  --shadow-color: rgba(0, 0, 0, 0.6);
-  --accent: #ff7300;
-  --terminal-glow: rgba(163, 193, 173, 0.15);
-  
-  --font-mono: 'Courier New', Courier, monospace;
-  --font-hand: 'Caveat', cursive;
-}
+/* ============================================================
+   Paper field-notebook theme (light-only).
+   Palette, type roles, and the tilt rule are documented in the
+   style tile of the reference prototype; short version:
+   - serif (Newsreader) for prose, mono (IBM Plex) for data/labels,
+     display (Archivo Black) for headlines, hand (Caveat) for the
+     one note per view
+   - rotation and props only on browsing surfaces; working surfaces
+     (tools, tables, forms) sit at zero degrees
+   ============================================================ */
 
-.dark {
-  --bg-primary: #1c1917;
-  --bg-secondary: #292524;
-  --text-primary: #e8e6e1;
-  --text-secondary: #E8D3BE;
-  --border-primary: #7a3f1a;
-  --shadow-color: rgba(0,0,0,0.5);
-  --accent: #ff7300;
+:root {
+  --paper: #f5f0e2;
+  --kraft: #e9ddc1;
+  --manila: #efe5cc;
+  --ink: #26221a;
+  --soil: #5a4630;
+  --marker: #e4571f;
+  --moss: #5c6b3c;
+  --rust: #a8442a;
+  --slateblue: #3f5d6b;
+
+  /* Legacy tokens mapped onto the paper palette so unported pages
+     inherit the new look. Remove when the overhaul completes. */
+  --bg-primary: var(--paper);
+  --bg-secondary: var(--manila);
+  --text-primary: var(--ink);
+  --text-secondary: var(--soil);
+  --border-primary: var(--ink);
+  --shadow-color: rgba(38, 34, 26, 0.85);
+  --accent: var(--marker);
+  --terminal-glow: rgba(163, 193, 173, 0.15);
+
+  --font-mono: var(--font-plex-mono), 'Courier New', Courier, monospace;
 }
 
 * {
@@ -32,20 +44,16 @@
 
 body {
   margin: 0;
-  font-family: var(--font-mono);
+  font-family: var(--font-serif), Georgia, serif;
   font-size: 17px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: var(--bg-primary);
-  color: var(--text-primary);
-  transition: background-color 0.2s ease, color 0.2s ease;
-  line-height: 1.6;
+  background-color: var(--paper);
+  color: var(--ink);
+  line-height: 1.65;
   position: relative;
-  image-rendering: crisp-edges;
-  text-shadow: 0.5px 0.5px 1px rgba(0,0,0,0.4);
 }
 
-/* Bump base font size on mobile for monospace legibility */
 @media (max-width: 640px) {
   body {
     font-size: 18px;
@@ -53,38 +61,137 @@ body {
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+  font-family: var(--font-plex-mono), Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
-/* Brutalist Block (Weathered Field Manual Style) */
+/* ============================================================
+   Field kit
+   ============================================================ */
+@layer components {
+  /* Paper grain overlay */
+  .grain {
+    position: relative;
+    isolation: isolate;
+  }
+  .grain::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    mix-blend-mode: multiply;
+    opacity: 0.55;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.07'/%3E%3C/svg%3E");
+  }
+
+  /* Ruled ledger paper */
+  .ruled {
+    background-image: repeating-linear-gradient(
+      to bottom,
+      transparent 0,
+      transparent 35px,
+      rgba(38, 34, 26, 0.14) 35px,
+      rgba(38, 34, 26, 0.14) 36px
+    );
+  }
+
+  /* Rubber stamp */
+  .stamp {
+    @apply inline-block font-mono font-semibold uppercase;
+    font-size: 0.68rem;
+    letter-spacing: 0.14em;
+    padding: 0.28rem 0.6rem 0.22rem;
+    border: 2px solid currentColor;
+    border-radius: 3px;
+    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.06), inset 0 0 6px rgba(0, 0, 0, 0.12);
+    transform: rotate(-1.5deg);
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='r'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.55' numOctaves='3'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.9 0.12'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23r)'/%3E%3C/svg%3E");
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='r'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.55' numOctaves='3'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.9 0.12'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23r)'/%3E%3C/svg%3E");
+    -webkit-mask-size: 160px;
+    mask-size: 160px;
+  }
+
+  /* Index card */
+  .card-paper {
+    background-color: var(--manila);
+    border: 1px solid rgba(38, 34, 26, 0.7);
+    box-shadow: 3px 3px 0 rgba(38, 34, 26, 0.85);
+  }
+
+  /* Hand-drawn checkbox */
+  .field-checkbox {
+    @apply inline-block align-[-2px] mr-2 shrink-0;
+    width: 15px;
+    height: 15px;
+    border: 2px solid var(--ink);
+    border-radius: 2px;
+    transform: rotate(-1deg);
+    background: transparent;
+  }
+
+  /* Marker highlight */
+  .hl {
+    background: linear-gradient(100deg, rgba(228, 87, 31, 0) 0.5%, rgba(228, 87, 31, 0.28) 3%, rgba(228, 87, 31, 0.28) 97%, rgba(228, 87, 31, 0) 99.5%);
+    padding: 0 0.15em;
+  }
+
+  /* Torn paper edge */
+  .torn-top {
+    clip-path: polygon(0 100%, 0 14px, 3% 6px, 7% 12px, 11% 4px, 16% 11px, 21% 5px, 26% 13px, 31% 7px, 36% 12px, 41% 3px, 46% 10px, 51% 6px, 56% 12px, 61% 4px, 66% 11px, 71% 7px, 76% 13px, 81% 5px, 86% 11px, 91% 6px, 95% 12px, 100% 7px, 100% 100%);
+  }
+
+  /* Kraft divider */
+  .divider-ink {
+    border-top: 2px solid var(--ink);
+    position: relative;
+  }
+  .divider-ink::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 2px;
+    border-top: 1px solid rgba(38, 34, 26, 0.5);
+  }
+}
+
+@layer utilities {
+  .rotate-slight {
+    transform: rotate(-1.2deg);
+  }
+  .rotate-slight-r {
+    transform: rotate(1.1deg);
+  }
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+/* ============================================================
+   Legacy component styles, restyled for paper. These keep
+   unported pages coherent; pages drop them as they're reworked.
+   ============================================================ */
+
 .brutalist-block {
-  background-color: var(--bg-secondary);
-  color: var(--text-primary);
-  border: var(--border-weight, 2px) solid var(--border-primary);
+  background-color: var(--manila);
+  color: var(--ink);
+  border: var(--border-weight, 2px) solid var(--ink);
   box-shadow: 4px 4px 0px 0px var(--shadow-color);
-  transition: all 0.2s ease;
+  transition: box-shadow 0.2s ease;
 }
 
 .brutalist-block:hover {
   box-shadow: 6px 6px 0px var(--shadow-color);
 }
 
-.dark .brutalist-block {
-  background-color: #000000;
-  border-color: var(--border-primary);
-}
-
-/* Shadows */
 .shadow-brutalist-lg {
   box-shadow: 8px 8px 0px 0px var(--shadow-color);
 }
 
-/* Backdrop blur */
 .backdrop-blur-sm {
   backdrop-filter: blur(2px);
 }
 
-/* Animations */
 @keyframes pulse {
   0%, 100% { opacity: 1; }
   50% { opacity: .5; }
@@ -94,29 +201,24 @@ code {
   animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
-/* Smooth transitions */
 .transition-smooth {
   transition: all 0.15s ease-in-out;
 }
 
-/* Lucide icons */
 svg {
   display: inline-block;
   vertical-align: middle;
 }
 
-/* Canvas overlay - scoped to avoid breaking STL viewer */
 canvas:not(.interactive) {
   pointer-events: none;
 }
 
-/* Focus-visible styles for accessibility */
 :focus-visible {
-  outline: 2px solid var(--accent);
+  outline: 2px solid var(--marker);
   outline-offset: 2px;
 }
 
-/* Respect reduced motion preferences */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
@@ -126,27 +228,26 @@ canvas:not(.interactive) {
   }
 }
 
-/* Selection */
 ::selection {
-  background-color: var(--accent);
-  color: #ffffff;
+  background-color: var(--marker);
+  color: var(--paper);
 }
 
-/* Scrollbar styling */
 ::-webkit-scrollbar {
   width: 10px;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--bg-primary);
+  background: var(--paper);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--accent);
-  border: 2px solid var(--bg-primary);
+  background: var(--soil);
+  border: 2px solid var(--paper);
 }
 
-/* Tactile Dymo Label Effect */
+/* Dymo label: a physical-world object, so it survives the paper
+   theme as-is (embossed plastic tape on cardstock). */
 .dymo-label {
   background: #111;
   color: #eee;
@@ -172,11 +273,10 @@ canvas:not(.interactive) {
   box-shadow: inset 1px 1px 1px rgba(255,255,255,0.05), 1px 1px 2px rgba(0,0,0,0.5);
 }
 
-/* Heavy "Concrete" Border */
 .field-station-box {
   padding: 2rem;
   position: relative;
-  background: rgba(0,0,0,0.2);
+  background: rgba(38, 34, 26, 0.04);
 }
 
 .field-station-box::after {
@@ -184,38 +284,35 @@ canvas:not(.interactive) {
   position: absolute;
   bottom: -10px;
   right: 20px;
-  background: var(--bg-secondary);
+  background: var(--manila);
   padding: 0 8px;
   font-size: 0.7rem;
-  color: var(--text-secondary);
-  border: 1px solid var(--border-primary);
+  color: var(--soil);
+  border: 1px solid var(--ink);
   z-index: 30;
 }
 
-/* Marginalia Styling */
 .marginalia {
   font-family: var(--font-hand), cursive;
-  color: var(--accent);
+  color: var(--marker);
   font-size: 1.3rem;
-  font-weight: 700;
+  font-weight: 600;
   position: absolute;
   opacity: 0.9;
   pointer-events: none;
   line-height: 1.2;
   transform: rotate(-2deg);
   max-width: 170px;
-  text-shadow: 1px 1px 0px rgba(0,0,0,0.15);
   z-index: 50;
 }
 
-/* Hide marginalia on small screens where they overlap content */
 @media (max-width: 768px) {
   .marginalia {
     display: none;
   }
 }
 
-/* The 'Condensation Sizzle' Glitch */
+/* Terminal overlay easter egg (ALT+T) keeps its CRT effects */
 @keyframes condensation-glitch {
   0%, 100% { transform: translate(0); filter: blur(0) contrast(1); opacity: 1; }
   1.5% { transform: translate(-3px, 2px); filter: blur(1.2px) contrast(1.6) hue-rotate(8deg); }
@@ -242,7 +339,6 @@ canvas:not(.interactive) {
   overflow: hidden;
 }
 
-/* Add dripping condensation effect */
 .terminal-container::after {
   content: "";
   position: absolute;
@@ -253,7 +349,6 @@ canvas:not(.interactive) {
   pointer-events: none;
 }
 
-/* Horizontal 'Short-Circuit' line */
 .terminal-container::before {
   content: "";
   position: absolute;
@@ -268,8 +363,7 @@ canvas:not(.interactive) {
   animation: scan-flash 35s infinite;
 }
 
-/* Raise opacity floor for body text legibility — decorative ghost elements (opacity-20/30) are unaffected */
-/* Bump sub-12px arbitrary text sizes to legible minimums — 134 instances across tool components */
+/* Legibility floors carried over from the dark theme; still apply on paper */
 @layer utilities {
   .opacity-40 { opacity: 0.65; }
   .opacity-50 { opacity: 0.75; }
@@ -284,13 +378,20 @@ canvas:not(.interactive) {
   .text-\[11px\] { font-size: 13px; line-height: 1.5; }
 }
 
-/* Global Print Styles */
+/* Field guides get printed */
 @media print {
   body {
     background: white !important;
     color: black !important;
+    font-size: 12pt;
   }
   * {
     box-shadow: none !important;
+  }
+  .no-print {
+    display: none !important;
+  }
+  .card-paper {
+    box-shadow: none;
   }
 }

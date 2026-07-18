@@ -1,148 +1,123 @@
-import { getAllPosts, getAllTags } from "@/lib/posts";
+import { getAllPosts, getAllCategories } from "@/lib/posts";
 import Link from "next/link";
-import Image from "next/image";
-import FieldStationLayout from "@/components/ui/FieldStationLayout";
-import BrutalistBlock from "@/components/ui/BrutalistBlock";
-import Typography from "@/components/ui/Typography";
-import Badge from "@/components/ui/Badge";
-import Button from "@/components/ui/Button";
+import { PaperClip, Stamp } from "@/components/field/kit";
 
 export const metadata = {
-  title: "Archive",
+  title: "Field Notes",
   description: "Field documentation, foraging guides, and survival knowledge from the community.",
 };
 
-export default async function ArchivePage(props: { searchParams: Promise<{ tag?: string }> }) {
+export default async function ArchivePage(props: { searchParams: Promise<{ tag?: string; drawer?: string }> }) {
   const searchParams = await props.searchParams;
   const allPosts = getAllPosts();
-  const tags = getAllTags();
+  const categories = getAllCategories();
+  // Old ?tag= links from inbound traffic keep filtering; the tab row uses drawers
+  const activeDrawer = searchParams.drawer;
   const activeTag = searchParams.tag;
-  const posts = activeTag
-    ? allPosts.filter((post) => post.tags.includes(activeTag))
-    : allPosts;
+  const posts = activeDrawer
+    ? allPosts.filter((post) => post.category === activeDrawer)
+    : activeTag
+      ? allPosts.filter((post) => post.tags.includes(activeTag))
+      : allPosts;
 
   return (
-    <FieldStationLayout stationId="HL_FIELD_ARCHIVE">
-      <div className="max-w-5xl mx-auto">
-        {/* Header image */}
-        <div className="relative w-full aspect-[16/9] mb-8 overflow-hidden">
-          <Image
-            src="/images/field_notes.png"
-            alt="Field Notes"
-            fill
-            className="object-cover"
-            priority
-          />
-        </div>
-
-        {/* Header */}
-        <div className="flex justify-between items-end mb-8 border-b-2 border-border-primary pb-4">
-          <div>
-            <Typography variant="h1" className="mb-0 text-2xl md:text-4xl">Field Notes</Typography>
-            <Typography variant="small" className="opacity-60">Documentation & community knowledge base</Typography>
+    <>
+      {/* Header band */}
+      <section className="bg-kraft grain border-b-2 border-ink relative">
+        <div className="max-w-6xl mx-auto px-4 pt-10 pb-10 relative z-[2]">
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-2 font-mono text-[0.68rem] uppercase tracking-[0.18em] text-ink/60 mb-5">
+            <Link href="/" className="hover:text-marker underline underline-offset-4">
+              Workbench
+            </Link>
+            <span>/</span>
+            <span>Field Notes</span>
+            <span className="ml-auto">{allPosts.length} notes on file</span>
           </div>
-          <Typography variant="small" className="font-mono text-xs opacity-40 uppercase mb-0">
-            {posts.length} articles
-          </Typography>
-        </div>
-
-        {/* Filters */}
-        {tags.length > 0 && (
-          <div className="mb-8">
-            <Typography variant="h4" className="text-xs opacity-50 mb-3">Filter by tag:</Typography>
-            <div className="flex flex-wrap gap-2">
-              {activeTag && (
-                <Link href="/archive/">
-                  <Badge
-                    variant="solid"
-                    className="cursor-pointer bg-accent border-accent text-white"
-                  >
-                    ✕ Clear
-                  </Badge>
-                </Link>
-              )}
-              {tags.map((tag) => (
-                <Link key={tag} href={`/archive/?tag=${encodeURIComponent(tag)}`}>
-                  <Badge 
-                    variant={activeTag === tag ? "solid" : "status"}
-                    className={`cursor-pointer hover:bg-accent hover:text-white transition-colors ${activeTag === tag ? "bg-accent border-accent text-white" : ""}`}
-                  >
-                    {tag}
-                  </Badge>
-                </Link>
-              ))}
-            </div>
+          <div className="flex flex-wrap gap-2 mb-5">
+            <Stamp color="text-moss">Tested on a real homestead</Stamp>
+            <Stamp color="text-slateblue" rotate="1.6deg">Prints clean</Stamp>
           </div>
-        )}
+          <h1 className="font-display uppercase text-3xl sm:text-5xl leading-[0.98] max-w-3xl text-balance">
+            Field notes, filed by drawer, not dumped in a pile.
+          </h1>
+          <p className="mt-4 text-lg md:text-xl leading-relaxed max-w-2xl text-ink/85 italic">
+            Every card shows the season and the subject before you open it.
+            Triage in five seconds, read the twenty-minute version later.
+          </p>
+        </div>
+      </section>
 
-        {/* Posts Grid */}
-        <div className="grid gap-8">
-          {posts.map((post) => (
-            <BrutalistBlock 
-              key={post.slug}
-              className="group p-6"
-              refTag={post.category.toUpperCase()}
+      {/* Category drawer tabs */}
+      {categories.length > 0 && (
+        <section className="max-w-6xl mx-auto px-4 pt-8">
+          <div className="flex flex-wrap items-center gap-2 font-mono text-[0.72rem] uppercase tracking-wider">
+            <Link
+              href="/archive/"
+              className={`px-3 py-1.5 border-2 border-ink transition-colors ${
+                !activeDrawer && !activeTag ? "bg-ink text-paper" : "bg-paper hover:bg-kraft"
+              }`}
             >
-              <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-6">
-                <div className="flex-grow">
-                  {/* Meta */}
-                  <div className="flex items-center gap-3 mb-3">
-                    <Typography variant="small" className="font-mono opacity-40 uppercase mb-0 tracking-tighter">
-                      {post.date} {"//"} {post.author}
-                    </Typography>
-                  </div>
+              All notes
+            </Link>
+            {categories.map((cat) => (
+              <Link
+                key={cat}
+                href={`/archive/?drawer=${encodeURIComponent(cat)}`}
+                className={`px-3 py-1.5 border-2 border-ink transition-colors ${
+                  activeDrawer === cat ? "bg-ink text-paper" : "bg-paper hover:bg-kraft"
+                }`}
+              >
+                {cat}
+              </Link>
+            ))}
+            {activeTag && (
+              <span className="px-3 py-1.5 border-2 border-marker text-marker">
+                tag: {activeTag}
+              </span>
+            )}
+          </div>
+        </section>
+      )}
 
-                  {/* Title */}
-                  <Link 
-                    href={`/archive/${post.slug}/`}
-                    className="block group"
-                  >
-                    <Typography variant="h3" className="mb-3 group-hover:text-accent transition-colors">
-                      {post.title}
-                    </Typography>
-                  </Link>
-
-                  {/* Description */}
-                  <Typography variant="body" className="opacity-70 mb-4 leading-relaxed line-clamp-2">
-                    {post.excerpt || post.description}
-                  </Typography>
-
-                  {/* Tags */}
-                  {post.tags.length > 0 && (
-                    <div className="flex flex-wrap gap-2">
-                      {post.tags.map((tag) => (
-                        <Badge 
-                          key={tag}
-                          variant="outline"
-                          className="text-[11px] opacity-40 border-foreground-primary/30"
-                        >
-                          {tag}
-                        </Badge>
-                      ))}
-                    </div>
-                  )}
-                </div>
-
-                {/* Read More */}
-                <Button 
-                  href={`/archive/${post.slug}/`}
-                  variant="secondary"
-                  size="sm"
-                  className="shrink-0"
-                >
-                  Read →
-                </Button>
+      {/* Card wall: browsing surface, tilts allowed */}
+      <section className="max-w-6xl mx-auto px-4 pt-10 pb-16">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {posts.map((post, i) => (
+            <Link
+              key={post.slug}
+              href={`/archive/${post.slug}/`}
+              className={`relative card-paper grain p-5 pt-6 block hover:-translate-y-1 hover:rotate-0 transition-transform group ${
+                i % 3 === 0 ? "rotate-slight" : i % 3 === 1 ? "" : "rotate-slight-r"
+              }`}
+            >
+              <PaperClip className="absolute -top-4 right-8 w-5 h-12 -rotate-6" />
+              <div className="flex items-center justify-between font-mono text-[0.64rem] uppercase tracking-[0.18em] text-ink/55 mb-3 relative z-[2]">
+                <span className="bg-kraft px-1.5 py-0.5 border border-ink/40">
+                  {post.category || "note"}
+                </span>
+                <span>{post.date}</span>
               </div>
-            </BrutalistBlock>
+              <h2 className="font-display uppercase text-lg leading-tight group-hover:text-marker transition-colors relative z-[2]">
+                {post.title}
+              </h2>
+              <p className="mt-2 text-[0.95rem] text-ink/80 leading-snug line-clamp-3 relative z-[2]">
+                {post.excerpt || post.description}
+              </p>
+              <p className="mt-4 pt-3 border-t border-dotted border-ink/40 font-mono text-[0.68rem] uppercase tracking-wider text-ink/60 relative z-[2]">
+                {post.author} · Read →
+              </p>
+            </Link>
           ))}
         </div>
 
         {posts.length === 0 && (
-          <BrutalistBlock className="text-center py-12" variant="default">
-            <Typography variant="body" className="opacity-40 mb-0 italic">No documents found in archive.</Typography>
-          </BrutalistBlock>
+          <div className="card-paper grain p-10 text-center">
+            <p className="text-ink/60 italic relative z-[2]">
+              Nothing in this drawer yet.
+            </p>
+          </div>
         )}
-      </div>
-    </FieldStationLayout>
+      </section>
+    </>
   );
 }
