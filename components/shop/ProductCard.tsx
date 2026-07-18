@@ -1,127 +1,123 @@
 "use client";
 
-import { FileText, Unlock, Cpu, ChevronRight, Plus } from "lucide-react";
-import { useCart } from "@/app/context/CartContext";
+import { useState } from "react";
 import Image from "next/image";
-import BrutalistBlock from "@/components/ui/BrutalistBlock";
-import Button from "@/components/ui/Button";
-import Typography from "@/components/ui/Typography";
-import Badge from "@/components/ui/Badge";
+import Link from "next/link";
+import { useCart } from "@/app/context/CartContext";
+import type { Product } from "@/lib/products";
+import { Stamp, Tape } from "@/components/field/kit";
 
 function AddToCartButton({ product }: { product: Product }) {
   const { addToCart } = useCart();
-  
-  const handleAddToCart = () => {
+  const [added, setAdded] = useState(false);
+
+  const handleAdd = () => {
     addToCart(product, 1);
+    setAdded(true);
+    setTimeout(() => setAdded(false), 2000);
   };
 
   return (
-    <Button
-      onClick={handleAddToCart}
-      variant="secondary"
-      size="sm"
-      className="w-full mt-4"
-      aria-label={`Add ${product.name} to cart`}
+    <button
+      onClick={handleAdd}
+      className="bg-ink text-paper px-5 py-3 border-2 border-ink font-mono text-[0.72rem] uppercase tracking-wider hover:bg-marker hover:border-marker transition-colors whitespace-nowrap"
+      aria-label={`Add ${product.name} to requisition`}
     >
-      <Plus size={12} className="mr-2" aria-hidden="true" />
-      Add_To_Requisition <ChevronRight size={12} className="ml-1" aria-hidden="true" />
-    </Button>
+      {added ? "✓ Logged" : "Add to requisition →"}
+    </button>
   );
 }
 
-interface Product {
-  id: string;
-  name: string;
-  price: number;
-  category: string;
-  description: string;
-  specs: string[];
-  image?: string;
-  affiliate?: {
-    url: string;
-  };
-}
-
-interface ProductCardProps {
+export default function ProductCard({
+  product,
+  no = "01",
+}: {
   product: Product;
-}
+  no?: string;
+}) {
+  const detailHref = `/shop/${product.id.toLowerCase()}/`;
+  const preOrder = typeof product.stock === "string";
 
-export default function ProductCard({ product }: ProductCardProps) {
   return (
-    <BrutalistBlock 
-      className="group flex flex-col h-full p-0 overflow-hidden" 
-      refTag={product.id}
-    >
-      <div className="h-48 bg-background-primary/50 border-b-2 border-border-primary relative overflow-hidden p-4 flex items-center justify-center">
-        {/* Background decoration */}
-        <div 
-          className="absolute inset-0 opacity-5 pointer-events-none"
-          style={{
-            backgroundImage: 'linear-gradient(0deg, transparent 24%, #000 25%, #000 26%, transparent 27%, transparent 74%, #000 75%, #000 76%, transparent 77%, transparent), linear-gradient(90deg, transparent 24%, #000 25%, #000 26%, transparent 27%, transparent 74%, #000 75%, #000 76%, transparent 77%, transparent)',
-            backgroundSize: '30px 30px'
-          }}
-        ></div>
-
-        {product.image && product.image.startsWith('/') ? (
-          <div className="relative w-32 h-32 z-10 group-hover:scale-110 transition-transform duration-500">
-            <Image 
-              src={product.image} 
+    <article className="card-paper grain relative">
+      <Tape className="-top-3 left-1/3 rotate-[-4deg] z-[3]" />
+      <div className="grid md:grid-cols-[1.1fr_1.3fr] relative z-[2]">
+        {/* Photograph */}
+        <div className="relative min-h-[240px] border-b-2 md:border-b-0 md:border-r-2 border-ink overflow-hidden">
+          {product.image ? (
+            <Image
+              src={product.image}
               alt={product.name}
               fill
-              sizes="(max-width: 768px) 100vw, 128px"
-              className="object-contain"
+              sizes="(max-width: 768px) 100vw, 45vw"
+              className="object-cover"
             />
-          </div>
-        ) : (
-          <div 
-            className="w-24 h-24 border-2 border-dashed border-border-primary/50 rounded-full flex items-center justify-center bg-background-primary/50 z-10 group-hover:scale-110 transition-transform duration-500" 
-            aria-hidden="true"
-          >
-            {product.category === 'DIGITAL' ? (
-              <FileText size={40} className="text-foreground-primary" />
-            ) : product.category === 'ZERO_DAY' ? (
-              <Unlock size={40} className="text-accent" />
-            ) : (
-              <Cpu size={40} className="text-foreground-primary" />
-            )}
-          </div>
-        )}
-      </div>
-      
-      <div className="p-4 flex flex-col flex-grow">
-        <div className="flex justify-between items-start mb-2 gap-2">
-          <Typography variant="h4" className="mb-0 leading-tight flex-grow">{product.name}</Typography>
-          <Badge variant="solid" className="bg-accent text-white border-accent shrink-0">${product.price}</Badge>
+          ) : (
+            <div className="flex items-center justify-center h-full font-mono text-[0.7rem] uppercase tracking-widest text-ink/40">
+              No photograph on file
+            </div>
+          )}
+          <span className="absolute top-2 left-2 bg-manila border border-ink/40 px-1.5 py-0.5 font-mono text-[0.66rem] uppercase tracking-[0.18em]">
+            No. {no}
+          </span>
         </div>
-        
-        <Typography variant="small" className="opacity-70 mb-4 flex-grow leading-relaxed">
-          {product.description}
-        </Typography>
 
-        <div className="space-y-4 mt-auto">
-          <div className="flex flex-wrap gap-1">
-            {product.specs.map((s) => (
-              <Badge key={s} variant="outline" className="text-[8px] px-1 py-0 border-foreground-primary/30 opacity-60">
-                {s}
-              </Badge>
+        {/* Catalog entry */}
+        <div className="p-6 flex flex-col">
+          <div className="flex items-start justify-between gap-3 mb-3">
+            <span className="font-mono text-[0.64rem] uppercase tracking-[0.18em] text-ink/55 bg-kraft px-1.5 py-0.5 border border-ink/40">
+              {product.category}
+            </span>
+            <Stamp color={preOrder ? "text-rust" : "text-moss"} rotate="2deg">
+              {preOrder ? product.stock : "In stock"}
+            </Stamp>
+          </div>
+
+          <h3 className="font-display uppercase text-2xl leading-tight">
+            <Link href={detailHref} className="hover:text-marker transition-colors">
+              {product.name}
+            </Link>
+          </h3>
+
+          <p className="mt-2 text-[0.98rem] text-ink/85 leading-snug">
+            {product.description}
+          </p>
+
+          <div className="flex flex-wrap gap-1.5 mt-4 mb-5">
+            {product.specs.map((spec) => (
+              <span
+                key={spec}
+                className="font-mono text-[0.64rem] uppercase tracking-wide text-ink/60 bg-paper/70 px-1.5 py-0.5 border border-ink/30"
+              >
+                {spec}
+              </span>
             ))}
           </div>
-          
-          {product.category === 'AFFILIATE' ? (
-            <Button
-              href={product.affiliate?.url}
-              variant="primary"
-              size="sm"
-              className="w-full"
-              aria-label={`View ${product.name} on external site`}
-            >
-              EXTERNAL_LINK <ChevronRight size={12} className="ml-1" aria-hidden="true" />
-            </Button>
-          ) : (
-            <AddToCartButton product={product} />
-          )}
+
+          <div className="mt-auto flex items-center justify-between gap-4 flex-wrap">
+            <span className="font-display text-3xl">${product.price}</span>
+            <div className="flex items-center gap-4 flex-wrap">
+              <Link
+                href={detailHref}
+                className="font-mono text-[0.72rem] uppercase tracking-wider underline decoration-marker decoration-2 underline-offset-4 hover:text-marker whitespace-nowrap"
+              >
+                Spec sheet →
+              </Link>
+              {product.category === "AFFILIATE" ? (
+                <a
+                  href={product.affiliate?.url}
+                  rel="noopener"
+                  className="bg-ink text-paper px-5 py-3 border-2 border-ink font-mono text-[0.72rem] uppercase tracking-wider hover:bg-marker hover:border-marker transition-colors whitespace-nowrap"
+                >
+                  View at supplier →
+                </a>
+              ) : (
+                <AddToCartButton product={product} />
+              )}
+            </div>
+          </div>
         </div>
       </div>
-    </BrutalistBlock>
+    </article>
   );
 }

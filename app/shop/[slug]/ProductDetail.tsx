@@ -1,16 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { useCart } from "../../context/CartContext";
-import { Plus, ExternalLink, Check, ChevronLeft } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
+import { useCart } from "../../context/CartContext";
 import type { Product } from "@/lib/products";
-import FieldStationLayout from "@/components/ui/FieldStationLayout";
-import BrutalistBlock from "@/components/ui/BrutalistBlock";
-import Typography from "@/components/ui/Typography";
-import Button from "@/components/ui/Button";
-import Badge from "@/components/ui/Badge";
+import { Stamp, Tape } from "@/components/field/kit";
 
 interface ProductDetailProps {
   product: Product;
@@ -19,6 +14,7 @@ interface ProductDetailProps {
 export default function ProductDetail({ product }: ProductDetailProps) {
   const { addToCart, totalItems } = useCart();
   const [added, setAdded] = useState(false);
+  const preOrder = typeof product.stock === "string";
 
   const handleAddToCart = () => {
     addToCart(product, 1);
@@ -27,159 +23,136 @@ export default function ProductDetail({ product }: ProductDetailProps) {
   };
 
   return (
-    <FieldStationLayout stationId={`HL_PRODUCT_${product.id}`}>
-      <div className="max-w-5xl mx-auto">
-        {/* Breadcrumb */}
-        <div className="mb-6">
-          <Link href="/shop/" className="inline-flex items-center text-xs font-bold uppercase tracking-tighter hover:text-accent transition-colors">
-            <ChevronLeft size={14} className="mr-1" /> ← HARDWARE_INDEX
-          </Link>
+    <>
+      {/* Header band */}
+      <section className="bg-kraft grain border-b-2 border-ink relative">
+        <div className="max-w-5xl mx-auto px-4 pt-10 pb-10 relative z-[2]">
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-2 font-mono text-[0.68rem] uppercase tracking-[0.18em] text-ink/60 mb-5">
+            <Link href="/shop/" className="hover:text-marker transition-colors">
+              The Catalog
+            </Link>
+            <span>/</span>
+            <span>{product.name}</span>
+            <span className="ml-auto">Ref: {product.id}</span>
+          </div>
+          <div className="flex flex-wrap gap-2 mb-5">
+            <Stamp color="text-slateblue">{product.category}</Stamp>
+            <Stamp color={preOrder ? "text-rust" : "text-moss"} rotate="1.8deg">
+              {preOrder ? product.stock : "In stock"}
+            </Stamp>
+          </div>
+          <h1 className="font-display uppercase text-3xl sm:text-5xl leading-[0.98] text-balance">
+            {product.name}
+          </h1>
         </div>
+      </section>
 
-        <BrutalistBlock className="p-4 md:p-8" variant="default" refTag={`REF_${product.id}`}>
-          <div className="flex flex-col md:flex-row gap-8 lg:gap-12">
-            {/* Product Image */}
-            <div className="w-full md:w-1/2">
-              <div className="aspect-square bg-background-primary/50 border-2 border-border-primary flex items-center justify-center relative overflow-hidden">
-                {/* Background decoration */}
-                <div 
-                  className="absolute inset-0 opacity-5 pointer-events-none"
-                  style={{
-                    backgroundImage: 'linear-gradient(0deg, transparent 24%, #000 25%, #000 26%, transparent 27%, transparent 74%, #000 75%, #000 76%, transparent 77%, transparent), linear-gradient(90deg, transparent 24%, #000 25%, #000 26%, transparent 27%, transparent 74%, #000 75%, #000 76%, transparent 77%, transparent)',
-                    backgroundSize: '40px 40px'
-                  }}
-                ></div>
-
+      <div className="max-w-5xl mx-auto px-4 pt-12 pb-12">
+        <div className="grid lg:grid-cols-[1.2fr_1fr] gap-10 items-start mb-14">
+          {/* Photograph */}
+          <div>
+            <figure className="relative rotate-slight card-paper p-2">
+              <Tape className="-top-3 left-1/2 -translate-x-1/2 rotate-[-3deg] z-[3]" />
+              <div className="relative aspect-[4/3] w-full overflow-hidden">
                 {product.image ? (
-                  <div className="relative w-full h-full p-8 z-10">
-                    <Image 
-                      src={product.image} 
-                      alt={product.name}
-                      fill
-                      className="object-contain"
-                    />
-                  </div>
+                  <Image
+                    src={product.image}
+                    alt={product.name}
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 560px"
+                    className="object-cover"
+                    priority
+                  />
                 ) : (
-                  <div className="text-8xl opacity-10 grayscale z-10">📦</div>
+                  <div className="flex items-center justify-center h-full border-2 border-dashed border-ink/30 font-mono text-[0.7rem] uppercase tracking-widest text-ink/40">
+                    No photograph on file
+                  </div>
                 )}
               </div>
-            </div>
+              <figcaption className="font-mono text-[0.64rem] uppercase tracking-[0.18em] text-ink/55 pt-2 px-1">
+                Field unit · {product.id}
+              </figcaption>
+            </figure>
 
-            {/* Product Info */}
-            <div className="w-full md:w-1/2 flex flex-col">
-              <div className="mb-2">
-                <Badge variant="outline">{product.category}</Badge>
-              </div>
-              
-              <Typography variant="h1" className="mb-2 text-2xl md:text-4xl">{product.name}</Typography>
-              
-              <Typography variant="h3" className="text-accent mb-6">
-                ${product.price}
-              </Typography>
-              
-              <Typography variant="body" className="opacity-80 mb-8">
-                {product.description}
-              </Typography>
-
-              {/* Features */}
-              {product.features && (
-                <div className="mb-8">
-                  <Typography variant="h4" className="text-xs opacity-50 mb-3 border-b border-border-primary/20 pb-1">Key Features</Typography>
-                  <ul className="space-y-2">
-                    {product.features.map((feature, idx) => (
-                      <li key={idx} className="flex items-start gap-3 text-sm">
-                        <span className="text-accent font-bold mt-0.5">»</span>
-                        <span className="opacity-80 font-mono uppercase text-[11px]">{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-
-              {/* Specs */}
-              <div className="mb-8">
-                <Typography variant="h4" className="text-xs opacity-50 mb-3 border-b border-border-primary/20 pb-1">Specifications</Typography>
-                <div className="flex flex-wrap gap-2">
-                  {product.specs.map((spec) => (
-                    <Badge 
-                      key={spec} 
-                      variant="status"
-                      className="text-xs opacity-70"
-                    >
-                      {spec}
-                    </Badge>
+            {product.features && (
+              <div className="mt-10">
+                <h2 className="font-display uppercase text-xl leading-tight mb-4">
+                  What it does
+                </h2>
+                <ul className="space-y-2.5">
+                  {product.features.map((feature) => (
+                    <li key={feature} className="flex items-start text-[0.98rem] leading-snug">
+                      <span className="field-checkbox mt-1" aria-hidden="true" />
+                      <span>{feature}</span>
+                    </li>
                   ))}
-                </div>
+                </ul>
+              </div>
+            )}
+          </div>
+
+          {/* Requisition box */}
+          <aside className="card-paper grain p-5">
+            <div className="relative z-[2]">
+              <p className="text-[0.98rem] text-ink/85 leading-snug border-b border-dotted border-ink/40 pb-4 mb-4">
+                {product.description}
+              </p>
+
+              <div className="flex flex-wrap gap-1.5 mb-4">
+                {product.specs.map((spec) => (
+                  <span
+                    key={spec}
+                    className="font-mono text-[0.64rem] uppercase tracking-wide text-ink/60 bg-paper/70 px-1.5 py-0.5 border border-ink/30"
+                  >
+                    {spec}
+                  </span>
+                ))}
               </div>
 
-              {/* Stock */}
-              <div className="mb-8 flex items-center gap-3 bg-black/20 p-2 border-l-2 border-accent">
-                <Typography variant="small" className="opacity-50 mb-0 font-mono">STATUS:</Typography>
-                <span className={`text-xs font-bold font-mono tracking-tighter ${
-                  typeof product.stock === 'number' && product.stock < 5 
-                    ? 'text-red-500' 
-                    : 'text-green-500'
-                }`}>
-                  {typeof product.stock === 'number' 
-                    ? `${product.stock} UNITS_AVAILABLE` 
-                    : product.stock}
+              <div className="flex items-baseline justify-between font-mono text-[0.7rem] uppercase tracking-wider border-b border-dotted border-ink/40 pb-3 mb-4">
+                <span className="text-ink/60">Status</span>
+                <span className={preOrder ? "text-rust font-bold" : "text-moss font-bold"}>
+                  {preOrder ? product.stock : `${product.stock} units available`}
                 </span>
               </div>
 
-              {/* Action Buttons */}
-              <div className="mt-auto space-y-4">
-                {product.category === 'AFFILIATE' ? (
-                  <Button
-                    href={product.affiliate?.url}
-                    variant="primary"
-                    size="lg"
-                    className="w-full"
-                  >
-                    <ExternalLink size={18} className="mr-2" />
-                    EXTERNAL_REQUISITION
-                  </Button>
-                ) : (
-                  <Button 
-                    onClick={handleAddToCart}
-                    disabled={added}
-                    variant={added ? 'outline' : 'primary'}
-                    size="lg"
-                    className={`w-full ${added ? 'bg-green-600/20 border-green-600 text-green-500 hover:bg-green-600/20 hover:text-green-500' : ''}`}
-                  >
-                    {added ? (
-                      <>
-                        <Check size={18} className="mr-2" />
-                        ADDED_TO_LOG
-                      </>
-                    ) : (
-                      <>
-                        <Plus size={18} className="mr-2" />
-                        ADD_TO_REQUISITION
-                      </>
-                    )}
-                  </Button>
-                )}
-
-                <Button 
-                  href="/requisition/"
-                  variant="secondary"
-                  size="md"
-                  className="w-full"
-                >
-                  View Requisition Form ({totalItems} items)
-                </Button>
+              <div className="flex items-center justify-between gap-4 mb-4">
+                <span className="font-display text-4xl">${product.price}</span>
               </div>
-            </div>
-          </div>
-        </BrutalistBlock>
 
-        {/* Technical Footer */}
-        <div className="mt-12 text-center">
-          <Typography variant="small" className="opacity-20 font-mono uppercase tracking-[0.2em]">
-            Authorized Field Equipment • Homesteader Labs Fabrication Division
-          </Typography>
+              {product.category === "AFFILIATE" ? (
+                <a
+                  href={product.affiliate?.url}
+                  rel="noopener"
+                  className="block text-center bg-ink text-paper px-5 py-3 border-2 border-ink font-mono text-[0.78rem] uppercase tracking-wider hover:bg-marker hover:border-marker transition-colors"
+                >
+                  View at supplier →
+                </a>
+              ) : (
+                <button
+                  onClick={handleAddToCart}
+                  disabled={added}
+                  className="w-full bg-ink text-paper px-5 py-3 border-2 border-ink font-mono text-[0.78rem] uppercase tracking-wider hover:bg-marker hover:border-marker transition-colors disabled:bg-moss disabled:border-moss"
+                >
+                  {added ? "✓ Logged to requisition" : "Add to requisition →"}
+                </button>
+              )}
+
+              <Link
+                href="/requisition/"
+                className="block text-center mt-4 font-mono text-[0.72rem] uppercase tracking-wider underline decoration-marker decoration-2 underline-offset-4 hover:text-marker"
+              >
+                View requisition ({totalItems} item{totalItems === 1 ? "" : "s"})
+              </Link>
+            </div>
+          </aside>
         </div>
+
+        {/* Station footer */}
+        <p className="text-center font-mono text-[0.64rem] uppercase tracking-[0.3em] text-ink/40 border-t border-ink/20 pt-6">
+          Authorized field equipment · Homesteader Labs fabrication division
+        </p>
       </div>
-    </FieldStationLayout>
+    </>
   );
 }

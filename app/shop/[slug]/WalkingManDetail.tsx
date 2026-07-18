@@ -3,13 +3,8 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { ChevronLeft, ArrowRight, Lock } from "lucide-react";
 import type { Product } from "@/lib/products";
-import FieldStationLayout from "@/components/ui/FieldStationLayout";
-import BrutalistBlock from "@/components/ui/BrutalistBlock";
-import Typography from "@/components/ui/Typography";
-import Button from "@/components/ui/Button";
-import Badge from "@/components/ui/Badge";
+import { SectionHead, SpecBox, Stamp, Tape } from "@/components/field/kit";
 
 interface WalkingManDetailProps {
   product: Product;
@@ -19,7 +14,7 @@ const CARTRIDGES = [
   {
     id: "MYCO_V1",
     name: "Mycologist",
-    desc: "15 species + deadly lookalikes. Amanita, Galerina, Gyromitra convergence training.",
+    desc: "15 species plus deadly lookalikes. Amanita, Galerina, Gyromitra convergence training.",
     status: "available",
   },
   {
@@ -50,29 +45,29 @@ const CARTRIDGES = [
 
 const STEPS = [
   {
-    num: "01",
+    no: "01",
     label: "Photograph",
-    desc: "Press shutter. RPi Camera Module 3 captures subject at full resolution.",
+    desc: "Press the shutter. The camera module captures the subject at full resolution.",
   },
   {
-    num: "02",
+    no: "02",
     label: "Convergence",
-    desc: "Hailo 8L NPU runs all loaded cartridges in parallel. Models vote on identification.",
+    desc: "The NPU runs every loaded cartridge in parallel. The models vote on the identification.",
   },
   {
-    num: "03",
+    no: "03",
     label: "Field ID",
-    desc: "E-ink display shows consensus ID, confidence score, and contextual field notes.",
+    desc: "The e-ink display shows the consensus ID, a confidence score, and contextual field notes.",
   },
 ];
 
-const HW_SPECS = [
-  { label: "Compute", value: "Raspberry Pi 5 — 8GB RAM" },
-  { label: "NPU", value: "Hailo 8L — 8 TOPS dedicated inference" },
-  { label: "Display", value: "Waveshare 4.2\" e-ink — readable in full sun" },
-  { label: "Optics", value: "RPi Camera Module 3 — autofocus, HDR" },
-  { label: "Sensors", value: "4× BLE coin sensors (upcoming)" },
-  { label: "Connectivity", value: "Offline-first — no cloud, no subscription, no signal required" },
+const HW_SPECS: [string, React.ReactNode][] = [
+  ["Compute", "Raspberry Pi 5, 8GB RAM"],
+  ["NPU", "Hailo 8L, 8 TOPS dedicated inference"],
+  ["Display", 'Waveshare 4.2" e-ink, readable in full sun'],
+  ["Optics", "RPi Camera Module 3, autofocus, HDR"],
+  ["Sensors", "4× BLE coin sensors (upcoming)"],
+  ["Cloud", "None. No subscription, no signal required."],
 ];
 
 export default function WalkingManDetail({ product }: WalkingManDetailProps) {
@@ -102,99 +97,80 @@ export default function WalkingManDetail({ product }: WalkingManDetailProps) {
   };
 
   return (
-    <FieldStationLayout stationId="HL_WLK_MN_PRO">
-      <div className="max-w-5xl mx-auto space-y-12">
+    <>
+      {/* Header band */}
+      <section className="bg-kraft grain border-b-2 border-ink relative">
+        <div className="max-w-5xl mx-auto px-4 pt-10 pb-10 relative z-[2]">
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-2 font-mono text-[0.68rem] uppercase tracking-[0.18em] text-ink/60 mb-5">
+            <Link href="/shop/" className="hover:text-marker transition-colors">
+              The Catalog
+            </Link>
+            <span>/</span>
+            <span>Walking Man Pro</span>
+            <span className="ml-auto">Ref: {product.id}</span>
+          </div>
+          <div className="flex flex-wrap gap-2 mb-5">
+            <Stamp color="text-rust">Pre-order</Stamp>
+            <Stamp color="text-moss" rotate="1.6deg">Offline-first</Stamp>
+            <Stamp color="text-slateblue" rotate="-2.2deg">No subscription</Stamp>
+          </div>
+          <h1 className="font-display uppercase text-4xl sm:text-6xl leading-[0.95] text-balance">
+            Walking Man Pro
+          </h1>
+          <p className="mt-4 text-lg md:text-xl leading-relaxed max-w-2xl text-ink/85 italic">
+            A field identification instrument. Plants, mushrooms, and berries
+            named on the spot, by three specialist models on dedicated edge
+            hardware. No cloud, no signal required.
+          </p>
+          <div className="mt-8 flex flex-wrap items-center gap-4">
+            <span className="font-display text-3xl">${product.price}</span>
+            <button
+              onClick={() =>
+                document.getElementById("waitlist")?.scrollIntoView({ behavior: "smooth" })
+              }
+              className="bg-ink text-paper px-5 py-3 border-2 border-ink font-mono text-[0.78rem] uppercase tracking-wider hover:bg-marker hover:border-marker transition-colors"
+            >
+              Join the waitlist →
+            </button>
+            <Link
+              href="/tools/forager-game/"
+              className="px-5 py-3 border-2 border-ink bg-paper font-mono text-[0.78rem] uppercase tracking-wider hover:bg-kraft transition-colors"
+            >
+              Play the game first
+            </Link>
+          </div>
+        </div>
+      </section>
 
-        {/* Breadcrumb */}
-        <div>
-          <Link href="/shop/" className="inline-flex items-center text-xs font-bold uppercase tracking-tighter hover:text-accent transition-colors">
-            <ChevronLeft size={14} className="mr-1" /> HARDWARE_INDEX
-          </Link>
+      <div className="max-w-5xl mx-auto px-4 pt-12 pb-12">
+        {/* §1 The instrument */}
+        <SectionHead no="§1" title="The Instrument" right="One device · Three experts" />
+        <div className="grid lg:grid-cols-[1.25fr_1fr] gap-10 items-start mb-10">
+          <div>
+            <figure className="relative rotate-slight card-paper p-2">
+              <Tape className="-top-3 left-1/2 -translate-x-1/2 rotate-[-3deg] z-[3]" />
+              <div className="relative aspect-[4/3] w-full overflow-hidden">
+                <Image
+                  src="/images/WalkingMan_hero_shot.jpg"
+                  alt="WALKING MAN PRO field research instrument with e-ink display and camera module"
+                  fill
+                  sizes="(max-width: 1024px) 100vw, 560px"
+                  className="object-cover"
+                  priority
+                />
+              </div>
+              <figcaption className="font-mono text-[0.64rem] uppercase tracking-[0.18em] text-ink/55 pt-2 px-1">
+                Field unit · Production prototype
+              </figcaption>
+            </figure>
+            <p className="font-hand font-semibold text-marker text-xl mt-4 rotate-[-1deg] max-w-sm">
+              the screen is e-ink. reads in full sun, sips power.
+            </p>
+          </div>
+          <SpecBox title="Hardware manifest" rows={HW_SPECS} />
         </div>
 
-        {/* ── Section 1: Hero ── */}
-        <BrutalistBlock variant="default" className="p-6 md:p-10">
-          <div className="flex flex-col md:flex-row gap-10">
-
-            {/* Left: identity + CTA */}
-            <div className="flex-1 flex flex-col gap-6">
-              <div className="flex flex-wrap gap-2">
-                <Badge variant="solid">HARDWARE</Badge>
-                <Badge variant="outline" pulse>PRE-ORDER</Badge>
-              </div>
-
-              <div>
-                <Typography variant="h1" className="leading-none tracking-tighter text-4xl md:text-5xl">
-                  WALKING MAN
-                </Typography>
-                <Typography variant="h2" className="text-accent tracking-widest text-sm md:text-base mt-1">
-                  {"// FIELD RESEARCH INSTRUMENT"}
-                </Typography>
-              </div>
-
-              <Typography variant="body" className="opacity-70 text-sm max-w-md">
-                Offline plant, mushroom, and berry identification. No cloud. No signal required.
-                Three specialist models running in parallel on dedicated edge hardware.
-              </Typography>
-
-              {/* Key stats */}
-              <div className="flex gap-6">
-                <div>
-                  <div className="font-mono text-4xl font-black text-accent">95.4%</div>
-                  <div className="text-xs font-mono uppercase opacity-50 mt-1">Field ID Accuracy</div>
-                </div>
-                <div className="w-px bg-border-primary/30" />
-                <div>
-                  <div className="font-mono text-4xl font-black">OFFLINE</div>
-                  <div className="text-xs font-mono uppercase opacity-50 mt-1">First Architecture</div>
-                </div>
-              </div>
-
-              <div className="flex flex-wrap gap-3 pt-2">
-                <Button
-                  variant="primary"
-                  size="lg"
-                  onClick={() => document.getElementById("waitlist")?.scrollIntoView({ behavior: "smooth" })}
-                >
-                  Join_Waitlist <ArrowRight size={16} className="ml-2" />
-                </Button>
-                <Button href="/shop/" variant="secondary" size="lg">
-                  ← Back to Shop
-                </Button>
-              </div>
-            </div>
-
-            {/* Right: product photo + hardware manifest terminal block */}
-            <div className="flex-1 min-w-0 flex flex-col gap-4">
-              <BrutalistBlock variant="default" className="p-2">
-                <div className="relative aspect-[4/3] w-full overflow-hidden">
-                  <Image
-                    src="/images/WalkingMan_hero_shot.jpg"
-                    alt="WALKING MAN PRO field research instrument — e-ink display and camera module"
-                    fill
-                    sizes="(max-width: 768px) 100vw, 480px"
-                    className="object-cover"
-                    priority
-                  />
-                </div>
-              </BrutalistBlock>
-              <BrutalistBlock variant="terminal" className="p-5 font-mono text-xs leading-relaxed">
-                <div className="text-accent/50 mb-3 text-[10px] tracking-widest">HARDWARE_MANIFEST // WLK-MN-PRO</div>
-                {HW_SPECS.map((s) => (
-                  <div key={s.label} className="flex gap-2 py-1 border-b border-accent/10 last:border-0">
-                    <span className="text-accent/60 w-24 shrink-0 uppercase">{s.label}:</span>
-                    <span className="text-accent">{s.value}</span>
-                  </div>
-                ))}
-                <div className="mt-4 text-accent/40 text-[10px]">$ price: ${product.price} {"// STATUS: PRE-ORDER"}</div>
-              </BrutalistBlock>
-            </div>
-
-          </div>
-        </BrutalistBlock>
-
-        {/* ── Field shot ── */}
-        <BrutalistBlock variant="default" className="p-2">
+        <figure className="card-paper p-2 mb-14">
           <div className="relative aspect-[16/9] w-full overflow-hidden">
             <Image
               src="/images/WalkingMan_dutch_angle.jpg"
@@ -203,221 +179,212 @@ export default function WalkingManDetail({ product }: WalkingManDetailProps) {
               sizes="(max-width: 1024px) 100vw, 960px"
               className="object-cover"
             />
-            <div className="absolute bottom-0 left-0 bg-background-primary/80 px-3 py-1 font-mono text-[10px] uppercase tracking-widest">
-              FIELD_UNIT // WLK-MN-PRO
+          </div>
+          <figcaption className="font-mono text-[0.64rem] uppercase tracking-[0.18em] text-ink/55 pt-2 px-1">
+            In the field · {product.id}
+          </figcaption>
+        </figure>
+
+        {/* §2 The accuracy claim */}
+        <SectionHead no="§2" title="The Accuracy Claim" right="15 species and their lookalikes" />
+        <div className="flex flex-wrap items-end gap-x-10 gap-y-6 mb-8">
+          <div>
+            <div className="font-display text-6xl md:text-7xl text-marker leading-none">
+              95–96%
+            </div>
+            <div className="font-mono text-[0.68rem] uppercase tracking-widest text-ink/60 mt-2">
+              Walking Man Pro, field ID accuracy
             </div>
           </div>
-        </BrutalistBlock>
-
-        {/* ── Section 2: Accuracy Claim ── */}
-        <BrutalistBlock variant="default" className="p-6 md:p-10" refTag="ACCURACY_CLAIM">
-          <Typography variant="h3" className="text-xs opacity-40 uppercase tracking-widest mb-6">
-            Identification Accuracy
-          </Typography>
-
-          {/* Stat comparison */}
-          <div className="flex flex-wrap gap-8 mb-8">
-            <div className="text-center">
-              <div className="font-mono font-black text-6xl md:text-7xl text-accent">95–96%</div>
-              <div className="text-xs font-mono uppercase opacity-60 mt-2">Walking Man Pro</div>
+          <div className="font-display text-2xl text-ink/30 pb-8">vs</div>
+          <div>
+            <div className="font-display text-6xl md:text-7xl text-ink/30 leading-none">
+              ~76%
             </div>
-            <div className="flex items-center text-2xl font-black opacity-20">vs</div>
-            <div className="text-center">
-              <div className="font-mono font-black text-6xl md:text-7xl opacity-30">~76%</div>
-              <div className="text-xs font-mono uppercase opacity-40 mt-2">Industry Baseline</div>
+            <div className="font-mono text-[0.68rem] uppercase tracking-widest text-ink/50 mt-2">
+              Typical ID apps
             </div>
           </div>
+        </div>
+        <p className="max-w-2xl text-[1.02rem] leading-relaxed text-ink/85 mb-8">
+          Trained on 15 species and the deadly lookalikes that get people hurt.
+          Three specialist models vote on every photo, a mycologist, a berry
+          expert, and an herbalist, and the device shows you the vote record,
+          not just the verdict.
+        </p>
 
-          <Typography variant="body" className="opacity-70 mb-4">
-            Trained on 15 species and their deadly lookalikes. Convergence from three specialist
-            models — not one generalist — produces a higher-confidence result with an auditable vote record.
-          </Typography>
+        <div className="border-2 border-rust bg-rust/10 p-5 mb-10">
+          <p className="font-mono text-[0.7rem] font-bold uppercase tracking-widest text-rust mb-2">
+            ⚠ Read this before you eat anything
+          </p>
+          <p className="text-[0.98rem] leading-snug text-ink/90">
+            The Walking Man Pro is a research instrument and a field-guide
+            assistant, <strong>not a guarantee</strong>. Verify every
+            identification against multiple sources before consuming any
+            wild-foraged material. Deadly lookalike species exist in every
+            cartridge domain. Treat a confidence score as a starting point,
+            never a final answer.
+          </p>
+        </div>
 
-          {/* Safety callout */}
-          <div className="border-2 border-accent p-4 bg-accent/5 mt-6">
-            <div className="text-xs font-mono font-bold text-accent uppercase tracking-widest mb-2">
-              ⚠ Safety Statement
+        {/* Game funnel */}
+        <div className="border-2 border-ink bg-kraft grain p-6 md:p-8 relative mb-14">
+          <div className="relative z-[2] flex items-center justify-between flex-wrap gap-6">
+            <div className="max-w-lg">
+              <p className="font-mono text-[0.66rem] uppercase tracking-[0.2em] text-ink/60 mb-2">
+                Interactive · The Forager Game
+              </p>
+              <h3 className="font-display uppercase text-xl leading-tight mb-2">
+                Don&apos;t take the 95% on faith
+              </h3>
+              <p className="text-[0.98rem] text-ink/85 leading-snug">
+                Play ten rounds against the exact model that ships on the
+                device. Same photos, same four options. See where it wins, and
+                where the deadly lookalikes fool the model, and you.
+              </p>
             </div>
-            <Typography variant="body" className="text-sm opacity-80">
-              The Walking Man Pro is a research instrument and field guide assistant — <strong>not a guarantee</strong>.
-              Always verify identifications against multiple sources before consuming any wild-foraged material.
-              Deadly lookalike species exist across every cartridge domain. Treat AI confidence scores as
-              a starting point, not a final answer.
-            </Typography>
-          </div>
-        </BrutalistBlock>
-
-        {/* ── Game funnel: prove the claim ── */}
-        <BrutalistBlock variant="terminal" className="p-6 md:p-10">
-          <div className="flex flex-col md:flex-row md:items-center gap-6">
-            <div className="flex-1">
-              <div className="text-accent/50 text-[10px] font-mono tracking-widest uppercase mb-2">
-                Interactive // Forager_Game
-              </div>
-              <Typography variant="h3" className="uppercase tracking-tight text-accent mb-2">
-                Can You Beat the AI?
-              </Typography>
-              <Typography variant="body" className="text-sm text-accent/70 max-w-md">
-                Don&apos;t take the 95% on faith. Play ten rounds against the exact model that runs on the
-                Walking Man — same photo, same four options. See where it wins, and where deadly
-                lookalikes fool the model (and you).
-              </Typography>
-            </div>
-            <div className="shrink-0">
-              <Button variant="primary" size="lg" href="/tools/forager-game/">
-                Play the Game <ArrowRight size={16} className="ml-2" />
-              </Button>
-            </div>
-          </div>
-        </BrutalistBlock>
-
-        {/* ── Section 3: How It Works ── */}
-        <div>
-          <Typography variant="h3" className="text-xs opacity-40 uppercase tracking-widest mb-4">
-            How It Works
-          </Typography>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {STEPS.map((step) => (
-              <BrutalistBlock key={step.num} variant="default" className="p-6">
-                <div className="font-mono text-5xl font-black text-accent/20 mb-3">{step.num}</div>
-                <Typography variant="h4" className="uppercase tracking-tight mb-2">{step.label}</Typography>
-                <Typography variant="body" className="text-sm opacity-70">{step.desc}</Typography>
-              </BrutalistBlock>
-            ))}
+            <Link
+              href="/tools/forager-game/"
+              className="bg-ink text-paper px-5 py-3 border-2 border-ink font-mono text-[0.78rem] uppercase tracking-wider hover:bg-marker hover:border-marker transition-colors shrink-0"
+            >
+              Play the game →
+            </Link>
           </div>
         </div>
 
-        {/* ── Section 4: Cartridge System ── */}
-        <div>
-          <div className="mb-4">
-            <Typography variant="h3" className="text-xs opacity-40 uppercase tracking-widest">
-              EXPERTISE_CARTRIDGES // Loadable Model Packs
-            </Typography>
-            <Typography variant="body" className="text-sm opacity-60 mt-1">
-              Load all three — the device cross-references across cartridges in parallel.
-            </Typography>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {CARTRIDGES.map((c) => {
-              const available = c.status === "available";
-              return (
-                <BrutalistBlock
-                  key={c.id}
-                  variant="default"
-                  className={`p-5 ${!available ? "opacity-40" : ""}`}
-                >
-                  <div className="flex items-start justify-between mb-3">
-                    <Badge variant={available ? "solid" : "outline"}>
-                      {available ? c.id : "LOCKED"}
-                    </Badge>
-                    {!available && <Lock size={14} className="opacity-40 mt-1" />}
-                  </div>
-                  <Typography variant="h4" className="uppercase tracking-tight mb-2">{c.name}</Typography>
-                  <Typography variant="body" className="text-xs opacity-70">{c.desc}</Typography>
-                  {!available && (
-                    <div className="mt-3 text-[10px] font-mono text-accent/50 uppercase tracking-widest">Coming Soon</div>
-                  )}
-                </BrutalistBlock>
-              );
-            })}
-          </div>
+        {/* §3 How it works */}
+        <SectionHead no="§3" title="How It Works" right="Shutter to verdict in seconds" />
+        <div className="grid md:grid-cols-3 gap-6 mb-14">
+          {STEPS.map((step) => (
+            <div key={step.no} className="card-paper grain p-5">
+              <div className="relative z-[2]">
+                <span className="font-mono text-[0.7rem] font-bold text-marker">
+                  No. {step.no}
+                </span>
+                <h3 className="font-display uppercase text-lg mt-2 leading-tight">
+                  {step.label}
+                </h3>
+                <p className="text-[0.95rem] text-ink/80 mt-1 leading-snug">{step.desc}</p>
+              </div>
+            </div>
+          ))}
         </div>
 
-        {/* ── Section 5: Hardware Manifest (full) ── */}
-        <BrutalistBlock variant="default" className="p-6 md:p-10" refTag="HW_MANIFEST">
-          <Typography variant="h3" className="text-xs opacity-40 uppercase tracking-widest mb-6">
-            Hardware Manifest
-          </Typography>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            {HW_SPECS.map((s) => (
-              <div key={s.label} className="flex flex-col p-3 border border-border-primary/30 bg-background-primary/20">
-                <span className="text-[10px] font-mono uppercase opacity-40 tracking-widest">{s.label}</span>
-                <span className="font-mono text-sm font-bold mt-0.5">{s.value}</span>
+        {/* §4 Cartridges */}
+        <SectionHead no="§4" title="Expertise Cartridges" right="3 live · 2 in training" />
+        <p className="max-w-2xl text-[1.02rem] leading-relaxed text-ink/85 mb-8">
+          Loadable model packs. Run all three at once and the device
+          cross-references their votes on every identification.
+        </p>
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-14">
+          {CARTRIDGES.map((c) =>
+            c.status === "available" ? (
+              <div key={c.id} className="card-paper grain p-5">
+                <div className="relative z-[2]">
+                  <span className="font-mono text-[0.64rem] uppercase tracking-[0.18em] text-ink/55 bg-kraft px-1.5 py-0.5 border border-ink/40">
+                    {c.id}
+                  </span>
+                  <h3 className="font-display uppercase text-lg mt-3 leading-tight">
+                    {c.name}
+                  </h3>
+                  <p className="text-[0.92rem] text-ink/80 mt-1 leading-snug">{c.desc}</p>
+                </div>
               </div>
-            ))}
-          </div>
-          <div className="mt-6 flex items-center gap-3 border-l-2 border-accent pl-4">
-            <Badge variant="solid">OFFLINE_FIRST</Badge>
-            <Typography variant="small" className="opacity-60 text-xs">
-              No cloud. No subscription. No signal required.
-            </Typography>
-          </div>
-        </BrutalistBlock>
+            ) : (
+              <div
+                key={c.id}
+                className="border-2 border-dashed border-ink/40 p-5 text-ink/50"
+              >
+                <span className="font-mono text-[0.64rem] uppercase tracking-widest">
+                  In training
+                </span>
+                <h3 className="font-display uppercase text-lg mt-3 leading-tight">
+                  {c.name}
+                </h3>
+                <p className="text-[0.92rem] mt-1 leading-snug">{c.desc}</p>
+              </div>
+            )
+          )}
+        </div>
 
-        {/* ── Section 6: Sensor Integration ── */}
-        <BrutalistBlock variant="terminal" className="p-6 md:p-8">
-          <div className="flex items-center gap-3 mb-4">
-            <Typography variant="h3" className="text-xs text-accent uppercase tracking-widest">
-              BLE Sensor Suite // Contextual Intelligence
-            </Typography>
-            <Badge variant="outline" className="border-accent text-accent text-[10px]">
-              STATUS: DEVELOPMENT
-            </Badge>
-          </div>
-          <Typography variant="body" className="text-sm text-accent/70 mb-4">
-            Four BLE coin sensors pair with the Walking Man Pro to provide environmental context
-            that informs and cross-checks field identifications:
-          </Typography>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 font-mono text-xs text-accent/60">
-            {["Humidity", "Water Levels", "Air Quality", "Radiation"].map((s) => (
-              <div key={s} className="border border-accent/20 p-3 text-center uppercase tracking-wider">
+        {/* §5 Sensor suite */}
+        <div className="border-2 border-dashed border-ink/40 p-6 mb-14">
+          <span className="font-mono text-[0.64rem] uppercase tracking-widest text-ink/60 block mb-2">
+            In development
+          </span>
+          <h2 className="font-display uppercase text-lg leading-tight mb-2">
+            BLE sensor coins
+          </h2>
+          <p className="text-[0.95rem] text-ink/70 leading-snug max-w-2xl mb-4">
+            Four coin-sized BLE sensors pair with the unit to add environmental
+            context to every identification. Cross-referencing lands when the
+            hardware does.
+          </p>
+          <div className="flex flex-wrap gap-1.5">
+            {["Humidity", "Water levels", "Air quality", "Radiation"].map((s) => (
+              <span
+                key={s}
+                className="font-mono text-[0.64rem] uppercase tracking-wide text-ink/60 bg-kraft px-1.5 py-0.5 border border-ink/40"
+              >
                 {s}
-              </div>
+              </span>
             ))}
           </div>
-          <div className="mt-4 text-[10px] font-mono text-accent/30 uppercase">
-            $ sensor_integration: pending // cartridge cross-reference: enabled_when_available
-          </div>
-        </BrutalistBlock>
+        </div>
 
-        {/* ── Section 7: Waitlist Capture ── */}
-        <div id="waitlist">
-        <BrutalistBlock variant="accent" className="p-6 md:p-10">
-          <Typography variant="h3" className="uppercase tracking-tight text-white mb-2">
-            Join the Waitlist
-          </Typography>
-          <Typography variant="body" className="text-white/80 text-sm mb-6">
-            Be first when we ship. No spam. One email when the device is ready.
-          </Typography>
+        {/* §6 Waitlist */}
+        <section id="waitlist" className="border-2 border-ink bg-ink text-paper p-6 md:p-10 mb-10">
+          <p className="font-mono text-[0.66rem] uppercase tracking-[0.2em] text-paper/60 mb-2">
+            The ledger
+          </p>
+          <h2 className="font-display uppercase text-2xl leading-tight mb-2">
+            Join the waitlist
+          </h2>
+          <p className="text-[0.98rem] text-paper/80 leading-snug mb-6 max-w-md">
+            One email when the device is ready to ship. Nothing else.
+          </p>
 
           {submitted ? (
-            <div className="border-2 border-white/40 p-4 bg-white/10 text-white font-mono text-sm uppercase tracking-wider">
-              ✓ Logged. We&apos;ll reach out at {email} when the Walking Man ships.
-            </div>
+            <p className="font-hand font-semibold text-2xl text-paper" aria-live="polite">
+              ✓ logged. we&apos;ll write to {email} when it ships.
+            </p>
           ) : (
-            <form onSubmit={handleWaitlist} className="flex flex-col sm:flex-row gap-3 max-w-lg">
-              <input
-                type="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="field_operator@domain.com"
-                className="flex-1 bg-white/10 border-2 border-white/40 text-white placeholder:text-white/30 font-mono text-sm px-4 py-3 outline-none focus:border-white"
-              />
-              <button
-                type="submit"
-                disabled={submitting}
-                className="inline-flex items-center justify-center font-bold uppercase px-8 py-3 text-sm bg-white text-accent border-2 border-white shadow-[4px_4px_0px_0px_rgba(0,0,0,0.3)] hover:brightness-95 active:shadow-none transition-all disabled:opacity-60"
-              >
-                {submitting ? "Submitting..." : "Submit →"}
-              </button>
+            <form onSubmit={handleWaitlist} className="max-w-lg">
+              <div className="flex flex-col sm:flex-row gap-3">
+                <label htmlFor="waitlist-email" className="sr-only">
+                  Email address
+                </label>
+                <input
+                  id="waitlist-email"
+                  type="email"
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="your@email.com"
+                  className="flex-1 bg-paper border-2 border-paper text-ink placeholder:text-ink/40 font-mono text-sm px-4 py-3 outline-none focus:border-marker"
+                />
+                <button
+                  type="submit"
+                  disabled={submitting}
+                  className="bg-marker text-paper px-6 py-3 border-2 border-marker font-mono text-[0.78rem] uppercase tracking-wider hover:bg-paper hover:border-paper hover:text-ink transition-colors disabled:opacity-60"
+                >
+                  {submitting ? "Logging..." : "Sign me up →"}
+                </button>
+              </div>
               {submitError && (
-                <p className="text-xs text-red-400 mt-2">Something went wrong. Please try again.</p>
+                <p className="font-mono text-[0.72rem] uppercase tracking-wider text-marker mt-3">
+                  Something went wrong. Try again.
+                </p>
               )}
             </form>
           )}
-        </BrutalistBlock>
-        </div>
+        </section>
 
-        {/* Footer */}
-        <div className="text-center pb-8">
-          <Typography variant="small" className="opacity-20 font-mono uppercase tracking-[0.2em]">
-            Field Research Instrument • Homesteader Labs Fabrication Division
-          </Typography>
-        </div>
-
+        {/* Station footer */}
+        <p className="text-center font-mono text-[0.64rem] uppercase tracking-[0.3em] text-ink/40 border-t border-ink/20 pt-6">
+          Field research instrument · Homesteader Labs fabrication division
+        </p>
       </div>
-    </FieldStationLayout>
+    </>
   );
 }
