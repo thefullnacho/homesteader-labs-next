@@ -1,100 +1,78 @@
 "use client";
 
 import Link from "next/link";
-import { Cloud, Sprout, Shield, Compass, ArrowRight, MapPin, ScanLine, FileText, Database } from "lucide-react";
-import FieldStationLayout from "@/components/ui/FieldStationLayout";
-import BrutalistBlock from "@/components/ui/BrutalistBlock";
-import Typography from "@/components/ui/Typography";
+import { MapPin } from "lucide-react";
 import { useFieldStation } from "@/app/context/FieldStationContext";
 import { isSurvivalPlanPublic } from "@/lib/survivalPlan/visibility";
+import { SectionHead, Stamp } from "@/components/field/kit";
 
 const ops = [
   {
-    id: "weather",
+    no: "01",
     code: "Weather",
     mission: "What's happening right now and what can I do today.",
     href: "/tools/weather/",
-    icon: Cloud,
-    status: "ONLINE" as const,
+    need: "ZIP code",
     capabilities: [
       "Real-time conditions",
       "Frost probability matrix",
       "Soil workability index",
-      "Application suitability",
-      "Livestock metabolic load",
       "GDD tracking",
-      "Solar capture index",
-      "Catchment efficiency",
+      "Solar & catchment indexes",
     ],
   },
   {
-    id: "plant",
+    no: "02",
     code: "Planting",
     mission: "What to plant, when to plant it, and how to extend your season.",
     href: "/tools/planting-calendar/",
-    icon: Sprout,
-    status: "ONLINE" as const,
+    need: "ZIP code",
     capabilities: [
       "Zone-calibrated calendar",
       "Succession planting logic",
+      "54 crops, variety timelines",
       "Microclimate mods",
-      "Lunar sync",
-      "Variety-specific timelines",
-      "54 crops",
-      "Row cover → greenhouse extension",
-      "Deployment recommendations",
+      "Row cover to greenhouse",
     ],
   },
   {
-    id: "kb",
+    no: "03",
     code: "Knowledge Base",
-    mission: "Look up how to grow it — 350+ crops, botanical names, sun and spacing.",
+    mission: "Look up how to grow it: 350+ crops, botanical names, sun and spacing.",
     href: "/kb/",
-    icon: Database,
-    status: "ONLINE" as const,
+    need: "Curiosity",
     capabilities: [
-      "353 crops",
-      "Botanical names",
+      "353 crops on file",
       "Sun & spacing data",
       "Sowing methods",
       "Companion crops",
-      "Links into planting calendar",
       "Open public-domain dataset",
-      "Recovered from OpenFarm.cc",
     ],
   },
   {
-    id: "survival",
+    no: "04",
     code: "Resilience",
     mission: "How long can your homestead sustain itself.",
     href: "/tools/caloric-security/",
-    icon: Shield,
-    status: "ONLINE" as const,
+    need: "Pantry list",
     capabilities: [
-      "Days of food",
-      "Days of water",
-      "Days of energy",
+      "Days of food, water, energy",
       "Caloric ROI by crop",
       "Companion planting advisor",
       "Canning day protocols",
       "Household profile",
-      "Solar & catchment integration",
     ],
   },
   {
-    id: "forager",
+    no: "05",
     code: "Forager Game",
     mission: "Can you out-identify the AI? Play the field-ID game.",
     href: "/tools/forager-game/",
-    icon: ScanLine,
-    status: "ONLINE" as const,
+    need: "Sharp eyes",
     capabilities: [
-      "Can You Beat the AI?",
       "109 rounds",
       "4 expert domains",
       "Deadly lookalikes",
-      "Offline-trained models",
-      "No account",
       "Score vs. the machine",
       "Built on WALKING MAN PRO",
     ],
@@ -105,162 +83,136 @@ export default function FieldStationPage() {
   const { activeLocation } = useFieldStation();
 
   return (
-    <FieldStationLayout stationId="HL_SYS_FIELD_STATION_V1">
-      {/* System Header */}
-      <div className="mb-10">
-        <div className="flex items-start justify-between flex-wrap gap-4 mb-6">
-          <div>
-            <div className="text-[10px] font-mono uppercase tracking-[0.3em] opacity-40 mb-2">
-              Homesteader Labs
-            </div>
-            <Typography variant="h1" className="mb-2">
-              Field Station
-            </Typography>
-            <Typography variant="body" className="text-foreground-secondary max-w-xl mb-0">
-              Homestead operations platform. Free. No account. All data stored locally.
-            </Typography>
+    <>
+      {/* Header band */}
+      <section className="bg-kraft grain border-b-2 border-ink relative">
+        <div className="max-w-6xl mx-auto px-4 pt-10 pb-10 relative z-[2]">
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-2 font-mono text-[0.68rem] uppercase tracking-[0.18em] text-ink/60 mb-5">
+            <span>Homesteader Labs</span>
+            <span>/</span>
+            <span>The Workbench</span>
+            <span className="ml-auto">All data stays in your browser</span>
           </div>
-          <div className="flex flex-col items-end gap-2 shrink-0" />
-        </div>
+          <div className="flex flex-wrap gap-2 mb-5">
+            <Stamp color="text-moss">Free</Stamp>
+            <Stamp color="text-slateblue" rotate="1.6deg">No account</Stamp>
+            <Stamp color="text-rust" rotate="-2.2deg">No tracking</Stamp>
+          </div>
+          <h1 className="font-display uppercase text-3xl sm:text-5xl leading-[0.98] text-balance">
+            The workbench
+          </h1>
+          <p className="mt-4 text-lg md:text-xl leading-relaxed max-w-2xl text-ink/85 italic">
+            Five instruments for running a homestead. Every one works offline,
+            stores its data locally, and answers a question in plain words.
+          </p>
 
-        {/* Location Calibration Status */}
-        <div className="flex items-center gap-3 p-3 border border-border-primary/40 bg-background-secondary/30 font-mono text-xs">
-          <MapPin
-            size={12}
-            className={activeLocation ? "text-accent shrink-0" : "opacity-30 shrink-0"}
-          />
-          {activeLocation ? (
-            <>
-              <span className="opacity-70 truncate">{activeLocation.name}</span>
-              <span
-                className="hidden sm:inline opacity-40 ml-auto shrink-0 cursor-help"
-                title="Coordinates derived from your ZIP code"
-              >
-                {activeLocation.lat.toFixed(4)}° N &nbsp;
-                {Math.abs(activeLocation.lon).toFixed(4)}° W
+          {/* Location calibration */}
+          <div className="mt-6 inline-flex items-center gap-3 px-4 py-2 card-paper font-mono text-xs relative">
+            <MapPin
+              size={12}
+              className={activeLocation ? "text-marker shrink-0" : "text-ink/30 shrink-0"}
+            />
+            {activeLocation ? (
+              <span className="relative z-[2]">
+                Calibrated to {activeLocation.name} ·{" "}
+                <span
+                  className="text-ink/50 cursor-help"
+                  title="Coordinates derived from your ZIP code"
+                >
+                  {activeLocation.lat.toFixed(2)}° N, {Math.abs(activeLocation.lon).toFixed(2)}° W
+                </span>
               </span>
-            </>
-          ) : (
-            <span className="opacity-40">
-              Enter a ZIP code to get started
-            </span>
-          )}
+            ) : (
+              <span className="text-ink/60 relative z-[2]">
+                Enter a ZIP code in any tool to calibrate the station
+              </span>
+            )}
+          </div>
         </div>
-      </div>
+      </section>
 
-      {/* OPS panels — free field tools */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
-        {ops.map((op) => {
-          const Icon = op.icon;
-          return (
-            <BrutalistBlock key={op.id} className="flex flex-col h-full" refTag={op.code}>
-              {/* Panel header */}
-              <div className="flex items-center justify-between mb-5">
-                <div className="w-10 h-10 bg-accent/10 border border-accent/30 flex items-center justify-center">
-                  <Icon size={20} className="text-accent" />
-                </div>
+      <div className="max-w-6xl mx-auto px-4 pt-12 pb-12">
+        {/* Instruments */}
+        <SectionHead no="§1" title="The Instruments" right="5 tools · 0 logins · $0" />
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-14">
+          {ops.map((op) => (
+            <Link
+              key={op.no}
+              href={op.href}
+              className="card-paper grain p-5 flex flex-col group hover:-translate-y-1 transition-transform"
+            >
+              <div className="flex items-baseline justify-between border-b-2 border-ink pb-2 relative z-[2]">
+                <span className="font-mono text-[0.7rem] font-bold text-marker">No. {op.no}</span>
+                <span className="font-mono text-[0.64rem] uppercase tracking-widest text-ink/50">
+                  You need: {op.need}
+                </span>
               </div>
-
-              {/* Mode identifier */}
-              <h2 className="text-xl font-bold font-mono tracking-tight mb-1">{op.code}</h2>
-              <p className="text-xs text-foreground-secondary font-mono mb-5 leading-relaxed">
-                {op.mission}
-              </p>
-
-              {/* Capability list */}
-              <ul className="flex-1 space-y-1.5 mb-6">
+              <h2 className="font-display uppercase text-lg mt-3 leading-tight group-hover:text-marker transition-colors relative z-[2]">
+                {op.code}
+              </h2>
+              <p className="text-[0.95rem] text-ink/80 mt-1 mb-4 relative z-[2]">{op.mission}</p>
+              <ul className="bg-paper/70 border border-ink/30 p-3 mb-4 space-y-1.5 font-mono text-[0.7rem] uppercase tracking-wide relative z-[2] flex-1">
                 {op.capabilities.map((cap) => (
                   <li
                     key={cap}
-                    className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-wide opacity-75"
+                    className="border-b border-dotted border-ink/40 pb-1 last:border-b-0 last:pb-0"
                   >
-                    <span className="w-1 h-1 bg-accent shrink-0" />
                     {cap}
                   </li>
                 ))}
               </ul>
+              <span className="mt-auto font-mono text-[0.72rem] uppercase tracking-wider underline decoration-marker decoration-2 underline-offset-4 relative z-[2]">
+                Open →
+              </span>
+            </Link>
+          ))}
 
-              {/* Entry CTA */}
-              <Link
-                href={op.href}
-                className="flex items-center justify-between w-full px-4 py-3 bg-accent text-white text-sm font-bold font-mono uppercase tracking-wider hover:bg-accent/90 transition-colors shadow-brutalist-sm hover:shadow-brutalist"
-              >
-                <span>Open</span>
-                <ArrowRight size={16} />
-              </Link>
-            </BrutalistBlock>
-          );
-        })}
-      </div>
+          {/* Coming soon: field ops */}
+          <div className="border-2 border-dashed border-ink/40 p-5 flex flex-col justify-center items-start text-ink/50">
+            <span className="font-mono text-[0.64rem] uppercase tracking-widest mb-2">
+              Coming soon
+            </span>
+            <h2 className="font-display uppercase text-lg leading-tight mb-2">Field Ops</h2>
+            <p className="text-[0.92rem] leading-snug">
+              The tool you take when you leave the homestead. Weather reads
+              conditions, planting plans the season, resilience counts reserves.
+              Field Ops identifies what nature already provides.
+            </p>
+          </div>
+        </div>
 
-      {/* Survival Garden Plan — paid, personalized PDF (hidden until launch) */}
-      {isSurvivalPlanPublic() && (
-      <div className="mb-10">
-        <BrutalistBlock refTag="SURVIVAL_PLAN">
-          <div className="flex items-center justify-between flex-wrap gap-4">
-            <div className="flex items-center gap-4">
-              <div className="w-10 h-10 bg-accent/10 border border-accent/30 flex items-center justify-center shrink-0">
-                <FileText size={20} className="text-accent" />
-              </div>
-              <div>
-                <div className="text-[10px] font-mono uppercase tracking-[0.3em] text-accent mb-1">
-                  Personalized Plan · $19
-                </div>
-                <h2 className="text-lg font-bold font-mono">Survival Garden Plan</h2>
-                <p className="text-xs font-mono opacity-60 mt-1 max-w-lg">
-                  Answer a few questions about your zip, household, and space — get a
-                  zone-calibrated, printable PDF: what to grow, when to plant, and a
-                  vetted seed-vendor list. Yours forever.
+        {/* Survival Garden Plan: paid, personalized PDF */}
+        {isSurvivalPlanPublic() && (
+          <div className="border-2 border-ink bg-kraft grain p-6 md:p-8 relative mb-10">
+            <div className="relative z-[2] flex items-center justify-between flex-wrap gap-6">
+              <div className="max-w-lg">
+                <p className="font-mono text-[0.66rem] uppercase tracking-[0.2em] text-ink/60 mb-2">
+                  Personalized plan · $19
+                </p>
+                <h2 className="font-display uppercase text-xl leading-tight mb-2">
+                  Survival Garden Plan
+                </h2>
+                <p className="text-[0.98rem] text-ink/85 leading-snug">
+                  Answer a few questions about your ZIP, household, and space.
+                  Get a zone-calibrated, printable PDF: what to grow, when to
+                  plant, and a vetted seed-vendor list. Yours forever.
                 </p>
               </div>
+              <Link
+                href="/survival-garden-plan/"
+                className="bg-ink text-paper px-5 py-3 border-2 border-ink font-mono text-[0.78rem] uppercase tracking-wider hover:bg-marker hover:border-marker transition-colors shrink-0"
+              >
+                Build mine →
+              </Link>
             </div>
-            <Link
-              href="/survival-garden-plan/"
-              className="flex items-center justify-between gap-3 px-4 py-3 bg-accent text-white text-sm font-bold font-mono uppercase tracking-wider hover:bg-accent/90 transition-colors shadow-brutalist-sm hover:shadow-brutalist shrink-0"
-            >
-              <span>Build mine</span>
-              <ArrowRight size={16} />
-            </Link>
           </div>
-        </BrutalistBlock>
-      </div>
-      )}
+        )}
 
-      {/* FIELD_OPS — future fourth mode teaser */}
-      <div className="mb-10">
-        <div className="opacity-40 pointer-events-none select-none">
-          <BrutalistBlock refTag="FIELD_OPS">
-            <div className="flex items-center justify-between flex-wrap gap-4">
-              <div className="flex items-center gap-4">
-                <div className="w-10 h-10 border border-current/30 flex items-center justify-center">
-                  <Compass size={20} className="opacity-50" />
-                </div>
-                <div>
-                  <div className="text-[10px] font-mono uppercase tracking-[0.3em] opacity-50 mb-1">
-                    Coming Soon
-                  </div>
-                  <h2 className="text-lg font-bold font-mono">Workshop</h2>
-                  <p className="text-xs font-mono opacity-60 mt-1 max-w-lg">
-                    The tool you take when you leave the homestead. Identifies what nature already provides.
-                    Weather tells you conditions, planting tells you what to grow, survival tracks your
-                    reserves — FIELD_OPS identifies what nature already provides.
-                  </p>
-                </div>
-              </div>
-              <span className="text-[9px] font-mono border border-current/30 px-2 py-1 opacity-40 shrink-0">
-                OFFLINE
-              </span>
-            </div>
-          </BrutalistBlock>
-        </div>
-      </div>
-
-      {/* System footer tagline */}
-      <div className="text-center py-4 border-t border-border-primary/10">
-        <p className="text-[9px] font-mono uppercase tracking-[0.3em] opacity-25">
-          All data stored locally &nbsp;·&nbsp; No account &nbsp;·&nbsp; No tracking &nbsp;·&nbsp; Infrastructure-independent
+        {/* Station footer */}
+        <p className="text-center font-mono text-[0.64rem] uppercase tracking-[0.3em] text-ink/40 border-t border-ink/20 pt-6">
+          All data stored locally · No account · No tracking · Infrastructure-independent
         </p>
       </div>
-    </FieldStationLayout>
+    </>
   );
 }
