@@ -420,7 +420,7 @@ export default function PlantingCalendarPage() {
               </h1>
               <p className="mt-4 text-lg md:text-xl max-w-2xl leading-relaxed text-ink/85 italic">
                 Most calendars say &quot;plant in May.&quot; This one works backward
-                from <em>your</em> last frost, so every start, transplant, and
+                from <em>your</em>{" "}last frost, so every start, transplant, and
                 harvest date is yours, not a seed packet&apos;s average.
               </p>
               <div className="mt-5">
@@ -753,7 +753,7 @@ export default function PlantingCalendarPage() {
                       <p className="font-serif text-lg leading-snug relative z-[2]">
                         You can&apos;t negotiate with the two frost dates. Everything
                         else on this page is arithmetic, and{" "}
-                        <span className="hl">arithmetic doesn&apos;t care</span> if you
+                        <span className="hl">arithmetic doesn&apos;t care</span>{" "}if you
                         were busy in May.
                       </p>
                       <div className="mt-4 relative z-[2]">
@@ -801,7 +801,7 @@ export default function PlantingCalendarPage() {
               May 14, expect first ripe fruit August 1.&quot;
             </p>
             <p>
-              It covers <strong>54 vegetables, herbs, and fruits</strong> with
+              It covers <strong>54 vegetables, herbs, and fruits</strong>{" "}with
               variety-level detail, supports succession planting at a configurable
               interval, and adjusts for your experience level, adding buffer days for
               beginners who can&apos;t always plant on the optimal day. Export the full

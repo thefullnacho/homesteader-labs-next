@@ -692,7 +692,7 @@ export default function WeatherPage() {
                   If you remember one thing
                 </p>
                 <p className="font-serif text-lg leading-snug relative z-[2]">
-                  A modest roof on a <span className="hl">modest storm</span> out-fills any rain
+                  A modest roof on a <span className="hl">modest storm</span>{" "}out-fills any rain
                   barrel you can buy. The bottleneck is storage, not rain.
                 </p>
                 <div className="mt-4 relative z-[2]">
