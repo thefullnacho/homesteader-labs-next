@@ -107,6 +107,7 @@ function interpolateWhy(template: string, state: SystemState, action: Action): s
                                        ? state.calendar.days_to_last_frost.toString()
                                        : '—',
     'calendar.seedling_deadline':   state.calendar.seedling_deadline_days?.toString() ?? '—',
+    'maintenance.filter_last_checked_days': state.maintenance.filter_last_checked_days.toString(),
     'inventory.upcoming_harvests':  state.inventory.upcoming_harvests.toString(),
     'inventory.critical_decay':     state.inventory.critical_decay_items.toString(),
     'inventory.food_to_dehydrate':  state.inventory.food_to_dehydrate.toString(),

@@ -9,9 +9,8 @@
 
 import { calculateItemDecay } from './decayCalculations';
 import { getCropById } from '@/lib/tools/planting-calendar/cropLoader';
-import type { CaloricTotals, WaterAutonomyResult, EnergyAutonomyResult, InventoryItem } from './types';
+import type { Actuals, CaloricTotals, WaterAutonomyResult, EnergyAutonomyResult, InventoryItem } from './types';
 import type { FrostDatesRow } from './db';
-import type { Actuals } from '@/components/tools/caloric-security/ActualsInput';
 import type { ForecastDay } from '@/lib/weatherTypes';
 import type { SystemState } from './actionTypes';
 

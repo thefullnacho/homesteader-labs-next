@@ -47,41 +47,38 @@ export default function CanningDayBanner({
   const surplusPct = Math.round((averageDailySolarWh / dailyDrawWh - 1) * 100);
 
   return (
-    <div className="border-2 border-green-500/50 bg-green-500/10 px-4 py-3 font-mono flex flex-col sm:flex-row sm:items-start gap-3 animate-in slide-in-from-top-2 duration-300">
+    <div className="border-2 border-moss bg-paper px-4 py-3 flex flex-col sm:flex-row sm:items-start gap-3 animate-in slide-in-from-top-2 duration-300">
       <div className="flex items-center gap-2 shrink-0 pt-0.5">
-        <Flame size={13} className="text-green-400" />
-        <span className="text-[10px] font-bold uppercase tracking-widest text-green-400">
-          Canning_Day // Protocol
+        <Flame size={14} className="text-moss" />
+        <span className="font-mono text-[0.68rem] font-bold uppercase tracking-[0.18em] text-moss">
+          Canning day
         </span>
       </div>
 
-      <div className="flex-1 space-y-1">
-        <div className="text-[10px] font-mono uppercase opacity-70">
-          Solar surplus detected (+{surplusPct}% above baseload) — ideal window for energy-intensive preservation.
-        </div>
+      <div className="flex-1 text-[0.92rem] leading-snug text-ink/85">
+        The panels are running <strong className="text-moss">{surplusPct}% over baseload</strong>.
+        Good window for the pressure canner and the dehydrator, the battery never feels it.
         {decliningFreshItems.length > 0 && (
-          <div className="text-[9px] font-mono uppercase opacity-50">
-            Prioritise:{' '}
-            <span className="text-green-300 opacity-100">
+          <>
+            {' '}Put up{' '}
+            <strong>
               {decliningFreshItems.slice(0, 4).join(', ')}
-              {decliningFreshItems.length > 4 ? ` +${decliningFreshItems.length - 4} more` : ''}
-            </span>
-            {' '}— shelf life declining.
-          </div>
-        )}
-        <div className="pt-1">
-          <Link
-            href="/tools/caloric-security/inventory"
-            className="text-[9px] font-mono uppercase text-green-400 opacity-70 hover:opacity-100 underline underline-offset-2 transition-opacity"
-          >
-            → View Inventory
-          </Link>
-        </div>
+              {decliningFreshItems.length > 4 ? ` and ${decliningFreshItems.length - 4} more` : ''}
+            </strong>{' '}
+            first, their shelf life is already sliding.
+          </>
+        )}{' '}
+        <Link
+          href="/tools/caloric-security/inventory/"
+          className="font-mono text-[0.68rem] uppercase tracking-wider underline underline-offset-4 hover:text-marker"
+        >
+          Open the inventory
+        </Link>
       </div>
 
       <button
         onClick={() => setDismissed(true)}
-        className="shrink-0 flex items-center gap-1 text-[9px] font-mono uppercase opacity-30 hover:opacity-70 transition-opacity mt-0.5"
+        className="shrink-0 flex items-center gap-1 font-mono text-[0.64rem] uppercase tracking-wider text-ink/45 hover:text-ink transition-colors mt-0.5"
       >
         <X size={10} /> Dismiss
       </button>

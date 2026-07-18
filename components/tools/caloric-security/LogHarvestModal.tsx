@@ -1,10 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { X, Leaf } from 'lucide-react';
-import BrutalistBlock from '@/components/ui/BrutalistBlock';
-import Button from '@/components/ui/Button';
-import Typography from '@/components/ui/Typography';
+import { createPortal } from 'react-dom';
+import { X } from 'lucide-react';
 import { getAllCrops } from '@/lib/tools/planting-calendar/cropLoader';
 import { putInventoryItem } from '@/lib/caloric-security/homesteadStore';
 import type { InventoryItem } from '@/lib/caloric-security/types';
@@ -15,6 +13,9 @@ import type { InventoryItem } from '@/lib/caloric-security/types';
 // Fast-path form to log an actual harvest straight to stored
 // inventory. Bypasses the full CRUD form on the inventory page
 // — just crop, weight, preservation method, and date.
+//
+// Portals to document.body: .grain sections set isolation, so
+// a fixed overlay rendered inline would clip.
 // ============================================================
 
 const PRESERVATION_LABELS: Record<NonNullable<InventoryItem['preservationMethod']>, string> = {
@@ -22,8 +23,11 @@ const PRESERVATION_LABELS: Record<NonNullable<InventoryItem['preservationMethod'
   canned:         'Canned',
   dehydrated:     'Dehydrated',
   frozen:         'Frozen',
-  'cold-storage': 'Cold Storage',
+  'cold-storage': 'Cold storage',
 };
+
+const FIELD_LABEL = 'block font-mono text-[0.68rem] uppercase tracking-widest text-ink/60 mb-1';
+const FIELD_INPUT = 'w-full px-3 py-2.5 bg-paper border-2 border-ink/40 focus:border-marker outline-none font-mono text-sm transition-colors placeholder:text-ink/40';
 
 interface LogHarvestModalProps {
   onClose:   () => void;
@@ -67,49 +71,39 @@ export default function LogHarvestModal({ onClose, defaultCropId }: LogHarvestMo
     }
   }
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-4 bg-black/60">
-      <BrutalistBlock className="w-full max-w-sm relative" refTag="LOG_HARVEST">
-        <button
-          onClick={onClose}
-          className="absolute top-3 right-3 p-1 opacity-40 hover:opacity-80 transition-opacity"
-        >
-          <X size={14} />
-        </button>
+  return createPortal(
+    <div className="fixed inset-0 bg-ink/70 flex items-center justify-center p-4 z-[100]">
+      <div className="card-paper grain w-full max-w-sm">
+        <div className="flex justify-between items-center px-5 py-3 border-b-2 border-ink relative z-[2]">
+          <span className="font-mono text-[0.72rem] font-bold uppercase tracking-[0.18em]">
+            Log a harvest
+          </span>
+          <button onClick={onClose} aria-label="Close" className="hover:text-marker">
+            <X size={18} />
+          </button>
+        </div>
 
-        {done ? (
-          <div className="py-8 text-center space-y-2">
-            <div className="text-2xl">✓</div>
-            <p className="text-xs font-mono uppercase font-bold text-green-400">Harvest Logged</p>
-            <p className="text-[10px] font-mono opacity-40 uppercase">
-              Food clock updated automatically.
-            </p>
-          </div>
-        ) : (
-          <>
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-9 h-9 bg-accent/10 border-2 border-accent flex items-center justify-center shrink-0">
-                <Leaf size={14} className="text-accent" />
-              </div>
-              <Typography variant="h4" className="mb-0 uppercase tracking-tight text-sm">
-                Log Harvest
-              </Typography>
+        <div className="p-5 relative z-[2]">
+          {done ? (
+            <div className="py-8 text-center">
+              <p className="font-hand font-semibold text-marker text-3xl -rotate-1">✓ in the ledger</p>
+              <p className="mt-2 font-mono text-[0.68rem] uppercase tracking-wider text-ink/55">
+                Food clock updated.
+              </p>
             </div>
-
+          ) : (
             <form onSubmit={handleSave} className="space-y-4">
               {/* Crop */}
               <div>
-                <label className="block text-[10px] font-mono uppercase tracking-widest mb-1 opacity-70">
-                  Crop
-                </label>
+                <label className={FIELD_LABEL}>Crop</label>
                 <select
                   value={cropId}
                   onChange={e => setCropId(e.target.value)}
-                  className="w-full bg-black/30 border-2 border-border-primary/40 focus:border-accent outline-none px-3 py-2 text-sm font-mono uppercase"
+                  className={FIELD_INPUT}
                   required
                 >
                   {allCrops.map(c => (
-                    <option key={c.id} value={c.id} className="bg-background-primary">
+                    <option key={c.id} value={c.id}>
                       {c.icon} {c.name}
                     </option>
                   ))}
@@ -118,9 +112,7 @@ export default function LogHarvestModal({ onClose, defaultCropId }: LogHarvestMo
 
               {/* Weight */}
               <div>
-                <label className="block text-[10px] font-mono uppercase tracking-widest mb-1 opacity-70">
-                  Weight (lbs)
-                </label>
+                <label className={FIELD_LABEL}>Weight (lbs)</label>
                 <input
                   type="number"
                   min="0.1"
@@ -128,26 +120,24 @@ export default function LogHarvestModal({ onClose, defaultCropId }: LogHarvestMo
                   placeholder="e.g. 5.5"
                   value={weightLbs}
                   onChange={e => setWeightLbs(e.target.value)}
-                  className="w-full bg-black/30 border-2 border-border-primary/40 focus:border-accent outline-none px-3 py-2 text-sm font-mono"
+                  className={FIELD_INPUT}
                   required
                 />
-                <p className="text-[9px] font-mono uppercase opacity-30 mt-1">
-                  Actual measured weight — more accurate than plant count
+                <p className="mt-1 font-mono text-[0.62rem] uppercase tracking-wide text-ink/50">
+                  What the scale said. Beats counting plants.
                 </p>
               </div>
 
               {/* Preservation method */}
               <div>
-                <label className="block text-[10px] font-mono uppercase tracking-widest mb-1 opacity-70">
-                  Preservation Method
-                </label>
+                <label className={FIELD_LABEL}>Preservation method</label>
                 <select
                   value={method}
                   onChange={e => setMethod(e.target.value as NonNullable<InventoryItem['preservationMethod']>)}
-                  className="w-full bg-black/30 border-2 border-border-primary/40 focus:border-accent outline-none px-3 py-2 text-sm font-mono uppercase"
+                  className={FIELD_INPUT}
                 >
                   {(Object.keys(PRESERVATION_LABELS) as Array<keyof typeof PRESERVATION_LABELS>).map(k => (
-                    <option key={k} value={k} className="bg-background-primary">
+                    <option key={k} value={k}>
                       {PRESERVATION_LABELS[k]}
                     </option>
                   ))}
@@ -156,37 +146,38 @@ export default function LogHarvestModal({ onClose, defaultCropId }: LogHarvestMo
 
               {/* Date */}
               <div>
-                <label className="block text-[10px] font-mono uppercase tracking-widest mb-1 opacity-70">
-                  Date Harvested
-                </label>
+                <label className={FIELD_LABEL}>Date harvested</label>
                 <input
                   type="date"
                   value={dateStr}
                   max={new Date().toISOString().slice(0, 10)}
                   onChange={e => setDateStr(e.target.value)}
-                  className="w-full bg-black/30 border-2 border-border-primary/40 focus:border-accent outline-none px-3 py-2 text-sm font-mono"
+                  className={FIELD_INPUT}
                   required
                 />
               </div>
 
               <div className="flex gap-3 pt-2">
-                <Button variant="outline" size="sm" type="button" onClick={onClose} className="flex-1">
+                <button
+                  type="button"
+                  onClick={onClose}
+                  className="flex-1 py-2.5 border-2 border-ink font-mono text-[0.7rem] font-bold uppercase tracking-wider hover:bg-ink/5 transition-colors"
+                >
                   Cancel
-                </Button>
-                <Button
-                  variant="primary"
-                  size="sm"
+                </button>
+                <button
                   type="submit"
                   disabled={saving || !cropId || !weightLbs}
-                  className="flex-1"
+                  className="flex-1 py-2.5 bg-ink text-paper border-2 border-ink font-mono text-[0.7rem] font-bold uppercase tracking-wider hover:bg-marker hover:border-marker transition-colors disabled:opacity-60"
                 >
-                  {saving ? 'Saving...' : 'Log Harvest'}
-                </Button>
+                  {saving ? 'Writing it in...' : 'Log it'}
+                </button>
               </div>
             </form>
-          </>
-        )}
-      </BrutalistBlock>
-    </div>
+          )}
+        </div>
+      </div>
+    </div>,
+    document.body
   );
 }

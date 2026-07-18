@@ -59,7 +59,7 @@ export interface FrostDatesRow {
 // ============================================================
 // Actuals row (version 2)
 //
-// Persists ActualsInput values across page refreshes so the
+// Persists field-reading actuals across page refreshes so the
 // user doesn't have to re-enter stored-gallons / battery % on
 // every visit.
 // ============================================================

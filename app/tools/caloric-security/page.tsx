@@ -1,12 +1,11 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import FieldStationLayout from '@/components/ui/FieldStationLayout';
-import FieldStationBridge from '@/components/ui/FieldStationBridge';
+import Link from 'next/link';
 import SetupWizard from '@/components/tools/caloric-security/SetupWizard';
 import AutonomyDashboard from '@/components/tools/caloric-security/AutonomyDashboard';
-import Typography from '@/components/ui/Typography';
 import FaqAccordion from '@/components/ui/FaqAccordion';
+import { Stamp } from '@/components/field/kit';
 import { isFirstRun, getConfig } from '@/lib/caloric-security/homesteadStore';
 import { useFieldStation } from '@/app/context/FieldStationContext';
 import { fetchWeatherData } from '@/lib/weatherApi';
@@ -17,15 +16,15 @@ import type { HomesteadConfig } from '@/lib/caloric-security/types';
 const FAQS: { q: string; a: string }[] = [
   {
     q: "How does this differ from a standard food storage calculator?",
-    a: "Most food storage calculators count what's in your pantry against a fixed target (e.g., \"30 days for 4 people\"). This dashboard adds active and planned crops to the equation — projecting future harvests using your local growing season — and tracks decay for stored items so the number reflects reality, not best case.",
+    a: "Most food storage calculators count what's in your pantry against a fixed target, say 30 days for 4 people. This dashboard adds active and planned crops to the equation, projecting future harvests from your local growing season, and it tracks decay for stored items so the number reflects reality, not best case.",
   },
   {
     q: "What counts as \"food autonomy\"?",
-    a: "The number of days your household can meet its daily caloric needs from stored food plus crops you've already planted and will harvest within the projection window. We don't count crops you might plant — only what's committed in your inventory.",
+    a: "The number of days your household can meet its daily caloric needs from stored food plus crops you've already planted and will harvest within the projection window. We don't count crops you might plant, only what's committed in your inventory.",
   },
   {
     q: "How accurate is the harvest projection?",
-    a: "Confidence varies by crop. Mature varieties with predictable yield (potatoes, beans, winter squash) project within roughly ±20%. Annuals with weather sensitivity (tomatoes, peppers, melons) can swing 40%+. The dashboard surfaces a confidence indicator on every projection so you can read the math.",
+    a: "Confidence varies by crop. Mature varieties with predictable yield (potatoes, beans, winter squash) project within roughly ±20%. Annuals with weather sensitivity (tomatoes, peppers, melons) can swing 40% or more. The ledger shows the math on every projection so you can judge it yourself.",
   },
   {
     q: "Do I need to enter all my food manually?",
@@ -33,7 +32,7 @@ const FAQS: { q: string; a: string }[] = [
   },
   {
     q: "Is this just for off-grid homesteaders?",
-    a: "No. Suburban gardeners use it to see how a summer of canning translates to winter days-of-food. Off-grid users lean on it most heavily because their water and energy autonomy matter in parallel — but the food math works regardless of grid status.",
+    a: "No. Suburban gardeners use it to see how a summer of canning translates to winter days-of-food. Off-grid users lean on it hardest because their water and energy autonomy matter in parallel, but the food math works regardless of grid status.",
   },
 ];
 
@@ -68,23 +67,53 @@ export default function CaloricSecurityPage() {
   }
 
   return (
-    <FieldStationLayout stationId="HL_CALORIC_SEC_V1.0">
-      {/* Conditional UI by state */}
-      {!ready && (
-        <div className="flex items-center justify-center min-h-[40vh]">
-          <span className="text-xs font-mono uppercase opacity-30 animate-pulse">
-            Loading...
-          </span>
+    <>
+      {/* ── Header band ─────────────────────────────────────── */}
+      <section className="bg-kraft grain border-b-2 border-ink relative">
+        <div className="max-w-6xl mx-auto px-4 pt-10 pb-10 relative z-[2]">
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-2 font-mono text-[0.68rem] uppercase tracking-[0.18em] text-ink/60 mb-5">
+            <Link href="/tools/" className="hover:text-marker underline underline-offset-4">
+              Workbench
+            </Link>
+            <span>/</span>
+            <span>No. 04 · Resilience</span>
+            <span className="ml-auto">All data stays in your browser</span>
+          </div>
+          <div className="flex flex-wrap gap-2 mb-5">
+            <Stamp color="text-moss">No account</Stamp>
+            <Stamp color="text-slateblue" rotate="1.6deg">Works offline</Stamp>
+          </div>
+          <h1 className="font-display uppercase text-3xl sm:text-5xl leading-[0.98] text-balance">
+            Three clocks. They all start the day the road closes.
+          </h1>
+          <p className="mt-4 text-lg md:text-xl max-w-2xl leading-relaxed text-ink/85 italic">
+            Resilience isn&apos;t how much you grow. It&apos;s how many days you can
+            keep the house fed, watered, and lit with what&apos;s already on hand.
+            The shortest clock is the only one that matters.
+          </p>
         </div>
+      </section>
+
+      {/* ── Loading ─────────────────────────────────────────── */}
+      {!ready && (
+        <section className="max-w-6xl mx-auto px-4 py-24 text-center">
+          <p className="font-mono text-[0.72rem] uppercase tracking-[0.3em] text-ink/50 animate-pulse">
+            Opening the ledger...
+          </p>
+        </section>
       )}
 
+      {/* ── First run / edit: the intake form ───────────────── */}
       {ready && needsSetup && (
-        <SetupWizard
-          initialConfig={editConfig ?? undefined}
-          onComplete={() => { setNeedsSetup(false); setEditConfig(null); }}
-        />
+        <section className="max-w-6xl mx-auto px-4 pt-12 pb-8">
+          <SetupWizard
+            initialConfig={editConfig ?? undefined}
+            onComplete={() => { setNeedsSetup(false); setEditConfig(null); }}
+          />
+        </section>
       )}
 
+      {/* ── The working dashboard ───────────────────────────── */}
       {ready && !needsSetup && (
         <AutonomyDashboard
           forecastDays={forecast}
@@ -94,55 +123,56 @@ export default function CaloricSecurityPage() {
       )}
 
       {/* SEO anchor block — always rendered so crawlers see it regardless of state */}
-      <section className="mt-16 pt-6 border-t border-border-primary/30 max-w-3xl">
-        <Typography variant="h2" className="mb-4 text-xl md:text-2xl normal-case font-mono">
-          Survival garden calculator — food, water, and energy autonomy
-        </Typography>
-        <div className="space-y-4 text-sm md:text-base font-mono opacity-80 leading-relaxed">
-          <p>
-            A real survival garden isn&apos;t measured in vegetables harvested. It&apos;s
-            measured in <strong>days you can keep your family fed</strong> with what&apos;s
-            already on hand plus what&apos;s growing. That&apos;s the calculation this
-            dashboard runs.
-          </p>
-          <p>
-            Enter your household size, water catchment setup, and energy system, and the
-            three clocks above tell you how many days of food, water, and energy you can
-            sustain without resupply. Inventory what you have stored, log harvests as they
-            come in, and the projections update in real time. No subscription, no account,
-            all data stays in your browser.
-          </p>
-          <p>
-            This is what <strong>food self-sufficiency</strong> actually looks like as a
-            number — not a vibes-based &quot;we should grow more&quot;; a measurable
-            autonomy in days. Most homesteads start around 7–14 days of food in storage.
-            Adding a quarter-acre of high-calorie crops typically pushes that past 90.
-          </p>
+      <section className="max-w-6xl mx-auto px-4 pb-16">
+        <div className="max-w-3xl mt-14 pt-8 border-t-2 border-ink">
+          <h2 className="font-display uppercase text-xl md:text-2xl mb-4">
+            Survival garden calculator: food, water, and energy autonomy
+          </h2>
+          <div className="space-y-4 text-[1.02rem] leading-relaxed text-ink/85">
+            <p>
+              A real survival garden isn&apos;t measured in vegetables harvested.
+              It&apos;s measured in <strong>days you can keep your family fed</strong>{' '}
+              with what&apos;s already on hand plus what&apos;s growing. That&apos;s
+              the calculation this ledger runs.
+            </p>
+            <p>
+              Enter your household size, water catchment setup, and energy system,
+              and the three clocks above tell you how many days of food, water, and
+              power you can sustain without resupply. Count what you have stored,
+              log harvests as they come in, and the projections update as you write.
+              No subscription, no account, all data stays in your browser.
+            </p>
+            <p>
+              This is what <strong>food self-sufficiency</strong>{' '}actually looks
+              like as a number. Not a vibes-based &quot;we should grow more,&quot;
+              a measurable autonomy in days. Most homesteads start around 7 to 14
+              days of food in storage. Adding a quarter-acre of high-calorie crops
+              typically pushes that past 90.
+            </p>
+          </div>
+
+          <h3 className="font-display uppercase text-base md:text-lg mt-10 mb-4">
+            Frequently asked questions
+          </h3>
+          <FaqAccordion faqs={FAQS} prefix="QUERY" numWidth={3} />
+
+          {/* FAQPage JSON-LD — eligible for Google rich results */}
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": "FAQPage",
+                mainEntity: FAQS.map(({ q, a }) => ({
+                  "@type": "Question",
+                  name: q,
+                  acceptedAnswer: { "@type": "Answer", text: a },
+                })),
+              }),
+            }}
+          />
         </div>
-
-        <Typography variant="h3" className="mt-10 mb-4 text-base md:text-lg normal-case font-mono">
-          Frequently asked questions
-        </Typography>
-        <FaqAccordion faqs={FAQS} prefix="QUERY" numWidth={3} />
-
-        {/* FAQPage JSON-LD — eligible for Google rich results */}
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "FAQPage",
-              mainEntity: FAQS.map(({ q, a }) => ({
-                "@type": "Question",
-                name: q,
-                acceptedAnswer: { "@type": "Answer", text: a },
-              })),
-            }),
-          }}
-        />
       </section>
-
-      {ready && !needsSetup && <FieldStationBridge currentOps="SURVIVAL" />}
-    </FieldStationLayout>
+    </>
   );
 }
