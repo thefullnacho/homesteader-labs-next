@@ -83,7 +83,7 @@ export default function WeatherChart({ forecast }: WeatherChartProps) {
               width={16}
               height={barHeight}
               fill="currentColor"
-              className="fill-blue-500/30"
+              className="fill-slateblue/30"
             />
           );
         })}
@@ -94,7 +94,7 @@ export default function WeatherChart({ forecast }: WeatherChartProps) {
           fill="none"
           stroke="currentColor"
           strokeWidth={2}
-          className="stroke-orange-500"
+          className="stroke-marker"
         />
 
         {/* Low temp line */}
@@ -103,7 +103,7 @@ export default function WeatherChart({ forecast }: WeatherChartProps) {
           fill="none"
           stroke="currentColor"
           strokeWidth={2}
-          className="stroke-blue-400"
+          className="stroke-slateblue"
         />
 
         {/* Data points */}
@@ -113,13 +113,13 @@ export default function WeatherChart({ forecast }: WeatherChartProps) {
               cx={getX(i)} 
               cy={getY(d.maxTemp)} 
               r={3} 
-              className="fill-orange-500"
+              className="fill-marker"
             />
             <circle 
               cx={getX(i)} 
               cy={getY(d.minTemp)} 
               r={3} 
-              className="fill-blue-400"
+              className="fill-slateblue"
             />
           </g>
         ))}
@@ -145,15 +145,15 @@ export default function WeatherChart({ forecast }: WeatherChartProps) {
       {/* Legend */}
       <div className="flex justify-center gap-6 mt-3">
         <div className="flex items-center gap-2">
-          <div className="w-3 h-0.5 bg-orange-500" />
+          <div className="w-3 h-0.5 bg-marker" />
           <span className="text-[8px] font-mono opacity-40">High</span>
         </div>
         <div className="flex items-center gap-2">
-          <div className="w-3 h-0.5 bg-blue-400" />
+          <div className="w-3 h-0.5 bg-slateblue" />
           <span className="text-[8px] font-mono opacity-40">Low</span>
         </div>
         <div className="flex items-center gap-2">
-          <div className="w-3 h-3 bg-blue-500/30" />
+          <div className="w-3 h-3 bg-slateblue/30" />
           <span className="text-[8px] font-mono opacity-40">Precip</span>
         </div>
       </div>

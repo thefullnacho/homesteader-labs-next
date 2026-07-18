@@ -69,7 +69,7 @@ const RadarView = ({ lat, lon, zoom = 6 }: RadarViewProps) => {
               Radar stream unavailable
             </span>
             <span className="text-[8px] font-mono uppercase tracking-widest opacity-30">
-              RainViewer unreachable — check connection
+              RainViewer unreachable. Check the connection.
             </span>
           </div>
         )}

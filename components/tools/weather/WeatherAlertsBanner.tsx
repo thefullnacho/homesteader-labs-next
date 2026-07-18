@@ -8,11 +8,11 @@ interface WeatherAlertsBannerProps {
   alerts: WeatherAlert[];
 }
 
-const SEVERITY_STYLES: Record<WeatherAlert["severity"], { border: string; bg: string; text: string; icon: string }> = {
-  critical: { border: "border-red-500",    bg: "bg-red-500/10",    text: "text-red-400",    icon: "text-red-500" },
-  high:     { border: "border-orange-500", bg: "bg-orange-500/10", text: "text-orange-400", icon: "text-orange-500" },
-  medium:   { border: "border-yellow-500", bg: "bg-yellow-500/10", text: "text-yellow-400", icon: "text-yellow-500" },
-  low:      { border: "border-blue-500",   bg: "bg-blue-500/10",   text: "text-blue-400",   icon: "text-blue-500" },
+const SEVERITY_STYLES: Record<WeatherAlert["severity"], { border: string; text: string }> = {
+  critical: { border: "border-rust", text: "text-rust" },
+  high:     { border: "border-marker", text: "text-marker" },
+  medium:   { border: "border-ink", text: "text-ink" },
+  low:      { border: "border-slateblue", text: "text-slateblue" },
 };
 
 export default function WeatherAlertsBanner({ alerts }: WeatherAlertsBannerProps) {
@@ -26,22 +26,23 @@ export default function WeatherAlertsBanner({ alerts }: WeatherAlertsBannerProps
     <div className="space-y-2">
       {/* Header row */}
       <div className="flex items-center gap-2">
-        <span className="text-[9px] font-mono uppercase tracking-widest opacity-40">
-          Active Alerts
+        <span className="font-mono text-[0.64rem] uppercase tracking-widest text-ink/50">
+          Posted warnings
         </span>
         <div className="relative inline-flex">
           <button
             onMouseEnter={() => setShowTooltip(true)}
             onMouseLeave={() => setShowTooltip(false)}
-            className="opacity-30 hover:opacity-70 transition-opacity"
+            className="text-ink/40 hover:text-ink/70 transition-colors"
             aria-label="Alert source information"
           >
             <Info size={11} />
           </button>
           {showTooltip && (
-            <div className="absolute left-5 top-0 z-50 w-56 p-2 bg-background-secondary border border-border-primary/40 shadow-brutalist-sm">
-              <p className="text-[9px] font-mono leading-relaxed opacity-80">
-                Alerts sourced from NOAA{"/"}NWS (api.weather.gov). US locations only — international locations will show no alerts.
+            <div className="absolute left-5 top-0 z-50 w-56 p-2 card-paper">
+              <p className="font-mono text-[0.62rem] leading-relaxed text-ink/80 relative z-[2]">
+                Warnings come from NOAA{"/"}NWS (api.weather.gov). US locations only, so
+                international places will show none.
               </p>
             </div>
           )}
@@ -52,27 +53,32 @@ export default function WeatherAlertsBanner({ alerts }: WeatherAlertsBannerProps
       {visible.map(alert => {
         const s = SEVERITY_STYLES[alert.severity];
         return (
-          <div key={alert.id} className={`border-l-4 ${s.border} ${s.bg} px-4 py-3 flex items-start gap-3`}>
-            <AlertTriangle size={13} className={`${s.icon} shrink-0 mt-0.5`} />
+          <div
+            key={alert.id}
+            className={`border-2 ${s.border} border-l-8 bg-paper px-4 py-3 flex items-start gap-3`}
+          >
+            <AlertTriangle size={13} className={`${s.text} shrink-0 mt-0.5`} />
             <div className="flex-1 min-w-0">
               <div className="flex items-baseline gap-2 mb-0.5">
-                <span className={`text-[9px] font-mono font-bold uppercase tracking-widest ${s.text}`}>
+                <span className={`font-mono text-[0.62rem] font-bold uppercase tracking-widest ${s.text}`}>
                   {alert.severity}
                 </span>
-                <span className="text-[9px] font-mono opacity-40 uppercase">{alert.type}</span>
+                <span className="font-mono text-[0.62rem] uppercase tracking-wider text-ink/50">
+                  {alert.type}
+                </span>
               </div>
-              <p className="text-[11px] font-mono uppercase leading-tight opacity-90">
+              <p className="font-mono text-[0.76rem] font-bold uppercase leading-tight">
                 {alert.title}
               </p>
               {alert.action && (
-                <p className="text-[10px] font-mono opacity-50 uppercase mt-1 leading-tight">
+                <p className="text-[0.88rem] text-ink/70 mt-1 leading-snug">
                   {alert.action}
                 </p>
               )}
             </div>
             <button
               onClick={() => setDismissed(prev => new Set(prev).add(alert.id))}
-              className="opacity-30 hover:opacity-70 transition-opacity shrink-0 mt-0.5"
+              className="text-ink/40 hover:text-ink transition-colors shrink-0 mt-0.5"
               aria-label="Dismiss alert"
             >
               <X size={12} />

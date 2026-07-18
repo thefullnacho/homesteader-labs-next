@@ -93,7 +93,7 @@ export default function HourlyChart({ hourly }: HourlyChartProps) {
                     width={8}
                     height={precipHeight}
                     fill="currentColor"
-                    className="fill-blue-500/40"
+                    className="fill-slateblue/40"
                   />
                 )}
                 {/* Snow on top of rain */}
@@ -104,7 +104,7 @@ export default function HourlyChart({ hourly }: HourlyChartProps) {
                     width={8}
                     height={snowHeight}
                     fill="currentColor"
-                    className="fill-white/60"
+                    className="fill-ink/20"
                   />
                 )}
               </g>
@@ -118,7 +118,7 @@ export default function HourlyChart({ hourly }: HourlyChartProps) {
             stroke="currentColor"
             strokeWidth={1}
             strokeDasharray="4,4"
-            className="stroke-orange-500/50"
+            className="stroke-marker/50"
           />
 
           {/* Temperature line */}
@@ -127,7 +127,7 @@ export default function HourlyChart({ hourly }: HourlyChartProps) {
             fill="none"
             stroke="currentColor"
             strokeWidth={2}
-            className="stroke-orange-500"
+            className="stroke-marker"
           />
 
           {/* Data points */}
@@ -137,7 +137,7 @@ export default function HourlyChart({ hourly }: HourlyChartProps) {
                 cx={getX(i)} 
                 cy={getY(d.temperature)} 
                 r={2} 
-                className="fill-orange-500"
+                className="fill-marker"
               />
             </g>
           ))}
@@ -174,7 +174,7 @@ export default function HourlyChart({ hourly }: HourlyChartProps) {
                 x={getX(i)}
                 y={padding.top + chartHeight - 5}
                 textAnchor="middle"
-                className="text-[7px] font-mono fill-blue-300 opacity-80"
+                className="text-[7px] font-mono fill-slateblue opacity-80"
               >
                 {d.precipitationProbability}%
               </text>
@@ -185,19 +185,19 @@ export default function HourlyChart({ hourly }: HourlyChartProps) {
         {/* Legend */}
         <div className="flex justify-center gap-6 mt-2 pb-2 border-b border-border-primary/20">
           <div className="flex items-center gap-2">
-            <div className="w-3 h-0.5 bg-orange-500" />
+            <div className="w-3 h-0.5 bg-marker" />
             <span className="text-[8px] font-mono opacity-40 uppercase">Temp</span>
           </div>
           <div className="flex items-center gap-2">
-            <div className="w-3 h-0.5 bg-orange-500/50 border-b border-dashed border-transparent" style={{ borderBottomStyle: 'dashed' }} />
+            <div className="w-3 h-0.5 bg-marker/50 border-b border-dashed border-transparent" style={{ borderBottomStyle: 'dashed' }} />
             <span className="text-[8px] font-mono opacity-40 uppercase">Feels Like</span>
           </div>
           <div className="flex items-center gap-2">
-            <div className="w-3 h-3 bg-blue-500/40" />
+            <div className="w-3 h-3 bg-slateblue/40" />
             <span className="text-[8px] font-mono opacity-40 uppercase">Rain</span>
           </div>
           <div className="flex items-center gap-2">
-            <div className="w-3 h-3 bg-white/60" />
+            <div className="w-3 h-3 bg-ink/20" />
             <span className="text-[8px] font-mono opacity-40 uppercase">Snow</span>
           </div>
         </div>
