@@ -1,10 +1,17 @@
-import { getAllPosts, getAllCategories } from "@/lib/posts";
+import { getAllPosts, getAllCategories, getPostNo, getSpecsLine } from "@/lib/posts";
 import Link from "next/link";
-import { PaperClip, Stamp } from "@/components/field/kit";
+import { PaperClip, Stamp, Tape } from "@/components/field/kit";
 
 export const metadata = {
   title: "Field Notes",
   description: "Field documentation, foraging guides, and survival knowledge from the community.",
+};
+
+/* One-line blurb per drawer, shown next to the pulls */
+const drawerBlurbs: Record<string, string> = {
+  "build-log": "How the tools get built",
+  "field-guide": "Tried outside, written down",
+  foraging: "Wild food, identified whole",
 };
 
 export default async function ArchivePage(props: { searchParams: Promise<{ tag?: string; drawer?: string }> }) {
@@ -47,46 +54,52 @@ export default async function ArchivePage(props: { searchParams: Promise<{ tag?:
         </div>
       </section>
 
-      {/* Category drawer tabs */}
-      {categories.length > 0 && (
-        <section className="max-w-6xl mx-auto px-4 pt-8">
-          <div className="flex flex-wrap items-center gap-2 font-mono text-[0.72rem] uppercase tracking-wider">
-            <Link
-              href="/archive/"
-              className={`px-3 py-1.5 border-2 border-ink transition-colors ${
-                !activeDrawer && !activeTag ? "bg-ink text-paper" : "bg-paper hover:bg-kraft"
-              }`}
-            >
-              All notes
-            </Link>
-            {categories.map((cat) => (
+      {/* Drawer pulls */}
+      <section className="max-w-6xl mx-auto px-4 pt-10">
+        <div
+          className="flex flex-wrap items-end gap-2 border-b-2 border-ink pb-0"
+          role="tablist"
+          aria-label="Filter notes by drawer"
+        >
+          {["", ...categories].map((cat) => {
+            const active = cat === "" ? !activeDrawer && !activeTag : activeDrawer === cat;
+            const count = cat === "" ? allPosts.length : allPosts.filter((p) => p.category === cat).length;
+            return (
               <Link
-                key={cat}
-                href={`/archive/?drawer=${encodeURIComponent(cat)}`}
-                className={`px-3 py-1.5 border-2 border-ink transition-colors ${
-                  activeDrawer === cat ? "bg-ink text-paper" : "bg-paper hover:bg-kraft"
+                key={cat || "all"}
+                href={cat === "" ? "/archive/" : `/archive/?drawer=${encodeURIComponent(cat)}`}
+                role="tab"
+                aria-selected={active}
+                className={`font-mono text-[0.72rem] uppercase tracking-wider px-5 pt-2 pb-2.5 border-2 border-b-0 border-ink transition-colors ${
+                  active ? "bg-ink text-paper" : "bg-manila hover:bg-kraft text-ink"
                 }`}
+                style={{
+                  clipPath: "polygon(6% 0, 94% 0, 100% 100%, 0 100%)",
+                  marginBottom: "-2px",
+                }}
               >
-                {cat}
+                {cat === "" ? "All notes" : cat}{" "}
+                <span className={active ? "text-marker" : "text-ink/45"}>{count}</span>
               </Link>
-            ))}
-            {activeTag && (
-              <span className="px-3 py-1.5 border-2 border-marker text-marker">
-                tag: {activeTag}
-              </span>
-            )}
-          </div>
-        </section>
-      )}
+            );
+          })}
+          {activeTag && (
+            <span className="font-mono text-[0.72rem] uppercase tracking-wider px-3 py-1.5 mb-1 border-2 border-marker text-marker">
+              tag: {activeTag}
+            </span>
+          )}
+          <span className="ml-auto hidden md:block font-mono text-[0.66rem] uppercase tracking-widest text-ink/50 pb-2">
+            {(activeDrawer && drawerBlurbs[activeDrawer]) || "The whole card catalog"}
+          </span>
+        </div>
 
-      {/* Card wall: browsing surface, tilts allowed */}
-      <section className="max-w-6xl mx-auto px-4 pt-10 pb-16">
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {/* Card wall: browsing surface, tilts allowed */}
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 pt-8">
           {posts.map((post, i) => (
             <Link
               key={post.slug}
               href={`/archive/${post.slug}/`}
-              className={`relative card-paper grain p-5 pt-6 block hover:-translate-y-1 hover:rotate-0 transition-transform group ${
+              className={`relative card-paper grain p-5 pt-6 flex flex-col hover:-translate-y-1 hover:rotate-0 transition-transform group ${
                 i % 3 === 0 ? "rotate-slight" : i % 3 === 1 ? "" : "rotate-slight-r"
               }`}
             >
@@ -95,17 +108,22 @@ export default async function ArchivePage(props: { searchParams: Promise<{ tag?:
                 <span className="bg-kraft px-1.5 py-0.5 border border-ink/40">
                   {post.category || "note"}
                 </span>
-                <span>{post.date}</span>
+                <span>No. {getPostNo(post.slug)} · {post.date}</span>
               </div>
               <h2 className="font-display uppercase text-lg leading-tight group-hover:text-marker transition-colors relative z-[2]">
                 {post.title}
               </h2>
-              <p className="mt-2 text-[0.95rem] text-ink/80 leading-snug line-clamp-3 relative z-[2]">
+              <p className="mt-2 text-[0.95rem] text-ink/80 leading-snug line-clamp-3 flex-1 relative z-[2]">
                 {post.excerpt || post.description}
               </p>
-              <p className="mt-4 pt-3 border-t border-dotted border-ink/40 font-mono text-[0.68rem] uppercase tracking-wider text-ink/60 relative z-[2]">
-                {post.author} · Read →
-              </p>
+              <div className="mt-4 pt-3 border-t border-dotted border-ink/40 flex items-center justify-between gap-2 relative z-[2]">
+                <span className="font-mono text-[0.68rem] uppercase tracking-wider text-ink/60">
+                  {getSpecsLine(post)}
+                </span>
+                {post.stamp && (
+                  <Stamp color="text-moss" rotate="-1.6deg">{post.stamp}</Stamp>
+                )}
+              </div>
             </Link>
           ))}
         </div>
@@ -117,6 +135,23 @@ export default async function ArchivePage(props: { searchParams: Promise<{ tag?:
             </p>
           </div>
         )}
+
+        {/* How these notes work */}
+        <div className="mt-14 mb-16 border-2 border-ink bg-kraft grain p-6 md:p-8 relative max-w-3xl">
+          <Tape className="-top-3 left-10 rotate-[-4deg]" />
+          <p className="font-mono text-[0.66rem] uppercase tracking-[0.2em] text-ink/60 mb-2 relative z-[2]">
+            How these notes work
+          </p>
+          <p className="text-[1.05rem] leading-relaxed text-ink/90 relative z-[2]">
+            Every note opens with an <strong className="font-bold">at-a-glance card</strong> —
+            season, skill, time, region, gear. If the card answers your question,
+            close the tab and go outside. If it doesn&apos;t, the long version is
+            written to be read <span className="hl">standing up, with gloves on.</span>
+          </p>
+          <p className="font-hand font-semibold text-marker text-xl mt-4 rotate-[-1deg] relative z-[2]">
+            ✎ print any note — it fits on one page, both sides.
+          </p>
+        </div>
       </section>
     </>
   );

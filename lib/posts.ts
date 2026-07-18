@@ -19,6 +19,34 @@ export interface Post {
   category: string;
   excerpt: string;
   content: string;
+  // Optional at-a-glance card fields (the SpecBox on the note page)
+  season?: string;
+  skill?: string;
+  region?: string;
+  gear?: string;
+  pairsWith?: string;
+  stamp?: string;
+}
+
+/* Rough read time from word count; shown as "N min" on cards/spec boxes */
+export function getReadMinutes(content: string): number {
+  const words = content.trim().split(/\s+/).filter(Boolean).length;
+  return Math.max(1, Math.round(words / 200));
+}
+
+/* Notes are numbered oldest-first: the oldest post is No. 001 */
+export function getPostNo(slug: string): string {
+  const posts = getAllPosts(); // sorted newest-first
+  const index = posts.findIndex((p) => p.slug === slug);
+  if (index === -1) return "000";
+  return String(posts.length - index).padStart(3, "0");
+}
+
+/* The "Season · Skill · N min" line on archive cards */
+export function getSpecsLine(post: Post): string {
+  return [post.season, post.skill, `${getReadMinutes(post.content)} min`]
+    .filter(Boolean)
+    .join(" · ");
 }
 
 export function getAllPosts(): Post[] {
@@ -58,6 +86,12 @@ export function getAllPosts(): Post[] {
         category: data.category || '',
         excerpt: data.excerpt || '',
         content,
+        season: data.season,
+        skill: data.skill,
+        region: data.region,
+        gear: data.gear,
+        pairsWith: data.pairsWith,
+        stamp: data.stamp,
       };
     });
 
@@ -99,6 +133,12 @@ export function getPostBySlug(slug: string): Post | null {
       category: data.category || '',
       excerpt: data.excerpt || '',
       content,
+      season: data.season,
+      skill: data.skill,
+      region: data.region,
+      gear: data.gear,
+      pairsWith: data.pairsWith,
+      stamp: data.stamp,
     };
   } catch {
     return null;

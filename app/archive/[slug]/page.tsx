@@ -1,7 +1,7 @@
-import { getAllSlugs, getPostBySlug, getAllPosts } from "@/lib/posts";
+import { getAllSlugs, getPostBySlug, getAllPosts, getPostNo, getReadMinutes } from "@/lib/posts";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { PaperClip, Stamp } from "@/components/field/kit";
+import { PaperClip, SpecBox, Stamp } from "@/components/field/kit";
 
 interface PageProps {
   params: Promise<{
@@ -53,6 +53,18 @@ export default async function ArchivePostPage(props: PageProps) {
   // Dynamically import the MDX content
   const { default: MDXContent } = await import(`../../../content/archive/${slug}.mdx`);
 
+  const postNo = getPostNo(slug);
+
+  // At-a-glance rows; the SpecBox renders when there's more than read time to say
+  const specRows: [string, React.ReactNode][] = [];
+  if (post.season) specRows.push(["Season", post.season]);
+  if (post.skill) specRows.push(["Skill", post.skill]);
+  specRows.push(["Time", `${getReadMinutes(post.content)} min read`]);
+  if (post.region) specRows.push(["Region", post.region]);
+  if (post.gear) specRows.push(["You'll need", post.gear]);
+  if (post.pairsWith) specRows.push(["Pairs with", post.pairsWith]);
+  const hasSpecBox = specRows.length >= 2;
+
   // Two neighbors from the same drawer for the footer
   const related = getAllPosts()
     .filter((p) => p.slug !== post.slug)
@@ -72,6 +84,8 @@ export default async function ArchivePostPage(props: PageProps) {
             </Link>
             <span>/</span>
             <span className="bg-paper border border-ink/40 px-1.5 py-0.5">{post.category}</span>
+            <span>/</span>
+            <span>No. {postNo}</span>
             <span className="ml-auto">
               {post.date} · {post.author}
             </span>
@@ -99,20 +113,26 @@ export default async function ArchivePostPage(props: PageProps) {
       </section>
 
       {/* Body: working surface, zero degrees */}
-      <section className="max-w-3xl mx-auto px-4 pt-12">
-        <div className="relative">
-          <MDXContent />
-        </div>
+      <section className={`${hasSpecBox ? "max-w-6xl" : "max-w-3xl"} mx-auto px-4 pt-12`}>
+        <div className={hasSpecBox ? "grid lg:grid-cols-[1fr_320px] gap-10 items-start" : ""}>
+          <div className="relative max-w-2xl">
+            <MDXContent />
 
-        {/* Document footer */}
-        <div className="mt-12 border-t-2 border-ink pt-4 flex flex-col sm:flex-row justify-between gap-4 font-mono text-[0.68rem] uppercase tracking-wider text-ink/60">
-          <div>
-            <p>Document: {post.slug.replace(/-/g, "_")}</p>
-            <p>Operator: {post.author}</p>
+            {/* Document footer */}
+            <div className="mt-12 border-t-2 border-ink pt-4 flex flex-col sm:flex-row justify-between gap-4 font-mono text-[0.68rem] uppercase tracking-wider text-ink/60">
+              <div>
+                <p>Document: {post.slug.replace(/-/g, "_")} · No. {postNo}</p>
+                <p>Operator: {post.author}</p>
+              </div>
+              <p className="text-ink/50 max-w-xs sm:text-right">
+                Educational purposes only. Field-verify before you rely on it.
+              </p>
+            </div>
           </div>
-          <p className="text-ink/50 max-w-xs sm:text-right">
-            Educational purposes only. Field-verify before you rely on it.
-          </p>
+
+          {hasSpecBox && (
+            <SpecBox className="lg:sticky lg:top-6" rows={specRows} />
+          )}
         </div>
 
         {/* Filed next to this one: browsing cards, tilts allowed */}
