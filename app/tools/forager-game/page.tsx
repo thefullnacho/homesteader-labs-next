@@ -1,8 +1,6 @@
+import Link from 'next/link';
 import { ArrowRight, Eye, Cpu, ShieldAlert, Sparkles } from 'lucide-react';
-import FieldStationLayout from '@/components/ui/FieldStationLayout';
-import BrutalistBlock from '@/components/ui/BrutalistBlock';
-import Typography from '@/components/ui/Typography';
-import Button from '@/components/ui/Button';
+import { SectionHead, Stamp } from '@/components/field/kit';
 import FaqAccordion from '@/components/ui/FaqAccordion';
 import DomainPicker from '@/components/foragerGame/DomainPicker';
 
@@ -42,46 +40,63 @@ const FAQS = [
 
 export default function ForagerGameLanding() {
   return (
-    <FieldStationLayout stationId="FORAGER_GAME_LANDING" gridLines>
-      <div className="max-w-4xl mx-auto px-4 py-12 space-y-12">
-
-        <header className="space-y-4">
-          <Typography variant="small" className="font-mono opacity-50 uppercase tracking-widest">
-            Homesteader_Labs // Forager_Game
-          </Typography>
-          <h1 className="text-4xl md:text-6xl font-bold uppercase tracking-tight leading-none">
-            Can you beat<br />
-            <span className="text-accent">the AI?</span>
+    <>
+      {/* Header band */}
+      <section className="bg-kraft grain border-b-2 border-ink relative">
+        <div className="max-w-6xl mx-auto px-4 pt-10 pb-10 relative z-[2]">
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-2 font-mono text-[0.68rem] uppercase tracking-[0.18em] text-ink/60 mb-5">
+            <Link href="/tools/" className="hover:text-marker underline underline-offset-4">
+              Tools
+            </Link>
+            <span>/</span>
+            <span>Forager Game</span>
+            <span className="ml-auto">10 rounds · 4 domains</span>
+          </div>
+          <div className="flex flex-wrap gap-2 mb-5">
+            <Stamp color="text-moss">Real photos, real lookalikes</Stamp>
+            <Stamp color="text-slateblue" rotate="1.6deg">Runs offline on device</Stamp>
+          </div>
+          <h1 className="font-display uppercase text-3xl sm:text-5xl leading-[0.98] max-w-3xl text-balance">
+            Can you beat the AI?
           </h1>
-          <p className="text-base md:text-lg opacity-70 max-w-2xl font-mono leading-relaxed">
-            Ten rounds. Real iNaturalist photos. You pick a species — then watch how the vision model that runs the WALKING MAN PRO scored on the same image.
+          <p className="mt-4 text-lg md:text-xl leading-relaxed max-w-2xl text-ink/85 italic">
+            Ten rounds. Real iNaturalist photos. You pick a species — then see how
+            the vision model that runs the WALKING MAN PRO scored on the same image.
           </p>
-        </header>
+          <p className="mt-3 font-hand font-semibold text-marker text-xl rotate-[-1deg]">
+            ✎ the mycologist rounds are your best chance to win
+          </p>
+        </div>
+      </section>
 
+      <div className="max-w-6xl mx-auto px-4 pt-12 pb-12">
+        {/* Domain picker */}
         <section>
-          <Typography variant="h3" className="uppercase tracking-tight mb-6 text-accent">Pick_your_domain</Typography>
+          <SectionHead no="§1" title="Pick your domain" right="10 rounds each" />
           <DomainPicker />
         </section>
 
-        <section>
-          <Typography variant="h3" className="uppercase tracking-tight mb-6 text-accent">What&apos;s_inside</Typography>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {FEATURES.map(f => (
-              <BrutalistBlock key={f.label}>
-                <div className="flex items-start gap-3">
-                  <f.icon size={20} className="text-accent shrink-0 mt-1" />
+        {/* What's inside */}
+        <section className="mt-14">
+          <SectionHead no="§2" title="What's inside" />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {FEATURES.map((f) => (
+              <div key={f.label} className="card-paper grain p-5">
+                <div className="flex items-start gap-3 relative z-[2]">
+                  <f.icon size={20} className="text-marker shrink-0 mt-1" />
                   <div>
                     <p className="font-mono font-bold uppercase text-sm mb-1">{f.label}</p>
-                    <p className="text-xs font-mono opacity-60 leading-relaxed">{f.sub}</p>
+                    <p className="text-[0.95rem] text-ink/80 leading-snug">{f.sub}</p>
                   </div>
                 </div>
-              </BrutalistBlock>
+              </div>
             ))}
           </div>
         </section>
 
-        <section>
-          <Typography variant="h3" className="uppercase tracking-tight mb-6 text-accent">FAQ</Typography>
+        {/* FAQ */}
+        <section className="mt-14">
+          <SectionHead no="§3" title="Questions on file" />
           <FaqAccordion faqs={FAQS} prefix="GAME" defaultOpen={0} />
           <script
             type="application/ld+json"
@@ -99,27 +114,29 @@ export default function ForagerGameLanding() {
           />
         </section>
 
-        <section>
-          <BrutalistBlock variant="accent">
-            <div className="text-center space-y-3 py-2">
-              <Typography variant="h3" className="uppercase tracking-tight">The_real_device</Typography>
-              <p className="text-sm font-mono opacity-80 max-w-md mx-auto leading-relaxed">
-                You just played against the brain. The body is WALKING MAN PRO — a 5&quot; field tool that runs the same model in your pocket, offline, at 187 ms per scan.
-              </p>
-              <Button variant="secondary" size="lg" href="/shop/wlk-mn-pro/">
-                See WALKING MAN PRO <ArrowRight size={18} className="ml-2" />
-              </Button>
-            </div>
-          </BrutalistBlock>
+        {/* Device CTA */}
+        <section className="mt-14 no-print">
+          <div className="bg-ink text-paper border-2 border-ink p-6 md:p-8 text-center">
+            <p className="font-display uppercase text-xl md:text-2xl">The real device</p>
+            <p className="mt-3 text-[0.95rem] text-paper/75 max-w-md mx-auto leading-relaxed">
+              You just played against the brain. The body is WALKING MAN PRO — a
+              5&quot; field tool that runs the same model in your pocket, offline,
+              at 187 ms per scan.
+            </p>
+            <Link
+              href="/shop/wlk-mn-pro/"
+              className="mt-5 inline-flex items-center justify-center gap-2 bg-paper text-ink border-2 border-paper px-6 py-3 font-mono text-[0.78rem] uppercase tracking-wider hover:bg-marker hover:border-marker hover:text-paper transition-colors"
+            >
+              See WALKING MAN PRO <ArrowRight size={16} />
+            </Link>
+          </div>
         </section>
 
-        <section className="border-t-2 border-foreground-primary/20 pt-6">
-          <p className="text-[10px] font-mono opacity-50 uppercase tracking-widest leading-relaxed">
-            Safety: This game is educational. Wild mushroom and plant identification carries fatal risk. Model output should not be acted on without independent verification by a qualified expert. Amatoxin poisoning has no reliable field antidote.
-          </p>
-        </section>
-
+        {/* Safety + station footer */}
+        <p className="mt-12 text-center font-mono text-[0.64rem] uppercase tracking-[0.3em] text-ink/40 border-t border-ink/20 pt-6">
+          Educational only · Never eat a wild ID · Amatoxin has no field antidote
+        </p>
       </div>
-    </FieldStationLayout>
+    </>
   );
 }

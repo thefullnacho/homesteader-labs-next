@@ -3,7 +3,6 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { AlertTriangle } from 'lucide-react';
-import BrutalistBlock from '@/components/ui/BrutalistBlock';
 import RoundView from './RoundView';
 import RevealView from './RevealView';
 import Scoreboard from './Scoreboard';
@@ -52,25 +51,30 @@ export default function GameShell() {
 
   if (phase === 'loading') {
     return (
-      <BrutalistBlock>
-        <p className="text-xs font-mono opacity-60 uppercase">Loading game data...</p>
-      </BrutalistBlock>
+      <div className="card-paper grain p-6">
+        <p className="font-mono text-[0.68rem] uppercase tracking-[0.18em] text-ink/50 relative z-[2]">
+          Loading game data…
+        </p>
+      </div>
     );
   }
   if (phase === 'error' || !session) {
     return (
-      <BrutalistBlock>
-        <div className="flex items-start gap-3">
-          <AlertTriangle size={18} className="text-accent shrink-0 mt-1" />
+      <div className="card-paper grain p-6">
+        <div className="flex items-start gap-3 relative z-[2]">
+          <AlertTriangle size={18} className="text-rust shrink-0 mt-1" />
           <div>
-            <p className="text-sm font-mono font-bold uppercase mb-2">Could not load game</p>
-            <p className="text-xs font-mono opacity-70 mb-3">{error}</p>
-            <button onClick={() => router.push('/tools/forager-game/')} className="px-3 py-1.5 border-2 border-accent text-accent text-xs font-mono uppercase font-bold">
+            <p className="font-mono font-bold uppercase text-sm mb-2">Could not load game</p>
+            <p className="text-[0.95rem] text-ink/80 mb-3">{error}</p>
+            <button
+              onClick={() => router.push('/tools/forager-game/')}
+              className="px-3 py-1.5 border-2 border-ink bg-paper hover:bg-kraft transition-colors font-mono text-[0.72rem] uppercase tracking-wider"
+            >
               Back to start
             </button>
           </div>
         </div>
-      </BrutalistBlock>
+      </div>
     );
   }
 

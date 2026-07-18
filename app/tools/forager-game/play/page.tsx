@@ -1,5 +1,4 @@
 import { Suspense } from 'react';
-import FieldStationLayout from '@/components/ui/FieldStationLayout';
 import GameShell from '@/components/foragerGame/GameShell';
 
 export const metadata = {
@@ -10,12 +9,10 @@ export const metadata = {
 
 export default function PlayPage() {
   return (
-    <FieldStationLayout stationId="FORAGER_GAME_PLAY" gridLines={false}>
-      <div className="max-w-xl mx-auto py-6 px-4">
-        <Suspense fallback={<div className="text-xs font-mono opacity-50 uppercase">Loading...</div>}>
-          <GameShell />
-        </Suspense>
-      </div>
-    </FieldStationLayout>
+    <div className="max-w-xl mx-auto py-8 px-4">
+      <Suspense fallback={<div className="font-mono text-[0.68rem] uppercase tracking-[0.18em] text-ink/50">Loading…</div>}>
+        <GameShell />
+      </Suspense>
+    </div>
   );
 }
