@@ -1,9 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ChevronLeft, Database } from "lucide-react";
-import FieldStationLayout from "@/components/ui/FieldStationLayout";
-import BrutalistBlock from "@/components/ui/BrutalistBlock";
-import Typography from "@/components/ui/Typography";
+import { Stamp } from "@/components/field/kit";
 import { getAllKbCrops } from "@/lib/kb";
 import KbBrowser from "./KbBrowser";
 
@@ -23,56 +20,50 @@ export default function KnowledgeBasePage() {
   const crops = getAllKbCrops();
 
   return (
-    <FieldStationLayout stationId="HL_KB_INDEX">
-      <div className="max-w-6xl mx-auto">
-        {/* Back link */}
-        <div className="mb-6">
-          <Link
-            href="/tools/"
-            className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-tighter hover:text-accent transition-colors"
-          >
-            <ChevronLeft size={14} />
-            <span>Back_to_Tools</span>
-          </Link>
-        </div>
-
-        {/* Header */}
-        <div className="mb-8">
-          <div className="flex items-center gap-3 mb-4">
-            <Database size={24} className="text-accent" />
-            <Typography variant="h1" className="text-3xl md:text-5xl leading-tight">
-              Crop Knowledge Base
-            </Typography>
+    <>
+      {/* Header band */}
+      <section className="bg-kraft grain border-b-2 border-ink relative">
+        <div className="max-w-6xl mx-auto px-4 pt-10 pb-10 relative z-[2]">
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-2 font-mono text-[0.68rem] uppercase tracking-[0.18em] text-ink/60 mb-5">
+            <Link
+              href="/tools/"
+              className="hover:text-marker underline underline-offset-4"
+            >
+              Tools
+            </Link>
+            <span>/</span>
+            <span>Knowledge Base</span>
+            <span className="ml-auto">{crops.length} crops on file</span>
           </div>
-          <Typography
-            variant="body"
-            className="opacity-70 text-lg leading-relaxed border-l-2 border-accent pl-4 max-w-3xl"
-          >
-            An open, searchable reference for {crops.length} crops — botanical
-            names, sun and spacing needs, and sowing methods. The broad reference
-            layer beneath our planting tools; crops marked{" "}
-            <span className="text-accent font-mono">In planting calculator</span>{" "}
-            have full frost-relative scheduling.
-          </Typography>
+          <div className="flex flex-wrap gap-2 mb-5">
+            <Stamp color="text-moss">Public domain · CC0</Stamp>
+            <Stamp color="text-slateblue" rotate="1.6deg">
+              Open dataset
+            </Stamp>
+          </div>
+          <h1 className="font-display uppercase text-3xl sm:text-5xl leading-[0.98] max-w-3xl text-balance">
+            The crop files, rescued from a dead website.
+          </h1>
+          <p className="mt-4 text-lg md:text-xl leading-relaxed max-w-2xl text-ink/85 italic">
+            Botanical names, sun and spacing needs, and sowing methods for{" "}
+            {crops.length} crops — the broad reference layer beneath the
+            planting tools.
+          </p>
+          <p className="mt-3 font-hand font-semibold text-marker text-xl rotate-[-1deg]">
+            recovered from OpenFarm.cc, 2011–2025
+          </p>
         </div>
+      </section>
 
+      <section className="max-w-6xl mx-auto px-4 pt-12 pb-12">
         <KbBrowser crops={crops} />
 
-        {/* Attribution */}
-        <BrutalistBlock
-          variant="default"
-          className="mt-10"
-          refTag="SRC_CC0"
-        >
-          <p className="text-xs font-mono opacity-60 leading-relaxed">
-            Seed data recovered from{" "}
-            <span className="text-accent">OpenFarm.cc</span> (2011–2025), released
-            into the public domain (CC0) and preserved via the Internet Archive.
-            We&apos;re rebuilding it as an open dataset — corrections and additions
-            welcome.
-          </p>
-        </BrutalistBlock>
-      </div>
-    </FieldStationLayout>
+        {/* Attribution + station footer */}
+        <p className="mt-12 text-center font-mono text-[0.64rem] uppercase tracking-[0.3em] text-ink/40 border-t border-ink/20 pt-6">
+          Seed data: OpenFarm.cc · CC0 · via the Internet Archive · Corrections
+          welcome
+        </p>
+      </section>
+    </>
   );
 }
