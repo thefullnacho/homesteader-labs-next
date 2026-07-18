@@ -28,8 +28,7 @@
     "remark-frontmatter": "^5.0.0",
     "remark-gfm": "^4.0.1",
     "resend": "^6.9.3",
-    "stripe": "^22.2.0",
-    "three": "^0.182.0"
+    "stripe": "^22.2.0"
   },
   "devDependencies": {
     "@next/mdx": "^16.2.10",

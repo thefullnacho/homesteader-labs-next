@@ -41,11 +41,11 @@ const tools = [
   {
     no: "04",
     name: "Workshop",
-    job: "Print estimates before you commit filament.",
-    need: "An STL file",
+    job: "Printable parts that earn their place outside.",
+    need: "A printer",
     href: "/tools/fabrication/",
-    rows: ["Upload an STL", "Pick your material", "Time and cost, estimated"],
-    stamps: [["Free", "text-moss"], ["Printable", "text-slateblue"]],
+    rows: ["Field-tested part designs", "Honest print settings", "Free models first"],
+    stamps: [["Free", "text-moss"], ["Open designs", "text-slateblue"]],
   },
 ];
 

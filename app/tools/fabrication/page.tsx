@@ -1,402 +1,227 @@
 "use client";
 
-import { useState, useCallback, useRef, useEffect } from "react";
-import { Upload, Box, Clock, Weight, AlertCircle } from "lucide-react";
-import dynamic from "next/dynamic";
+import { useState } from "react";
+import Link from "next/link";
+import { SectionHead, Stamp } from "@/components/field/kit";
 
-const STLViewer = dynamic(() => import("@/components/fabrication/STLViewer"), {
-  ssr: false,
-  loading: () => (
-    <div className="h-[400px] w-full flex items-center justify-center bg-black/20 border-2 border-border-primary border-dashed">
-      <div className="text-center">
-        <Box className="w-12 h-12 text-accent animate-pulse mx-auto mb-4" />
-        <p className="font-mono text-xs text-accent uppercase tracking-widest">Loading 3D viewer...</p>
-      </div>
-    </div>
-  ),
-});
+const parts = [
+  {
+    name: "Plant tags",
+    job: "Readable after a season of sun. Write on them in pencil, reuse them every year.",
+    material: "PETG",
+    status: "On the bench",
+  },
+  {
+    name: "Hose guides",
+    job: "Keep a charged hose out of the beds without staking a fight at every corner.",
+    material: "PETG",
+    status: "On the bench",
+  },
+  {
+    name: "Hooks",
+    job: "Hang tools, feeders, and fence gear where you actually need them.",
+    material: "PETG",
+    status: "On the bench",
+  },
+  {
+    name: "Row cover clips",
+    job: "Pin fabric to hoops through wind it has no business surviving.",
+    material: "PETG",
+    status: "On the bench",
+  },
+  {
+    name: "Drip emitters",
+    job: "Field-repair spares for when a line fails mid-summer. Backup, not primary infrastructure.",
+    material: "PETG",
+    status: "In design",
+  },
+];
 
-import {
-  FILAMENT_TYPES,
-  DEFAULT_SETTINGS,
-  calculatePrintEstimate,
-  formatPrintTime,
-} from "@/lib/fabricationTypes";
-import type { FilamentType, PrintSettings, PrintEstimate } from "@/lib/fabricationTypes";
-import { getStoredFile, setStoredFile, clearStoredFile } from "@/lib/indexedDB";
-import FieldStationLayout from "@/components/ui/FieldStationLayout";
-import BrutalistBlock from "@/components/ui/BrutalistBlock";
-import Typography from "@/components/ui/Typography";
-import Button from "@/components/ui/Button";
-import Badge from "@/components/ui/Badge";
-import DymoLabel from "@/components/ui/DymoLabel";
+const lanes = [
+  {
+    no: "01",
+    name: "Free models",
+    desc: "Individual parts published free on MakerWorld, with documentation worth keeping. Print them, modify them, improve them.",
+    tag: "First out",
+  },
+  {
+    no: "02",
+    name: "The fabrication kit",
+    desc: "The curated bundle: every part, tested print settings per material, and honest notes on what each one survived. Digital, yours forever.",
+    tag: "Paid · digital",
+  },
+  {
+    no: "03",
+    name: "Field packs",
+    desc: "No printer? Occasional printed batches, listed when they exist and gone when they sell. Small drops, not print-on-demand.",
+    tag: "Limited drops",
+  },
+];
 
 export default function FabricationPage() {
-  const [file, setFile] = useState<File | null>(null);
-  const [isDragging, setIsDragging] = useState(false);
-  const [selectedFilament, setSelectedFilament] = useState<FilamentType>(FILAMENT_TYPES[0]);
-  const [settings, setSettings] = useState<PrintSettings>(DEFAULT_SETTINGS);
-  const [estimate, setEstimate] = useState<PrintEstimate | null>(null);
-  const [dimensions, setDimensions] = useState<{ x: number; y: number; z: number } | null>(null);
-  const [error, setError] = useState<string | null>(null);
-  const [hasVolume, setHasVolume] = useState(false);
-  const rawVolumeRef = useRef<number>(0);
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [email, setEmail] = useState("");
+  const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
+  const [submitting, setSubmitting] = useState(false);
 
-  useEffect(() => {
-    getStoredFile().then(storedFile => {
-      if (storedFile) {
-        setFile(storedFile);
-      }
-    });
-  }, []);
-
-  const handleVolumeCalculated = useCallback((volumeCm3: number, dims: { x: number; y: number; z: number }) => {
-    rawVolumeRef.current = volumeCm3;
-    setHasVolume(true);
-    setDimensions(dims);
-    const newEstimate = calculatePrintEstimate(volumeCm3, selectedFilament, settings);
-    setEstimate(newEstimate);
-    setError(null);
-  }, [selectedFilament, settings]);
-
-  const handleError = useCallback((errorMsg: string) => {
-    setError(errorMsg);
-    setHasVolume(false);
-    setEstimate(null);
-  }, []);
-
-  const handleFileDrop = useCallback((e: React.DragEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsDragging(false);
-    
-    const droppedFile = e.dataTransfer.files[0];
-    if (droppedFile && droppedFile.name.toLowerCase().endsWith(".stl")) {
-      setFile(droppedFile);
-      setStoredFile(droppedFile);
-      setError(null);
-    } else {
-      setError("Please upload a valid STL file");
-    }
-  }, []);
-
-  const handleFileSelect = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedFile = e.target.files?.[0];
-    if (selectedFile && selectedFile.name.toLowerCase().endsWith(".stl")) {
-      setFile(selectedFile);
-      setStoredFile(selectedFile);
-      setError(null);
-    } else {
-      setError("Please upload a valid STL file");
-    }
-  }, []);
-
-  const updateSettings = (key: keyof PrintSettings, value: number | boolean) => {
-    setSettings((prev) => {
-      const newSettings = { ...prev, [key]: value };
-      // Recalculate estimate using stored raw volume (avoids stale closure on back-calculation)
-      if (rawVolumeRef.current > 0 && dimensions) {
-        setEstimate(calculatePrintEstimate(rawVolumeRef.current, selectedFilament, newSettings));
-      }
-      return newSettings;
-    });
-  };
-
-  const updateFilament = (filamentId: string) => {
-    const filament = FILAMENT_TYPES.find((f) => f.id === filamentId);
-    if (filament) {
-      setSelectedFilament(filament);
-      // Use stored raw volume instead of back-calculating from weight with potentially stale density
-      if (rawVolumeRef.current > 0 && dimensions) {
-        setEstimate(calculatePrintEstimate(rawVolumeRef.current, filament, settings));
-      }
-    }
-  };
-
-  const resetViewer = () => {
-    setFile(null);
-    setEstimate(null);
-    setDimensions(null);
-    setError(null);
-    setHasVolume(false);
-    clearStoredFile();
-    if (fileInputRef.current) {
-      fileInputRef.current.value = "";
+    if (!email) return;
+    setSubmitting(true);
+    try {
+      const res = await fetch("/api/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, type: "fabrication" }),
+      });
+      if (!res.ok) throw new Error("Subscribe failed");
+      setStatus("success");
+    } catch {
+      setStatus("error");
+    } finally {
+      setSubmitting(false);
     }
   };
 
   return (
-    <FieldStationLayout stationId="HL_FAB_WORKBENCH">
-      <div className="max-w-6xl mx-auto">
-        {/* Header */}
-        <BrutalistBlock className="mb-8 p-6" variant="default">
-          <div className="flex justify-between items-end">
-            <div>
-              <Typography variant="h1" className="mb-0">Fabrication_Workbench</Typography>
-              <Typography variant="small" className="opacity-60">STL Viewer & Precise Print Estimation Matrix</Typography>
-            </div>
-            <div className="text-right flex flex-col items-end gap-2">
-              <Typography variant="small" className="font-mono text-xs opacity-40 uppercase mb-0">
-                {FILAMENT_TYPES.length} materials available
-              </Typography>
-            </div>
+    <>
+      {/* Header band */}
+      <section className="bg-kraft grain border-b-2 border-ink relative">
+        <div className="max-w-6xl mx-auto px-4 pt-10 pb-10 relative z-[2]">
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-2 font-mono text-[0.68rem] uppercase tracking-[0.18em] text-ink/60 mb-5">
+            <span>Homesteader Labs</span>
+            <span>/</span>
+            <span>The Workshop</span>
+            <span className="ml-auto">Print it yourself</span>
           </div>
-        </BrutalistBlock>
+          <div className="flex flex-wrap gap-2 mb-5">
+            <Stamp color="text-moss">Open designs</Stamp>
+            <Stamp color="text-slateblue" rotate="1.8deg">PETG outdoors</Stamp>
+            <Stamp color="text-rust" rotate="-2.2deg">No plastic junk</Stamp>
+          </div>
+          <h1 className="font-display uppercase text-3xl sm:text-5xl leading-[0.98] text-balance">
+            The workshop
+          </h1>
+          <p className="mt-4 text-lg md:text-xl leading-relaxed max-w-2xl text-ink/85 italic">
+            Printable parts for the homestead, designed to be made, not
+            purchased. Every model earns its file the same way hardware earns a
+            catalog page: by surviving outside first.
+          </p>
+          <p className="font-hand font-semibold text-marker text-xl mt-4 rotate-[-1deg]">
+            designed on the A1, tested in the dirt.
+          </p>
+        </div>
+      </section>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Left Column - Viewer & Upload */}
-          <div className="lg:col-span-2 space-y-6">
-            {/* Upload Area */}
-            <BrutalistBlock className="p-0 overflow-hidden" variant="default">
-              <div className="flex justify-between items-center p-4 border-b-2 border-border-primary bg-background-primary/30">
-                <Typography variant="h4" className="mb-0 flex items-center gap-2 text-sm">
-                  <Upload size={16} className="text-accent" />
-                  Upload STL File
-                </Typography>
-                {file && (
-                  <Button
-                    onClick={resetViewer}
-                    variant="outline"
-                    size="sm"
-                    className="h-8 py-0 px-3"
-                  >
-                    Clear
-                  </Button>
+      <div className="max-w-6xl mx-auto px-4 pt-12 pb-12">
+        {/* The parts bin */}
+        <SectionHead no="§1" title="The Parts Bin" right="5 parts in fabrication · 0 released" />
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-14">
+          {parts.map((part) => (
+            <div
+              key={part.name}
+              className="border-2 border-dashed border-ink/40 p-5 flex flex-col text-ink/70"
+            >
+              <div className="flex items-baseline justify-between gap-3 mb-2">
+                <span className="font-mono text-[0.64rem] uppercase tracking-widest">
+                  {part.status}
+                </span>
+                <span className="font-mono text-[0.64rem] uppercase tracking-wide bg-kraft px-1.5 py-0.5 border border-ink/40">
+                  {part.material}
+                </span>
+              </div>
+              <h2 className="font-display uppercase text-lg leading-tight text-ink/85">
+                {part.name}
+              </h2>
+              <p className="text-[0.95rem] leading-snug mt-1">{part.job}</p>
+            </div>
+          ))}
+        </div>
+
+        {/* How it ships */}
+        <SectionHead no="§2" title="How It Ships" right="Free first · Kit later · Drops maybe" />
+        <div className="grid md:grid-cols-3 gap-6 mb-14">
+          {lanes.map((lane) => (
+            <div key={lane.no} className="card-paper grain p-5">
+              <div className="relative z-[2]">
+                <div className="flex items-baseline justify-between border-b-2 border-ink pb-2">
+                  <span className="font-mono text-[0.7rem] font-bold text-marker">
+                    No. {lane.no}
+                  </span>
+                  <span className="font-mono text-[0.64rem] uppercase tracking-widest text-ink/50">
+                    {lane.tag}
+                  </span>
+                </div>
+                <h2 className="font-display uppercase text-lg mt-3 leading-tight">
+                  {lane.name}
+                </h2>
+                <p className="text-[0.95rem] text-ink/80 mt-1 leading-snug">{lane.desc}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Bench list */}
+        <div className="border-2 border-ink bg-kraft grain p-6 md:p-8 relative mb-10">
+          <div className="relative z-[2] flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+            <div className="max-w-lg">
+              <p className="font-mono text-[0.66rem] uppercase tracking-[0.2em] text-ink/60 mb-2">
+                The bench list
+              </p>
+              <h2 className="font-display uppercase text-xl leading-tight mb-2">
+                Know when the first models drop
+              </h2>
+              <p className="text-[0.98rem] text-ink/85 leading-snug">
+                One email when the free models go up, one when the kit is
+                ready. Nothing else.
+              </p>
+            </div>
+
+            <form onSubmit={handleSubmit} className="shrink-0 w-full md:w-auto">
+              <div className="flex gap-2">
+                <label htmlFor="fabrication-email" className="sr-only">
+                  Email address
+                </label>
+                <input
+                  id="fabrication-email"
+                  type="email"
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="your@email.com"
+                  className="flex-grow md:w-64 px-3 py-2 bg-paper border-2 border-ink text-ink placeholder:text-ink/40 focus:outline-none focus:border-marker font-mono text-sm"
+                />
+                <button
+                  type="submit"
+                  disabled={submitting}
+                  className="bg-ink text-paper px-4 py-2 border-2 border-ink font-mono text-xs uppercase tracking-wider hover:bg-marker hover:border-marker transition-colors disabled:opacity-60"
+                >
+                  {submitting ? "..." : "Join"}
+                </button>
+              </div>
+              <div aria-live="polite" aria-atomic="true">
+                {status === "success" && (
+                  <p className="font-hand font-semibold text-moss text-lg mt-2">
+                    ✓ you&apos;re on the bench list
+                  </p>
+                )}
+                {status === "error" && (
+                  <p className="font-hand font-semibold text-marker text-lg mt-2">
+                    ✎ that didn&apos;t go through, try again
+                  </p>
                 )}
               </div>
-
-              <div className="p-6">
-                {!file ? (
-                  <div
-                    onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
-                    onDragLeave={() => setIsDragging(false)}
-                    onDrop={handleFileDrop}
-                    onClick={() => fileInputRef.current?.click()}
-                    className={`border-2 border-dashed p-16 text-center cursor-pointer transition-all ${
-                      isDragging
-                        ? "border-accent bg-accent/10"
-                        : "border-border-primary/40 hover:border-accent hover:bg-background-secondary/50"
-                    }`}
-                  >
-                    <Box size={64} className="mx-auto mb-6 opacity-20 text-accent" />
-                    <Typography variant="h3" className="mb-2">Awaiting Data...</Typography>
-                    <Typography variant="body" className="opacity-40 text-sm mb-0">
-                      Drag & Drop STL file or click to scan directory
-                    </Typography>
-                    <Typography variant="small" className="opacity-20 font-mono mt-4 block">
-                      Max file size: 50MB
-                    </Typography>
-                    <input
-                      ref={fileInputRef}
-                      type="file"
-                      accept=".stl"
-                      onChange={handleFileSelect}
-                      className="hidden"
-                    />
-                  </div>
-                ) : (
-                  <div className="space-y-4">
-                    <div className="flex items-center justify-between p-3 bg-black/20 border-l-4 border-accent">
-                      <div className="flex items-center gap-3">
-                        <Box size={18} className="text-accent" />
-                        <Typography variant="small" className="mb-0 font-bold font-mono truncate max-w-md">
-                          {file.name}
-                        </Typography>
-                      </div>
-                      <Badge variant="outline" className="opacity-60">
-                        {(file.size / 1024 / 1024).toFixed(2)} MB
-                      </Badge>
-                    </div>
-
-                    {/* 3D Viewer */}
-                    <div className="border-2 border-border-primary">
-                      <STLViewer
-                        file={file}
-                        onVolumeCalculated={handleVolumeCalculated}
-                        onError={handleError}
-                      />
-                    </div>
-
-                    {error && (
-                      <div className="p-4 border-2 border-red-500 bg-red-500/10 text-red-500 text-xs flex items-center gap-3 font-bold uppercase tracking-tighter">
-                        <AlertCircle size={18} />
-                        {error}
-                      </div>
-                    )}
-                  </div>
-                )}
-              </div>
-            </BrutalistBlock>
-
-            {/* Model Dimensions */}
-            {dimensions && (
-              <BrutalistBlock className="p-6" title="Geometry_Analysis">
-                <div className="grid grid-cols-3 gap-6 text-center">
-                  <div className="bg-background-primary/30 border border-border-primary/30 p-4">
-                    <Typography variant="h3" className="mb-0 text-accent">{dimensions.x.toFixed(1)}</Typography>
-                    <Typography variant="small" className="opacity-40 font-mono mb-0 uppercase text-[11px]">Width (mm)</Typography>
-                  </div>
-                  <div className="bg-background-primary/30 border border-border-primary/30 p-4">
-                    <Typography variant="h3" className="mb-0 text-accent">{dimensions.y.toFixed(1)}</Typography>
-                    <Typography variant="small" className="opacity-40 font-mono mb-0 uppercase text-[11px]">Depth (mm)</Typography>
-                  </div>
-                  <div className="bg-background-primary/30 border border-border-primary/30 p-4">
-                    <Typography variant="h3" className="mb-0 text-accent">{dimensions.z.toFixed(1)}</Typography>
-                    <Typography variant="small" className="opacity-40 font-mono mb-0 uppercase text-[11px]">Height (mm)</Typography>
-                  </div>
-                </div>
-              </BrutalistBlock>
-            )}
-          </div>
-
-          {/* Right Column - Settings & Pricing */}
-          <div className="space-y-8">
-            {/* Filament Selection */}
-            <BrutalistBlock className="p-6" title="Material_Selection">
-              <div className="space-y-4 mt-2">
-                {FILAMENT_TYPES.map((filament) => (
-                  <button
-                    key={filament.id}
-                    onClick={() => updateFilament(filament.id)}
-                    className={`w-full text-left p-4 border-2 transition-all ${
-                      selectedFilament.id === filament.id
-                        ? "border-accent bg-accent/10 shadow-[2px_2px_0px_0px_var(--accent)]"
-                        : "border-border-primary/30 hover:border-border-primary bg-background-secondary/30"
-                    }`}
-                  >
-                    <div className="flex justify-between items-start mb-2">
-                      <Typography variant="h4" className="mb-0 text-sm">{filament.name}</Typography>
-                      <Badge variant="solid" className="bg-accent border-accent">${filament.pricePerKg}/kg</Badge>
-                    </div>
-                    <Typography variant="small" className="opacity-60 text-xs leading-tight mb-0">
-                      {filament.description}
-                    </Typography>
-                  </button>
-                ))}
-              </div>
-            </BrutalistBlock>
-
-            {/* Print Settings */}
-            <BrutalistBlock className="p-6" title="Machine_Configuration">
-              <div className="space-y-6 mt-2">
-                {/* Infill */}
-                <div>
-                  <div className="flex justify-between items-end mb-3">
-                    <Typography variant="small" className="mb-0 uppercase font-bold text-xs">Infill Density</Typography>
-                    <Typography variant="h4" className="mb-0 text-accent">{settings.infill}%</Typography>
-                  </div>
-                  <input
-                    type="range"
-                    min="5"
-                    max="100"
-                    step="5"
-                    value={settings.infill}
-                    onChange={(e) => updateSettings("infill", parseInt(e.target.value))}
-                    className="w-full h-1 bg-background-secondary rounded-lg appearance-none cursor-pointer accent-accent border border-border-primary"
-                  />
-                  <div className="flex justify-between text-[8px] font-mono opacity-30 mt-2 uppercase">
-                    <span>Low</span>
-                    <span>Solid</span>
-                  </div>
-                </div>
-
-                {/* Layer Height */}
-                <div>
-                  <Typography variant="small" className="mb-3 block uppercase font-bold text-xs">Layer Height</Typography>
-                  <div className="flex gap-2">
-                    {[0.1, 0.2, 0.3].map((height) => (
-                      <button
-                        key={height}
-                        onClick={() => updateSettings("layerHeight", height)}
-                        className={`flex-1 py-2 text-xs font-mono border-2 transition-all ${
-                          settings.layerHeight === height
-                            ? "border-accent bg-accent text-white"
-                            : "border-border-primary/40 hover:border-border-primary"
-                        }`}
-                      >
-                        {height}mm
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Supports */}
-                <div className="flex items-center justify-between bg-black/10 p-3 border border-border-primary/20">
-                  <Typography variant="small" className="mb-0 uppercase font-bold text-xs">Support Structures</Typography>
-                  <button
-                    onClick={() => updateSettings("supportEnabled", !settings.supportEnabled)}
-                    className={`w-12 h-6 border-2 transition-all relative ${
-                      settings.supportEnabled
-                        ? "border-accent bg-accent"
-                        : "border-border-primary/40 bg-background-secondary"
-                    }`}
-                  >
-                    <div
-                      className={`absolute top-0.5 w-4 h-4 bg-white transition-transform ${
-                        settings.supportEnabled ? "left-[1.6rem]" : "left-0.5"
-                      }`}
-                    />
-                  </button>
-                </div>
-              </div>
-            </BrutalistBlock>
-
-            {/* Pricing Estimate */}
-            {estimate && hasVolume && (
-              <BrutalistBlock className="border-accent bg-background-primary/40 p-6" title="Cost_Analysis">
-                <div className="space-y-3 mb-8 mt-2">
-                  <div className="flex justify-between items-center text-xs font-mono">
-                    <span className="opacity-50 uppercase flex items-center gap-2">
-                      <Weight size={14} /> Weight
-                    </span>
-                    <span className="font-bold">{estimate.weight}g</span>
-                  </div>
-                  <div className="flex justify-between items-center text-xs font-mono">
-                    <span className="opacity-50 uppercase flex items-center gap-2">
-                      <Clock size={14} /> Print Time
-                    </span>
-                    <span className="font-bold">{formatPrintTime(estimate.printTime)}</span>
-                  </div>
-                  <div className="flex justify-between items-center text-xs font-mono">
-                    <span className="opacity-50 uppercase">Material_Cost</span>
-                    <span className="font-bold">${estimate.materialCost.toFixed(2)}</span>
-                  </div>
-                  <div className="flex justify-between items-center text-xs font-mono">
-                    <span className="opacity-50 uppercase">Service_Fee</span>
-                    <span className="font-bold">${estimate.serviceFee.toFixed(2)}</span>
-                  </div>
-                </div>
-
-                <div className="border-t-2 border-accent pt-6 mb-6">
-                  <div className="flex justify-between items-end">
-                    <div>
-                      <Typography variant="small" className="opacity-40 mb-0 font-mono uppercase text-[11px]">Total</Typography>
-                      <Typography variant="h2" className="mb-0 text-accent text-4xl">${estimate.totalCost.toFixed(2)}</Typography>
-                    </div>
-                    <Badge variant="status" className="mb-1">ESTIMATE</Badge>
-                  </div>
-                </div>
-
-                <Button variant="primary" size="lg" className="w-full group">
-                  <DymoLabel className="group-hover:scale-105 transition-transform px-6">
-                    Request Quote
-                  </DymoLabel>
-                </Button>
-              </BrutalistBlock>
-            )}
-
-            {/* Placeholder when no file */}
-            {!file && (
-              <BrutalistBlock className="p-8 text-center bg-background-secondary/20 border-dashed" variant="default">
-                <Box size={40} className="mx-auto mb-4 opacity-10" />
-                <Typography variant="small" className="opacity-40 italic mb-0">
-                  Data stream idle. Upload STL for analysis.
-                </Typography>
-              </BrutalistBlock>
-            )}
+            </form>
           </div>
         </div>
+
+        {/* Station footer */}
+        <p className="text-center font-mono text-[0.64rem] uppercase tracking-[0.3em] text-ink/40 border-t border-ink/20 pt-6">
+          Open designs · Modify everything ·{" "}
+          <Link href="/terms-of-fabrication/" className="underline decoration-marker decoration-2 underline-offset-4 hover:text-marker">
+            Read the terms of fabrication
+          </Link>
+        </p>
       </div>
-    </FieldStationLayout>
+    </>
   );
 }

@@ -1,11 +1,11 @@
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Fabrication Station",
-  description: "3D STL viewer, print time calculator, and G-code generator for off-grid fabrication. Design and estimate prints for homestead hardware projects.",
+  title: "The Workshop — Printable Homestead Parts",
+  description: "3D-printable parts for the homestead: plant tags, hose guides, hooks, and row cover clips. Free field-tested models with honest print settings, plus a curated fabrication kit.",
   openGraph: {
-    title: "Fabrication Station",
-    description: "3D STL viewer, print time calculator, and G-code generator for homestead hardware fabrication.",
+    title: "The Workshop — Printable Homestead Parts",
+    description: "3D-printable parts for the homestead: free field-tested models with honest print settings, plus a curated fabrication kit.",
     type: "website",
   },
 };

@@ -57,7 +57,6 @@ Both providers are wrapped in `components/providers.tsx` at the root layout:
 
 - **BrutalistBlock** (`components/ui/BrutalistBlock.tsx`) — primary container with the signature offset shadow border
 - **FieldStationLayout** (`components/ui/FieldStationLayout.tsx`) — wrapper used for all tool pages
-- **STLViewer** (`components/fabrication/`) — loaded via `next/dynamic` with `ssr: false` due to Three.js
 - **Terminal overlay** — ALT+T keyboard shortcut, rendered by `TerminalOverlay`
 
 ### Styling Conventions
