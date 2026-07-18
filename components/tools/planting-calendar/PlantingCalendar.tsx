@@ -1,18 +1,12 @@
 "use client";
 
-import React from 'react';
 import { PlantingDate, FrostDates } from "@/lib/tools/planting-calendar/types";
-import { 
+import {
   groupDatesByMonth,
-  sortDatesByDate 
+  sortDatesByDate,
 } from "@/lib/tools/planting-calendar/plantingCalculations";
 import { getCropById } from "@/lib/tools/planting-calendar/crops";
-import { Calendar, MapPin, TrendingUp, CalendarPlus } from "lucide-react";
-import Typography from "@/components/ui/Typography";
-import BrutalistBlock from "@/components/ui/BrutalistBlock";
-import Badge from "@/components/ui/Badge";
-import Button from "@/components/ui/Button";
-import DymoLabel from "@/components/ui/DymoLabel";
+import { CalendarPlus, Printer } from "lucide-react";
 
 interface PlantingCalendarProps {
   dates: PlantingDate[];
@@ -36,7 +30,7 @@ function downloadICS(dates: PlantingDate[], frostDates: FrostDates) {
   dates.forEach((d, idx) => {
     const start = new Date(d.date).toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
     const uid = `hl-plant-${d.cropId}-${d.action}-${idx}@homesteaderlabs`;
-    const summary = `${d.cropName} — ${d.action.replace(/-/g, ' ')}${d.successionNumber ? ` (seq ${d.successionNumber})` : ''}`;
+    const summary = `${d.cropName}: ${d.action.replace(/-/g, ' ')}${d.successionNumber ? ` (round ${d.successionNumber})` : ''}`;
     const description = d.notes?.join('; ') ?? '';
     lines.push(
       'BEGIN:VEVENT',
@@ -58,224 +52,167 @@ function downloadICS(dates: PlantingDate[], frostDates: FrostDates) {
   URL.revokeObjectURL(url);
 }
 
-const ActionMap: Record<string, string> = {
-  'start-indoors': 'START_IN',
-  'transplant': 'TRANS_PL',
-  'direct-sow': 'DIR_SOW',
-  'harvest': 'HARV_EST',
+const ACTION_LABEL: Record<PlantingDate["action"], string> = {
+  "start-indoors": "start inside",
+  transplant: "plant out",
+  "direct-sow": "sow",
+  harvest: "harvest",
+};
+
+const ACTION_TONE: Record<PlantingDate["action"], string> = {
+  "start-indoors": "text-slateblue",
+  transplant: "text-moss",
+  "direct-sow": "text-moss",
+  harvest: "text-marker",
 };
 
 export default function PlantingCalendar({
   dates,
   frostDates,
   onEmailCapture,
-  caloricSummary
+  caloricSummary,
 }: PlantingCalendarProps) {
   const sortedDates = sortDatesByDate(dates);
   const groupedByMonth = groupDatesByMonth(sortedDates);
-  
+
   const months = Array.from(groupedByMonth.entries()).sort((a, b) => {
     const dateA = a[1][0]?.date || new Date();
     const dateB = b[1][0]?.date || new Date();
     return dateA.getTime() - dateB.getTime();
   });
 
-  const uniqueCropsCount = new Set(dates.map(d => d.cropId)).size;
-
   if (dates.length === 0) return null;
 
   return (
-    <div className="space-y-8 animate-in fade-in slide-in-from-right-4 duration-700 print:animate-none print:text-black">
-      {/* MISSION PARAMETERS */}
-      <BrutalistBlock className="p-6 bg-background-primary/40 border-accent/20 print:bg-white print:border-black print:text-black" variant="default" refTag="LOC_ZONE_DATA">
-        <div className="flex items-start gap-4 mb-5">
-          <div className="w-12 h-12 bg-accent/10 border-2 border-accent flex items-center justify-center shrink-0 print:bg-white print:border-black">
-            <Calendar size={24} className="text-accent print:text-black" />
-          </div>
-          <div>
-            <Typography variant="h3" className="mb-1 tracking-tighter print:text-black">PLANTING_TIMELINE_V2</Typography>
-            <div className="flex items-center gap-3 text-xs font-mono opacity-50 uppercase tracking-widest print:text-black print:opacity-100">
-              <span className="flex items-center gap-1"><MapPin size={10} className="text-accent print:text-black" /> {frostDates.zipCode}</span>
-              <span>{"//"}</span>
-              <span>ZONE_{frostDates.growingZone}</span>
+    <div className="grid lg:grid-cols-[1.6fr_1fr] gap-8 items-start print:block">
+      {/* The ledger */}
+      <div className="card-paper grain print:border-0 print:shadow-none">
+        <div className="ruled px-5 py-4 relative z-[2]">
+          {months.map(([month, monthDates]) => (
+            <div key={month} className="mb-6 last:mb-0 print:break-inside-avoid">
+              <p className="font-display uppercase text-lg border-b-2 border-ink pb-1 mb-2">
+                {month}
+              </p>
+              <div>
+                {monthDates.map((date, idx) => {
+                  const crop = getCropById(date.cropId);
+                  return (
+                    <div
+                      key={`${date.cropId}-${date.action}-${idx}`}
+                      className={`flex items-baseline gap-3 py-1.5 border-b border-dotted border-ink/30 last:border-b-0 ${
+                        date.completed ? "opacity-50" : ""
+                      }`}
+                    >
+                      <span className="font-mono text-[0.72rem] font-bold w-14 shrink-0">
+                        {new Date(date.date).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
+                      </span>
+                      <span
+                        className={`font-mono text-[0.66rem] font-bold uppercase tracking-wider w-24 shrink-0 ${ACTION_TONE[date.action]}`}
+                      >
+                        {date.completed ? "✓ done" : ACTION_LABEL[date.action]}
+                      </span>
+                      <span className="text-[0.95rem] leading-snug min-w-0">
+                        <span className="font-semibold">{crop?.icon} {date.cropName}</span>
+                        <span className="text-ink/60"> · {date.varietyName}</span>
+                        {date.successionNumber && (
+                          <span className="font-mono text-[0.62rem] uppercase tracking-wider text-ink/50">
+                            {" "}· round {date.successionNumber}
+                          </span>
+                        )}
+                        {date.lunarPhase && (
+                          <span
+                            className={`font-mono text-[0.62rem] uppercase tracking-wider ${
+                              date.lunarAligned ? "text-moss" : "text-rust"
+                            }`}
+                          >
+                            {" "}· {date.lunarPhase} {date.lunarAligned ? "in phase" : "off phase"}
+                          </span>
+                        )}
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
-          </div>
+          ))}
         </div>
+      </div>
 
-        <div className="grid grid-cols-3 gap-4">
-          <div className="border-l-2 border-border-primary/30 pl-3 print:border-black">
-            <Typography variant="small" className="text-[8px] opacity-40 uppercase mb-1 font-mono print:text-black print:opacity-100">Last_Spring_Frost</Typography>
-            <Typography variant="h4" className="mb-0 text-xs font-mono print:text-black">
-              {frostDates.lastSpringFrost.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }).toUpperCase()}
-            </Typography>
-          </div>
-          <div className="border-l-2 border-border-primary/30 pl-3 print:border-black">
-            <Typography variant="small" className="text-[8px] opacity-40 uppercase mb-1 font-mono print:text-black print:opacity-100">First_Fall_Frost</Typography>
-            <Typography variant="h4" className="mb-0 text-xs font-mono print:text-black">
-              {frostDates.firstFallFrost.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }).toUpperCase()}
-            </Typography>
-          </div>
-          <div className="border-l-2 border-border-primary/30 pl-3 print:border-black">
-            <Typography variant="small" className="text-[8px] opacity-40 uppercase mb-1 font-mono print:text-black print:opacity-100">Growth_Window</Typography>
-            <Typography variant="h4" className="mb-0 text-xs font-mono print:text-black">{frostDates.frostFreeDays}_DAYS</Typography>
-          </div>
-        </div>
-
+      {/* Side rail: what it feeds you + take it with you */}
+      <div className="space-y-6 print:hidden">
         {caloricSummary && caloricSummary.totalKcal > 0 && (
-          <div className="mt-4 pt-4 border-t border-border-primary/20 print:border-black">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-[9px] font-mono uppercase opacity-40">Est. Season Yield</span>
-              <span className="text-xs font-mono font-bold text-accent">
-                ~{caloricSummary.daysOfFood} days of food
+          <div className="card-paper grain p-5">
+            <div className="flex items-baseline justify-between border-b-2 border-ink pb-2 mb-3 relative z-[2]">
+              <h3 className="font-display uppercase text-lg">What it feeds you</h3>
+              <span className="font-mono text-[0.66rem] uppercase tracking-widest text-ink/50">
+                est. season yield
               </span>
             </div>
-            <div className="space-y-1">
+            <div className="flex items-baseline gap-2 mb-3 relative z-[2]">
+              {caloricSummary.daysOfFood >= 1 ? (
+                <>
+                  <span className="font-display text-4xl">~{caloricSummary.daysOfFood}</span>
+                  <span className="font-mono text-[0.72rem] uppercase tracking-wider text-ink/60">
+                    days of food at 2,000 kcal
+                  </span>
+                </>
+              ) : (
+                <>
+                  <span className="font-display text-4xl">{caloricSummary.totalKcal.toLocaleString()}</span>
+                  <span className="font-mono text-[0.72rem] uppercase tracking-wider text-ink/60">
+                    kcal · under a day at 2,000. Add plants.
+                  </span>
+                </>
+              )}
+            </div>
+            <div className="relative z-[2]">
               {caloricSummary.crops.map((c) => (
-                <div key={c.cropName} className="flex justify-between text-[9px] font-mono opacity-60">
-                  <span>{c.icon} {c.cropName} × {c.quantity}</span>
-                  <span>{c.totalKcal.toLocaleString()} kcal</span>
+                <div
+                  key={c.cropName}
+                  className="flex justify-between font-mono text-[0.7rem] py-1 border-b border-dotted border-ink/30 last:border-b-0"
+                >
+                  <span>
+                    {c.icon} {c.cropName} × {c.quantity}
+                  </span>
+                  <span className="text-ink/70">{c.totalKcal.toLocaleString()} kcal</span>
                 </div>
               ))}
             </div>
-            <div className="flex justify-between text-[10px] font-mono font-bold mt-2 pt-2 border-t border-border-primary/10">
-              <span className="opacity-60">Total</span>
-              <span>{caloricSummary.totalKcal.toLocaleString()} kcal</span>
-            </div>
+            <p className="mt-3 font-mono text-[0.62rem] uppercase tracking-widest text-ink/50 relative z-[2]">
+              Full picture on the resilience board
+            </p>
           </div>
         )}
-      </BrutalistBlock>
 
-      {/* DEPLOYMENT LOG */}
-      <div className="space-y-6 print:space-y-4">
-        {months.map(([month, monthDates]) => (
-          <div key={month} className="relative pl-8 border-l-2 border-border-primary/20 print:border-black print:pl-6">
-            {/* Timeline Marker */}
-            <div className="absolute -left-[9px] top-0 w-4 h-4 bg-background-primary border-2 border-accent rounded-full z-10 print:border-black print:bg-white print:-left-[7px] print:w-3 print:h-3" />
-            
-            <div className="mb-4 flex items-center gap-4 print:mb-2">
-              <DymoLabel className="text-[9px] px-4 print:bg-transparent print:border print:border-black print:text-black">{month.toUpperCase()}_LOG</DymoLabel>
-              <div className="h-px flex-grow bg-border-primary/10 print:bg-black/20" />
-            </div>
-
-            <div className="grid gap-3 print:gap-1">
-              {monthDates.map((date, idx) => {
-                const crop = getCropById(date.cropId);
-                return (
-                  <div
-                    key={`${date.cropId}-${date.action}-${idx}`}
-                    className={`group flex flex-col sm:flex-row sm:items-center gap-4 p-3 border-2 transition-all print:break-inside-avoid print:bg-white print:border-black print:p-2 print:gap-2 ${
-                      date.completed
-                        ? 'bg-black/10 border-border-primary/10 opacity-50'
-                        : 'bg-black/20 border-border-primary/30 hover:border-accent/50'
-                    }`}
-                  >
-                    {/* Timestamp */}
-                    <div className="flex flex-row sm:flex-col items-center sm:items-start gap-2 sm:gap-0 min-w-[100px] border-r-2 border-border-primary/10 pr-4 print:border-black/20 print:min-w-[80px] print:pr-2">
-                      <span className="text-xs font-bold font-mono text-accent print:text-black">
-                        {new Date(date.date).toLocaleDateString('en-US', { day: '2-digit', month: '2-digit' })}
-                      </span>
-                      <span className="text-[8px] font-mono opacity-30 uppercase print:opacity-100 print:text-black">CYCLE_ENTRY</span>
-                    </div>
-                    
-                    {/* Crop Identity */}
-                    <div className="flex items-center gap-4 flex-1 print:gap-2">
-                      <div className="w-10 h-10 bg-background-secondary border border-border-primary flex items-center justify-center text-xl shrink-0 print:bg-transparent print:border-black print:w-8 print:h-8">
-                        {crop?.icon}
-                      </div>
-                      <div className="min-w-0">
-                        <div className="flex items-center gap-2 mb-0.5 print:gap-1">
-                          <span className="text-xs font-bold uppercase tracking-tight truncate print:text-black">{date.cropName}</span>
-                          {date.successionNumber && (
-                            <Badge variant="outline" className="text-[7px] py-0 px-1 opacity-40 italic print:opacity-100 print:border-black print:text-black">SEQ_{date.successionNumber}</Badge>
-                          )}
-                        </div>
-                        <div className="text-[9px] font-mono opacity-40 uppercase truncate print:text-black print:opacity-100">
-                          {date.varietyName} {"//"} {crop?.category}
-                        </div>
-                      </div>
-                    </div>
-                    
-                    {/* Lunar Phase Alignment */}
-                    {date.lunarPhase && (
-                      <div className="hidden lg:flex flex-col items-center justify-center min-w-[90px] border-l-2 border-border-primary/10 px-4 print:border-black/20">
-                        <div className="flex items-center gap-2">
-                          <span className="text-sm">{date.lunarPhase}</span>
-                          <span className={`text-[8px] font-bold uppercase ${date.lunarAligned ? 'text-green-500' : 'text-orange-500'} print:text-black`}>
-                            {date.lunarAligned ? 'SYNC_OK' : 'MISMATCH'}
-                          </span>
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Tactical Action */}
-                    <div className="flex items-center gap-3 sm:justify-end print:gap-2">
-                      <div className="text-right hidden md:block">
-                        <div className="text-[8px] font-mono opacity-30 uppercase print:text-black print:opacity-100">Protocol</div>
-                        <div className="text-xs font-bold font-mono tracking-tighter opacity-60 uppercase print:text-black print:opacity-100">{date.action.replace('-', '_')}</div>
-                      </div>
-                      {date.completed ? (
-                        <div className="px-3 py-1.5 font-mono text-xs font-bold border-2 border-border-primary/20 text-foreground-secondary/40 bg-black/10 print:bg-transparent print:border-black print:text-black print:px-2 print:py-1">
-                          ✓_DONE
-                        </div>
-                      ) : (
-                        <div className={`px-3 py-1.5 font-mono text-xs font-bold border-2 ${getActionStyle(date.action)} print:bg-transparent print:border-black print:text-black print:px-2 print:py-1`}>
-                          {ActionMap[date.action]}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
+        <div className="card-paper grain p-5">
+          <p className="font-mono text-[0.68rem] font-bold uppercase tracking-[0.18em] mb-3 relative z-[2]">
+            Take it with you
+          </p>
+          <div className="flex flex-col gap-2 relative z-[2]">
+            <button
+              onClick={() => downloadICS(dates, frostDates)}
+              className="flex items-center justify-center gap-2 py-2.5 bg-ink text-paper border-2 border-ink font-mono text-[0.7rem] font-bold uppercase tracking-wider hover:bg-marker hover:border-marker transition-colors"
+            >
+              <CalendarPlus size={14} /> Export .ics
+            </button>
+            <button
+              onClick={() => window.print()}
+              className="flex items-center justify-center gap-2 py-2.5 border-2 border-ink font-mono text-[0.7rem] font-bold uppercase tracking-wider hover:bg-kraft transition-colors"
+            >
+              <Printer size={14} /> Print the ledger
+            </button>
+            <button
+              onClick={onEmailCapture}
+              className="flex items-center justify-center gap-2 py-2.5 border-2 border-ink font-mono text-[0.7rem] font-bold uppercase tracking-wider hover:bg-kraft transition-colors"
+            >
+              Weekly reminders by email
+            </button>
           </div>
-        ))}
+          <p className="mt-3 font-mono text-[0.62rem] uppercase tracking-widest text-ink/50 relative z-[2]">
+            .ics works with Google, Apple, and Outlook
+          </p>
+        </div>
       </div>
-
-      {/* EXPORT / ALERT COMMANDS */}
-      <BrutalistBlock className="p-8 border-accent bg-accent/5 flex flex-col md:flex-row items-center justify-between gap-8 text-center md:text-left print:hidden" refTag="ALRT_SRVC_01">
-        <div className="space-y-2">
-          <Typography variant="h3" className="mb-0 flex items-center justify-center md:justify-start gap-3 uppercase tracking-tighter">
-            <TrendingUp size={20} className="text-accent" />
-            Active_Monitoring_Protocol
-          </Typography>
-          <Typography variant="body" className="text-xs opacity-70 mb-0 uppercase font-mono max-w-md">
-            Initialize weekly transmission cycle for {uniqueCropsCount} selected crops.
-            Receive critical sequence alerts customized for {frostDates.zipCode}.
-          </Typography>
-          <Typography variant="small" className="text-[9px] font-mono opacity-30 uppercase mt-1 mb-0">
-            Used by 340+ homesteaders this season
-          </Typography>
-        </div>
-        <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
-          <Button
-            onClick={() => downloadICS(dates, frostDates)}
-            variant="secondary"
-            size="lg"
-            className="w-full sm:w-auto flex items-center gap-2"
-          >
-            <CalendarPlus size={16} />
-            Add to Calendar
-          </Button>
-          <Button
-            onClick={onEmailCapture}
-            variant="primary"
-            size="lg"
-            className="w-full sm:w-auto shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-none"
-          >
-            EXEC_INIT_REMINDERS
-          </Button>
-        </div>
-      </BrutalistBlock>
     </div>
   );
-}
-
-function getActionStyle(action: string): string {
-  switch (action) {
-    case 'start-indoors': return 'border-blue-500/50 text-blue-400 bg-blue-500/5';
-    case 'transplant': return 'border-orange-500/50 text-orange-400 bg-orange-500/5';
-    case 'direct-sow': return 'border-green-500/50 text-green-400 bg-green-500/5';
-    case 'harvest': return 'border-purple-500/50 text-purple-400 bg-purple-500/5';
-    default: return 'border-border-primary text-foreground-secondary';
-  }
 }
