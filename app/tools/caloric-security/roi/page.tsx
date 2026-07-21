@@ -28,7 +28,7 @@ const GATE_KEY     = 'hl_features_unlocked';
 const FAQS: { q: string; a: string }[] = [
   {
     q: "What's the highest calorie crop you can grow at home?",
-    a: "Potatoes lead by a wide margin, typically 350–400 calories per square foot in good conditions. Sweet potatoes follow at 200–300. After that you're looking at winter squash (180–250) and dent corn (250–300, but with much higher water and soil-fertility demands).",
+    a: "Densely planted roots lead, because you fit so many into a small bed. Parsnips and carrots clear 1,000 calories per square foot, with beets and onions close behind in the 500 to 600 range. Potatoes and other row-spaced tubers land around 350 to 400, lower per square foot than the tight roots but far easier to store through a winter. Sprawling crops like winter squash, melons, and corn rank near the bottom despite big per-plant yields, because each plant claims so much ground.",
   },
   {
     q: "How big a garden do I need to feed my family?",
@@ -40,7 +40,7 @@ const FAQS: { q: string; a: string }[] = [
   },
   {
     q: "Why do salad greens rank so low?",
-    a: "Greens like lettuce and spinach are mostly water (95%+) and very low in calories per 100g. They're nutritionally valuable but don't produce enough caloric mass per square foot to anchor a survival garden. Treat them as supplement, not staple.",
+    a: "Head greens like lettuce are mostly water (95%+) and very low in calories per 100g. Even planted intensively, a square foot of lettuce returns under 50 calories, against a few hundred for spinach and over a thousand for tight-spaced roots. They earn their place for vitamins and fresh eating, not caloric mass, so treat them as supplement, not staple.",
   },
   {
     q: "Where does this data come from?",
@@ -58,9 +58,19 @@ interface RoiRow {
   kcalPerSqFt:  number;
 }
 
-function parseFirstInt(s: string): number {
-  const m = s.match(/\d+/);
-  return m ? parseInt(m[0]) : 12;
+// Spacing strings look like `18-24" apart`, `6' apart`, `3-5' apart`, or
+// `12" apart (blocks of 9)`. Read the leading range and its unit: an
+// apostrophe means feet, a double-quote (or nothing) means inches. Use the
+// range midpoint, and always return inches so callers get one unit.
+function parseSpacingInches(s: string): number {
+  if (!s) return 12;
+  const m = s.match(/^\s*(\d+(?:\.\d+)?)(?:\s*[-–]\s*(\d+(?:\.\d+)?))?\s*(['"′″])?/);
+  if (!m) return 12;
+  const lo = parseFloat(m[1]);
+  const hi = m[2] ? parseFloat(m[2]) : lo;
+  const mid = (lo + hi) / 2;
+  const feet = m[3] === "'" || m[3] === '′';
+  return feet ? mid * 12 : mid;
 }
 
 const FIELD_INPUT = 'w-full px-3 py-2.5 bg-paper border-2 border-ink/40 focus:border-marker outline-none font-mono text-sm transition-colors placeholder:text-ink/40';
@@ -81,14 +91,21 @@ export default function RoiPage() {
 
   const rows: RoiRow[] = useMemo(() => {
     return getAllCrops()
-      .filter(c => c.yield && c.yield.caloriesPer100g > 0 && !c.yield['non-caloric'])
+      // Herbs are excluded: their calories-per-100g are culinary trace amounts,
+      // not dietary staples. They belong in a tonics/medicinals tool, not a
+      // caloric ROI ranking. Only food crops (vegetables + fruit) compete here.
+      .filter(c => c.category !== 'herb' && c.yield && c.yield.caloriesPer100g > 0 && !c.yield['non-caloric'])
       .map(c => {
         const y           = c.yield!;
         const norm        = UNIT_NORMALIZATIONS[y.unit] ?? UNIT_NORMALIZATIONS['lbs'];
         const totalGrams  = y.avgPerPlant * norm.gramsPerUnit;
         const kcalPerPlant = (totalGrams / 100) * y.caloriesPer100g;
-        const spacingIn   = parseFirstInt(c.spacing);
-        const sqFtPerPlant = ((spacingIn / 12) ** 2);
+        // Footprint = in-row spacing × between-row spacing. Row/field crops carry
+        // an explicit rowSpacing; intensively bedded crops (roots, greens) grow at
+        // equidistant spacing, so the footprint falls back to spacing².
+        const inRowIn      = parseSpacingInches(c.spacing);
+        const rowIn        = c.rowSpacing ? parseSpacingInches(c.rowSpacing) : inRowIn;
+        const sqFtPerPlant = (inRowIn * rowIn) / 144;
         const kcalPerSqFt  = sqFtPerPlant > 0 ? kcalPerPlant / sqFtPerPlant : 0;
         return {
           id:          c.id,
@@ -147,7 +164,8 @@ export default function RoiPage() {
 
         {/* Methodology note */}
         <p className="font-mono text-[0.64rem] uppercase tracking-wide text-ink/50 border-2 border-dotted border-ink/40 px-4 py-2.5">
-          The math: (avg yield × unit grams ÷ 100 × kcal/100 g) ÷ (spacing² ÷ 144) = kcal/sq ft.
+          The math: (avg yield × unit grams ÷ 100 × kcal/100 g) ÷ (in-row × row spacing ÷ 144) = kcal/sq ft.
+          Row crops use catalog row spacing; intensively bedded crops use equidistant spacing.
           Assumptions: bunches ~100 g · bulbs ~40 g · ears ~90 g · heads ~300 g
         </p>
 
@@ -216,24 +234,27 @@ export default function RoiPage() {
             <p>
               When space is limited, <strong>calories per square foot</strong>{' '}is the
               most honest measure of which crops actually feed you. A 100-square-foot
-              plot of lettuce produces around 1,300 calories. The same plot of potatoes
-              produces over 35,000. That&apos;s a 25× difference, and it&apos;s why every
+              plot of lettuce produces around 4,900 calories. The same plot of potatoes
+              produces roughly 37,000. That&apos;s nearly an 8× difference, and it&apos;s why every
               serious survival garden starts from this number.
             </p>
             <p>
               This report ranks every crop in our database by <strong>kilocalories per
               square foot of garden space</strong>, computed from three numbers: the
               crop&apos;s average yield per plant, the calories per 100 grams of edible
-              portion, and the plant&apos;s spacing requirement. No estimates, no
-              marketing, just the math.
+              portion, and the ground each plant actually occupies (in-row spacing for
+              intensively bedded crops, in-row times row spacing for field crops). No
+              estimates, no marketing, just the math.
             </p>
             <p>
-              The top of the list is dominated by starchy roots and tubers
-              (potatoes, sweet potatoes, parsnips), winter squash (butternut, pumpkin),
-              and grains where they&apos;re practical for home growers (corn, dent corn).
-              Salad greens, peppers, and herbs occupy the bottom. They&apos;re worth
-              growing for flavor and nutrition, but they will not be what stands between
-              you and a hungry winter.
+              The top of the list is dominated by densely planted roots (parsnips,
+              carrots, beets, onions) and hilled tubers (potatoes), which pack calories
+              into a small footprint. Sprawling crops fall to the bottom: winter squash,
+              melons, cucumbers, sweet corn, and fruit trees claim many square feet per
+              plant, so their high per-plant yield spreads thin. Head greens and
+              slow brassicas like broccoli sit low too. They&apos;re worth growing for
+              flavor and nutrition, but they will not be what stands between you and a
+              hungry winter.
             </p>
           </div>
 

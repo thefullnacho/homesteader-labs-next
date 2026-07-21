@@ -81,7 +81,8 @@ export interface Crop {
 
   // Growing conditions
   sun: 'full' | 'partial' | 'shade';
-  spacing: string;
+  spacing: string;                  // in-row spacing (e.g. "12-15\" apart")
+  rowSpacing?: string;              // between-row spacing for row/field crops (e.g. "30\" rows"); absent = grown at intensive/equidistant spacing (footprint = spacing²)
   notes: string[];
   lunarAffinity?: 'waxing' | 'waning';
 
