@@ -81,7 +81,7 @@ Kraft header band (`bg-kraft grain border-b-2 border-ink`, `torn-top` on article
 
 ### Legacy (do not extend)
 
-`components/ui/FieldStationLayout`, `BrutalistBlock`, `Typography`, `Badge`, `Button` and tokens `text-accent` / `border-border-primary` / `shadow-brutalist*` are the old system. No `app/` page uses them anymore; they survive only inside a few tool components (`components/tools/weather/*`, `ClockDisplay`, `ContextualRequisition`, terminal overlay) pending future passes. Old tokens are remapped onto the paper palette in globals.css as a bridge.
+The old brutalist component wrappers (`FieldStationLayout`, `BrutalistBlock`, `Typography`, `Badge`, `Button`) have been deleted — nothing imports them. What remains of the old system is the **token bridge**: legacy tokens `text-accent` / `border-border-primary` / `shadow-brutalist*` are still remapped onto the paper palette in globals.css so any lingering class references keep rendering. Removing that remap (and the last `text-accent`/`shadow-brutalist*` class usages) is the final teardown pass; do not add new uses of these tokens.
 
 ## Content Conventions
 
@@ -103,7 +103,7 @@ Add entries to the relevant JSON in `content/crops/` following the existing sche
 ## Current Status (2026-07-18)
 
 - Branch `redesign/paper-field-notebook`: **redesign complete for all routes**. Latest commits: KB as the crop files (`13af908`), field notes drawer pulls + at-a-glance cards (`b814b7c`), forager game as the field quiz (`59cae0d`), survival garden plan as the intake worksheet (`ba9344c`).
-- Remaining cleanup candidates: legacy wrappers inside `components/tools/weather/*`, `ClockDisplay`, `ContextualRequisition`, terminal overlay.
+- Legacy component teardown done: 5 dead weather/caloric dashboards + `FieldStationLayout` deleted, and the 4 live consumers (`TerminalOverlay`, `ContextualRequisition`, `RadarView`, `DashboardErrorBoundary`) ported off the old wrappers. Remaining: remove the globals.css token remap and the last `text-accent`/`shadow-brutalist*` class usages; per-page copy + em-dash sweep.
 
 ### Parked idea: open research + agent reporting layer
 

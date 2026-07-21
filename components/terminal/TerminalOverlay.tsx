@@ -3,10 +3,6 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { X, Terminal, ChevronRight } from "lucide-react";
 import Link from "next/link";
-import BrutalistBlock from "@/components/ui/BrutalistBlock";
-import Button from "@/components/ui/Button";
-import Typography from "@/components/ui/Typography";
-import Badge from "@/components/ui/Badge";
 
 interface Command {
   input: string;
@@ -287,25 +283,22 @@ export default function TerminalOverlay() {
       }}
     >
       {/* Terminal Container */}
-      <BrutalistBlock 
-        variant="terminal" 
-        className="w-full max-w-4xl h-[90vh] sm:h-[80vh] flex flex-col p-0 shadow-accent/50 overflow-hidden"
-      >
+      <div className="relative w-full max-w-4xl h-[90vh] sm:h-[80vh] flex flex-col overflow-hidden border-2 border-marker bg-black text-marker shadow-[6px_6px_0_0_rgba(228,87,31,0.35)]">
         {/* Header */}
-        <div className="flex justify-between items-center p-3 border-b-2 border-accent bg-background-secondary/50">
+        <div className="flex justify-between items-center p-3 border-b-2 border-marker bg-white/5">
           <div className="flex items-center gap-2">
-            <Terminal size={16} className="text-accent" />
-            <Typography variant="small" className="font-bold mb-0">
+            <Terminal size={16} className="text-marker" />
+            <span className="text-sm font-bold font-mono">
               {isEditorMode ? `EDITOR: ${editorFile}` : "TERMINAL v2.1"}
-            </Typography>
+            </span>
           </div>
           <div className="flex items-center gap-4">
-            <span className="hidden sm:inline text-xs text-foreground-secondary font-mono">
+            <span className="hidden sm:inline text-xs text-white/50 font-mono">
               {isEditorMode ? "ESC to cancel" : "ALT+T to toggle"}
             </span>
             <button
               onClick={() => setIsOpen(false)}
-              className="p-1 hover:bg-accent hover:text-white transition-colors"
+              className="p-1 hover:bg-marker hover:text-black transition-colors"
               aria-label="Close terminal"
             >
               <X size={16} />
@@ -319,29 +312,27 @@ export default function TerminalOverlay() {
             <textarea
               value={editorContent}
               onChange={(e) => setEditorContent(e.target.value)}
-              className="flex-grow p-4 bg-transparent text-accent font-mono text-sm resize-none focus:outline-none"
+              className="flex-grow p-4 bg-transparent text-marker font-mono text-sm resize-none focus:outline-none"
               placeholder="Type your content here..."
               spellCheck={false}
             />
-            <div className="p-3 border-t-2 border-accent bg-background-secondary/50 flex justify-between items-center">
-              <span className="text-xs text-foreground-secondary font-mono">
+            <div className="p-3 border-t-2 border-marker bg-white/5 flex justify-between items-center">
+              <span className="text-xs text-white/50 font-mono">
                 {editorContent.length} chars | {editorContent.split("\n").length} lines
               </span>
               <div className="flex gap-2">
-                <Button
+                <button
                   onClick={() => setIsEditorMode(false)}
-                  variant="outline"
-                  size="sm"
+                  className="px-3 py-1.5 border-2 border-marker text-marker font-mono text-xs font-bold uppercase tracking-wider hover:bg-marker hover:text-black transition-colors"
                 >
                   Cancel
-                </Button>
-                <Button
+                </button>
+                <button
                   onClick={saveEditorContent}
-                  variant="primary"
-                  size="sm"
+                  className="px-3 py-1.5 border-2 border-marker bg-marker text-black font-mono text-xs font-bold uppercase tracking-wider hover:bg-transparent hover:text-marker transition-colors"
                 >
                   Save
-                </Button>
+                </button>
               </div>
             </div>
           </div>
@@ -352,20 +343,20 @@ export default function TerminalOverlay() {
               ref={terminalRef}
               aria-live="polite"
               aria-label="Terminal output"
-              className="flex-grow p-4 overflow-y-auto font-mono text-sm space-y-1 bg-black/40 scrollbar-thin scrollbar-thumb-accent"
+              className="flex-grow p-4 overflow-y-auto font-mono text-sm space-y-1 bg-black/40 scrollbar-thin scrollbar-thumb-marker"
             >
               {commands.map((cmd, index) => (
                 <div key={index} className="mb-2">
                   {cmd.input && (
-                    <div className="flex items-start gap-2 text-foreground-primary">
-                      <ChevronRight size={14} className="mt-1 text-accent shrink-0" />
+                    <div className="flex items-start gap-2 text-white/90">
+                      <ChevronRight size={14} className="mt-1 text-marker shrink-0" />
                       <span className="break-all font-bold">{cmd.input}</span>
                     </div>
                   )}
                   {cmd.output.map((line, lineIndex) => (
                     <div
                       key={lineIndex}
-                      className={`pl-6 ${cmd.isError ? "text-red-500" : "text-accent"}`}
+                      className={`pl-6 ${cmd.isError ? "text-rust" : "text-marker"}`}
                     >
                       {line}
                     </div>
@@ -373,23 +364,26 @@ export default function TerminalOverlay() {
                 </div>
               ))}
               {isBooting && (
-                <div className="flex items-center gap-2 text-accent">
+                <div className="flex items-center gap-2 text-marker">
                   <span className="animate-pulse">_</span>
-                  <Badge variant="status" pulse>Booting...</Badge>
+                  <span className="inline-flex items-center gap-1.5 px-2 py-0.5 border border-marker text-marker font-mono text-[10px] font-bold uppercase tracking-wider">
+                    <span className="w-1.5 h-1.5 rounded-full bg-marker animate-pulse" />
+                    Booting...
+                  </span>
                 </div>
               )}
             </div>
 
             {/* Command Input */}
-            <form onSubmit={handleSubmit} className="p-3 border-t-2 border-accent bg-background-secondary/50">
+            <form onSubmit={handleSubmit} className="p-3 border-t-2 border-marker bg-white/5">
               <div className="flex items-center gap-2">
-                <ChevronRight size={14} className="text-accent" />
+                <ChevronRight size={14} className="text-marker" />
                 <input
                   ref={inputRef}
                   type="text"
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
-                  className="flex-grow bg-transparent border-none outline-none font-mono text-sm text-accent placeholder:opacity-30"
+                  className="flex-grow bg-transparent border-none outline-none font-mono text-sm text-marker placeholder:opacity-30"
                   placeholder="Enter command..."
                   aria-label="Terminal command input"
                   spellCheck={false}
@@ -399,18 +393,18 @@ export default function TerminalOverlay() {
             </form>
 
             {/* Quick Links */}
-            <div className="px-3 py-2 border-t border-accent/30 bg-black/20 flex flex-wrap gap-x-4 gap-y-1 text-xs uppercase font-bold">
-              <Link href="/shop/" className="text-foreground-secondary hover:text-accent transition-colors">[shop]</Link>
-              <Link href="/archive/" className="text-foreground-secondary hover:text-accent transition-colors">[archive]</Link>
-              <Link href="/tools/" className="text-foreground-secondary hover:text-accent transition-colors">[field-station]</Link>
-              <Link href="/tools/planting-calendar/" className="text-foreground-secondary hover:text-accent transition-colors">[planting]</Link>
-              <Link href="/tools/caloric-security/" className="text-foreground-secondary hover:text-accent transition-colors">[caloric-sec]</Link>
-              <Link href="/tools/fabrication/" className="text-foreground-secondary hover:text-accent transition-colors">[fabrication]</Link>
-              <Link href="/tools/weather/" className="text-foreground-secondary hover:text-accent transition-colors">[weather]</Link>
+            <div className="px-3 py-2 border-t border-marker/30 bg-black/20 flex flex-wrap gap-x-4 gap-y-1 text-xs uppercase font-bold">
+              <Link href="/shop/" className="text-white/50 hover:text-marker transition-colors">[shop]</Link>
+              <Link href="/archive/" className="text-white/50 hover:text-marker transition-colors">[archive]</Link>
+              <Link href="/tools/" className="text-white/50 hover:text-marker transition-colors">[field-station]</Link>
+              <Link href="/tools/planting-calendar/" className="text-white/50 hover:text-marker transition-colors">[planting]</Link>
+              <Link href="/tools/caloric-security/" className="text-white/50 hover:text-marker transition-colors">[caloric-sec]</Link>
+              <Link href="/tools/fabrication/" className="text-white/50 hover:text-marker transition-colors">[fabrication]</Link>
+              <Link href="/tools/weather/" className="text-white/50 hover:text-marker transition-colors">[weather]</Link>
             </div>
           </>
         )}
-      </BrutalistBlock>
+      </div>
     </div>
   );
 }
