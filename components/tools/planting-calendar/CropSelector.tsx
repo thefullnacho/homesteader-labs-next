@@ -1,12 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { Check, Sprout, Settings2, ChevronDown } from "lucide-react";
+import { Check, Settings2, ChevronDown } from "lucide-react";
 import { Crop, SelectedCrop, FrostDates } from "@/lib/tools/planting-calendar/types";
 import { getAllCrops } from "@/lib/tools/planting-calendar/crops";
 import { calculateMaxSuccessionPlantings } from "@/lib/tools/planting-calendar/plantingCalculations";
-import Typography from "@/components/ui/Typography";
-import BrutalistBlock from "@/components/ui/BrutalistBlock";
 
 interface CropSelectorProps {
   selectedCrops: SelectedCrop[];
@@ -15,18 +13,15 @@ interface CropSelectorProps {
   frostDates?: FrostDates | null;
 }
 
-const CATEGORY_COLORS: Record<string, { border: string; badge: string }> = {
-  vegetable: { border: 'border-l-green-500',  badge: 'text-green-500/70'  },
-  herb:      { border: 'border-l-teal-400',   badge: 'text-teal-400/70'   },
-  fruit:     { border: 'border-l-rose-400',   badge: 'text-rose-400/70'   },
+const CATEGORY_ORDER = ["vegetable", "herb", "fruit"];
+const CATEGORY_LABELS: Record<string, string> = {
+  vegetable: "Vegetables",
+  herb: "Herbs",
+  fruit: "Fruits",
 };
 
-const CATEGORY_ORDER = ['vegetable', 'herb', 'fruit'];
-const CATEGORY_LABELS: Record<string, string> = {
-  vegetable: 'Vegetables',
-  herb: 'Herbs',
-  fruit: 'Fruits',
-};
+const inputCls =
+  "font-mono text-xs bg-paper border-2 border-ink/40 px-2 py-1.5 outline-none focus:border-marker transition-colors";
 
 export default function CropSelector({
   selectedCrops,
@@ -35,7 +30,7 @@ export default function CropSelector({
   frostDates,
 }: CropSelectorProps) {
   const [expandedCrop, setExpandedCrop] = useState<string | null>(null);
-  const [openCategories, setOpenCategories] = useState<Set<string>>(new Set());
+  const [openCategories, setOpenCategories] = useState<Set<string>>(new Set(["vegetable"]));
   const allCrops = getAllCrops();
 
   const toggleCategory = (cat: string) => {
@@ -123,145 +118,150 @@ export default function CropSelector({
   const todayIso = new Date().toISOString().slice(0, 10);
 
   return (
-    <BrutalistBlock className="p-6" variant="default" refTag="INV_MANIFEST_01">
-      <div className="flex items-center justify-between mb-6">
-        <div className="flex items-center gap-4">
-          <div className="w-10 h-10 bg-background-secondary border-2 border-border-primary flex items-center justify-center shrink-0">
-            <Sprout size={20} className="text-green-500" />
-          </div>
-          <div>
-            <Typography variant="h4" className="mb-0 uppercase tracking-tighter">Crop Selection</Typography>
-            <Typography variant="small" className="opacity-40 text-[9px] uppercase font-mono mb-0">{selectedCrops.length} of {maxCrops} selected</Typography>
-          </div>
-        </div>
+    <div className="card-paper grain p-5">
+      <div className="flex items-baseline justify-between border-b-2 border-ink pb-2 mb-4 relative z-[2]">
+        <h3 className="font-display uppercase text-lg">Pick your crops</h3>
+        <span className="font-mono text-[0.66rem] uppercase tracking-widest text-ink/50">
+          {selectedCrops.length} of {maxCrops}
+        </span>
       </div>
 
-      {/* Category accordions */}
-      <div className="mb-6">
+      {/* Category drawers */}
+      <div className="relative z-[2]">
         {CATEGORY_ORDER.map(cat => {
           const crops = grouped[cat] ?? [];
           const isOpen = openCategories.has(cat);
           const selectedCount = crops.filter(c => selectedCrops.find(sc => sc.cropId === c.id)).length;
-          const colors = CATEGORY_COLORS[cat] ?? { border: 'border-l-border-primary', badge: 'opacity-40' };
 
           return (
-            <div key={cat} className="mb-4">
-              {/* Category header */}
+            <div key={cat} className="mb-4 last:mb-0">
               <button
                 onClick={() => toggleCategory(cat)}
-                className="w-full flex items-center justify-between px-2 py-1.5 mb-2 border-b border-border-primary/20 group"
+                aria-expanded={isOpen}
+                className="w-full flex items-center justify-between py-1.5 mb-2 border-b border-ink/30 group"
               >
-                <span className={`text-[10px] font-mono font-bold uppercase tracking-widest ${colors.badge}`}>
+                <span className="font-mono text-[0.7rem] font-bold uppercase tracking-[0.18em] group-hover:text-marker transition-colors">
                   {CATEGORY_LABELS[cat]}
-                  {selectedCount > 0 && <span className="ml-2 opacity-60">({selectedCount})</span>}
+                  <span className="ml-2 text-ink/50 font-normal">
+                    {selectedCount > 0 ? `${selectedCount} picked · ` : ""}{crops.length} on file
+                  </span>
                 </span>
-                <ChevronDown size={12} className={`opacity-40 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+                <ChevronDown
+                  size={13}
+                  className={`text-ink/50 transition-transform ${isOpen ? "rotate-180" : ""}`}
+                />
               </button>
 
-              {/* Crop grid */}
               {isOpen && (
-                <div className="grid grid-cols-2 sm:grid-cols-1 gap-3">
+                <div className="grid grid-cols-2 gap-2">
                   {crops.map((crop) => {
                     const isSelected = selectedCrops.find(sc => sc.cropId === crop.id);
                     const isExpanded = expandedCrop === crop.id;
 
                     return (
-                      <div key={crop.id} className="space-y-1">
+                      <div key={crop.id} className={isExpanded && isSelected ? "col-span-2" : ""}>
                         <button
                           onClick={() => toggleCrop(crop)}
-                          className={`w-full p-3 border-2 border-l-4 transition-all flex items-center justify-between group ${colors.border} ${
+                          className={`w-full px-3 py-2 border-2 transition-colors flex items-center justify-between gap-2 ${
                             isSelected
-                              ? "border-accent bg-accent/5"
-                              : "border-border-primary/20 hover:border-border-primary/60 bg-black/10"
+                              ? "border-ink bg-ink text-paper"
+                              : "border-ink/30 hover:border-ink bg-paper"
                           }`}
                         >
-                          <div className="flex items-center gap-3 min-w-0">
-                            <span className="text-xl shrink-0 opacity-80 group-hover:scale-110 transition-transform">{crop.icon}</span>
-                            <div className="text-left min-w-0">
-                              <div className={`text-xs font-bold uppercase truncate ${isSelected ? 'text-accent' : 'opacity-60'}`}>
-                                {crop.name}
-                              </div>
-                              <div className={`text-[8px] font-mono uppercase truncate ${colors.badge}`}>{crop.category}</div>
-                            </div>
-                          </div>
+                          <span className="flex items-center gap-2 min-w-0">
+                            <span className="shrink-0">{crop.icon}</span>
+                            <span className="font-mono text-[0.7rem] font-bold uppercase tracking-wide truncate">
+                              {crop.name}
+                            </span>
+                          </span>
                           {isSelected && (
-                            <div className="flex items-center gap-2 shrink-0">
-                              <div className="w-4 h-4 bg-accent flex items-center justify-center">
-                                <Check size={10} className="text-white" />
-                              </div>
-                              <div
-                                onClick={(e) => { e.stopPropagation(); setExpandedCrop(isExpanded ? null : crop.id); }}
-                                className="p-1 hover:bg-accent/20 transition-colors"
+                            <span className="flex items-center gap-1.5 shrink-0">
+                              <Check size={12} />
+                              <span
+                                role="button"
+                                tabIndex={0}
+                                aria-label={`Adjust ${crop.name}`}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setExpandedCrop(isExpanded ? null : crop.id);
+                                }}
+                                onKeyDown={(e) => {
+                                  if (e.key === "Enter" || e.key === " ") {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    setExpandedCrop(isExpanded ? null : crop.id);
+                                  }
+                                }}
+                                className="p-1 hover:text-marker transition-colors"
                               >
-                                <Settings2 size={12} className="opacity-40" />
-                              </div>
-                            </div>
+                                <Settings2 size={12} />
+                              </span>
+                            </span>
                           )}
                         </button>
 
                         {/* Expanded options */}
                         {isExpanded && isSelected && (
-                          <div className="border-x-2 border-b-2 border-accent/20 p-4 bg-accent/5 animate-in slide-in-from-top-2 duration-200">
-                            <div className="mb-4">
-                              <label className="text-[8px] font-mono font-bold uppercase opacity-40 block mb-2 tracking-widest">Variety</label>
-                              <select
-                                value={isSelected.varietyId}
-                                onChange={(e) => updateVariety(crop.id, e.target.value)}
-                                className="w-full text-xs font-mono bg-black/40 border-2 border-border-primary/30 px-2 py-2 outline-none focus:border-accent uppercase"
-                              >
-                                {crop.varieties.map(variety => (
-                                  <option key={variety.id} value={variety.id} className="bg-background-primary">
-                                    {variety.name} ({variety.daysToMaturity}D_MAT)
-                                  </option>
-                                ))}
-                              </select>
-                            </div>
+                          <div className="border-x-2 border-b-2 border-ink bg-paper p-4">
+                            <div className="flex flex-wrap gap-x-6 gap-y-3 mb-3">
+                              <label className="block">
+                                <span className="font-mono text-[0.62rem] font-bold uppercase tracking-widest text-ink/60 block mb-1">
+                                  Variety
+                                </span>
+                                <select
+                                  value={isSelected.varietyId}
+                                  onChange={(e) => updateVariety(crop.id, e.target.value)}
+                                  className={inputCls}
+                                >
+                                  {crop.varieties.map(variety => (
+                                    <option key={variety.id} value={variety.id}>
+                                      {variety.name} ({variety.daysToMaturity}d)
+                                    </option>
+                                  ))}
+                                </select>
+                              </label>
 
-                            <div className="mb-4">
-                              <label className="text-[8px] font-mono font-bold uppercase opacity-40 block mb-2 tracking-widest">Plants</label>
-                              <input
-                                type="number"
-                                min={1}
-                                max={999}
-                                value={isSelected.quantity ?? 1}
-                                onChange={(e) => updateQuantity(crop.id, parseInt(e.target.value) || 1)}
-                                className="w-20 text-xs font-mono bg-black/40 border-2 border-border-primary/30 px-2 py-2 outline-none focus:border-accent"
-                              />
+                              <label className="block">
+                                <span className="font-mono text-[0.62rem] font-bold uppercase tracking-widest text-ink/60 block mb-1">
+                                  Plants
+                                </span>
+                                <input
+                                  type="number"
+                                  min={1}
+                                  max={999}
+                                  value={isSelected.quantity ?? 1}
+                                  onChange={(e) => updateQuantity(crop.id, parseInt(e.target.value) || 1)}
+                                  className={`${inputCls} w-20`}
+                                />
+                              </label>
                             </div>
 
                             {crop.successionEnabled && (
-                              <div className="space-y-2">
-                                <label className="flex items-center gap-3 cursor-pointer group">
-                                  <div className="relative">
-                                    <input
-                                      type="checkbox"
-                                      checked={isSelected.successionEnabled}
-                                      onChange={() => toggleSuccession(crop.id)}
-                                      className="sr-only"
-                                    />
-                                    <div className={`w-8 h-4 border-2 transition-colors ${isSelected.successionEnabled ? 'bg-accent border-accent' : 'border-border-primary/30 bg-black/20'}`}>
-                                      <div className={`absolute top-0.5 w-2 h-2 bg-white transition-all ${isSelected.successionEnabled ? 'left-[1.1rem]' : 'left-0.5'}`} />
-                                    </div>
-                                  </div>
-                                  <span className="text-[9px] font-mono uppercase opacity-60 group-hover:opacity-100 transition-opacity">
-                                    Succession planting
+                              <div className="pt-3 border-t border-dotted border-ink/40">
+                                <label className="inline-flex items-center gap-2 cursor-pointer">
+                                  <input
+                                    type="checkbox"
+                                    checked={isSelected.successionEnabled}
+                                    onChange={() => toggleSuccession(crop.id)}
+                                    className="accent-[#e4571f] w-3.5 h-3.5"
+                                  />
+                                  <span className="font-mono text-[0.66rem] font-bold uppercase tracking-wider">
+                                    Succession sowing
                                   </span>
                                 </label>
 
                                 {isSelected.successionEnabled && (
-                                  <div className="pl-11 space-y-2">
-                                    <div className="flex items-center gap-2">
-                                      <label className="text-[8px] font-mono uppercase opacity-40 whitespace-nowrap">Every</label>
-                                      <select
-                                        value={isSelected.successionInterval ?? crop.successionInterval}
-                                        onChange={(e) => updateSuccessionInterval(crop.id, Number(e.target.value))}
-                                        className="text-xs font-mono bg-black/40 border-2 border-border-primary/30 px-2 py-1 outline-none focus:border-accent uppercase"
-                                      >
-                                        {[1, 2, 3, 4].map(w => (
-                                          <option key={w} value={w} className="bg-background-primary">{w}w</option>
-                                        ))}
-                                      </select>
-                                    </div>
+                                  <span className="ml-4 inline-flex items-center gap-2 font-mono text-[0.66rem] uppercase tracking-wider">
+                                    <span className="text-ink/55">every</span>
+                                    <select
+                                      value={isSelected.successionInterval ?? crop.successionInterval}
+                                      onChange={(e) => updateSuccessionInterval(crop.id, Number(e.target.value))}
+                                      className={inputCls}
+                                    >
+                                      {[1, 2, 3, 4].map(w => (
+                                        <option key={w} value={w}>{w} wk</option>
+                                      ))}
+                                    </select>
                                     {frostDates && (() => {
                                       const interval = isSelected.successionInterval ?? crop.successionInterval;
                                       const variety = crop.varieties.find(v => v.id === isSelected.varietyId) ?? crop.varieties[0];
@@ -272,59 +272,54 @@ export default function CropSelector({
                                         interval
                                       );
                                       return (
-                                        <p className="text-[8px] font-mono opacity-40 uppercase">
-                                          → {count} sow {count === 1 ? 'window' : 'windows'} this season
-                                        </p>
+                                        <span className="text-ink/55">
+                                          → {count} sow window{count === 1 ? "" : "s"}
+                                        </span>
                                       );
                                     })()}
-                                  </div>
+                                  </span>
                                 )}
                               </div>
                             )}
 
                             {/* Actual date anchoring */}
-                            <div className="pt-3 border-t border-border-primary/10">
-                              <label className="flex items-center gap-3 cursor-pointer group">
-                                <div className="relative">
-                                  <input
-                                    type="checkbox"
-                                    checked={!!isSelected.actualActionDate}
-                                    onChange={e => {
-                                      if (!e.target.checked) {
-                                        updateActualActionDate(crop.id, undefined);
-                                      } else {
-                                        const firstAction = crop.startIndoors !== null
-                                          ? 'start-indoors'
-                                          : crop.transplant !== null
-                                            ? 'transplant'
-                                            : 'direct-sow';
-                                        updateActualActionDate(crop.id, { action: firstAction as 'start-indoors' | 'transplant' | 'direct-sow', date: todayIso });
-                                      }
-                                    }}
-                                    className="sr-only"
-                                  />
-                                  <div className={`w-8 h-4 border-2 transition-colors ${isSelected.actualActionDate ? 'bg-accent border-accent' : 'border-border-primary/30 bg-black/20'}`}>
-                                    <div className={`absolute top-0.5 w-2 h-2 bg-white transition-all ${isSelected.actualActionDate ? 'left-[1.1rem]' : 'left-0.5'}`} />
-                                  </div>
-                                </div>
-                                <span className="text-[9px] font-mono uppercase opacity-60 group-hover:opacity-100 transition-opacity">
-                                  Already Started
+                            <div className="pt-3 mt-3 border-t border-dotted border-ink/40">
+                              <label className="inline-flex items-center gap-2 cursor-pointer">
+                                <input
+                                  type="checkbox"
+                                  checked={!!isSelected.actualActionDate}
+                                  onChange={e => {
+                                    if (!e.target.checked) {
+                                      updateActualActionDate(crop.id, undefined);
+                                    } else {
+                                      const firstAction = crop.startIndoors !== null
+                                        ? 'start-indoors'
+                                        : crop.transplant !== null
+                                          ? 'transplant'
+                                          : 'direct-sow';
+                                      updateActualActionDate(crop.id, { action: firstAction as 'start-indoors' | 'transplant' | 'direct-sow', date: todayIso });
+                                    }
+                                  }}
+                                  className="accent-[#e4571f] w-3.5 h-3.5"
+                                />
+                                <span className="font-mono text-[0.66rem] font-bold uppercase tracking-wider">
+                                  Already started
                                 </span>
                               </label>
 
                               {isSelected.actualActionDate && (
-                                <div className="mt-3 space-y-2 pl-11">
+                                <div className="mt-2 flex flex-wrap items-center gap-3">
                                   <select
                                     value={isSelected.actualActionDate.action}
                                     onChange={e => updateActualActionDate(crop.id, {
                                       ...isSelected.actualActionDate!,
                                       action: e.target.value as 'start-indoors' | 'transplant' | 'direct-sow',
                                     })}
-                                    className="w-full text-xs font-mono bg-black/40 border-2 border-border-primary/30 px-2 py-1.5 outline-none focus:border-accent uppercase"
+                                    className={inputCls}
                                   >
-                                    {crop.startIndoors !== null && <option value="start-indoors" className="bg-background-primary">Start Indoors</option>}
-                                    {crop.transplant !== null    && <option value="transplant"    className="bg-background-primary">Transplant</option>}
-                                    {crop.directSow !== null     && <option value="direct-sow"    className="bg-background-primary">Direct Sow</option>}
+                                    {crop.startIndoors !== null && <option value="start-indoors">Started inside</option>}
+                                    {crop.transplant !== null && <option value="transplant">Planted out</option>}
+                                    {crop.directSow !== null && <option value="direct-sow">Sowed</option>}
                                   </select>
                                   <input
                                     type="date"
@@ -334,11 +329,11 @@ export default function CropSelector({
                                       ...isSelected.actualActionDate!,
                                       date: e.target.value,
                                     })}
-                                    className="w-full text-xs font-mono bg-black/40 border-2 border-border-primary/30 px-2 py-1.5 outline-none focus:border-accent"
+                                    className={inputCls}
                                   />
-                                  <p className="text-[8px] font-mono opacity-30 uppercase">
-                                    All harvest + succession dates shift to match.
-                                  </p>
+                                  <span className="font-mono text-[0.62rem] uppercase tracking-wider text-ink/50">
+                                    every date shifts to match
+                                  </span>
                                 </div>
                               )}
                             </div>
@@ -355,10 +350,10 @@ export default function CropSelector({
       </div>
 
       {selectedCrops.length >= maxCrops && (
-        <div className="p-3 border-2 border-orange-500 bg-orange-500/10 text-orange-500 text-[9px] font-mono font-bold uppercase flex items-center gap-2">
-          <span>⚠</span> Crop limit reached
-        </div>
+        <p className="mt-3 px-3 py-2 border-2 border-rust text-rust font-mono text-[0.66rem] font-bold uppercase tracking-wider relative z-[2]">
+          Drawer&apos;s full: {maxCrops} crops
+        </p>
       )}
-    </BrutalistBlock>
+    </div>
   );
 }

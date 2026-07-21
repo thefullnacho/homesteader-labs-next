@@ -33,7 +33,7 @@ export default function EmailCapture({
 
   const content = {
     save: {
-      icon: <MapPin size={24} className="text-[var(--accent)]" />,
+      icon: <MapPin size={24} className="text-marker" />,
       title: "Save Your Weather Stations",
       subtitle: `You have multiple locations. Sync them across devices.`,
       cta: "Save Locations",
@@ -41,7 +41,7 @@ export default function EmailCapture({
       urgency: false
     },
     weekly: {
-      icon: <Cloud size={24} className="text-[var(--accent)]" />,
+      icon: <Cloud size={24} className="text-marker" />,
       title: "Weekly Survival Briefing",
       subtitle: locationName ? `Get Monday alerts for ${locationName}` : "Get weekly alerts for your location",
       cta: "Subscribe Free",
@@ -70,7 +70,7 @@ export default function EmailCapture({
   if (isSuccess) {
     return (
       <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-        <div className="brutalist-block bg-background-primary max-w-md w-full p-6 text-center">
+        <div className="border-2 border-ink bg-paper shadow-brutalist max-w-md w-full p-6 text-center">
           <div className="flex justify-center mb-4">
             <div className="w-16 h-16 bg-green-600 rounded-full flex items-center justify-center">
               <CheckCircle size={32} className="text-white" />
@@ -87,13 +87,13 @@ export default function EmailCapture({
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className={`brutalist-block bg-background-primary max-w-md w-full p-6 relative ${
+      <div className={`border-2 border-ink bg-paper shadow-brutalist max-w-md w-full p-6 relative ${
         currentContent.urgency ? 'border-red-500' : ''
       }`}>
         {/* Close button */}
         <button 
           onClick={onDismiss}
-          className="absolute top-3 right-3 p-1 hover:bg-background-secondary transition-colors"
+          className="absolute top-3 right-3 p-1 hover:bg-manila transition-colors"
           aria-label="Dismiss"
         >
           <X size={18} />
@@ -122,7 +122,7 @@ export default function EmailCapture({
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="homesteader@example.com"
-                className="w-full bg-background-secondary border border-border-primary pl-10 pr-3 py-2 text-sm focus:outline-none focus:border-[var(--accent)]"
+                className="w-full bg-manila border border-ink pl-10 pr-3 py-2 text-sm focus:outline-none focus:border-marker"
                 required
               />
             </div>
@@ -149,7 +149,7 @@ export default function EmailCapture({
             className={`w-full py-3 font-bold uppercase text-sm transition-all ${
               currentContent.urgency
                 ? 'bg-red-600 text-white hover:bg-red-700'
-                : 'bg-[var(--accent)] text-white hover:brightness-110'
+                : 'bg-marker text-white hover:brightness-110'
             } disabled:opacity-50 disabled:cursor-not-allowed`}
           >
             {isSubmitting ? (
@@ -168,7 +168,7 @@ export default function EmailCapture({
         )}
 
         {/* Trust signals */}
-        <div className="mt-4 pt-3 border-t border-border-primary/30 text-xs opacity-50 text-center">
+        <div className="mt-4 pt-3 border-t border-ink/30 text-xs opacity-50 text-center">
           <p>🔒 We never share your email. Powered by Homesteader Labs.</p>
         </div>
       </div>

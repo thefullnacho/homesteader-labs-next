@@ -1,10 +1,8 @@
 "use client";
 
 import React, { useState } from 'react';
-import { MapPin, Plus, X, Trash2, AlertTriangle } from 'lucide-react';
-import Typography from "@/components/ui/Typography";
-import BrutalistBlock from "@/components/ui/BrutalistBlock";
-import Button from "@/components/ui/Button";
+import { createPortal } from 'react-dom';
+import { MapPin, Plus, X, Trash2 } from 'lucide-react';
 import type { SavedLocation } from "@/lib/weatherTypes";
 import { geocodeLocation, geocodeZipCode, parseCoordinates } from "@/lib/weatherApi";
 
@@ -16,6 +14,8 @@ interface LocationManagerProps {
   onAdd: (loc: Omit<SavedLocation, 'id'>) => void;
   onRemove: (id: string) => void;
 }
+
+const MODE_LABELS = { city: "Town", zip: "ZIP", coords: "Coordinates" } as const;
 
 const LocationManager = ({ locations, activeLocation, growingZone, onSwitch, onAdd, onRemove }: LocationManagerProps) => {
   const [showAdd, setShowAdd] = useState(false);
@@ -44,48 +44,36 @@ const LocationManager = ({ locations, activeLocation, growingZone, onSwitch, onA
         setLat("");
         setLon("");
       } else {
-        setError("NODE_NOT_FOUND");
+        setError("Could not find that place. Check the spelling and try again.");
       }
     } catch {
-      setError("COMM_LINK_FAILURE");
+      setError("Connection failed. Try again in a moment.");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="mb-8">
-      <div className="flex flex-wrap gap-2 items-center">
+    <div>
+      <div className="flex flex-wrap gap-2 items-stretch">
         {activeLocation && (
-          <div className="flex items-center gap-3 bg-black/40 border-2 border-border-primary p-2 px-4 mr-2">
-            <MapPin size={14} className="text-accent shrink-0" />
-            <div className="flex flex-col">
-              <Typography variant="h4" className="mb-0 text-xs font-mono tracking-tighter uppercase leading-tight">
+          <div className="card-paper flex items-center gap-3 px-4 py-2 mr-2">
+            <MapPin size={13} className="text-marker shrink-0 relative z-[2]" />
+            <div className="relative z-[2]">
+              <p className="font-mono text-[0.72rem] font-bold uppercase tracking-wide leading-tight">
                 {activeLocation.name}
-              </Typography>
-              <div className="flex items-center gap-2 mt-0.5">
-                {growingZone && (
-                  <span className="text-[8px] font-mono text-accent/70 uppercase font-bold tracking-widest">
-                    Zone {growingZone}
-                  </span>
-                )}
-                {activeLocation.elevation && (
-                  <>
-                    {growingZone && <span className="text-[8px] font-mono opacity-20">/</span>}
-                    <span className="text-[8px] font-mono opacity-40 uppercase">
-                      {Math.round(activeLocation.elevation).toLocaleString()} ft
-                    </span>
-                  </>
-                )}
-                {!growingZone && !activeLocation.elevation && (
-                  <span
-                    className="text-[8px] font-mono opacity-25 cursor-help"
-                    title="Coordinates derived from your ZIP code"
-                  >
-                    [{activeLocation.lat.toFixed(2)}, {activeLocation.lon.toFixed(2)}]
-                  </span>
-                )}
-              </div>
+              </p>
+              <p className="font-mono text-[0.6rem] uppercase tracking-widest text-ink/50 mt-0.5">
+                {growingZone && <span className="text-marker">Zone {growingZone}</span>}
+                {growingZone && activeLocation.elevation ? " · " : ""}
+                {activeLocation.elevation
+                  ? `${Math.round(activeLocation.elevation).toLocaleString()} ft`
+                  : !growingZone && (
+                      <span title="Coordinates derived from your ZIP code" className="cursor-help">
+                        {activeLocation.lat.toFixed(2)}, {activeLocation.lon.toFixed(2)}
+                      </span>
+                    )}
+              </p>
             </div>
           </div>
         )}
@@ -94,10 +82,10 @@ const LocationManager = ({ locations, activeLocation, growingZone, onSwitch, onA
           <div key={loc.id} className="relative group">
             <button
               onClick={() => onSwitch(loc.id)}
-              className={`h-9 px-4 text-[9px] font-bold font-mono uppercase border-2 transition-all ${
+              className={`h-full px-4 py-2 font-mono text-[0.66rem] font-bold uppercase tracking-wider border-2 transition-colors ${
                 activeLocation?.id === loc.id
-                  ? "bg-accent text-white border-accent"
-                  : "border-border-primary/30 hover:border-border-primary bg-background-secondary/50"
+                  ? "bg-ink text-paper border-ink"
+                  : "border-ink/40 hover:border-ink text-ink/70 hover:text-ink"
               } ${locations.length > 1 ? "pr-8" : ""}`}
             >
               {loc.name.split(",")[0]}
@@ -105,7 +93,8 @@ const LocationManager = ({ locations, activeLocation, growingZone, onSwitch, onA
             {locations.length > 1 && (
               <button
                 onClick={(e) => { e.stopPropagation(); onRemove(loc.id); }}
-                className="absolute right-1 top-1/2 -translate-y-1/2 p-1 opacity-30 group-hover:opacity-100 group-hover:text-red-400 transition-all"
+                aria-label={`Remove ${loc.name.split(",")[0]}`}
+                className="absolute right-1.5 top-1/2 -translate-y-1/2 p-1 opacity-30 group-hover:opacity-100 group-hover:text-rust transition-all"
               >
                 <Trash2 size={12} />
               </button>
@@ -115,31 +104,40 @@ const LocationManager = ({ locations, activeLocation, growingZone, onSwitch, onA
 
         <button
           onClick={() => setShowAdd(true)}
-          className="h-9 px-4 border-2 border-dashed border-border-primary/40 hover:border-accent hover:text-accent transition-all text-[9px] font-bold font-mono uppercase flex items-center gap-2"
+          className="px-4 py-2 border-2 border-dashed border-ink/40 hover:border-marker hover:text-marker transition-colors font-mono text-[0.66rem] font-bold uppercase tracking-wider flex items-center gap-2"
         >
-          <Plus size={14} /> ADD NODE
+          <Plus size={13} /> Add a place
         </button>
       </div>
+      <p className="font-mono text-[0.6rem] uppercase tracking-widest text-ink/50 mt-2">
+        Stored locally. Never leaves your browser.
+      </p>
 
-      {showAdd && (
-        <div className="fixed inset-0 bg-black/90 backdrop-blur-md flex items-center justify-center p-4 z-[100] animate-in fade-in duration-300">
-          <BrutalistBlock className="w-full max-w-md p-0 overflow-hidden" variant="default" refTag="SYS_NODE_MGMT">
-            <div className="flex justify-between items-center p-4 border-b-2 border-border-primary bg-background-primary/30">
-              <Typography variant="h4" className="mb-0 uppercase text-xs font-mono tracking-widest opacity-80">Initialization Protocol</Typography>
-              <button onClick={() => setShowAdd(false)} className="hover:text-accent"><X size={20} /></button>
+      {/* Portaled past the header's isolated stacking context (.grain sets
+          isolation: isolate), which would otherwise trap the overlay */}
+      {showAdd && createPortal(
+        <div className="fixed inset-0 bg-ink/70 flex items-center justify-center p-4 z-[100]">
+          <div className="card-paper grain w-full max-w-md">
+            <div className="flex justify-between items-center px-5 py-3 border-b-2 border-ink relative z-[2]">
+              <span className="font-mono text-[0.72rem] font-bold uppercase tracking-[0.18em]">
+                Pin a place
+              </span>
+              <button onClick={() => setShowAdd(false)} aria-label="Close" className="hover:text-marker">
+                <X size={18} />
+              </button>
             </div>
 
-            <div className="p-6">
-              <div className="flex gap-2 mb-6 border-b-2 border-border-primary pb-4">
+            <div className="p-5 relative z-[2]">
+              <div className="flex gap-2 mb-5">
                 {(["city", "zip", "coords"] as const).map((m) => (
                   <button
                     key={m}
                     onClick={() => setMode(m)}
-                    className={`flex-1 py-1.5 text-[9px] font-bold font-mono uppercase border-2 transition-all ${
-                      mode === m ? "bg-accent border-accent text-white" : "border-border-primary/20 opacity-40"
+                    className={`flex-1 py-1.5 font-mono text-[0.64rem] font-bold uppercase tracking-wider border-2 transition-colors ${
+                      mode === m ? "bg-ink text-paper border-ink" : "border-ink/30 text-ink/50 hover:border-ink/60"
                     }`}
                   >
-                    {m}
+                    {MODE_LABELS[m]}
                   </button>
                 ))}
               </div>
@@ -151,44 +149,55 @@ const LocationManager = ({ locations, activeLocation, growingZone, onSwitch, onA
                     type="text"
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
-                    placeholder={mode === "city" ? "ENTRY_CITY_NAME..." : "ENTRY_ZIP_CODE..."}
-                    className="w-full px-4 py-3 bg-black/40 border-2 border-border-primary/30 focus:border-accent outline-none text-xs font-mono uppercase transition-colors"
+                    placeholder={mode === "city" ? "Town or city name" : "ZIP code"}
+                    className="w-full px-3 py-2.5 bg-paper border-2 border-ink/40 focus:border-marker outline-none font-mono text-sm transition-colors placeholder:text-ink/40"
                   />
                 ) : (
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-2 gap-3">
                     <input
                       type="text"
                       value={lat}
                       onChange={(e) => setLat(e.target.value)}
-                      placeholder="LATITUDE"
-                      className="w-full px-4 py-3 bg-black/40 border-2 border-border-primary/30 focus:border-accent outline-none text-xs font-mono transition-colors"
+                      placeholder="Latitude"
+                      className="w-full px-3 py-2.5 bg-paper border-2 border-ink/40 focus:border-marker outline-none font-mono text-sm transition-colors placeholder:text-ink/40"
                     />
                     <input
                       type="text"
                       value={lon}
                       onChange={(e) => setLon(e.target.value)}
-                      placeholder="LONGITUDE"
-                      className="w-full px-4 py-3 bg-black/40 border-2 border-border-primary/30 focus:border-accent outline-none text-xs font-mono transition-colors"
+                      placeholder="Longitude"
+                      className="w-full px-3 py-2.5 bg-paper border-2 border-ink/40 focus:border-marker outline-none font-mono text-sm transition-colors placeholder:text-ink/40"
                     />
                   </div>
                 )}
 
                 {error && (
-                  <div className="p-3 border-2 border-red-500 bg-red-500/10 text-red-500 text-[9px] font-bold font-mono uppercase flex items-center gap-2">
-                    <AlertTriangle size={12} /> ERR: {error}
-                  </div>
+                  <p className="px-3 py-2 border-2 border-rust text-rust font-mono text-[0.7rem]">
+                    {error}
+                  </p>
                 )}
 
-                <div className="flex gap-3 pt-4">
-                  <Button type="button" onClick={() => setShowAdd(false)} variant="outline" size="sm" className="flex-1">Abort</Button>
-                  <Button type="submit" disabled={loading} variant="primary" size="sm" className="flex-1">
-                    {loading ? "CALIBRATING..." : "EXEC_INIT"}
-                  </Button>
+                <div className="flex gap-3 pt-2">
+                  <button
+                    type="button"
+                    onClick={() => setShowAdd(false)}
+                    className="flex-1 py-2.5 border-2 border-ink font-mono text-[0.7rem] font-bold uppercase tracking-wider hover:bg-ink/5 transition-colors"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={loading}
+                    className="flex-1 py-2.5 bg-ink text-paper border-2 border-ink font-mono text-[0.7rem] font-bold uppercase tracking-wider hover:bg-marker hover:border-marker transition-colors disabled:opacity-60"
+                  >
+                    {loading ? "Looking it up..." : "Pin it"}
+                  </button>
                 </div>
               </form>
             </div>
-          </BrutalistBlock>
-        </div>
+          </div>
+        </div>,
+        document.body
       )}
     </div>
   );

@@ -3,8 +3,6 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Trophy, Bot, Mail, Twitter, Share2, ArrowRight, AlertTriangle, CheckCircle } from 'lucide-react';
-import BrutalistBlock from '@/components/ui/BrutalistBlock';
-import Typography from '@/components/ui/Typography';
 import { recordResult } from '@/lib/foragerGame/session';
 import type { GameResult } from '@/lib/foragerGame/types';
 
@@ -64,119 +62,125 @@ export default function EndScreen({ result, onReplay }: Props) {
 
   return (
     <div className="space-y-6">
-      <BrutalistBlock variant="accent" refTag="RESULT">
-        <div className="text-center space-y-3 py-2">
+      {/* Score card */}
+      <div className="border-2 border-ink bg-kraft grain p-6 md:p-8">
+        <div className="text-center space-y-3 relative z-[2]">
           {result.verdict === 'you-win' ? (
-            <Trophy size={36} className="mx-auto text-white" />
+            <Trophy size={36} className="mx-auto text-moss" />
           ) : (
-            <Bot size={36} className="mx-auto text-white" />
+            <Bot size={36} className="mx-auto text-marker" />
           )}
-          <Typography variant="h2" className="uppercase tracking-tight">{verdictText}</Typography>
-          <div className="flex items-center justify-center gap-6 text-lg font-mono">
+          <p className="font-display uppercase text-2xl md:text-3xl tracking-tight">{verdictText}</p>
+          <div className="flex items-center justify-center gap-6">
             <div>
-              <span className="text-[10px] font-mono uppercase opacity-60 block">You</span>
-              <span className="text-3xl font-bold tabular-nums">{result.userScore}</span>
+              <span className="font-mono text-[0.64rem] uppercase tracking-[0.18em] text-ink/55 block">You</span>
+              <span className="text-3xl font-display tabular-nums">{result.userScore}</span>
             </div>
-            <span className="opacity-40">vs</span>
+            <span className="text-ink/40 font-mono">vs</span>
             <div>
-              <span className="text-[10px] font-mono uppercase opacity-60 block">AI</span>
-              <span className="text-3xl font-bold tabular-nums text-white">{result.aiScore}</span>
+              <span className="font-mono text-[0.64rem] uppercase tracking-[0.18em] text-ink/55 block">AI</span>
+              <span className="text-3xl font-display tabular-nums text-marker">{result.aiScore}</span>
             </div>
           </div>
-          <p className="text-[10px] font-mono opacity-50 uppercase tracking-widest">
+          <p className="font-mono text-[0.64rem] uppercase tracking-[0.18em] text-ink/50">
             Total time {(result.totalResponseMs / 1000).toFixed(1)}s · AI runs each ID in 187 ms on device
           </p>
         </div>
-      </BrutalistBlock>
+      </div>
 
-      <BrutalistBlock>
-        <Typography variant="h3" className="uppercase tracking-tight mb-3">Field_Guide</Typography>
-        <p className="text-xs font-mono opacity-70 leading-relaxed mb-3">
-          Drop your email — we&apos;ll send the printable lookalike field guide for every species you saw, plus seasonal foraging windows for your zone.
-        </p>
-        {emailStatus === 'success' ? (
-          <div className="flex items-center gap-2 text-accent">
-            <CheckCircle size={16} />
-            <span className="text-xs font-mono uppercase">Field guide on its way to {email}</span>
-          </div>
-        ) : (
-          <form onSubmit={handleEmail} className="space-y-2">
-            <div className="flex gap-2">
-              <input
-                type="email"
-                required
-                value={email}
-                onChange={e => setEmail(e.target.value)}
-                placeholder="you@example.com"
-                className="flex-1 bg-black/30 border-2 border-foreground-primary/40 focus:border-accent outline-none px-3 py-2 text-sm font-mono"
-              />
-              <button
-                type="submit"
-                disabled={emailStatus === 'loading' || !email.includes('@')}
-                className="inline-flex items-center gap-2 px-4 py-2 border-2 border-accent text-accent font-bold uppercase text-xs hover:bg-accent hover:text-white disabled:opacity-40"
-              >
-                <Mail size={14} /> Send
-              </button>
-            </div>
-            {emailError && (
-              <div className="flex items-center gap-2 text-red-300 text-[10px] font-mono">
-                <AlertTriangle size={12} /> {emailError}
-              </div>
-            )}
-            <p className="text-[10px] font-mono opacity-30 uppercase tracking-widest">No spam. One field guide + seasonal notes.</p>
-          </form>
-        )}
-      </BrutalistBlock>
-
-      <BrutalistBlock>
-        <Typography variant="h3" className="uppercase tracking-tight mb-3">Share_score</Typography>
-        <div className="flex flex-wrap gap-2">
-          <a
-            href={`https://twitter.com/intent/tweet?text=${shareText}&url=${shareUrl}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-4 py-2 border-2 border-foreground-primary/40 hover:border-accent hover:text-accent text-xs font-mono font-bold uppercase"
-          >
-            <Twitter size={12} /> X / Twitter
-          </a>
-          <a
-            href={`https://www.facebook.com/sharer/sharer.php?u=${shareUrl}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-4 py-2 border-2 border-foreground-primary/40 hover:border-accent hover:text-accent text-xs font-mono font-bold uppercase"
-          >
-            <Share2 size={12} /> Facebook
-          </a>
-          <a
-            href={ogPath}
-            download={`forager-score-${result.userScore}-${result.aiScore}.png`}
-            className="inline-flex items-center gap-2 px-4 py-2 border-2 border-foreground-primary/40 hover:border-accent hover:text-accent text-xs font-mono font-bold uppercase"
-          >
-            <Share2 size={12} /> Save score card
-          </a>
-        </div>
-      </BrutalistBlock>
-
-      <BrutalistBlock variant="accent">
-        <div className="text-center space-y-3 py-2">
-          <Typography variant="h3" className="uppercase tracking-tight">The_real_device</Typography>
-          <p className="text-xs font-mono opacity-80 max-w-md mx-auto leading-relaxed">
-            That same model — running on a 4 TOPS Hailo chip in your hand, offline, in 187 ms per scan. WALKING MAN PRO is a 5&quot; field tool that does this in your pocket.
+      {/* Field guide capture */}
+      <div className="card-paper grain p-6">
+        <div className="relative z-[2]">
+          <p className="font-display uppercase text-lg mb-3">Field guide</p>
+          <p className="text-[0.95rem] text-ink/80 leading-relaxed mb-3">
+            Drop your email. We&apos;ll send the printable lookalike field guide for every species you saw, plus seasonal foraging windows for your zone.
           </p>
-          <Link
-            href="/shop/wlk-mn-pro/"
-            className="inline-flex items-center justify-center gap-2 font-bold uppercase bg-white text-accent border-2 border-white px-6 py-3 text-sm shadow-brutalist hover:bg-white/90"
-          >
-            See WALKING MAN PRO <ArrowRight size={16} />
-          </Link>
+          {emailStatus === 'success' ? (
+            <div className="flex items-center gap-2 text-moss">
+              <CheckCircle size={16} />
+              <span className="font-mono text-[0.72rem] uppercase tracking-wider">Field guide on its way to {email}</span>
+            </div>
+          ) : (
+            <form onSubmit={handleEmail} className="space-y-2">
+              <div className="flex gap-2">
+                <input
+                  type="email"
+                  required
+                  value={email}
+                  onChange={e => setEmail(e.target.value)}
+                  placeholder="you@example.com"
+                  className="flex-1 bg-paper border-2 border-ink px-3 py-2 font-mono text-sm focus:border-marker focus:outline-none transition-colors"
+                />
+                <button
+                  type="submit"
+                  disabled={emailStatus === 'loading' || !email.includes('@')}
+                  className="inline-flex items-center gap-2 px-4 py-2 border-2 border-ink bg-ink text-paper font-mono text-[0.72rem] uppercase tracking-wider hover:bg-marker hover:border-marker disabled:opacity-40 transition-colors"
+                >
+                  <Mail size={14} /> Send
+                </button>
+              </div>
+              {emailError && (
+                <div className="flex items-center gap-2 text-rust font-mono text-[0.68rem]">
+                  <AlertTriangle size={12} /> {emailError}
+                </div>
+              )}
+              <p className="font-mono text-[0.64rem] uppercase tracking-[0.18em] text-ink/40">No spam. One field guide + seasonal notes.</p>
+            </form>
+          )}
         </div>
-      </BrutalistBlock>
+      </div>
+
+      {/* Share */}
+      <div className="card-paper grain p-6">
+        <div className="relative z-[2]">
+          <p className="font-display uppercase text-lg mb-3">Share score</p>
+          <div className="flex flex-wrap gap-2">
+            <a
+              href={`https://twitter.com/intent/tweet?text=${shareText}&url=${shareUrl}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-4 py-2 border-2 border-ink bg-paper hover:bg-kraft font-mono text-[0.72rem] uppercase tracking-wider transition-colors"
+            >
+              <Twitter size={12} /> X / Twitter
+            </a>
+            <a
+              href={`https://www.facebook.com/sharer/sharer.php?u=${shareUrl}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-4 py-2 border-2 border-ink bg-paper hover:bg-kraft font-mono text-[0.72rem] uppercase tracking-wider transition-colors"
+            >
+              <Share2 size={12} /> Facebook
+            </a>
+            <a
+              href={ogPath}
+              download={`forager-score-${result.userScore}-${result.aiScore}.png`}
+              className="inline-flex items-center gap-2 px-4 py-2 border-2 border-ink bg-paper hover:bg-kraft font-mono text-[0.72rem] uppercase tracking-wider transition-colors"
+            >
+              <Share2 size={12} /> Save score card
+            </a>
+          </div>
+        </div>
+      </div>
+
+      {/* Device CTA */}
+      <div className="bg-ink text-paper border-2 border-ink p-6 md:p-8 text-center">
+        <p className="font-display uppercase text-xl">The real device</p>
+        <p className="mt-3 text-[0.95rem] text-paper/75 max-w-md mx-auto leading-relaxed">
+          That same model, running on a 4 TOPS Hailo chip in your hand, offline, in 187 ms per scan. WALKING MAN PRO is a 5&quot; field tool that does this in your pocket.
+        </p>
+        <Link
+          href="/shop/wlk-mn-pro/"
+          className="mt-5 inline-flex items-center justify-center gap-2 bg-paper text-ink border-2 border-paper px-6 py-3 font-mono text-[0.78rem] uppercase tracking-wider hover:bg-marker hover:border-marker hover:text-paper transition-colors"
+        >
+          See WALKING MAN PRO <ArrowRight size={16} />
+        </Link>
+      </div>
 
       <button
         onClick={onReplay}
-        className="w-full border-2 border-foreground-primary/40 hover:border-accent hover:text-accent px-6 py-3 text-sm font-mono font-bold uppercase"
+        className="w-full border-2 border-ink bg-paper hover:bg-kraft px-6 py-3 font-mono text-[0.78rem] uppercase tracking-wider transition-colors"
       >
-        Play_again
+        Play again
       </button>
     </div>
   );

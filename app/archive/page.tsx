@@ -1,148 +1,158 @@
-import { getAllPosts, getAllTags } from "@/lib/posts";
+import { getAllPosts, getAllCategories, getPostNo, getSpecsLine } from "@/lib/posts";
 import Link from "next/link";
-import Image from "next/image";
-import FieldStationLayout from "@/components/ui/FieldStationLayout";
-import BrutalistBlock from "@/components/ui/BrutalistBlock";
-import Typography from "@/components/ui/Typography";
-import Badge from "@/components/ui/Badge";
-import Button from "@/components/ui/Button";
+import { PaperClip, Stamp, Tape } from "@/components/field/kit";
 
 export const metadata = {
-  title: "Archive",
+  title: "Field Notes",
   description: "Field documentation, foraging guides, and survival knowledge from the community.",
 };
 
-export default async function ArchivePage(props: { searchParams: Promise<{ tag?: string }> }) {
+/* One-line blurb per drawer, shown next to the pulls */
+const drawerBlurbs: Record<string, string> = {
+  "build-log": "How the tools get built",
+  "field-guide": "Tried outside, written down",
+  foraging: "Wild food, identified whole",
+};
+
+export default async function ArchivePage(props: { searchParams: Promise<{ tag?: string; drawer?: string }> }) {
   const searchParams = await props.searchParams;
   const allPosts = getAllPosts();
-  const tags = getAllTags();
+  const categories = getAllCategories();
+  // Old ?tag= links from inbound traffic keep filtering; the tab row uses drawers
+  const activeDrawer = searchParams.drawer;
   const activeTag = searchParams.tag;
-  const posts = activeTag
-    ? allPosts.filter((post) => post.tags.includes(activeTag))
-    : allPosts;
+  const posts = activeDrawer
+    ? allPosts.filter((post) => post.category === activeDrawer)
+    : activeTag
+      ? allPosts.filter((post) => post.tags.includes(activeTag))
+      : allPosts;
 
   return (
-    <FieldStationLayout stationId="HL_FIELD_ARCHIVE">
-      <div className="max-w-5xl mx-auto">
-        {/* Header image */}
-        <div className="relative w-full aspect-[16/9] mb-8 overflow-hidden">
-          <Image
-            src="/images/field_notes.png"
-            alt="Field Notes"
-            fill
-            className="object-cover"
-            priority
-          />
+    <>
+      {/* Header band */}
+      <section className="bg-kraft grain border-b-2 border-ink relative">
+        <div className="max-w-6xl mx-auto px-4 pt-10 pb-10 relative z-[2]">
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-2 font-mono text-[0.68rem] uppercase tracking-[0.18em] text-ink/60 mb-5">
+            <Link href="/" className="hover:text-marker underline underline-offset-4">
+              Workbench
+            </Link>
+            <span>/</span>
+            <span>Field Notes</span>
+            <span className="ml-auto">{allPosts.length} notes on file</span>
+          </div>
+          <div className="flex flex-wrap gap-2 mb-5">
+            <Stamp color="text-moss">Tested on a real homestead</Stamp>
+            <Stamp color="text-slateblue" rotate="1.6deg">Prints clean</Stamp>
+          </div>
+          <h1 className="font-display uppercase text-3xl sm:text-5xl leading-[0.98] max-w-3xl text-balance">
+            Field notes, filed by drawer, not dumped in a pile.
+          </h1>
+          <p className="mt-4 text-lg md:text-xl leading-relaxed max-w-2xl text-ink/85 italic">
+            Every card shows the season and the subject before you open it.
+            Triage in five seconds, read the twenty-minute version later.
+          </p>
+        </div>
+      </section>
+
+      {/* Drawer pulls */}
+      <section className="max-w-6xl mx-auto px-4 pt-10">
+        <div
+          className="flex flex-wrap items-end gap-2 border-b-2 border-ink pb-0"
+          role="tablist"
+          aria-label="Filter notes by drawer"
+        >
+          {["", ...categories].map((cat) => {
+            const active = cat === "" ? !activeDrawer && !activeTag : activeDrawer === cat;
+            const count = cat === "" ? allPosts.length : allPosts.filter((p) => p.category === cat).length;
+            return (
+              <Link
+                key={cat || "all"}
+                href={cat === "" ? "/archive/" : `/archive/?drawer=${encodeURIComponent(cat)}`}
+                role="tab"
+                aria-selected={active}
+                className={`font-mono text-[0.72rem] uppercase tracking-wider px-5 pt-2 pb-2.5 border-2 border-b-0 border-ink transition-colors ${
+                  active ? "bg-ink text-paper" : "bg-manila hover:bg-kraft text-ink"
+                }`}
+                style={{
+                  clipPath: "polygon(6% 0, 94% 0, 100% 100%, 0 100%)",
+                  marginBottom: "-2px",
+                }}
+              >
+                {cat === "" ? "All notes" : cat}{" "}
+                <span className={active ? "text-marker" : "text-ink/45"}>{count}</span>
+              </Link>
+            );
+          })}
+          {activeTag && (
+            <span className="font-mono text-[0.72rem] uppercase tracking-wider px-3 py-1.5 mb-1 border-2 border-marker text-marker">
+              tag: {activeTag}
+            </span>
+          )}
+          <span className="ml-auto hidden md:block font-mono text-[0.66rem] uppercase tracking-widest text-ink/50 pb-2">
+            {(activeDrawer && drawerBlurbs[activeDrawer]) || "The whole card catalog"}
+          </span>
         </div>
 
-        {/* Header */}
-        <div className="flex justify-between items-end mb-8 border-b-2 border-border-primary pb-4">
-          <div>
-            <Typography variant="h1" className="mb-0 text-2xl md:text-4xl">Field Notes</Typography>
-            <Typography variant="small" className="opacity-60">Documentation & community knowledge base</Typography>
-          </div>
-          <Typography variant="small" className="font-mono text-xs opacity-40 uppercase mb-0">
-            {posts.length} articles
-          </Typography>
-        </div>
-
-        {/* Filters */}
-        {tags.length > 0 && (
-          <div className="mb-8">
-            <Typography variant="h4" className="text-xs opacity-50 mb-3">Filter by tag:</Typography>
-            <div className="flex flex-wrap gap-2">
-              {activeTag && (
-                <Link href="/archive/">
-                  <Badge
-                    variant="solid"
-                    className="cursor-pointer bg-accent border-accent text-white"
-                  >
-                    ✕ Clear
-                  </Badge>
-                </Link>
-              )}
-              {tags.map((tag) => (
-                <Link key={tag} href={`/archive/?tag=${encodeURIComponent(tag)}`}>
-                  <Badge 
-                    variant={activeTag === tag ? "solid" : "status"}
-                    className={`cursor-pointer hover:bg-accent hover:text-white transition-colors ${activeTag === tag ? "bg-accent border-accent text-white" : ""}`}
-                  >
-                    {tag}
-                  </Badge>
-                </Link>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Posts Grid */}
-        <div className="grid gap-8">
-          {posts.map((post) => (
-            <BrutalistBlock 
+        {/* Card wall: browsing surface, tilts allowed */}
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 pt-8">
+          {posts.map((post, i) => (
+            <Link
               key={post.slug}
-              className="group p-6"
-              refTag={post.category.toUpperCase()}
+              href={`/archive/${post.slug}/`}
+              className={`relative card-paper grain p-5 pt-6 flex flex-col hover:-translate-y-1 hover:rotate-0 transition-transform group ${
+                i % 3 === 0 ? "rotate-slight" : i % 3 === 1 ? "" : "rotate-slight-r"
+              }`}
             >
-              <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-6">
-                <div className="flex-grow">
-                  {/* Meta */}
-                  <div className="flex items-center gap-3 mb-3">
-                    <Typography variant="small" className="font-mono opacity-40 uppercase mb-0 tracking-tighter">
-                      {post.date} {"//"} {post.author}
-                    </Typography>
-                  </div>
-
-                  {/* Title */}
-                  <Link 
-                    href={`/archive/${post.slug}/`}
-                    className="block group"
-                  >
-                    <Typography variant="h3" className="mb-3 group-hover:text-accent transition-colors">
-                      {post.title}
-                    </Typography>
-                  </Link>
-
-                  {/* Description */}
-                  <Typography variant="body" className="opacity-70 mb-4 leading-relaxed line-clamp-2">
-                    {post.excerpt || post.description}
-                  </Typography>
-
-                  {/* Tags */}
-                  {post.tags.length > 0 && (
-                    <div className="flex flex-wrap gap-2">
-                      {post.tags.map((tag) => (
-                        <Badge 
-                          key={tag}
-                          variant="outline"
-                          className="text-[11px] opacity-40 border-foreground-primary/30"
-                        >
-                          {tag}
-                        </Badge>
-                      ))}
-                    </div>
-                  )}
-                </div>
-
-                {/* Read More */}
-                <Button 
-                  href={`/archive/${post.slug}/`}
-                  variant="secondary"
-                  size="sm"
-                  className="shrink-0"
-                >
-                  Read →
-                </Button>
+              <PaperClip className="absolute -top-4 right-8 w-5 h-12 -rotate-6" />
+              <div className="flex items-center justify-between font-mono text-[0.64rem] uppercase tracking-[0.18em] text-ink/55 mb-3 relative z-[2]">
+                <span className="bg-kraft px-1.5 py-0.5 border border-ink/40">
+                  {post.category || "note"}
+                </span>
+                <span>No. {getPostNo(post.slug)} · {post.date}</span>
               </div>
-            </BrutalistBlock>
+              <h2 className="font-display uppercase text-lg leading-tight group-hover:text-marker transition-colors relative z-[2]">
+                {post.title}
+              </h2>
+              <p className="mt-2 text-[0.95rem] text-ink/80 leading-snug line-clamp-3 flex-1 relative z-[2]">
+                {post.excerpt || post.description}
+              </p>
+              <div className="mt-4 pt-3 border-t border-dotted border-ink/40 flex items-center justify-between gap-2 relative z-[2]">
+                <span className="font-mono text-[0.68rem] uppercase tracking-wider text-ink/60">
+                  {getSpecsLine(post)}
+                </span>
+                {post.stamp && (
+                  <Stamp color="text-moss" rotate="-1.6deg">{post.stamp}</Stamp>
+                )}
+              </div>
+            </Link>
           ))}
         </div>
 
         {posts.length === 0 && (
-          <BrutalistBlock className="text-center py-12" variant="default">
-            <Typography variant="body" className="opacity-40 mb-0 italic">No documents found in archive.</Typography>
-          </BrutalistBlock>
+          <div className="card-paper grain p-10 text-center">
+            <p className="text-ink/60 italic relative z-[2]">
+              Nothing in this drawer yet.
+            </p>
+          </div>
         )}
-      </div>
-    </FieldStationLayout>
+
+        {/* How these notes work */}
+        <div className="mt-14 mb-16 border-2 border-ink bg-kraft grain p-6 md:p-8 relative max-w-3xl">
+          <Tape className="-top-3 left-10 rotate-[-4deg]" />
+          <p className="font-mono text-[0.66rem] uppercase tracking-[0.2em] text-ink/60 mb-2 relative z-[2]">
+            How these notes work
+          </p>
+          <p className="text-[1.05rem] leading-relaxed text-ink/90 relative z-[2]">
+            Every note opens with an <strong className="font-bold">at-a-glance card</strong>:{" "}
+            season, skill, time, region, gear. If the card answers your question,
+            close the tab and go outside. If it doesn&apos;t, the long version is
+            written to be read <span className="hl">standing up, with gloves on.</span>
+          </p>
+          <p className="font-hand font-semibold text-marker text-xl mt-4 rotate-[-1deg] relative z-[2]">
+            ✎ print any note, it fits on one page, both sides.
+          </p>
+        </div>
+      </section>
+    </>
   );
 }

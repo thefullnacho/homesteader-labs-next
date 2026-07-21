@@ -42,10 +42,10 @@ export default function FaqAccordion({
         return (
           <div
             key={faq.q}
-            className={`border transition-colors ${
+            className={`border-2 transition-colors ${
               isOpen
-                ? 'border-accent/40 bg-accent/[0.03]'
-                : 'border-border-primary/20 hover:border-border-primary/40'
+                ? 'border-marker/60 bg-kraft/40'
+                : 'border-ink/20 hover:border-ink/50'
             }`}
           >
             <button
@@ -56,24 +56,24 @@ export default function FaqAccordion({
             >
               <span
                 className={`text-[9px] font-mono uppercase tracking-widest mt-1 shrink-0 ${
-                  isOpen ? 'text-accent' : 'opacity-30'
+                  isOpen ? 'text-marker' : 'text-ink/30'
                 }`}
               >
                 {prefix}.{num}
               </span>
               <span
                 className={`flex-1 text-sm md:text-base font-mono leading-snug ${
-                  isOpen ? 'opacity-100' : 'opacity-80'
+                  isOpen ? 'text-ink' : 'text-ink/80'
                 }`}
               >
                 {faq.q}
               </span>
-              <span className={`mt-1 shrink-0 ${isOpen ? 'text-accent' : 'opacity-30'}`}>
+              <span className={`mt-1 shrink-0 ${isOpen ? 'text-marker' : 'text-ink/30'}`}>
                 {isOpen ? <Minus size={14} /> : <Plus size={14} />}
               </span>
             </button>
             {isOpen && (
-              <div className="px-4 pb-4 md:pl-[72px] text-sm md:text-base font-mono opacity-70 leading-relaxed">
+              <div className="px-4 pb-4 md:pl-[72px] text-sm md:text-base text-ink/70 leading-relaxed">
                 {faq.a}
               </div>
             )}

@@ -2,9 +2,6 @@
 
 import { useEffect, useMemo } from "react";
 import { useLiveQuery } from "dexie-react-hooks";
-import { TrendingUp, Leaf, ThermometerSun } from "lucide-react";
-import Typography from "@/components/ui/Typography";
-import BrutalistBlock from "@/components/ui/BrutalistBlock";
 import type { ForecastDay } from "@/lib/weatherTypes";
 import { db } from "@/lib/db";
 import { useFieldStation } from "@/app/context/FieldStationContext";
@@ -18,16 +15,17 @@ interface SeasonMilestone {
   name: string;
   gdd: number;
   description: string;
-  crops: string[];
 }
 
 const MILESTONES: SeasonMilestone[] = [
-  { name: 'Early Spring', gdd: 200, description: 'Peas, spinach, kale', crops: ['🥬', '🫛', '🥬'] },
-  { name: 'Spring Planting', gdd: 400, description: 'Beets, carrots, lettuce', crops: ['🥕', '🥗', '🫛'] },
-  { name: 'Warm Season Start', gdd: 600, description: 'Beans, corn, squash', crops: ['🌽', '🥒', '🫘'] },
-  { name: 'Summer', gdd: 1000, description: 'Tomatoes, peppers', crops: ['🍅', '🌶️', '🍆'] },
-  { name: 'Peak Summer', gdd: 1500, description: 'Peak growing season', crops: ['🌽', '🍅', '🥒'] },
+  { name: 'Early Spring', gdd: 200, description: 'peas, spinach, kale' },
+  { name: 'Spring Planting', gdd: 400, description: 'beets, carrots, lettuce' },
+  { name: 'Warm Season Start', gdd: 600, description: 'beans, corn, squash' },
+  { name: 'Summer', gdd: 1000, description: 'tomatoes, peppers' },
+  { name: 'Peak Summer', gdd: 1500, description: 'peak growing season' },
 ];
+
+const SCALE_MAX = 1500;
 
 const BASE_TEMP = 50;
 
@@ -99,95 +97,70 @@ export default function GrowingSeasonTracker({ forecast, locationName }: Growing
     maybeAdvanceDay();
   }, [key, year, forecast]);
 
-  const currentMilestone = MILESTONES.find((m, i) => {
-    const prev = i === 0 ? 0 : MILESTONES[i - 1].gdd;
-    return totalGDD >= prev && totalGDD < m.gdd;
-  }) || MILESTONES[MILESTONES.length - 1];
-
+  // Last milestone crossed (where you are), first one still ahead (where you're going)
+  const passedMilestone = [...MILESTONES].reverse().find(m => m.gdd <= totalGDD);
   const nextMilestone = MILESTONES.find(m => m.gdd > totalGDD);
-  const progressToNext = nextMilestone
-    ? ((totalGDD - (currentMilestone?.gdd || 0)) / (nextMilestone.gdd - (currentMilestone?.gdd || 0))) * 100
-    : 100;
+  const gddPct = Math.min(100, (totalGDD / SCALE_MAX) * 100);
 
   return (
-    <BrutalistBlock className="p-6 border-green-900/40 bg-green-900/5" title="GROWING SEASON TRACKER" refTag="GDD_TRACKER_V1">
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-4">
-        {/* Cumulative GDD */}
-        <div className="flex flex-col gap-2 border-l-2 border-border-primary/20 pl-4">
-          <div className="flex items-center gap-2 opacity-60">
-            <ThermometerSun size={14} className="text-orange-400" />
-            <Typography variant="small" className="font-mono text-[9px] uppercase tracking-widest mb-0">
-              Cumulative GDD
-            </Typography>
-          </div>
-          <div className="flex items-end gap-2">
-            <Typography variant="h3" className="font-mono text-3xl text-foreground-primary mb-0 leading-none">
-              {totalGDD}
-            </Typography>
-            <span className="text-xs font-mono opacity-40 uppercase mb-1">Base 50°F</span>
-          </div>
-        </div>
-
-        {/* Days Since Spring */}
-        <div className="flex flex-col gap-2 border-l-2 border-border-primary/20 pl-4">
-          <div className="flex items-center gap-2 opacity-60">
-            <TrendingUp size={14} className="text-green-500" />
-            <Typography variant="small" className="font-mono text-[9px] uppercase tracking-widest mb-0">
-              Days Since Spring
-            </Typography>
-          </div>
-          <div className="flex items-end gap-2">
-            <Typography variant="h3" className="font-mono text-3xl text-foreground-primary mb-0 leading-none">
-              {daysSinceStart}
-            </Typography>
-            <span className="text-xs font-mono opacity-40 uppercase mb-1">Days</span>
-          </div>
-        </div>
-
-        {/* Current Stage */}
-        <div className="flex flex-col gap-2 border-l-2 border-border-primary/20 pl-4">
-          <div className="flex items-center gap-2 opacity-60">
-            <Leaf size={14} className="text-accent" />
-            <Typography variant="small" className="font-mono text-[9px] uppercase tracking-widest mb-0">
-              Current Stage
-            </Typography>
-          </div>
-          <div>
-            <Typography variant="h3" className="font-mono text-lg text-accent uppercase mb-1 tracking-tighter">
-              {currentMilestone?.name || 'Peak'}
-            </Typography>
-            <div className="flex gap-1 mt-1">
-              {currentMilestone?.crops.map((emoji, i) => (
-                <span key={i} className="text-sm bg-black/20 border border-border-primary/30 p-1 rounded-sm">{emoji}</span>
-              ))}
-            </div>
-          </div>
-        </div>
+    <div className="card-paper grain p-6">
+      <div className="flex items-baseline justify-between border-b-2 border-ink pb-2 mb-5 relative z-[2]">
+        <h3 className="font-display uppercase text-lg">Heat units (GDD)</h3>
+        <span className="font-mono text-[0.66rem] uppercase tracking-widest text-ink/50">base 50°F</span>
       </div>
 
-      {/* Progress bar to next milestone */}
-      {nextMilestone && (
-        <div className="mt-8 pt-6 border-t border-border-primary/10">
-          <div className="flex justify-between items-end mb-2">
-            <Typography variant="small" className="font-mono text-[9px] uppercase opacity-60 mb-0">
-              Progress to {nextMilestone.name}
-            </Typography>
-            <span className="text-[9px] font-mono font-bold text-accent">
-              {nextMilestone.gdd - totalGDD} GDD REMAINING
-            </span>
-          </div>
-          <div className="w-full h-2 bg-background-secondary border border-border-primary/20 overflow-hidden">
-            <div
-              className="h-full bg-accent transition-all duration-1000 ease-in-out"
-              style={{ width: `${Math.min(progressToNext, 100)}%` }}
-            />
-          </div>
-          <div className="flex justify-between text-[8px] font-mono uppercase opacity-30 mt-1">
-            <span>{currentMilestone?.name} ({currentMilestone?.gdd || 0})</span>
-            <span>{nextMilestone.name} ({nextMilestone.gdd})</span>
-          </div>
-        </div>
-      )}
-    </BrutalistBlock>
+      <div className="flex items-baseline gap-2 mb-3 relative z-[2]">
+        <span className="font-display text-4xl">{totalGDD}</span>
+        <span className="font-mono text-[0.72rem] uppercase tracking-wider text-ink/60">
+          banked, plus the coming fortnight
+        </span>
+      </div>
+
+      <div className="relative h-8 border-2 border-ink bg-paper mt-8 z-[2]">
+        <div className="absolute inset-y-0 left-0 bg-moss/70" style={{ width: `${gddPct}%` }} />
+        {MILESTONES.filter(m => m.gdd < SCALE_MAX).map((m) => (
+          <div
+            key={m.gdd}
+            className="absolute inset-y-0 w-0.5 bg-ink/40"
+            style={{ left: `${(m.gdd / SCALE_MAX) * 100}%` }}
+          />
+        ))}
+        {nextMilestone && (
+          <span
+            className="absolute -top-6 font-mono text-[0.6rem] uppercase tracking-wide text-rust whitespace-nowrap"
+            style={{
+              left: `${Math.min(88, Math.max(12, (nextMilestone.gdd / SCALE_MAX) * 100))}%`,
+              transform: 'translateX(-50%)',
+            }}
+          >
+            {nextMilestone.name.toLowerCase()} at {nextMilestone.gdd.toLocaleString()}
+          </span>
+        )}
+      </div>
+      <div className="flex justify-between font-mono text-[0.64rem] text-ink/55 mt-1.5 relative z-[2]">
+        <span>0</span>
+        <span className="font-bold text-ink">
+          you are here: {passedMilestone ? `past ${passedMilestone.name.toLowerCase()}` : 'season opening'}
+        </span>
+        <span>{SCALE_MAX.toLocaleString()}</span>
+      </div>
+
+      <p className="mt-4 text-[0.95rem] text-ink/80 leading-snug relative z-[2]">
+        {nextMilestone ? (
+          <>
+            <strong className="font-bold">{nextMilestone.gdd - totalGDD}</strong> more heat units to{' '}
+            {nextMilestone.name.toLowerCase()}: {nextMilestone.description}.
+          </>
+        ) : (
+          <>Peak season. Everything that wants heat has it.</>
+        )}
+      </p>
+
+      <p className="mt-3 font-mono text-[0.62rem] uppercase tracking-widest text-ink/50 relative z-[2]">
+        Day {daysSinceStart} of the season · counted from{' '}
+        {seasonStart.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+        {frostDates?.lastSpringFrost ? ' (your last frost)' : ' (spring equinox)'}
+      </p>
+    </div>
   );
 }

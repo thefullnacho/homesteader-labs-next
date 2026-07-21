@@ -2,7 +2,6 @@
 
 import Link from 'next/link';
 import { Cherry, Sparkles, Leaf, Shuffle } from 'lucide-react';
-import BrutalistBlock from '@/components/ui/BrutalistBlock';
 import type { PlayMode } from '@/lib/foragerGame/types';
 
 interface DomainOption {
@@ -13,7 +12,7 @@ interface DomainOption {
 }
 
 const ICON_SIZE = 22;
-const ICON_CLASS = 'text-accent shrink-0 mt-1';
+const ICON_CLASS = 'text-marker shrink-0 mt-1';
 
 const DOMAINS: DomainOption[] = [
   { key: 'mixed',                label: 'Mixed',                   sub: 'All four domains shuffled together',     icon: <Shuffle  size={ICON_SIZE} className={ICON_CLASS} /> },
@@ -25,24 +24,26 @@ const DOMAINS: DomainOption[] = [
 
 export default function DomainPicker() {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       {DOMAINS.map(d => (
         <Link
           key={d.key}
           href={`/tools/forager-game/play/?mode=${d.key}`}
-          className="block"
           data-mode={d.key}
+          className="card-paper grain p-5 block hover:-translate-y-1 transition-transform group"
         >
-          <BrutalistBlock>
-            <div className="flex items-start gap-3">
-              {d.icon}
-              <div className="flex-1">
-                <p className="font-mono font-bold uppercase text-sm">{d.label}</p>
-                <p className="text-[10px] font-mono opacity-60 mt-1 uppercase tracking-wider">{d.sub}</p>
-              </div>
-              <span className="text-accent text-lg font-mono">→</span>
+          <div className="flex items-start gap-3 relative z-[2]">
+            {d.icon}
+            <div className="flex-1">
+              <p className="font-display uppercase text-lg leading-tight group-hover:text-marker transition-colors">
+                {d.label}
+              </p>
+              <p className="mt-1 font-mono text-[0.68rem] uppercase tracking-[0.18em] text-ink/55">
+                {d.sub}
+              </p>
             </div>
-          </BrutalistBlock>
+            <span className="text-ink/40 group-hover:text-marker text-lg font-mono transition-colors">→</span>
+          </div>
         </Link>
       ))}
     </div>

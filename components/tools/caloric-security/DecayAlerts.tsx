@@ -71,7 +71,7 @@ export default function DecayAlerts({ inventory }: DecayAlertsProps) {
   if (alerts.length === 0) return null;
 
   return (
-    <div className={`border-2 ${hasCritical ? 'border-red-500/50' : 'border-yellow-500/30'} bg-black/20`}>
+    <div className={`border-2 bg-paper ${hasCritical ? 'border-rust' : 'border-marker'}`}>
       {/* Header — always visible, clickable to collapse */}
       <button
         onClick={() => setOpen(o => !o)}
@@ -79,67 +79,55 @@ export default function DecayAlerts({ inventory }: DecayAlertsProps) {
       >
         <div className="flex items-center gap-2">
           <AlertTriangle
-            size={13}
-            className={hasCritical ? 'text-red-400' : 'text-yellow-400'}
+            size={14}
+            className={hasCritical ? 'text-rust' : 'text-marker'}
           />
-          <span className={`text-[10px] font-mono uppercase font-bold tracking-widest ${
-            hasCritical ? 'text-red-400' : 'text-yellow-400'
+          <span className={`font-mono text-[0.68rem] font-bold uppercase tracking-[0.18em] ${
+            hasCritical ? 'text-rust' : 'text-marker'
           }`}>
-            Decay Alerts
+            The spoilage watch
           </span>
-          <span className={`text-[9px] font-mono border px-1.5 py-0.5 ${
-            hasCritical
-              ? 'border-red-500/40 text-red-400'
-              : 'border-yellow-500/30 text-yellow-400'
+          <span className={`font-mono text-[0.64rem] border px-1.5 py-0.5 ${
+            hasCritical ? 'border-rust text-rust' : 'border-marker text-marker'
           }`}>
             {alerts.length}
           </span>
         </div>
         {open
-          ? <ChevronUp size={12} className="opacity-40" />
-          : <ChevronDown size={12} className="opacity-40" />
+          ? <ChevronUp size={12} className="text-ink/50" />
+          : <ChevronDown size={12} className="text-ink/50" />
         }
       </button>
 
       {/* Alert rows */}
       {open && (
-        <div className="px-4 pb-4 space-y-1.5">
-          {alerts.map(a => {
-            const isSpoiled  = a.phase === 'spoiled';
-            const isCritical = a.daysRemaining < 7 && !isSpoiled;
+        <div className="px-4 pb-4">
+          <table className="w-full font-mono text-[0.76rem]">
+            <tbody>
+              {alerts.map(a => {
+                const isSpoiled  = a.phase === 'spoiled';
+                const isCritical = a.daysRemaining < 7 && !isSpoiled;
+                const tone = isSpoiled || isCritical ? 'text-rust' : 'text-marker';
 
-            return (
-              <div
-                key={a.id}
-                className={`flex items-center gap-3 px-3 py-2 text-[10px] font-mono uppercase ${
-                  isSpoiled  ? 'bg-red-500/10 border border-red-500/30'    :
-                  isCritical ? 'bg-red-500/5  border border-red-500/20'    :
-                               'bg-yellow-500/5 border border-yellow-500/20'
-                }`}
-              >
-                <AlertTriangle
-                  size={10}
-                  className={`shrink-0 ${isSpoiled || isCritical ? 'text-red-400' : 'text-yellow-400'}`}
-                />
-                <span className="font-bold shrink-0">
-                  {a.cropIcon} {a.cropName}
-                </span>
-                <span className="opacity-40 shrink-0">({a.method})</span>
-                <span className={`ml-auto shrink-0 font-bold tabular-nums ${
-                  isSpoiled  ? 'text-red-400'    :
-                  isCritical ? 'text-red-400'    :
-                               'text-yellow-400'
-                }`}>
-                  {isSpoiled
-                    ? 'Spoiled — remove'
-                    : `${a.daysRemaining}d remaining · ${a.valuePct}% value`
-                  }
-                </span>
-              </div>
-            );
-          })}
-          <p className="text-[9px] font-mono uppercase opacity-20 pt-1">
-            Manage inventory to update harvest dates and preservation methods.
+                return (
+                  <tr key={a.id} className="h-[34px] border-b border-dotted border-ink/30 last:border-b-0">
+                    <td className="font-semibold pr-3">
+                      {a.cropIcon} {a.cropName}
+                    </td>
+                    <td className="text-ink/55 pr-3">{a.method}</td>
+                    <td className={`text-right font-bold tabular-nums ${tone}`}>
+                      {isSpoiled
+                        ? 'spoiled, pull it'
+                        : `${a.daysRemaining} d left · ${a.valuePct}% value`
+                      }
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+          <p className="pt-2 font-mono text-[0.64rem] uppercase tracking-wide text-ink/50">
+            Update harvest dates and preservation methods under Manage.
           </p>
         </div>
       )}

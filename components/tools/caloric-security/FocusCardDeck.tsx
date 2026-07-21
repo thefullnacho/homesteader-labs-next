@@ -7,7 +7,7 @@ import { buildSystemState } from '@/lib/caloric-security/systemState';
 import { getTopActions } from '@/lib/caloric-security/scoreActions';
 import { getAllActions } from '@/lib/caloric-security/actionLoader';
 import FocusCard from './FocusCard';
-import type { Actuals } from './ActualsInput';
+import type { Actuals } from '@/lib/caloric-security/types';
 import type { CaloricTotals, WaterAutonomyResult, EnergyAutonomyResult, InventoryItem } from '@/lib/caloric-security/types';
 import type { ForecastDay } from '@/lib/weatherTypes';
 import type { DismissalOption } from '@/lib/caloric-security/actionTypes';
@@ -83,14 +83,28 @@ export default function FocusCardDeck({
     saveDismissals(updated);
   }
 
-  if (topCards.length === 0) return null;
+  if (topCards.length === 0) {
+    return (
+      <div className="border-2 border-dashed border-ink/40 p-8 text-center print:hidden">
+        <p className="font-display uppercase text-lg mb-1">Nothing pressing on the docket</p>
+        <p className="text-ink/70 text-[0.95rem] max-w-md mx-auto">
+          The scored to-do list fills in as the clocks, forecast, and inventory
+          give it something to work with. Dismissed items come back when their
+          cooldown runs out.
+        </p>
+      </div>
+    );
+  }
 
   return (
-    <div className="space-y-2 print:hidden">
-      <p className="text-[9px] font-mono uppercase tracking-widest opacity-30">
-        Today&apos;s Focus
-      </p>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+    <div className="card-paper grain p-6 print:hidden">
+      <div className="border-b-2 border-ink pb-2 mb-4 flex items-center justify-between relative z-[2]">
+        <h3 className="font-display uppercase text-lg">The docket</h3>
+        <span className="font-mono text-[0.64rem] uppercase tracking-widest text-ink/50">
+          ordered by what it buys you
+        </span>
+      </div>
+      <div className="space-y-3.5 relative z-[2]">
         {topCards.map(s => (
           <FocusCard key={s.action.id} scored={s} onDismiss={handleDismiss} />
         ))}

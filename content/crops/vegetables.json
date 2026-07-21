@@ -46,6 +46,7 @@
     "successionMax": 1,
     "sun": "full",
     "spacing": "24-36\" apart",
+    "rowSpacing": "36\" rows",
     "notes": [
       "Start indoors 6 weeks before last frost",
       "Harden off before transplanting",
@@ -134,6 +135,7 @@
     "successionMax": 1,
     "sun": "full",
     "spacing": "18-24\" apart",
+    "rowSpacing": "24\" rows",
     "notes": [
       "Needs warm soil (70°F+)",
       "Start indoors 8 weeks early",
@@ -218,6 +220,7 @@
     "successionMax": 1,
     "sun": "full",
     "spacing": "18-24\" apart",
+    "rowSpacing": "24\" rows",
     "notes": [
       "Longer season than bell peppers",
       "Harvest at full color for maximum heat",
@@ -301,6 +304,7 @@
     "successionMax": 3,
     "sun": "full",
     "spacing": "36-48\" apart (vining)",
+    "rowSpacing": "60\" rows",
     "notes": [
       "Can direct sow or transplant",
       "Succession plant every 3 weeks",
@@ -458,6 +462,7 @@
     "successionMax": 4,
     "sun": "full",
     "spacing": "4-6\" apart",
+    "rowSpacing": "18\" rows",
     "notes": [
       "Wait for soil to warm to 60°F",
       "Succession plant every 2 weeks",
@@ -537,6 +542,7 @@
     "successionMax": 1,
     "sun": "full",
     "spacing": "6-8\" apart (on trellis)",
+    "rowSpacing": "36\" rows",
     "notes": [
       "Provide trellis or poles",
       "Longer harvest period than bush beans",
@@ -625,6 +631,7 @@
     "successionMax": 2,
     "sun": "full",
     "spacing": "36-48\" apart",
+    "rowSpacing": "48\" rows",
     "notes": [
       "Very prolific - 2-3 plants per family",
       "Pick when small for best flavor",
@@ -708,6 +715,7 @@
     "successionMax": 1,
     "sun": "full",
     "spacing": "48-72\" apart",
+    "rowSpacing": "72\" rows",
     "notes": [
       "Needs 90+ frost-free days",
       "Vines spread 10-15 feet",
@@ -1024,6 +1032,7 @@
     "successionMax": 1,
     "sun": "full",
     "spacing": "18-24\" apart",
+    "rowSpacing": "24\" rows",
     "notes": [
       "Very cold-hardy",
       "Succession plant optional",
@@ -1106,6 +1115,7 @@
     "successionMax": 3,
     "sun": "full",
     "spacing": "18-24\" apart",
+    "rowSpacing": "30\" rows",
     "notes": [
       "Start indoors 6 weeks early",
       "Succession plant for fall harvest",
@@ -1373,6 +1383,7 @@
     "successionMax": 1,
     "sun": "full",
     "spacing": "12-15\" apart",
+    "rowSpacing": "30\" rows",
     "notes": [
       "Plant seed potatoes 2 weeks after last frost",
       "Hill soil around plants as they grow",
@@ -1463,6 +1474,7 @@
     "successionMax": 3,
     "sun": "full",
     "spacing": "12\" apart (blocks, not rows)",
+    "rowSpacing": "30\" rows",
     "notes": [
       "Soil must be 60°F+",
       "Plant in blocks for pollination",
@@ -1551,6 +1563,7 @@
     "successionMax": 3,
     "sun": "full",
     "spacing": "2-3\" apart",
+    "rowSpacing": "18\" rows",
     "notes": [
       "Plant 6 weeks before last frost",
       "Peas love cool weather",
@@ -1720,6 +1733,7 @@
     "successionMax": 3,
     "sun": "partial",
     "spacing": "8-12\" apart",
+    "rowSpacing": "18\" rows",
     "notes": [
       "Direct sow 1 week before last frost",
       "Harvest outer leaves continuously",
@@ -1780,6 +1794,7 @@
     "successionMax": 1,
     "sun": "full",
     "spacing": "18-24\" apart",
+    "rowSpacing": "30\" rows",
     "notes": [
       "Very sensitive to cold; do not transplant until nights are consistently above 60F",
       "Highly susceptible to flea beetles"
@@ -1867,6 +1882,7 @@
     "successionMax": 1,
     "sun": "partial",
     "spacing": "8-12\" apart",
+    "rowSpacing": "24\" rows",
     "notes": [
       "Requires extremely consistent moisture; drying out causes bitter, stringy stalks",
       "Long germination time (up to 3 weeks)"
@@ -1955,6 +1971,7 @@
     "successionMax": 1,
     "sun": "full",
     "spacing": "18\" apart",
+    "rowSpacing": "48\" rows",
     "notes": [
       "Plant crowns in deep trenches",
       "Do not harvest at all the first year; harvest lightly the second year",
@@ -2001,6 +2018,7 @@
     "successionMax": 1,
     "sun": "full",
     "spacing": "18-24\" apart",
+    "rowSpacing": "30\" rows",
     "notes": [
       "To keep the head white, tie outer leaves over the developing curd ('blanching')",
       "Very sensitive to temperature fluctuations"
@@ -2047,6 +2065,7 @@
     "successionMax": 2,
     "sun": "full",
     "spacing": "12-18\" apart",
+    "rowSpacing": "24\" rows",
     "notes": [
       "Harvest before heads split; splitting is triggered by sudden rain after dry period",
       "Rotate with non-brassica crops each year to prevent clubroot buildup",

@@ -35,27 +35,28 @@ export default function DroughtAlert({ waterAutonomy, activeCropCount }: Drought
   if (waterAutonomy.daysOfWater >= 30) return null;              // plenty stored
 
   return (
-    <div className="border-2 border-yellow-500/60 bg-yellow-500/10 px-4 py-3 font-mono flex flex-col sm:flex-row sm:items-center gap-3 animate-in slide-in-from-top-2 duration-300">
+    <div className="border-2 border-marker bg-paper px-4 py-3 flex flex-col sm:flex-row sm:items-center gap-3 animate-in slide-in-from-top-2 duration-300">
       <div className="flex items-center gap-2 shrink-0">
-        <Droplets size={13} className="text-yellow-400" />
-        <span className="text-[10px] font-bold uppercase tracking-widest text-yellow-400">
-          Drought_Warning
+        <Droplets size={14} className="text-marker" />
+        <span className="font-mono text-[0.68rem] font-bold uppercase tracking-[0.18em] text-marker">
+          Drought watch
         </span>
       </div>
 
-      <div className="flex-1 text-[10px] font-mono uppercase opacity-70">
-        No precipitation forecast — stored supply:{' '}
-        <span className="opacity-100 text-yellow-300 font-bold">
-          {waterAutonomy.daysOfWater.toFixed(1)} days
-        </span>
+      <div className="flex-1 text-[0.92rem] leading-snug text-ink/85">
+        Nothing on the rain sheet, and the stored supply reads{' '}
+        <strong className="text-marker">{waterAutonomy.daysOfWater.toFixed(1)} days</strong>.
         {activeCropCount > 0 && (
-          <> · {activeCropCount} active crop{activeCropCount !== 1 ? 's' : ''} at drought risk — consider supplemental irrigation.</>
+          <>
+            {' '}{activeCropCount} crop{activeCropCount !== 1 ? 's' : ''} in the ground will
+            want supplemental irrigation.
+          </>
         )}
       </div>
 
       <button
         onClick={() => setDismissed(true)}
-        className="shrink-0 flex items-center gap-1 text-[9px] font-mono uppercase opacity-30 hover:opacity-70 transition-opacity"
+        className="shrink-0 flex items-center gap-1 font-mono text-[0.64rem] uppercase tracking-wider text-ink/45 hover:text-ink transition-colors"
       >
         <X size={10} /> Dismiss
       </button>

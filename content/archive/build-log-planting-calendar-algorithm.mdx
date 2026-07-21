@@ -1,14 +1,13 @@
 ---
 title: "Build Log: Planting Calendar Algorithm"
-description: "The engineering behind the Homesteader Labs planting calendar — frost-date anchoring, viability checks, succession math, actual-date self-correction, and moon phase calculation."
+description: "The engineering behind the Homesteader Labs planting calendar: frost-date anchoring, viability checks, succession math, actual-date self-correction, and moon phase calculation."
 date: "2026-03-14"
 author: "Alex de Brantes"
 tags: ["build-log", "planting", "algorithms", "lunar", "succession"]
 category: "build-log"
-excerpt: "Paper seed packets use calendar dates. That works if you live in the same climate as the packet author. We built something different — a calendar anchored to frost dates, self-correcting from real data, and deterministically synced to moon phase."
+excerpt: "Paper seed packets use calendar dates. That works if you live in the same climate as the packet author. We built something different, a calendar anchored to frost dates, self-correcting from real data, and deterministically synced to moon phase."
 ---
 
-# Build log: planting calendar algorithm
 
 Paper seed packets use calendar dates. That works if you live in the same climate as the packet author.
 
@@ -45,7 +44,7 @@ harvestDate = transplantDate + daysToMaturity
 
 This makes the calendar **location-agnostic**. Enter a ZIP code in Maine and the dates reflect a short growing season. Enter a ZIP code in Georgia and the dates reflect a long one. The same algorithm, the same crop data, different frost anchors.
 
-The frost date lookup returns historical averages from NOAA's climate normals dataset, keyed by ZIP code. These are 30-year averages — statistically meaningful but not guarantees. We build buffer into start-indoors windows precisely because a late frost can still arrive after the historical average date.
+The frost date lookup returns historical averages from NOAA's climate normals dataset, keyed by ZIP code. These are 30-year averages, statistically meaningful but not guarantees. We build buffer into start-indoors windows precisely because a late frost can still arrive after the historical average date.
 
 ---
 
@@ -55,7 +54,7 @@ Before any planting cycle is added to the schedule, it passes a single viability
 
 ```typescript
 if (harvestDate >= firstFrostDate) {
-  // Drop this planting — it cannot mature before frost
+  // Drop this planting, it cannot mature before frost
   return null;
 }
 ```
@@ -64,7 +63,7 @@ If the calculated harvest date is on or after your first fall frost, the plantin
 
 This is the most important design decision in the algorithm. Many calendar tools show you all possible planting windows and leave it to you to figure out which ones will actually work. That puts the math burden on the user, and most users do not do the math. They plant in August, watch their tomatoes get killed by frost, and blame the weather.
 
-The viability check makes the calendar take responsibility for showing only what can succeed. You may notice that some crops have fewer succession cycles than the theoretical maximum — that is the viability check dropping cycles that would not finish before frost. That is correct behavior.
+The viability check makes the calendar take responsibility for showing only what can succeed. You may notice that some crops have fewer succession cycles than the theoretical maximum, that is the viability check dropping cycles that would not finish before frost. That is correct behavior.
 
 ---
 
@@ -78,9 +77,9 @@ const rawCount = Math.floor(daysAvailable / intervalDays);
 const maxPlantings = Math.min(rawCount, crop.successionMax);
 ```
 
-The `Math.floor()` is critical. You cannot schedule a partial planting cycle. If `daysAvailable / intervalDays` returns 3.8, you get 3 cycles — the fourth would not mature in time (and would fail the viability check anyway, which acts as a second guard).
+The `Math.floor()` is critical. You cannot schedule a partial planting cycle. If `daysAvailable / intervalDays` returns 3.8, you get 3 cycles, the fourth would not mature in time (and would fail the viability check anyway, which acts as a second guard).
 
-`crop.successionMax` is a per-crop ceiling defined in the crop JSON. Some crops have natural limits beyond the math — you probably do not need 12 successions of lettuce, and some crops do not succession-plant well even if the math says they could.
+`crop.successionMax` is a per-crop ceiling defined in the crop JSON. Some crops have natural limits beyond the math, you probably do not need 12 successions of lettuce, and some crops do not succession-plant well even if the math says they could.
 
 Each succession cycle is then checked individually against the viability filter. If any cycle's harvest date is after first frost, it is dropped.
 
@@ -110,7 +109,7 @@ If you transplanted 5 days later than predicted, your harvest window shifts 5 da
 
 The delta captures the **actual growing condition signal** that historical averages cannot. Your soil might warm faster than the regional average. Your microclimate might run warmer or colder. Your specific seed lot might germinate faster than the published days-to-maturity.
 
-After two or three seasons of recording actual dates, the accumulated deltas reflect your land's real behavior. The calendar does not average them across seasons — that is a future feature — but per-season recording still gives you a useful feedback loop within each growing year.
+After two or three seasons of recording actual dates, the accumulated deltas reflect your land's real behavior. The calendar does not average them across seasons, that is a future feature, but per-season recording still gives you a useful feedback loop within each growing year.
 
 > Record actual dates as events happen, not at season end. The delta is most useful applied in real time, shifting forward dates before you commit to the next task.
 
@@ -131,15 +130,15 @@ function getMoonPhase(date: Date): number {
 }
 ```
 
-The January 6, 2000 reference is a well-documented astronomical new moon — the first new moon of the year 2000, occurring at 18:14 UTC. This is used as the reference point in many lunar calculation implementations.
+The January 6, 2000 reference is a well-documented astronomical new moon, the first new moon of the year 2000, occurring at 18:14 UTC. This is used as the reference point in many lunar calculation implementations.
 
-The synodic month (`29.530588853` days) is the average time between successive new moons. It is not constant — the moon's elliptical orbit means actual lunations vary by hours — but for planting timing, where we are advising on multi-day windows, the average is sufficient.
+The synodic month (`29.530588853` days) is the average time between successive new moons. It is not constant, the moon's elliptical orbit means actual lunations vary by hours, but for planting timing, where we are advising on multi-day windows, the average is sufficient.
 
 **Why a fixed-reference calculation rather than an API?**
 
-- **Deterministic** — the same date always produces the same phase value. No network call, no API key, no service outage.
-- **Testable** — the function is pure. The test suite checks known moon dates against expected phase values.
-- **Replayable** — any past or future date can be computed instantly. No caching required.
+- **Deterministic**: the same date always produces the same phase value. No network call, no API key, no service outage.
+- **Testable**: the function is pure. The test suite checks known moon dates against expected phase values.
+- **Replayable**: any past or future date can be computed instantly. No caching required.
 
 The phase value maps to an emoji and a waxing/waning classification:
 
@@ -228,8 +227,8 @@ Pure functions make the test suite fast and deterministic. No database, no netwo
 
 Two extensions fit cleanly into the existing architecture:
 
-**Grow-zone-aware variety filtering** — filter the crop browser to show only varieties rated for your USDA hardiness zone. The crop JSON already has zone ratings; the UI filter is not wired yet.
+**Grow-zone-aware variety filtering**: filter the crop browser to show only varieties rated for your USDA hardiness zone. The crop JSON already has zone ratings; the UI filter is not wired yet.
 
-**Canning day predictor integration** — the planting calendar knows your expected harvest dates. The canning day predictor (planned) would take those dates and produce a processing schedule: when to have jars washed, when pectin needs to be on hand, which weeks are high-volume. The two tools share the same frost date and location context already.
+**Canning day predictor integration**: the planting calendar knows your expected harvest dates. The canning day predictor (planned) would take those dates and produce a processing schedule: when to have jars washed, when pectin needs to be on hand, which weeks are high-volume. The two tools share the same frost date and location context already.
 
-The frost-date-anchored architecture handles both without redesign. Add the filter logic to the crop loader, wire the output dates to the canning predictor's input — the calculation layer does not change.
+The frost-date-anchored architecture handles both without redesign. Add the filter logic to the crop loader, wire the output dates to the canning predictor's input. The calculation layer does not change.

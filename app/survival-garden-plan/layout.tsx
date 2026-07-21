@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: {
-    default: 'Survival Garden Plan — Personalized for Your Zone',
+    default: 'Survival Garden Plan: Personalized for Your Zone',
     template: '%s · Survival Garden Plan',
   },
   description:

@@ -1,12 +1,9 @@
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
-import { ArrowLeft, Lock, TrendingUp } from 'lucide-react';
-import Link from 'next/link';
-import FieldStationLayout from '@/components/ui/FieldStationLayout';
-import BrutalistBlock from '@/components/ui/BrutalistBlock';
-import Button from '@/components/ui/Button';
-import Typography from '@/components/ui/Typography';
+import { createPortal } from 'react-dom';
+import { Lock, X } from 'lucide-react';
+import DrawerBand from '@/components/tools/caloric-security/DrawerBand';
 import { getAllCrops } from '@/lib/tools/planting-calendar/cropLoader';
 import { UNIT_NORMALIZATIONS } from '@/lib/caloric-security/yieldCalculations';
 import FaqAccordion from '@/components/ui/FaqAccordion';
@@ -31,11 +28,11 @@ const GATE_KEY     = 'hl_features_unlocked';
 const FAQS: { q: string; a: string }[] = [
   {
     q: "What's the highest calorie crop you can grow at home?",
-    a: "Potatoes lead by a wide margin — typically 350–400 calories per square foot in good conditions. Sweet potatoes follow at 200–300. After that you're looking at winter squash (180–250) and dent corn (250–300, but with much higher water and soil-fertility demands).",
+    a: "Densely planted roots lead, because you fit so many into a small bed. Parsnips and carrots clear 1,000 calories per square foot, with beets and onions close behind in the 500 to 600 range. Potatoes and other row-spaced tubers land around 350 to 400, lower per square foot than the tight roots but far easier to store through a winter. Sprawling crops like winter squash, melons, and corn rank near the bottom despite big per-plant yields, because each plant claims so much ground.",
   },
   {
     q: "How big a garden do I need to feed my family?",
-    a: "Common rules of thumb: 200 sq ft per person for a basic vegetable garden, 400–600 sq ft per person for a meaningful share of your diet, and 800–1,000 sq ft per person for near-complete vegetable self-sufficiency. The Caloric Security Dashboard computes your actual days-of-food from inventory and projected harvests.",
+    a: "Common rules of thumb: 200 sq ft per person for a basic vegetable garden, 400–600 sq ft per person for a meaningful share of your diet, and 800–1,000 sq ft per person for near-complete vegetable self-sufficiency. The resilience dashboard computes your actual days-of-food from inventory and projected harvests.",
   },
   {
     q: "Is calories per square foot the only number that matters?",
@@ -43,7 +40,7 @@ const FAQS: { q: string; a: string }[] = [
   },
   {
     q: "Why do salad greens rank so low?",
-    a: "Greens like lettuce and spinach are mostly water (95%+) and very low in calories per 100g. They're nutritionally valuable but don't produce enough caloric mass per square foot to anchor a survival garden. Treat them as supplement, not staple.",
+    a: "Head greens like lettuce are mostly water (95%+) and very low in calories per 100g. Even planted intensively, a square foot of lettuce returns under 50 calories, against a few hundred for spinach and over a thousand for tight-spaced roots. They earn their place for vitamins and fresh eating, not caloric mass, so treat them as supplement, not staple.",
   },
   {
     q: "Where does this data come from?",
@@ -61,10 +58,24 @@ interface RoiRow {
   kcalPerSqFt:  number;
 }
 
-function parseFirstInt(s: string): number {
-  const m = s.match(/\d+/);
-  return m ? parseInt(m[0]) : 12;
+// Spacing strings look like `18-24" apart`, `6' apart`, `3-5' apart`, or
+// `12" apart (blocks of 9)`. Read the leading range and its unit: an
+// apostrophe means feet, a double-quote (or nothing) means inches. Use the
+// range midpoint, and always return inches so callers get one unit.
+function parseSpacingInches(s: string): number {
+  if (!s) return 12;
+  const m = s.match(/^\s*(\d+(?:\.\d+)?)(?:\s*[-–]\s*(\d+(?:\.\d+)?))?\s*(['"′″])?/);
+  if (!m) return 12;
+  const lo = parseFloat(m[1]);
+  const hi = m[2] ? parseFloat(m[2]) : lo;
+  const mid = (lo + hi) / 2;
+  const feet = m[3] === "'" || m[3] === '′';
+  return feet ? mid * 12 : mid;
 }
+
+const FIELD_INPUT = 'w-full px-3 py-2.5 bg-paper border-2 border-ink/40 focus:border-marker outline-none font-mono text-sm transition-colors placeholder:text-ink/40';
+const BTN_GHOST   = 'px-4 py-2.5 border-2 border-ink bg-paper font-mono text-[0.7rem] font-bold uppercase tracking-wider hover:bg-kraft transition-colors';
+const BTN_SOLID   = 'px-4 py-2.5 bg-ink text-paper border-2 border-ink font-mono text-[0.7rem] font-bold uppercase tracking-wider hover:bg-marker hover:border-marker transition-colors disabled:opacity-60';
 
 export default function RoiPage() {
   const [unlocked,     setUnlocked]     = useState(false);
@@ -80,14 +91,21 @@ export default function RoiPage() {
 
   const rows: RoiRow[] = useMemo(() => {
     return getAllCrops()
-      .filter(c => c.yield && c.yield.caloriesPer100g > 0 && !c.yield['non-caloric'])
+      // Herbs are excluded: their calories-per-100g are culinary trace amounts,
+      // not dietary staples. They belong in a tonics/medicinals tool, not a
+      // caloric ROI ranking. Only food crops (vegetables + fruit) compete here.
+      .filter(c => c.category !== 'herb' && c.yield && c.yield.caloriesPer100g > 0 && !c.yield['non-caloric'])
       .map(c => {
         const y           = c.yield!;
         const norm        = UNIT_NORMALIZATIONS[y.unit] ?? UNIT_NORMALIZATIONS['lbs'];
         const totalGrams  = y.avgPerPlant * norm.gramsPerUnit;
         const kcalPerPlant = (totalGrams / 100) * y.caloriesPer100g;
-        const spacingIn   = parseFirstInt(c.spacing);
-        const sqFtPerPlant = ((spacingIn / 12) ** 2);
+        // Footprint = in-row spacing × between-row spacing. Row/field crops carry
+        // an explicit rowSpacing; intensively bedded crops (roots, greens) grow at
+        // equidistant spacing, so the footprint falls back to spacing².
+        const inRowIn      = parseSpacingInches(c.spacing);
+        const rowIn        = c.rowSpacing ? parseSpacingInches(c.rowSpacing) : inRowIn;
+        const sqFtPerPlant = (inRowIn * rowIn) / 144;
         const kcalPerSqFt  = sqFtPerPlant > 0 ? kcalPerPlant / sqFtPerPlant : 0;
         return {
           id:          c.id,
@@ -130,125 +148,119 @@ export default function RoiPage() {
   const topKcal      = rows[0]?.kcalPerSqFt ?? 1;
 
   return (
-    <FieldStationLayout stationId="HL_CALORIC_ROI_V1.0">
-      <div className="max-w-4xl mx-auto space-y-8">
+    <>
+      <DrawerBand
+        drawer="Caloric ROI"
+        title="What every square foot pays"
+        sub={`${rows.length} crops ranked by calories per square foot. The order is not what the seed catalog implies.`}
+        right={!unlocked && (
+          <button onClick={() => setGateOpen(true)} className={`${BTN_SOLID} flex items-center gap-2`}>
+            <Lock size={12} /> Unlock the full list
+          </button>
+        )}
+      />
 
-        {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 border-b-2 border-border-primary pb-6">
-          <div>
-            <Link
-              href="/tools/caloric-security"
-              className="inline-flex items-center gap-1.5 text-[10px] font-mono uppercase opacity-40 hover:opacity-80 transition-opacity mb-3"
-            >
-              <ArrowLeft size={10} /> Dashboard
-            </Link>
-            <Typography variant="h1" className="mb-1 uppercase tracking-tight font-mono text-2xl md:text-4xl flex items-center gap-3">
-              <TrendingUp size={20} className="opacity-60" />
-              Caloric ROI Report
-            </Typography>
-            <Typography variant="small" className="opacity-40 font-mono text-[11px] uppercase tracking-widest">
-              kcal per sq ft // {rows.length} crops ranked
-            </Typography>
-          </div>
-          {!unlocked && (
-            <Button variant="primary" size="sm" onClick={() => setGateOpen(true)} className="flex items-center gap-2">
-              <Lock size={12} /> Unlock_Full_Report
-            </Button>
-          )}
-        </div>
+      <section className="max-w-5xl mx-auto px-4 pt-10 pb-16 space-y-6">
 
         {/* Methodology note */}
-        <div className="text-[9px] font-mono uppercase opacity-30 border border-border-primary/10 px-4 py-2">
-          Formula: (avg yield × unit grams / 100 × kcal/100g) ÷ (spacing² / 144) = kcal/sqft
-          {' — '}Assumptions: bunches ~100g · bulbs ~40g · ears ~90g · heads ~300g
-        </div>
+        <p className="font-mono text-[0.64rem] uppercase tracking-wide text-ink/50 border-2 border-dotted border-ink/40 px-4 py-2.5">
+          The math: (avg yield × unit grams ÷ 100 × kcal/100 g) ÷ (in-row × row spacing ÷ 144) = kcal/sq ft.
+          Row crops use catalog row spacing; intensively bedded crops use equidistant spacing.
+          Assumptions: bunches ~100 g · bulbs ~40 g · ears ~90 g · heads ~300 g
+        </p>
 
         {/* Rankings table */}
-        <BrutalistBlock refTag="ROI_RANKINGS" className="overflow-x-auto">
-          <table className="w-full text-[10px] font-mono uppercase">
-            <thead>
-              <tr className="border-b border-border-primary/20">
-                {['Rank', 'Crop', 'Category', 'kcal/Plant', 'sqFt/Plant', 'kcal/sqFt', 'Density'].map(h => (
-                  <th key={h} className="text-left py-2 pr-4 opacity-40 font-bold">{h}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-border-primary/10">
-              {visibleRows.map((row, i) => (
-                <tr key={row.id} className="hover:bg-black/20 transition-colors">
-                  <td className={`py-2 pr-4 tabular-nums font-bold ${i === 0 ? 'text-accent' : i < 3 ? 'opacity-70' : 'opacity-40'}`}>
-                    #{i + 1}
-                  </td>
-                  <td className="py-2 pr-4 font-bold">
-                    <span className="mr-1.5">{row.icon}</span>
-                    {row.name}
-                  </td>
-                  <td className="py-2 pr-4 opacity-50">{row.category}</td>
-                  <td className="py-2 pr-4 tabular-nums">{row.kcalPerPlant.toLocaleString()}</td>
-                  <td className="py-2 pr-4 tabular-nums">{row.sqFtPerPlant}</td>
-                  <td className="py-2 pr-4 tabular-nums font-bold text-accent">
-                    {row.kcalPerSqFt.toLocaleString()}
-                  </td>
-                  <td className="py-2 pr-4">
-                    <div className="flex items-center gap-1">
+        <div className="card-paper grain overflow-hidden">
+          <div className="ruled px-4 py-2 relative z-[2] overflow-x-auto">
+            <table className="w-full font-mono text-[0.76rem] min-w-[600px]">
+              <thead>
+                <tr className="text-left uppercase tracking-widest text-[0.62rem] text-ink/55">
+                  <th className="py-1.5 pr-3 font-semibold">Rank</th>
+                  <th className="py-1.5 pr-3 font-semibold">Crop</th>
+                  <th className="py-1.5 pr-3 font-semibold">Category</th>
+                  <th className="py-1.5 pr-3 font-semibold text-right">kcal/plant</th>
+                  <th className="py-1.5 pr-3 font-semibold text-right">sq ft/plant</th>
+                  <th className="py-1.5 pr-3 font-semibold text-right">kcal/sq ft</th>
+                  <th className="py-1.5 font-semibold">Density</th>
+                </tr>
+              </thead>
+              <tbody>
+                {visibleRows.map((row, i) => (
+                  <tr key={row.id} className="h-[36px]">
+                    <td className={`pr-3 tabular-nums font-bold ${i === 0 ? 'text-marker' : i < 3 ? '' : 'text-ink/50'}`}>
+                      #{i + 1}
+                    </td>
+                    <td className="pr-3 font-semibold">
+                      <span className="mr-1.5">{row.icon}</span>
+                      {row.name}
+                    </td>
+                    <td className="pr-3 text-ink/60">{row.category}</td>
+                    <td className="pr-3 tabular-nums text-right">{row.kcalPerPlant.toLocaleString()}</td>
+                    <td className="pr-3 tabular-nums text-right">{row.sqFtPerPlant}</td>
+                    <td className="pr-3 tabular-nums text-right font-bold text-marker">
+                      {row.kcalPerSqFt.toLocaleString()}
+                    </td>
+                    <td>
                       <div
-                        className="h-1.5 bg-accent/60"
+                        className="h-2.5 bg-marker/70 border border-ink/40"
                         style={{ width: `${Math.round((row.kcalPerSqFt / topKcal) * 60)}px`, minWidth: '2px' }}
                       />
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
 
-          {/* Gate overlay for locked rows */}
-          {!unlocked && lockedCount > 0 && (
-            <div className="border-t-2 border-border-primary/20 mt-2 pt-4 flex flex-col items-center gap-3 py-6">
-              <Lock size={20} className="opacity-20" />
-              <div className="text-[10px] font-mono uppercase opacity-40 text-center">
-                +{lockedCount} more crops hidden — unlock full rankings
+            {/* Gate for locked rows */}
+            {!unlocked && lockedCount > 0 && (
+              <div className="border-t-2 border-ink mt-2 py-6 flex flex-col items-center gap-3">
+                <p className="font-mono text-[0.72rem] uppercase tracking-wider text-ink/60 text-center">
+                  {lockedCount} more crops below the fold
+                </p>
+                <button onClick={() => setGateOpen(true)} className={`${BTN_GHOST} flex items-center gap-2`}>
+                  <Lock size={11} /> Unlock the full list
+                </button>
               </div>
-              <Button variant="outline" size="sm" onClick={() => setGateOpen(true)} className="flex items-center gap-2">
-                <Lock size={10} /> Unlock_Free_Access
-              </Button>
-            </div>
-          )}
-        </BrutalistBlock>
+            )}
+          </div>
+        </div>
 
         {/* SEO anchor block — targets "calories per square foot" + "highest calorie crops" cluster */}
-        <section className="mt-16 pt-6 border-t border-border-primary/30 max-w-3xl">
-          <Typography variant="h2" className="mb-4 text-xl md:text-2xl normal-case font-mono">
+        <div className="max-w-3xl mt-14 pt-8 border-t-2 border-ink">
+          <h2 className="font-display uppercase text-xl md:text-2xl mb-4">
             How calories per square foot ranks crops for a survival garden
-          </Typography>
-          <div className="space-y-4 text-sm md:text-base font-mono opacity-80 leading-relaxed">
+          </h2>
+          <div className="space-y-4 text-[1.02rem] leading-relaxed text-ink/85">
             <p>
-              When space is limited, <strong>calories per square foot</strong> is the
+              When space is limited, <strong>calories per square foot</strong>{' '}is the
               most honest measure of which crops actually feed you. A 100-square-foot
-              plot of lettuce produces around 1,300 calories. The same plot of potatoes
-              produces over 35,000. That&apos;s a 25× difference, and it&apos;s why every
+              plot of lettuce produces around 4,900 calories. The same plot of potatoes
+              produces roughly 37,000. That&apos;s nearly an 8× difference, and it&apos;s why every
               serious survival garden starts from this number.
             </p>
             <p>
               This report ranks every crop in our database by <strong>kilocalories per
               square foot of garden space</strong>, computed from three numbers: the
               crop&apos;s average yield per plant, the calories per 100 grams of edible
-              portion, and the plant&apos;s spacing requirement. No estimates,
-              no marketing — just the math.
+              portion, and the ground each plant actually occupies (in-row spacing for
+              intensively bedded crops, in-row times row spacing for field crops). No
+              estimates, no marketing, just the math.
             </p>
             <p>
-              The top of the list is dominated by starchy roots and tubers
-              (potatoes, sweet potatoes, parsnips), winter squash (butternut, pumpkin),
-              and grains where they&apos;re practical for home growers (corn, dent corn).
-              Salad greens, peppers, and herbs occupy the bottom — they&apos;re worth
-              growing for flavor and nutrition, but they will not be what stands between
-              you and a hungry winter.
+              The top of the list is dominated by densely planted roots (parsnips,
+              carrots, beets, onions) and hilled tubers (potatoes), which pack calories
+              into a small footprint. Sprawling crops fall to the bottom: winter squash,
+              melons, cucumbers, sweet corn, and fruit trees claim many square feet per
+              plant, so their high per-plant yield spreads thin. Head greens and
+              slow brassicas like broccoli sit low too. They&apos;re worth growing for
+              flavor and nutrition, but they will not be what stands between you and a
+              hungry winter.
             </p>
           </div>
 
-          <Typography variant="h3" className="mt-10 mb-4 text-base md:text-lg normal-case font-mono">
+          <h3 className="font-display uppercase text-base md:text-lg mt-10 mb-4">
             Frequently asked questions
-          </Typography>
+          </h3>
           <FaqAccordion faqs={FAQS} prefix="DATA" />
 
           {/* FAQPage JSON-LD — eligible for Google rich results */}
@@ -266,56 +278,68 @@ export default function RoiPage() {
               }),
             }}
           />
-        </section>
-      </div>
+        </div>
+      </section>
 
       {/* Email gate modal */}
-      {gateOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70">
-          <BrutalistBlock className="w-full max-w-sm" refTag="ROI_GATE">
-            <Typography variant="h3" className="uppercase tracking-tight mb-1 text-base">
-              Unlock_Full_Report
-            </Typography>
-            <p className="text-[10px] font-mono opacity-40 uppercase mb-6">
-              Free access — enter email to see all {rows.length} crops ranked by caloric density.
-            </p>
+      {gateOpen && createPortal(
+        <div className="fixed inset-0 bg-ink/70 flex items-center justify-center p-4 z-[100]">
+          <div className="card-paper grain w-full max-w-sm">
+            <div className="flex justify-between items-center px-5 py-3 border-b-2 border-ink relative z-[2]">
+              <span className="font-mono text-[0.72rem] font-bold uppercase tracking-[0.18em]">
+                The full list
+              </span>
+              <button onClick={() => setGateOpen(false)} aria-label="Close" className="hover:text-marker">
+                <X size={18} />
+              </button>
+            </div>
 
-            <form onSubmit={handleUnlock} className="space-y-4">
-              <input
-                type="email"
-                required
-                placeholder="homesteader@example.com"
-                value={email}
-                onChange={e => setEmail(e.target.value)}
-                className="w-full bg-black/30 border-2 border-border-primary/40 focus:border-accent outline-none px-3 py-2 text-sm font-mono"
-              />
-              <label className="flex items-start gap-2 cursor-pointer">
+            <div className="p-5 relative z-[2]">
+              <p className="text-[0.95rem] text-ink/80 leading-snug mb-5">
+                Free with an email: all {rows.length} crops ranked by caloric
+                density, unlocked on this device for good.
+              </p>
+
+              <form onSubmit={handleUnlock} className="space-y-4">
                 <input
-                  type="checkbox"
-                  checked={consent}
-                  onChange={e => setConsent(e.target.checked)}
-                  className="mt-0.5"
+                  type="email"
                   required
+                  placeholder="homesteader@example.com"
+                  value={email}
+                  onChange={e => setEmail(e.target.value)}
+                  className={FIELD_INPUT}
                 />
-                <span className="text-[9px] font-mono uppercase opacity-50 leading-tight">
-                  I want the full caloric density rankings. No spam — unsubscribe anytime.
-                </span>
-              </label>
-              <div className="flex gap-3 pt-2">
-                <Button variant="outline" size="sm" onClick={() => setGateOpen(false)} className="flex-1" type="button">
-                  Cancel
-                </Button>
-                <Button variant="primary" size="sm" disabled={!consent || submitting} className="flex-1" type="submit">
-                  {submitting ? "Submitting..." : "Unlock_Now"}
-                </Button>
-              </div>
-              {submitError && (
-                <p className="text-xs text-red-500 mt-2">Something went wrong. Please try again.</p>
-              )}
-            </form>
-          </BrutalistBlock>
-        </div>
+                <label className="flex items-start gap-2 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={consent}
+                    onChange={e => setConsent(e.target.checked)}
+                    className="mt-1 accent-marker"
+                    required
+                  />
+                  <span className="font-mono text-[0.64rem] uppercase tracking-wide text-ink/60 leading-tight">
+                    I want the full caloric density rankings. No spam, unsubscribe anytime.
+                  </span>
+                </label>
+                <div className="flex gap-3 pt-2">
+                  <button type="button" onClick={() => setGateOpen(false)} className={`${BTN_GHOST} flex-1`}>
+                    Cancel
+                  </button>
+                  <button type="submit" disabled={!consent || submitting} className={`${BTN_SOLID} flex-1`}>
+                    {submitting ? 'Unlocking...' : 'Unlock it'}
+                  </button>
+                </div>
+                {submitError && (
+                  <p className="px-3 py-2 border-2 border-rust text-rust font-mono text-[0.7rem]">
+                    Something went wrong. Try it again.
+                  </p>
+                )}
+              </form>
+            </div>
+          </div>
+        </div>,
+        document.body
       )}
-    </FieldStationLayout>
+    </>
   );
 }

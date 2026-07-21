@@ -1,13 +1,12 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { useLiveQuery } from 'dexie-react-hooks';
-import { ArrowLeft, AlertTriangle, Leaf, Lock, Shield } from 'lucide-react';
+import { AlertTriangle, Lock, X } from 'lucide-react';
 import Link from 'next/link';
-import FieldStationLayout from '@/components/ui/FieldStationLayout';
-import BrutalistBlock from '@/components/ui/BrutalistBlock';
-import Button from '@/components/ui/Button';
-import Typography from '@/components/ui/Typography';
+import DrawerBand from '@/components/tools/caloric-security/DrawerBand';
+import { SectionHead, Stamp } from '@/components/field/kit';
 import { getDB } from '@/lib/caloric-security/db';
 import { getCropById } from '@/lib/tools/planting-calendar/cropLoader';
 import type { InventoryItem } from '@/lib/caloric-security/types';
@@ -42,11 +41,11 @@ const FAQS: { q: string; a: string }[] = [
   },
   {
     q: "When do squash bugs emerge?",
-    a: "Squash bug adults activate when soil temperatures exceed 65°F at four inches deep — typically one to two weeks after squash transplant. They lay eggs on leaf undersides; first-generation nymphs appear 7–10 days later. The advisor flags this transition automatically once your soil temp crosses the threshold.",
+    a: "Squash bug adults activate when soil temperatures exceed 65°F at four inches deep, typically one to two weeks after squash transplant. They lay eggs on leaf undersides; first-generation nymphs appear 7–10 days later. The advisor flags this transition automatically once your soil temp crosses the threshold.",
   },
   {
     q: "Does companion planting actually work?",
-    a: "Some pairings have strong evidence (basil with tomatoes, marigolds suppressing nematodes, three sisters mutually supporting each other). Others are folklore. The advisor tags each suggested pairing with an evidence level — peer-reviewed, observational, or traditional — so you can decide what's worth the garden space.",
+    a: "Some pairings have strong evidence (basil with tomatoes, marigolds suppressing nematodes, three sisters mutually supporting each other). Others are folklore. The advisor tags each suggested pairing with an evidence level: peer-reviewed, observational, or traditional, so you can decide what's worth the garden space.",
   },
   {
     q: "Why not just use a static companion planting chart?",
@@ -100,8 +99,8 @@ function getPressureLabel(
   currentGDD:   number,
   forecastGDD:  number,
 ): string {
-  if (pressure === 'peak')    return 'PEAK — High risk now';
-  if (pressure === 'active')  return 'ACTIVE — Act now';
+  if (pressure === 'peak')    return 'PEAK · high risk now';
+  if (pressure === 'active')  return 'ACTIVE · act now';
   if (pressure === 'unknown') return '—';
 
   // For 'soon' and 'dormant', try to add a GDD-based day estimate
@@ -109,26 +108,26 @@ function getPressureLabel(
     const days = getDaysUntilPestActive(currentGDD, gddThreshold, forecastGDD);
     if (days !== null) {
       return pressure === 'soon'
-        ? `SOON — ~${days}d (GDD)`
-        : `PRE-SEASON — ~${days}d`;
+        ? `SOON · ~${days} d by GDD`
+        : `PRE-SEASON · ~${days} d`;
     }
   }
 
-  return pressure === 'soon' ? 'SOON — Plant defenses' : 'PRE-SEASON';
+  return pressure === 'soon' ? 'SOON · plant defenses' : 'PRE-SEASON';
 }
 
 const PRESSURE_STYLES: Record<PestPressure, { border: string; badge: string }> = {
-  peak:    { border: 'border-red-500/40 bg-red-500/5',       badge: 'text-red-400 border-red-400/60' },
-  active:  { border: 'border-red-500/30 bg-red-500/3',       badge: 'text-red-400 border-red-400/40' },
-  soon:    { border: 'border-orange-500/30 bg-orange-500/5', badge: 'text-orange-400 border-orange-400/50' },
-  dormant: { border: 'border-green-500/20 bg-green-500/3',   badge: 'text-green-400 border-green-400/30' },
-  unknown: { border: 'border-border-primary/20',             badge: 'text-foreground/30 border-border-primary/30' },
+  peak:    { border: 'border-rust',    badge: 'text-rust border-rust' },
+  active:  { border: 'border-rust',    badge: 'text-rust border-rust' },
+  soon:    { border: 'border-marker',  badge: 'text-marker border-marker' },
+  dormant: { border: 'border-ink/40',  badge: 'text-moss border-moss' },
+  unknown: { border: 'border-ink/40',  badge: 'text-ink/40 border-ink/40' },
 };
 
 const EVIDENCE_STYLES: Record<string, { label: string; cls: string }> = {
-  strong:   { label: 'STRONG', cls: 'text-green-400 border-green-400/50' },
-  moderate: { label: 'MOD',    cls: 'text-yellow-400 border-yellow-400/50' },
-  anecdotal:{ label: 'ANEC',   cls: 'text-orange-400 border-orange-400/40' },
+  strong:   { label: 'STRONG', cls: 'text-moss border-moss' },
+  moderate: { label: 'MOD',    cls: 'text-slateblue border-slateblue' },
+  anecdotal:{ label: 'ANEC',   cls: 'text-marker border-marker' },
 };
 
 // ── Pest Defense data structures ─────────────────────────
@@ -152,6 +151,10 @@ interface CropPestBlock {
   cropIcon: string;
   pests: PestEntry[];
 }
+
+const FIELD_INPUT = 'w-full px-3 py-2.5 bg-paper border-2 border-ink/40 focus:border-marker outline-none font-mono text-sm transition-colors placeholder:text-ink/40';
+const BTN_GHOST   = 'px-4 py-2.5 border-2 border-ink bg-paper font-mono text-[0.7rem] font-bold uppercase tracking-wider hover:bg-kraft transition-colors';
+const BTN_SOLID   = 'px-4 py-2.5 bg-ink text-paper border-2 border-ink font-mono text-[0.7rem] font-bold uppercase tracking-wider hover:bg-marker hover:border-marker transition-colors disabled:opacity-60';
 
 export default function CompanionsPage() {
   const [unlocked,    setUnlocked]    = useState(false);
@@ -312,108 +315,87 @@ export default function CompanionsPage() {
   const currentMonth = new Date().toLocaleString('default', { month: 'long', year: 'numeric' });
 
   return (
-    <FieldStationLayout stationId="HL_COMPANION_V1.1">
-      <div className="max-w-4xl mx-auto space-y-8">
-
-        {/* ── Print header (hidden on screen) ──────────────── */}
-        <div className="hidden print:block mb-6 pb-4 border-b-2 border-black">
-          <div className="text-xs font-mono uppercase tracking-widest mb-1">Homesteader Labs // Pest Defense Plan</div>
-          <div className="text-[10px] font-mono opacity-60">
-            {currentMonth} · Soil temp: {soilTempDisplay} · GDD (base 50): {Math.round(forecastGDD)}
-          </div>
+    <>
+      {/* ── Print header (hidden on screen) ──────────────── */}
+      <div className="hidden print:block mb-6 pb-4 border-b-2 border-black px-4">
+        <div className="text-xs font-mono uppercase tracking-widest mb-1">Homesteader Labs · Pest Defense Plan</div>
+        <div className="text-[10px] font-mono opacity-60">
+          {currentMonth} · Soil temp: {soilTempDisplay} · GDD (base 50): {Math.round(forecastGDD)}
         </div>
+      </div>
 
-        {/* ── Header ───────────────────────────────────────── */}
-        <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 border-b-2 border-border-primary pb-6 print:hidden">
-          <div>
-            <Link
-              href="/tools/caloric-security"
-              className="inline-flex items-center gap-1.5 text-[10px] font-mono uppercase opacity-40 hover:opacity-80 transition-opacity mb-3"
-            >
-              <ArrowLeft size={10} /> Dashboard
-            </Link>
-            <Typography variant="h1" className="mb-1 uppercase tracking-tight font-mono text-2xl md:text-4xl flex items-center gap-3">
-              <Leaf size={20} className="opacity-60" />
-              Companion Planting
-            </Typography>
-            <Typography variant="small" className="opacity-40 font-mono text-[11px] uppercase tracking-widest">
-              Pest defense · Antagonist alerts · Companion suggestions // {uniqueIds.length} active crops
-            </Typography>
-            {soilTemp !== null && (
-              <div className="mt-2 text-[10px] font-mono opacity-50">
-                Soil temp: <span className="text-accent">{soilTempDisplay}</span>
-                {' · '}GDD (base 50): <span className="text-accent">{Math.round(forecastGDD)}</span>
-              </div>
-            )}
-          </div>
-          <div className="flex items-center gap-3">
-            <button
-              onClick={() => window.print()}
-              className="text-[9px] font-mono uppercase tracking-widest border border-border-primary/30 px-2 py-1 opacity-40 hover:opacity-70 transition-opacity"
-            >
-              Print Plan
-            </button>
-            {!unlocked && (
-              <Button variant="primary" size="sm" onClick={() => setGateOpen(true)} className="flex items-center gap-2">
-                <Lock size={12} /> Unlock_Full_Advisor
-              </Button>
-            )}
-          </div>
+      <div className="print:hidden">
+        <DrawerBand
+          drawer="Companions"
+          title="Who grows well beside whom"
+          sub={`Pest defense, antagonist alerts, and pairings for the ${uniqueIds.length} crop${uniqueIds.length !== 1 ? 's' : ''} you're growing.`}
+          right={
+            <>
+              <button onClick={() => window.print()} className={BTN_GHOST}>
+                Print the plan
+              </button>
+              {!unlocked && (
+                <button onClick={() => setGateOpen(true)} className={`${BTN_SOLID} flex items-center gap-2`}>
+                  <Lock size={12} /> Unlock it all
+                </button>
+              )}
+            </>
+          }
+        />
+      </div>
+
+      {soilTemp !== null && (
+        <div className="max-w-5xl mx-auto px-4 pt-6 print:hidden">
+          <p className="font-mono text-[0.68rem] uppercase tracking-[0.18em] text-ink/60">
+            Soil temp <strong className="text-marker">{soilTempDisplay}</strong>
+            {' '}· GDD base 50 <strong className="text-marker">{Math.round(forecastGDD)}</strong>
+            {' '}· pressure calls below use these numbers
+          </p>
         </div>
+      )}
+
+      <section className="max-w-5xl mx-auto px-4 pt-8 pb-16 space-y-12">
 
         {/* ── Empty state ───────────────────────────────────── */}
         {uniqueIds.length === 0 && (
-          <BrutalistBlock refTag="NO_CROPS">
-            <div className="py-12 text-center font-mono uppercase text-[11px] opacity-30 space-y-2">
-              <Leaf size={28} className="mx-auto opacity-30" />
-              <div>No active or planned crops in inventory.</div>
-              <div>
-                <Link href="/tools/caloric-security/inventory" className="underline">
-                  Add crops to inventory
-                </Link>
-                {' '}to see companion analysis.
-              </div>
-            </div>
-          </BrutalistBlock>
+          <div className="border-2 border-dashed border-ink/40 p-10 text-center print:hidden">
+            <p className="font-display uppercase text-xl mb-2">Nothing growing on paper yet</p>
+            <p className="text-ink/70 max-w-md mx-auto">
+              The advisor reads from your{' '}
+              <Link href="/tools/caloric-security/inventory/" className="underline underline-offset-4 hover:text-marker">
+                stock book
+              </Link>
+              . Add planned or in-the-ground crops and the pest calls, conflicts,
+              and pairings fill in.
+            </p>
+          </div>
         )}
 
-        {/* ══════════════════════════════════════════════════════
-            PANEL 1 — PEST DEFENSE (always visible, no gate)
-        ══════════════════════════════════════════════════════ */}
+        {/* PANEL 1 — PEST DEFENSE (always visible, no gate) */}
         {pestBlocks.length > 0 && (
-          <BrutalistBlock refTag="PEST_DEFENSE">
-            {/* Screen header */}
-            <div className="flex items-center gap-2 mb-5 print:hidden">
-              <Shield size={14} className="text-accent" />
-              <Typography variant="h4" className="text-xs uppercase tracking-widest font-mono opacity-60 mb-0">
-                Pest Defense ({pestBlocks.length} crops)
-              </Typography>
-              {soilTemp !== null && (
-                <span className="ml-auto text-[9px] font-mono opacity-40">
-                  Soil {soilTempDisplay}
-                </span>
-              )}
+          <div>
+            <div className="print:hidden">
+              <SectionHead
+                no="§1"
+                title="Pest Defense"
+                right={soilTemp !== null ? `soil ${soilTempDisplay}` : 'add a location for live calls'}
+              />
             </div>
-
-            {/* Print section header */}
             <div className="hidden print:block mb-4">
               <div className="text-sm font-mono uppercase font-bold tracking-widest border-b border-black pb-1 mb-3">
                 Pest Defense Recommendations
               </div>
             </div>
 
-            <div className="space-y-6">
+            <div className="space-y-8">
               {pestBlocks.map(block => (
                 <div key={block.cropId}>
-                  {/* Crop label */}
-                  <div className="flex items-center gap-2 mb-2">
-                    <span className="text-base">{block.cropIcon}</span>
-                    <span className="text-[11px] font-mono uppercase tracking-widest font-bold">
-                      {block.cropName}
-                    </span>
+                  <div className="flex items-center gap-2 mb-3">
+                    <span className="text-lg">{block.cropIcon}</span>
+                    <span className="font-display uppercase text-lg">{block.cropName}</span>
                   </div>
 
-                  <div className="space-y-2 pl-2 border-l-2 border-border-primary/20">
+                  <div className="grid md:grid-cols-2 gap-4">
                     {block.pests.map(pest => {
                       const pressure = getPestPressure(soilTemp, pest.soilTempThreshold);
                       const ps    = PRESSURE_STYLES[pressure];
@@ -422,46 +404,44 @@ export default function CompanionsPage() {
                       return (
                         <div
                           key={pest.name}
-                          className={`p-3 border ${ps.border} print:border-black/20 print:bg-transparent`}
+                          className={`border-2 bg-paper p-4 ${ps.border} print:border-black/20`}
                         >
                           {/* Pest header */}
-                          <div className="flex items-center gap-2 mb-2 flex-wrap">
-                            <span className="text-[10px] font-mono uppercase tracking-wider font-bold">
+                          <div className="flex items-center gap-2 mb-2 flex-wrap border-b border-dotted border-ink/40 pb-2">
+                            <span className="font-mono text-[0.72rem] uppercase tracking-wider font-bold">
                               {pest.name.replace(/-/g, ' ')}
                             </span>
-                            {/* Pressure badge (screen only) */}
-                            <span className={`print:hidden text-[8px] font-mono border px-1.5 py-0.5 uppercase ${ps.badge}`}>
+                            <span className={`print:hidden font-mono text-[0.6rem] uppercase tracking-wide border px-1.5 py-0.5 ${ps.badge}`}>
                               {label}
                             </span>
-                            <span className="text-[8px] font-mono opacity-30 ml-auto print:hidden">
-                              Soil threshold: {pest.soilTempThreshold}°F
-                              {pest.gddThreshold ? ` · GDD: ${pest.gddThreshold}` : ''}
+                            <span className="font-mono text-[0.6rem] uppercase text-ink/45 ml-auto print:hidden">
+                              &gt;{pest.soilTempThreshold}°F soil
+                              {pest.gddThreshold ? ` · GDD ${pest.gddThreshold}` : ''}
                             </span>
-                            {/* Print: show threshold */}
                             <span className="hidden print:inline text-[9px] font-mono opacity-50 ml-auto">
                               active &gt;{pest.soilTempThreshold}°F soil
                             </span>
                           </div>
 
                           {/* Companion rows */}
-                          <div className="space-y-1.5">
+                          <div className="space-y-2">
                             {pest.companions.map((comp, ci) => {
                               const ev = EVIDENCE_STYLES[comp.evidenceLevel] ?? EVIDENCE_STYLES.anecdotal;
                               return (
                                 <div key={ci} className="flex items-start gap-2">
-                                  <span className={`shrink-0 text-[8px] font-mono border px-1 py-0.5 mt-0.5 ${ev.cls} print:border-black/40 print:text-black`}>
+                                  <span className={`shrink-0 font-mono text-[0.58rem] border px-1 py-0.5 mt-0.5 ${ev.cls} print:border-black/40 print:text-black`}>
                                     {ev.label}
                                   </span>
                                   <div className="min-w-0">
                                     <div className="flex items-center gap-2 flex-wrap">
-                                      <span className="text-[10px] font-mono uppercase font-semibold">
+                                      <span className="font-mono text-[0.72rem] uppercase font-semibold">
                                         {comp.companion}
                                       </span>
-                                      <span className="text-[8px] font-mono border border-border-primary/30 px-1 opacity-50 print:border-black/30">
+                                      <span className="font-mono text-[0.58rem] uppercase border border-ink/40 text-ink/55 px-1 print:border-black/30">
                                         {comp.placement}
                                       </span>
                                     </div>
-                                    <p className="text-[9px] font-mono opacity-40 leading-snug mt-0.5 normal-case print:opacity-70">
+                                    <p className="text-[0.82rem] text-ink/70 leading-snug mt-0.5 print:opacity-70">
                                       {comp.reason}
                                     </p>
                                   </div>
@@ -488,7 +468,7 @@ export default function CompanionsPage() {
                   {Array.from(printBorder.entries()).map(([comp, crops]) => (
                     <div key={comp} className="text-[9px] font-mono flex gap-2">
                       <span>□</span>
-                      <span>{comp} — {crops.join(', ')}</span>
+                      <span>{comp}, for {crops.join(', ')}</span>
                     </div>
                   ))}
                 </div>
@@ -499,7 +479,7 @@ export default function CompanionsPage() {
                   {Array.from(printInterplant.entries()).map(([comp, crops]) => (
                     <div key={comp} className="text-[9px] font-mono flex gap-2">
                       <span>□</span>
-                      <span>{comp} — with {crops.join(', ')}</span>
+                      <span>{comp}, with {crops.join(', ')}</span>
                     </div>
                   ))}
                 </div>
@@ -508,33 +488,25 @@ export default function CompanionsPage() {
                 EVIDENCE KEY: STRONG = controlled trials · MOD = field observations + some trials · ANEC = traditional use, limited formal study
               </div>
             </div>
-          </BrutalistBlock>
+          </div>
         )}
 
-        {/* ══════════════════════════════════════════════════════
-            PANEL 2 — CONFLICT ALERTS [GATED]
-        ══════════════════════════════════════════════════════ */}
+        {/* PANEL 2 — CONFLICT ALERTS [GATED] */}
         {conflicts.length > 0 && (
-          <BrutalistBlock refTag="CONFLICTS" className="print:hidden">
-            <div className="flex items-center gap-2 mb-4">
-              <AlertTriangle size={14} className="text-red-400" />
-              <Typography variant="h4" className="text-xs uppercase tracking-widest font-mono opacity-60 mb-0">
-                Conflicts ({conflicts.length})
-              </Typography>
-            </div>
-
-            <div className="space-y-2">
+          <div className="print:hidden">
+            <SectionHead no="§2" title="Bad Neighbors" right={`${conflicts.length} conflict${conflicts.length !== 1 ? 's' : ''} on the plot`} />
+            <div className="space-y-3">
               {visibleConflicts.map((c, i) => (
-                <div key={i} className="p-3 border border-red-500/20 bg-red-500/5">
-                  <div className="flex items-center gap-3 text-[10px] font-mono uppercase">
-                    <AlertTriangle size={10} className="text-red-400 shrink-0" />
-                    <span className="font-bold">{c.iconA} {c.cropA}</span>
-                    <span className="opacity-40">antagonises</span>
-                    <span className="font-bold">{c.iconB} {c.cropB}</span>
-                    <span className="opacity-30 ml-auto hidden sm:block">Keep separated</span>
+                <div key={i} className="border-2 border-rust bg-paper px-4 py-3">
+                  <div className="flex items-center gap-3 flex-wrap">
+                    <AlertTriangle size={13} className="text-rust shrink-0" />
+                    <span className="font-semibold text-[0.95rem]">{c.iconA} {c.cropA}</span>
+                    <span className="font-mono text-[0.64rem] uppercase tracking-wider text-ink/55">antagonises</span>
+                    <span className="font-semibold text-[0.95rem]">{c.iconB} {c.cropB}</span>
+                    <Stamp color="text-rust" className="ml-auto hidden sm:inline-flex">Keep apart</Stamp>
                   </div>
                   {c.description && (
-                    <p className="mt-1.5 pl-5 text-[9px] font-mono opacity-40 normal-case leading-snug">
+                    <p className="mt-1.5 pl-6 text-[0.85rem] text-ink/70 leading-snug">
                       {c.description}
                     </p>
                   )}
@@ -543,44 +515,37 @@ export default function CompanionsPage() {
             </div>
 
             {!unlocked && lockedConflicts > 0 && (
-              <div className="mt-3 text-center text-[9px] font-mono uppercase opacity-30">
-                +{lockedConflicts} more conflicts hidden —{' '}
-                <button onClick={() => setGateOpen(true)} className="underline hover:opacity-60">unlock</button>
-              </div>
+              <p className="mt-3 text-center font-mono text-[0.68rem] uppercase tracking-wider text-ink/55">
+                {lockedConflicts} more behind the gate.{' '}
+                <button onClick={() => setGateOpen(true)} className="underline underline-offset-4 hover:text-marker">
+                  Unlock it
+                </button>
+              </p>
             )}
-          </BrutalistBlock>
-        )}
-
-        {conflicts.length === 0 && uniqueIds.length > 0 && (
-          <div className="text-[10px] font-mono uppercase opacity-30 text-center py-4 print:hidden">
-            ✓ No antagonist conflicts detected in current inventory.
           </div>
         )}
 
-        {/* ══════════════════════════════════════════════════════
-            PANEL 3 — COMPANION SUGGESTIONS [GATED]
-        ══════════════════════════════════════════════════════ */}
-        {suggestions.length > 0 && (
-          <BrutalistBlock refTag="SUGGESTIONS" className="print:hidden">
-            <div className="flex items-center gap-2 mb-4">
-              <Leaf size={14} className="text-green-400" />
-              <Typography variant="h4" className="text-xs uppercase tracking-widest font-mono opacity-60 mb-0">
-                Good Companions ({suggestions.length})
-              </Typography>
-            </div>
+        {conflicts.length === 0 && uniqueIds.length > 0 && (
+          <p className="font-hand font-semibold text-moss text-xl -rotate-1 print:hidden">
+            ✓ no antagonists on the plot, everything gets along
+          </p>
+        )}
 
-            <div className="space-y-2">
+        {/* PANEL 3 — COMPANION SUGGESTIONS [GATED] */}
+        {suggestions.length > 0 && (
+          <div className="print:hidden">
+            <SectionHead no="§3" title="Good Company" right={`${suggestions.length} pairing${suggestions.length !== 1 ? 's' : ''} worth the space`} />
+            <div className="space-y-3">
               {visibleSuggestions.map((s, i) => (
-                <div key={i} className="p-3 border border-green-500/20 bg-green-500/5">
-                  <div className="flex items-center gap-3 text-[10px] font-mono uppercase flex-wrap">
-                    <Leaf size={10} className="text-green-400 shrink-0" />
-                    <span className="opacity-50">You have</span>
-                    <span className="font-bold">{s.forIcon} {s.forCrop}</span>
-                    <span className="opacity-50">→ consider adding</span>
-                    <span className="font-bold text-green-400">{s.compIcon} {s.companion}</span>
+                <div key={i} className="border-2 border-ink bg-paper px-4 py-3">
+                  <div className="flex items-center gap-3 flex-wrap">
+                    <span className="font-mono text-[0.64rem] uppercase tracking-wider text-ink/55">You grow</span>
+                    <span className="font-semibold text-[0.95rem]">{s.forIcon} {s.forCrop}</span>
+                    <span className="font-mono text-[0.64rem] uppercase tracking-wider text-ink/55">so consider</span>
+                    <span className="font-semibold text-[0.95rem] text-moss">{s.compIcon} {s.companion}</span>
                   </div>
                   {s.description && (
-                    <p className="mt-1.5 pl-5 text-[9px] font-mono opacity-40 normal-case leading-snug">
+                    <p className="mt-1.5 text-[0.85rem] text-ink/70 leading-snug">
                       {s.description}
                     </p>
                   )}
@@ -589,38 +554,40 @@ export default function CompanionsPage() {
             </div>
 
             {!unlocked && lockedSuggestions > 0 && (
-              <div className="mt-3 text-center text-[9px] font-mono uppercase opacity-30">
-                +{lockedSuggestions} more suggestions hidden —{' '}
-                <button onClick={() => setGateOpen(true)} className="underline hover:opacity-60">unlock</button>
-              </div>
+              <p className="mt-3 text-center font-mono text-[0.68rem] uppercase tracking-wider text-ink/55">
+                {lockedSuggestions} more behind the gate.{' '}
+                <button onClick={() => setGateOpen(true)} className="underline underline-offset-4 hover:text-marker">
+                  Unlock it
+                </button>
+              </p>
             )}
-          </BrutalistBlock>
-        )}
-
-        {suggestions.length === 0 && uniqueIds.length > 0 && (
-          <div className="text-[10px] font-mono uppercase opacity-30 text-center py-4 print:hidden">
-            All known companions for your current crops are already in inventory.
           </div>
         )}
 
+        {suggestions.length === 0 && uniqueIds.length > 0 && (
+          <p className="text-center font-mono text-[0.68rem] uppercase tracking-wider text-ink/55 print:hidden">
+            Every known companion for your crops is already in the book.
+          </p>
+        )}
+
         {/* SEO anchor block — targets "when do [pest] emerge" cluster + companion planting */}
-        <section className="mt-16 pt-6 border-t border-border-primary/30 max-w-3xl">
-          <Typography variant="h2" className="mb-4 text-xl md:text-2xl normal-case font-mono">
-            Pest emergence calendar + companion planting — driven by your local GDD
-          </Typography>
-          <div className="space-y-4 text-sm md:text-base font-mono opacity-80 leading-relaxed">
+        <div className="max-w-3xl pt-8 border-t-2 border-ink print:hidden">
+          <h2 className="font-display uppercase text-xl md:text-2xl mb-4">
+            A pest emergence calendar driven by your local GDD
+          </h2>
+          <div className="space-y-4 text-[1.02rem] leading-relaxed text-ink/85">
             <p>
               Static companion-planting charts and pest-emergence tables are everywhere.
               The problem: pests don&apos;t read the calendar. Cucumber beetles emerge
-              when <em>your</em> spring crosses ~150 GDD, not on May 15. Squash bugs
-              activate at soil temperatures above 65°F, not at &quot;summer.&quot;
+              when <em>your</em>{' '}spring crosses roughly 150 GDD, not on May 15. Squash
+              bugs activate at soil temperatures above 65°F, not at &quot;summer.&quot;
             </p>
             <p>
               This advisor flips the model. It tracks live growing degree days and soil
-              temperature for your location and tells you which pests are emerging
-              <em> right now</em> — not historically average. For each crop in your
+              temperature for your location and tells you which pests are emerging{' '}
+              <em>right now</em>, not on historical average. For each crop in your
               inventory, it surfaces the relevant pest pressures with current activity
-              status (<strong>DORMANT, PRE-SEASON, ACTIVE, PEAK</strong>) and ranks the
+              status (<strong>dormant, pre-season, active, peak</strong>) and ranks the
               companion plants that deter or trap each pest.
             </p>
             <p>
@@ -630,9 +597,9 @@ export default function CompanionsPage() {
             </p>
           </div>
 
-          <Typography variant="h3" className="mt-10 mb-4 text-base md:text-lg normal-case font-mono">
+          <h3 className="font-display uppercase text-base md:text-lg mt-10 mb-4">
             Frequently asked questions
-          </Typography>
+          </h3>
           <FaqAccordion faqs={FAQS} prefix="PEST" defaultOpen={0} />
 
           {/* FAQPage JSON-LD — eligible for Google rich results */}
@@ -650,56 +617,68 @@ export default function CompanionsPage() {
               }),
             }}
           />
-        </section>
-      </div>
+        </div>
+      </section>
 
       {/* ── Email gate modal ─────────────────────────────────── */}
-      {gateOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70">
-          <BrutalistBlock className="w-full max-w-sm" refTag="COMPANION_GATE">
-            <Typography variant="h3" className="uppercase tracking-tight mb-1 text-base">
-              Unlock Companion Planting
-            </Typography>
-            <p className="text-[10px] font-mono opacity-40 uppercase mb-6">
-              Free access — see all antagonist conflicts and companion pairings for your crops.
-            </p>
+      {gateOpen && createPortal(
+        <div className="fixed inset-0 bg-ink/70 flex items-center justify-center p-4 z-[100]">
+          <div className="card-paper grain w-full max-w-sm">
+            <div className="flex justify-between items-center px-5 py-3 border-b-2 border-ink relative z-[2]">
+              <span className="font-mono text-[0.72rem] font-bold uppercase tracking-[0.18em]">
+                The full advisor
+              </span>
+              <button onClick={() => setGateOpen(false)} aria-label="Close" className="hover:text-marker">
+                <X size={18} />
+              </button>
+            </div>
 
-            <form onSubmit={handleUnlock} className="space-y-4">
-              <input
-                type="email"
-                required
-                placeholder="homesteader@example.com"
-                value={email}
-                onChange={e => setEmail(e.target.value)}
-                className="w-full bg-black/30 border-2 border-border-primary/40 focus:border-accent outline-none px-3 py-2 text-sm font-mono"
-              />
-              <label className="flex items-start gap-2 cursor-pointer">
+            <div className="p-5 relative z-[2]">
+              <p className="text-[0.95rem] text-ink/80 leading-snug mb-5">
+                Free with an email: every antagonist conflict and companion
+                pairing for your crops, unlocked on this device for good.
+              </p>
+
+              <form onSubmit={handleUnlock} className="space-y-4">
                 <input
-                  type="checkbox"
-                  checked={consent}
-                  onChange={e => setConsent(e.target.checked)}
-                  className="mt-0.5"
+                  type="email"
                   required
+                  placeholder="homesteader@example.com"
+                  value={email}
+                  onChange={e => setEmail(e.target.value)}
+                  className={FIELD_INPUT}
                 />
-                <span className="text-[9px] font-mono uppercase opacity-50 leading-tight">
-                  I want companion planting analysis for my garden. No spam — unsubscribe anytime.
-                </span>
-              </label>
-              <div className="flex gap-3 pt-2">
-                <Button variant="outline" size="sm" onClick={() => setGateOpen(false)} className="flex-1" type="button">
-                  Cancel
-                </Button>
-                <Button variant="primary" size="sm" disabled={!consent || submitting} className="flex-1" type="submit">
-                  {submitting ? "Submitting..." : "Unlock_Now"}
-                </Button>
-              </div>
-              {submitError && (
-                <p className="text-xs text-red-500 mt-2">Something went wrong. Please try again.</p>
-              )}
-            </form>
-          </BrutalistBlock>
-        </div>
+                <label className="flex items-start gap-2 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={consent}
+                    onChange={e => setConsent(e.target.checked)}
+                    className="mt-1 accent-marker"
+                    required
+                  />
+                  <span className="font-mono text-[0.64rem] uppercase tracking-wide text-ink/60 leading-tight">
+                    I want companion planting analysis for my garden. No spam, unsubscribe anytime.
+                  </span>
+                </label>
+                <div className="flex gap-3 pt-2">
+                  <button type="button" onClick={() => setGateOpen(false)} className={`${BTN_GHOST} flex-1`}>
+                    Cancel
+                  </button>
+                  <button type="submit" disabled={!consent || submitting} className={`${BTN_SOLID} flex-1`}>
+                    {submitting ? 'Unlocking...' : 'Unlock it'}
+                  </button>
+                </div>
+                {submitError && (
+                  <p className="px-3 py-2 border-2 border-rust text-rust font-mono text-[0.7rem]">
+                    Something went wrong. Try it again.
+                  </p>
+                )}
+              </form>
+            </div>
+          </div>
+        </div>,
+        document.body
       )}
-    </FieldStationLayout>
+    </>
   );
 }

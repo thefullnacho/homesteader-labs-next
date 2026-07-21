@@ -1,14 +1,13 @@
 ---
 title: "Build Log: Survival Index"
-description: "How and why we built the homestead survival index — the design choices behind fire risk, livestock stress, solar efficiency, and water catchment calculations."
+description: "How and why we built the homestead survival index, the design choices behind fire risk, livestock stress, solar efficiency, and water catchment calculations."
 date: "2026-03-08"
 author: "Alex de Brantes"
 tags: ["build-log", "weather", "algorithms", "open-meteo", "fire-risk"]
 category: "build-log"
-excerpt: "Weather apps give you a forecast. A homestead needs decisions. Here's how we built the survival index — every design choice, every formula, and why we made the tradeoffs we did."
+excerpt: "Weather apps give you a forecast. A homestead needs decisions. Here's how we built the survival index, every design choice, every formula, and why we made the tradeoffs we did."
 ---
 
-# Build log: survival index
 
 Weather apps give you a forecast. A homestead needs decisions.
 
@@ -41,7 +40,7 @@ Open-Meteo is a free, open-source weather API. No API key, no account, no rate l
 - Wind gusts, not just sustained wind
 - Precipitation probability and expected accumulation
 
-The "no auth" constraint was deliberate. One of our design principles is **offline-first philosophy**: the tools should degrade gracefully without accounts, servers, or paid services. Open-Meteo aligns with that. If it ever disappears, we can swap in NOAA's public API — the calculation layer is completely separate from the data-fetch layer.
+The "no auth" constraint was deliberate. One of our design principles is **offline-first philosophy**: the tools should degrade gracefully without accounts, servers, or paid services. Open-Meteo aligns with that. If it ever disappears, we can swap in NOAA's public API. The calculation layer is completely separate from the data-fetch layer.
 
 The fetch lives in `lib/weatherApi.ts`. The survival index calculations in `lib/survivalIndex.ts` receive plain data objects. They have no knowledge of where the data came from.
 
@@ -64,7 +63,7 @@ temp >= 80°F  → +20 points
 temp >= 75°F  → +10 points
 ```
 
-**Humidity scoring (inverted — low humidity = high risk):**
+**Humidity scoring (inverted, low humidity = high risk):**
 
 ```
 humidity < 20% → +30 points
@@ -89,7 +88,7 @@ days_since_rain >= 3  → +5 points
 
 **Why additive?**
 
-The alternative — a multiplicative model or a weighted formula — would let a single extreme factor produce a misleadingly high score, or let moderate conditions across all factors be masked by a low score in one. The additive model is transparent: you can look at the score and trace exactly which factors contributed.
+The alternative, a multiplicative model or a weighted formula, would let a single extreme factor produce a misleadingly high score, or let moderate conditions across all factors be masked by a low score in one. The additive model is transparent: you can look at the score and trace exactly which factors contributed.
 
 Hot, dry, windy, and drought-dry is a 100. Cool, humid, calm, and recently rained is a 0. Reality lives between those extremes. The score reflects which combination you are actually facing.
 
@@ -97,7 +96,7 @@ Hot, dry, windy, and drought-dry is a 100. Cool, humid, calm, and recently raine
 
 ## Livestock stress: the NOAA nine-term polynomial
 
-For heat stress, we use the official NOAA heat index formula. Not a simplified version — the full nine-term polynomial:
+For heat stress, we use the official NOAA heat index formula. Not a simplified version, the full nine-term polynomial:
 
 ```
 HI = -42.379
@@ -115,7 +114,7 @@ Where `T` is temperature in °F and `RH` is relative humidity as a percentage.
 
 **Why use the official standard?**
 
-This is a formula used to make animal welfare decisions. If someone sees "severe stress" and acts on it — or doesn't act on it — they are trusting the number we show them. Using a simplified approximation that diverges from the NOAA standard in edge cases is not acceptable when the edge cases are exactly where the stakes are highest.
+This is a formula used to make animal welfare decisions. If someone sees "severe stress" and acts on it, or doesn't act on it, they are trusting the number we show them. Using a simplified approximation that diverges from the NOAA standard in edge cases is not acceptable when the edge cases are exactly where the stakes are highest.
 
 The formula is also used by veterinary extension services, livestock producers, and USDA guidance. Using the same standard means our scores can be compared to existing guidance rather than recalibrated from scratch.
 
@@ -195,9 +194,9 @@ No side effects. No internal state. No async. Same inputs always produce the sam
 
 This matters for three reasons:
 
-1. **Testability** — every function has a test suite that runs without browser globals, network calls, or mocked providers. The tests use real numeric inputs and assert real numeric outputs.
-2. **Replayability** — given a historical weather dataset, you can run the full index against any past date and get the same results that would have been shown at the time. This enables backtesting survival decisions against historical records.
-3. **Auditability** — a user (or a developer, or a reviewer) can look at the code, trace a score from input to output, and verify that it is correct. There are no magic constants hidden in state.
+1. **Testability**: every function has a test suite that runs without browser globals, network calls, or mocked providers. The tests use real numeric inputs and assert real numeric outputs.
+2. **Replayability**: given a historical weather dataset, you can run the full index against any past date and get the same results that would have been shown at the time. This enables backtesting survival decisions against historical records.
+3. **Auditability**: a user (or a developer, or a reviewer) can look at the code, trace a score from input to output, and verify that it is correct. There are no magic constants hidden in state.
 
 ---
 
@@ -205,8 +204,8 @@ This matters for three reasons:
 
 Two extensions are already within reach of the current architecture:
 
-**Drought index** — a rolling GDD-based precipitation deficit. Open-Meteo already returns soil moisture data. The calculation would be a rolling 30-day deficit against historical averages.
+**Drought index**: a rolling GDD-based precipitation deficit. Open-Meteo already returns soil moisture data. The calculation would be a rolling 30-day deficit against historical averages.
 
-**Historical comparison** — the Open-Meteo archive API is already wired into the data layer. We can fetch the same weather variables for any past date range and show current conditions against the 10-year average for this week. That context — "this is the 4th driest March in a decade" — changes how you interpret a fire risk score of 40.
+**Historical comparison**: the Open-Meteo archive API is already wired into the data layer. We can fetch the same weather variables for any past date range and show current conditions against the 10-year average for this week. That context, "this is the 4th driest March in a decade", changes how you interpret a fire risk score of 40.
 
 The pure function architecture means adding these requires no refactoring. Write the function, wire it to the existing data fetch, test it.

@@ -7,28 +7,27 @@ const config: Config = {
     './components/**/*.{js,ts,jsx,tsx,mdx}',
     './app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
-  darkMode: 'class',
   theme: {
     extend: {
       colors: {
-        background: {
-          primary: 'var(--bg-primary)',
-          secondary: 'var(--bg-secondary)',
-        },
-        foreground: {
-          primary: 'var(--text-primary)',
-          secondary: 'var(--text-secondary)',
-        },
-        accent: 'var(--accent)',
-        border: {
-          primary: 'var(--border-primary)',
-        },
-        terminal: {
-          glow: 'var(--terminal-glow)',
-        },
+        // Paper field-notebook palette. Hex literals, not var() refs:
+        // Tailwind can't inject alpha into var() colors, so opacity
+        // modifiers (text-ink/60, bg-moss/50) silently generate nothing.
+        // Keep in sync with the :root block in globals.css.
+        paper: '#f5f0e2',
+        kraft: '#e9ddc1',
+        manila: '#efe5cc',
+        ink: '#26221a',
+        soil: '#5a4630',
+        marker: '#e4571f',
+        moss: '#5c6b3c',
+        rust: '#a8442a',
+        slateblue: '#3f5d6b',
       },
       fontFamily: {
-        mono: ['var(--font-mono)', 'Courier New', 'Courier', 'monospace'],
+        display: ['var(--font-display)', 'sans-serif'],
+        serif: ['var(--font-serif)', 'Georgia', 'serif'],
+        mono: ['var(--font-plex-mono)', 'Courier New', 'Courier', 'monospace'],
         hand: ['var(--font-hand)', 'Caveat', 'cursive'],
       },
       boxShadow: {

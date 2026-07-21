@@ -1,53 +1,55 @@
 "use client";
 
 import Link from "next/link";
-import Typography from "@/components/ui/Typography";
+import { Stamp } from "@/components/field/kit";
+
+const indexLinks = [
+  { href: "/archive/", label: "Field Notes" },
+  { href: "/shop/", label: "Shop" },
+  { href: "/tools/fabrication/", label: "Workshop" },
+  { href: "/terms-of-fabrication/", label: "Terms" },
+  { href: "/warranty/", label: "Warranty" },
+];
 
 export default function Footer() {
   return (
-    <footer className="border-t-2 border-border-primary bg-background-secondary mt-auto relative overflow-hidden">
-      {/* Subtle Background Text */}
-      <div className="absolute -bottom-4 -left-4 text-[60px] font-bold opacity-[0.02] select-none pointer-events-none font-mono">
-        OFF_GRID_RESILIENCE
-      </div>
+    <footer className="bg-ink text-paper mt-auto no-print">
+      <div className="max-w-7xl mx-auto px-4 py-10 grid md:grid-cols-3 gap-8">
+        <div>
+          <p className="font-display uppercase text-lg mb-2">Homesteader Labs</p>
+          <p className="font-serif text-paper/70 text-[0.95rem] max-w-xs">
+            Field guides and plain-talk tools for people who build their own
+            world. No accounts. No ads.
+          </p>
+        </div>
 
-      <div className="max-w-7xl mx-auto px-4 py-8 relative z-10">
-        <div className="flex flex-col md:flex-row justify-between items-center gap-8">
-          <div className="flex flex-col gap-1">
-            <Typography variant="h4" className="mb-0 text-sm">Homesteader Labs</Typography>
+        <div className="font-mono text-[0.72rem] uppercase tracking-wider text-paper/70">
+          <p className="text-paper mb-2 font-semibold">Index</p>
+          <ul className="space-y-1.5">
+            {indexLinks.map((l) => (
+              <li key={l.href}>
+                <Link className="hover:text-marker transition-colors" href={l.href}>
+                  — {l.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div className="font-mono text-[0.72rem] uppercase tracking-wider text-paper/70">
+          <p className="text-paper mb-2 font-semibold">Colophon</p>
+          <p>Set in Newsreader, IBM Plex Mono &amp; Caveat.</p>
+          <p className="mt-1">© 2026 Homesteader Labs</p>
+          <div className="mt-4 flex items-center gap-4">
+            <Link href="/privacy/" className="hover:text-marker transition-colors">
+              Privacy
+            </Link>
+            <Link href="/requisition/" className="hover:text-marker transition-colors">
+              Cart
+            </Link>
           </div>
-
-          <div className="flex gap-x-6 gap-y-2 text-xs font-bold uppercase tracking-widest flex-wrap justify-center font-mono">
-            <Link href="/archive/" className="opacity-50 hover:opacity-100 hover:text-accent transition-all">
-              Field Notes
-            </Link>
-            <Link href="/shop/" className="opacity-50 hover:opacity-100 hover:text-accent transition-all">
-              Shop
-            </Link>
-            <Link href="/tools/fabrication/" className="opacity-50 hover:opacity-100 hover:text-accent transition-all">
-              Workshop
-            </Link>
-            <Link href="/terms-of-fabrication/" className="opacity-50 hover:opacity-100 hover:text-accent transition-all">
-              Terms
-            </Link>
-            <Link href="/warranty/" className="opacity-50 hover:opacity-100 hover:text-accent transition-all">
-              Warranty
-            </Link>
-          </div>
-
-          <div className="flex flex-col items-center md:items-end gap-1">
-            <div className="flex items-center gap-4">
-              <Link href="/privacy/" className="text-[9px] opacity-30 hover:opacity-60 transition-opacity uppercase font-bold tracking-widest">
-                Privacy
-              </Link>
-              <span className="text-[9px] opacity-10">|</span>
-              <Link href="/requisition/" className="text-[9px] opacity-30 hover:opacity-60 transition-opacity uppercase font-bold tracking-widest">
-                Cart
-              </Link>
-            </div>
-            <Typography variant="small" className="opacity-20 font-mono text-[8px] uppercase tracking-widest mb-0">
-              © 2026 Homesteader Labs
-            </Typography>
+          <div className="mt-4">
+            <Stamp color="text-marker">No account required</Stamp>
           </div>
         </div>
       </div>

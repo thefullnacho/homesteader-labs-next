@@ -3,7 +3,7 @@ import { buildSystemState } from './systemState';
 import type {
   CaloricTotals, WaterAutonomyResult, EnergyAutonomyResult, InventoryItem,
 } from './types';
-import type { Actuals } from '@/components/tools/caloric-security/ActualsInput';
+import type { Actuals } from '@/lib/caloric-security/types';
 import type { ForecastDay } from '@/lib/weatherTypes';
 import type { FrostDatesRow } from './db';
 

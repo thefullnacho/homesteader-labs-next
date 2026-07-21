@@ -1,18 +1,17 @@
 ---
 title: "How to Read Your Weather Station"
-description: "A field operator's guide to every index on the Homesteader Labs weather dashboard — what each score means and when to act on it."
+description: "A field operator's guide to every index on the Homesteader Labs weather dashboard, what each score means and when to act on it."
 date: "2026-03-10"
 author: "Alex de Brantes"
 tags: ["weather", "field-guide", "fire-risk", "livestock", "solar"]
 category: "field-guide"
-excerpt: "Numbers on a screen don't mean anything until you know what to do with them. Here's how to read every index on the weather station — and what action each one demands."
+excerpt: "Numbers on a screen don't mean anything until you know what to do with them. Here's how to read every index on the weather station, and what action each one demands."
 ---
 
-# How to read your weather station
 
 Numbers on a screen don't mean anything until you know what to do with them.
 
-The Homesteader Labs weather station pulls live forecast data from Open-Meteo — a free, open-source weather API that requires no account and no API key. It looks 14 days out. Every index you see is calculated locally in your browser from that raw forecast data. There is no server in the middle, no account required, no subscription.
+The Homesteader Labs weather station pulls live forecast data from Open-Meteo, a free, open-source weather API that requires no account and no API key. It looks 14 days out. Every index you see is calculated locally in your browser from that raw forecast data. There is no server in the middle, no account required, no subscription.
 
 Here is what each index means and when it demands action.
 
@@ -20,7 +19,7 @@ Here is what each index means and when it demands action.
 
 ## Fire risk index
 
-Fire risk is scored 0–100. It is additive — temperature, humidity, wind speed, and dry spell days each contribute a fixed amount to the score. No single factor dominates.
+Fire risk is scored 0–100. It is additive: temperature, humidity, wind speed, and dry spell days each contribute a fixed amount to the score. No single factor dominates.
 
 **Score ranges:**
 
@@ -48,10 +47,10 @@ Water catchment shows two things: the **collection potential** for the next rain
 
 **Potential ratings:**
 
-- **Poor** — low probability or very low expected accumulation. Not worth staging tanks.
-- **Fair** — moderate event. Top off existing storage.
-- **Good** — worth opening every collection point. Stage your barrels and cistern intakes.
-- **Excellent** — high probability, meaningful accumulation. Full collection posture. Clear debris from gutters now.
+- **Poor**: low probability or very low expected accumulation. Not worth staging tanks.
+- **Fair**: moderate event. Top off existing storage.
+- **Good**: worth opening every collection point. Stage your barrels and cistern intakes.
+- **Excellent**: high probability, meaningful accumulation. Full collection posture. Clear debris from gutters now.
 
 The "next rain" date tells you when to expect the event. Use the gap between today and that date to plan:
 
@@ -64,7 +63,7 @@ The "next rain" date tells you when to expect the event. Use the gap between tod
 
 ## Solar efficiency
 
-Solar efficiency is a daily estimate of **peak productive hours** — the hours in a day when your panels are operating at meaningful output.
+Solar efficiency is a daily estimate of **peak productive hours**, the hours in a day when your panels are operating at meaningful output.
 
 The calculation is:
 
@@ -78,7 +77,7 @@ The `0.5` multiplier is a deliberate simplification. Real panel output depends o
 
 - **0–2 hours:** Overcast or very short day. Don't run high-draw loads if your bank is low.
 - **3–4 hours:** Average. Normal consumption patterns.
-- **5+ hours:** High-output day. Good time to run power-hungry tasks — water pumping, battery conditioning, dehydrating.
+- **5+ hours:** High-output day. Good time to run power-hungry tasks: water pumping, battery conditioning, dehydrating.
 
 Check the next 3–5 days together. A string of low-efficiency days means you should reduce draw or run a generator now, before your bank is depleted.
 
@@ -86,7 +85,7 @@ Check the next 3–5 days together. A string of low-efficiency days means you sh
 
 ## Livestock stress index
 
-The livestock stress index uses the **NOAA nine-term polynomial heat index formula** for heat stress, and a wind chill calculation for cold stress. These are the official federal standards — the same ones used by extension services and veterinary guidelines.
+The livestock stress index uses the **NOAA nine-term polynomial heat index formula** for heat stress, and a wind chill calculation for cold stress. These are the official federal standards, the same ones used by extension services and veterinary guidelines.
 
 **Heat stress (above 80°F effective temperature):**
 
@@ -120,13 +119,13 @@ The 7-day, 14-day, and 30-day windows show the probability of a frost event in e
 
 Based on soil temperature and recent precipitation. Statuses:
 
-- **Not workable** — frozen or saturated. Working it now damages soil structure.
-- **Marginal** — possible, but you will compact wet soil. Work raised beds only.
-- **Workable** — proceed. Optimal soil preparation conditions.
+- **Not workable**: frozen or saturated. Working it now damages soil structure.
+- **Marginal**: possible, but you will compact wet soil. Work raised beds only.
+- **Workable**: proceed. Optimal soil preparation conditions.
 
 **Growing degree days (GDD):**
 
-GDD accumulates from March 1 each year using a base temperature of 50°F. The display shows your current accumulation against the 200-unit target — the point at which most cool-season crops have enough heat to push germination and early growth.
+GDD accumulates from March 1 each year using a base temperature of 50°F. The display shows your current accumulation against the 200-unit target, the point at which most cool-season crops have enough heat to push germination and early growth.
 
 ```
 GDD = max(0, (daily_high + daily_low) / 2 - 50)
@@ -149,7 +148,7 @@ humidity:    40%–90%
 - **Below 50°F:** Many products do not activate at low temperatures. Absorption is poor.
 - **Above 85°F:** Evaporation is rapid. Foliar damage risk increases.
 - **Wind below 3 mph:** No air movement means poor coverage distribution.
-- **Wind above 10 mph:** Drift. Your product ends up in the wrong place — neighbor's garden, water, habitat.
+- **Wind above 10 mph:** Drift. Your product ends up in the wrong place: neighbor's garden, water, habitat.
 - **Humidity below 40%:** Rapid drying reduces contact time and uptake.
 - **Humidity above 90%:** Fungal disease conditions. Foliar sprays compound the problem.
 
@@ -163,9 +162,9 @@ Check the station each morning, not just before a task. The indices you care abo
 
 Build a simple morning check habit:
 
-1. Fire risk — is it trending up? Plan burn and power-tool work around the forecast low.
-2. Planting index — frost risk trending? Protect transplants tonight.
-3. Livestock stress — does tomorrow look worse than today? Stage water and shade now.
-4. Solar efficiency — low-output stretch coming? Reduce draw, run generator, or defer high-load tasks.
+1. Fire risk: is it trending up? Plan burn and power-tool work around the forecast low.
+2. Planting index: frost risk trending? Protect transplants tonight.
+3. Livestock stress: does tomorrow look worse than today? Stage water and shade now.
+4. Solar efficiency: low-output stretch coming? Reduce draw, run generator, or defer high-load tasks.
 
-The station is most useful as a **decision tool**, not a readout. Every number has an action attached. If you are just reading the numbers and not doing anything with them, you are using it as a weather app. That is fine — but you can get more from it.
+The station is most useful as a **decision tool**, not a readout. Every number has an action attached. If you are just reading the numbers and not doing anything with them, you are using it as a weather app. That is fine, but you can get more from it.

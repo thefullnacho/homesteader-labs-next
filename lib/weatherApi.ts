@@ -25,7 +25,6 @@ interface OpenMeteoDaily {
   cloud_cover_mean: number[];
   sunrise: string[];
   sunset: string[];
-  soil_temperature_0cm_mean?: number[];
 }
 
 interface OpenMeteoHourly {
@@ -40,6 +39,7 @@ interface OpenMeteoHourly {
   wind_speed_10m: number[];
   cloud_cover: number[];
   uv_index?: number[];
+  soil_temperature_0cm?: number[];
 }
 
 interface OpenMeteoResponse {
@@ -131,6 +131,7 @@ export async function fetchWeatherData(
       "precipitation_probability",
       "wind_speed_10m",
       "cloud_cover",
+      "soil_temperature_0cm",
     ].join(","),
     daily: [
       "temperature_2m_max",
@@ -180,13 +181,21 @@ function transformWeatherData(data: OpenMeteoResponse): WeatherData {
 
   // Group hourly data by day
   const hourlyByDay: { [key: string]: HourlyForecast[] } = {};
-  
+  // Daily soil temperature comes from averaging hourly readings; Open-Meteo
+  // has no valid daily soil aggregate on the free forecast endpoint
+  const soilByDay: { [key: string]: number[] } = {};
+
   hourly.time.forEach((time, index) => {
     const date = time.split("T")[0];
     if (!hourlyByDay[date]) {
       hourlyByDay[date] = [];
+      soilByDay[date] = [];
     }
-    
+    const soil = hourly.soil_temperature_0cm?.[index];
+    if (soil !== null && soil !== undefined) {
+      soilByDay[date].push(soil);
+    }
+
     hourlyByDay[date].push({
       time: time,
       temperature: hourly.temperature_2m[index],
@@ -220,7 +229,9 @@ function transformWeatherData(data: OpenMeteoResponse): WeatherData {
       windSpeed: daily.wind_speed_10m_max[index],
       uvIndex: daily.uv_index_max[index],
       cloudCover: daily.cloud_cover_mean[index],
-      soilTemperature: daily.soil_temperature_0cm_mean?.[index],
+      soilTemperature: soilByDay[date]?.length
+        ? soilByDay[date].reduce((a, b) => a + b, 0) / soilByDay[date].length
+        : undefined,
       sunrise: daily.sunrise[index],
       sunset: daily.sunset[index],
       hourly: dayHourlyData,
@@ -243,7 +254,7 @@ function transformWeatherData(data: OpenMeteoResponse): WeatherData {
       visibility: null, // Open-Meteo free tier doesn't provide visibility
       cloudCover: current.cloud_cover,
       precipitation: hourly.precipitation[0] || 0,
-      soilTemperature: current.soil_temperature_0cm ?? daily.soil_temperature_0cm_mean?.[0],
+      soilTemperature: current.soil_temperature_0cm ?? hourly.soil_temperature_0cm?.[0],
     },
     forecast,
     alerts: [], // Open-Meteo doesn't provide alerts, would need separate API

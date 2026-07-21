@@ -42,29 +42,30 @@ export default function FrostGuardAlert({
   const overflow     = activeCropNames.length - visibleCrops.length;
 
   return (
-    <div className="border-2 border-red-500/70 bg-red-500/10 px-4 py-3 font-mono flex flex-col sm:flex-row sm:items-center gap-3 animate-in slide-in-from-top-2 duration-300">
+    <div className="border-2 border-rust bg-paper px-4 py-3 flex flex-col sm:flex-row sm:items-center gap-3 animate-in slide-in-from-top-2 duration-300">
       <div className="flex items-center gap-2 shrink-0">
-        <Snowflake size={13} className="text-red-400 animate-pulse" />
-        <span className="text-[10px] font-bold uppercase tracking-widest text-red-400">
-          Frost_Guard // Alert
+        <Snowflake size={14} className="text-rust" />
+        <span className="font-mono text-[0.68rem] font-bold uppercase tracking-[0.18em] text-rust">
+          Frost guard
         </span>
       </div>
 
-      <div className="flex-1 text-[10px] font-mono uppercase opacity-70">
-        Freeze event{' '}
-        <span className="opacity-100 text-red-300 font-bold">
+      <div className="flex-1 text-[0.92rem] leading-snug text-ink/85">
+        Freeze{' '}
+        <strong className="text-rust">
           {daysAway === 0 ? 'tonight' : `in ${daysAway} day${daysAway !== 1 ? 's' : ''}`}
-        </span>
-        {' '}({dateLabel} / low {frostEvent.minTemp}°F) — protect active crops:{' '}
-        <span className="opacity-100 text-red-300">
+        </strong>{' '}
+        ({dateLabel}, low {frostEvent.minTemp}°F). Cover what&apos;s in the ground:{' '}
+        <strong>
           {visibleCrops.join(', ')}
-          {overflow > 0 ? ` +${overflow} more` : ''}
-        </span>
+          {overflow > 0 ? ` and ${overflow} more` : ''}
+        </strong>
+        .
       </div>
 
       <button
         onClick={() => setDismissed(true)}
-        className="shrink-0 flex items-center gap-1 text-[9px] font-mono uppercase opacity-30 hover:opacity-70 transition-opacity"
+        className="shrink-0 flex items-center gap-1 font-mono text-[0.64rem] uppercase tracking-wider text-ink/45 hover:text-ink transition-colors"
       >
         <X size={10} /> Dismiss
       </button>

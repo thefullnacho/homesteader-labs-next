@@ -22,7 +22,7 @@ export interface ForecastRainDay {
 }
 
 export interface WaterAutonomyInput {
-  storedGallons: number;         // current reading — from ActualsInput
+  storedGallons: number;         // current reading — from the field-readings card
   householdSize: number;
   catchment?: CatchmentConfig;   // optional; if absent, clock shows stored-only
   forecastDays?: ForecastRainDay[];  // 7-day outlook from weatherApi
@@ -37,6 +37,17 @@ export interface WaterAutonomyResult {
   dailyTotalNeed: number;            // gallons/day including irrigation if provided
   confidence: 'high' | 'medium' | 'low';
   irrigationTracked: boolean;        // false → UI must show a warning
+}
+
+// ============================================================
+// Actuals — live field readings the user maintains by hand
+// (tank gauge, irrigation draw, battery state of charge)
+// ============================================================
+
+export interface Actuals {
+  storedGallons:          number;
+  irrigationDailyGallons: number;
+  currentBatteryPct:      number;   // 0–100 % of usable capacity; 100 = fully charged
 }
 
 // ============================================================

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import FiledDocument from "@/components/legal/FiledDocument";
 
 export const metadata: Metadata = {
   title: "Warranty (VOID)",
@@ -7,53 +8,28 @@ export const metadata: Metadata = {
 
 export default function WarrantyPage() {
   return (
-    <div className="max-w-4xl mx-auto px-4 py-12">
-      <div className="brutalist-block bg-secondary p-8 md:p-12">
-        <div className="border-b-2 border-border-primary pb-4 mb-8">
-          <h1 className="text-3xl md:text-4xl font-bold uppercase tracking-tight">
-            Warranty (VOID)
-          </h1>
-          <p className="text-foreground-secondary mt-2 font-mono text-sm">
-            &gt;&gt; WARRANTY STATUS: VOID
-          </p>
-        </div>
-
-        <div className="space-y-8">
-          <section>
-            <div className="bg-[var(--accent)]/10 border border-[var(--accent)] p-6 mb-6">
-              <p className="text-lg font-bold text-[var(--accent)] uppercase tracking-wider">
-                All warranties were voided the moment you decided to take production into your own hands.
-              </p>
-            </div>
-          </section>
-
-          <section>
-            <h2 className="text-xl font-bold mb-4 uppercase border-l-4 border-[var(--accent)] pl-4">
-              No Customer Support
-            </h2>
-            <p className="leading-relaxed text-foreground-secondary">
-              There is no customer support. There is only the community and the documentation.
-            </p>
-          </section>
-
-          <section>
-            <h2 className="text-xl font-bold mb-4 uppercase border-l-4 border-[var(--accent)] pl-4">
-              The Protocol
-            </h2>
-            <p className="leading-relaxed text-foreground-secondary">
-              If it breaks, fix it. If it doesn&apos;t work, iterate.
-            </p>
-          </section>
-        </div>
-
-        <div className="mt-12 pt-6 border-t border-border-primary/30">
-          <p className="text-xs opacity-60 font-mono">
-            WARRANTY_ID: NULL<br />
-            STATUS: PERMANENTLY_VOID<br />
-            REF: WARRANTY_VOID_V1
-          </p>
-        </div>
-      </div>
-    </div>
+    <FiledDocument
+      title="Warranty (Void)"
+      subtitle="Warranty status: void"
+      refCode="WARRANTY_VOID_V1"
+      stamp={{ label: "Void", color: "text-rust" }}
+      voided
+      notice="All warranties were voided the moment you decided to take production into your own hands."
+      sections={[
+        {
+          heading: "No Customer Support",
+          body: "There is no customer support. There is only the community and the documentation.",
+        },
+        {
+          heading: "The Protocol",
+          body: "If it breaks, fix it. If it doesn't work, iterate.",
+        },
+      ]}
+      footerLines={[
+        "Warranty ID: null",
+        "Status: permanently void",
+        "Ref: WARRANTY_VOID_V1",
+      ]}
+    />
   );
 }

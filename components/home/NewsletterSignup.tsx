@@ -1,10 +1,8 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { Send, Terminal } from "lucide-react";
-import BrutalistBlock from "@/components/ui/BrutalistBlock";
-import Typography from "@/components/ui/Typography";
-import Button from "@/components/ui/Button";
+import { Send } from "lucide-react";
+import { Stamp } from "@/components/field/kit";
 
 export default function NewsletterSignup() {
   const [email, setEmail] = useState("");
@@ -42,67 +40,62 @@ export default function NewsletterSignup() {
   };
 
   return (
-    <section className="mb-12">
-      <BrutalistBlock className="bg-accent/10 border-accent p-0">
-        <div className="p-6 md:p-8">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-            {/* Text */}
-            <div className="flex-grow">
-              <div className="flex items-center gap-2 mb-2">
-                <Terminal size={20} className="text-accent" />
-                <Typography variant="h3" className="mb-0">Stay in the loop</Typography>
-              </div>
-              <Typography variant="small" className="text-foreground-secondary mb-0">
-                Get field reports, new hardware drops, and survival tips. 
-                No spam. No tracking. Just signal.
-              </Typography>
+    <section className="mb-16">
+      <div className="border-2 border-ink bg-kraft grain p-6 md:p-8 relative">
+        <div className="relative z-[2] flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+          {/* Text */}
+          <div className="flex-grow">
+            <p className="font-mono text-[0.66rem] uppercase tracking-[0.2em] text-ink/60 mb-2">
+              The dispatch
+            </p>
+            <h2 className="font-display uppercase text-xl leading-tight mb-2">
+              Field reports, by mail
+            </h2>
+            <p className="text-[0.98rem] text-ink/80 max-w-md leading-snug">
+              New guides, hardware drops, and what to do outside this month.
+              No spam, no tracking, just signal.
+            </p>
+          </div>
+
+          {/* Form */}
+          <form onSubmit={handleSubmit} className="flex-shrink-0 w-full md:w-auto">
+            <div className="flex gap-2">
+              <label htmlFor="newsletter-email" className="sr-only">Email address</label>
+              <input
+                id="newsletter-email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="your@email.com"
+                className="flex-grow md:w-64 px-3 py-2 bg-paper border-2 border-ink text-ink placeholder:text-ink/40 focus:outline-none focus:border-marker font-mono text-sm"
+              />
+              <button
+                type="submit"
+                className="bg-ink text-paper px-4 py-2 border-2 border-ink font-mono text-xs uppercase tracking-wider hover:bg-marker hover:border-marker transition-colors flex items-center gap-2"
+              >
+                <Send size={14} />
+                <span className="hidden sm:inline">Join</span>
+              </button>
             </div>
 
-            {/* Form */}
-            <form onSubmit={handleSubmit} className="flex-shrink-0 w-full md:w-auto">
-              <div className="flex gap-2">
-                <label htmlFor="newsletter-email" className="sr-only">Email address</label>
-                <input
-                  id="newsletter-email"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="your@email.com"
-                  className="flex-grow md:w-64 px-3 py-2 bg-background-secondary border-2 border-border-primary text-foreground-primary placeholder:text-foreground-secondary/50 focus:outline-none focus:border-accent font-mono text-sm"
-                />
-                <Button
-                  type="submit"
-                  size="sm"
-                  className="px-4 py-2"
-                >
-                  <Send size={14} className="mr-2" />
-                  <span className="hidden sm:inline">Join</span>
-                </Button>
-              </div>
-
-              <div aria-live="polite" aria-atomic="true">
-                {status === "success" && (
-                  <p className="text-xs text-green-600 mt-2">
-                    &gt;&gt; SUBSCRIPTION_CONFIRMED
-                  </p>
-                )}
-                {status === "error" && (
-                  <p className="text-xs text-accent mt-2">
-                    &gt;&gt; ERROR: INVALID_EMAIL_FORMAT
-                  </p>
-                )}
-              </div>
-            </form>
-          </div>
+            <div aria-live="polite" aria-atomic="true">
+              {status === "success" && (
+                <p className="font-hand font-semibold text-moss text-lg mt-2">
+                  ✓ you&apos;re on the list
+                </p>
+              )}
+              {status === "error" && (
+                <p className="font-hand font-semibold text-marker text-lg mt-2">
+                  ✎ that email doesn&apos;t look right
+                </p>
+              )}
+            </div>
+            <p className="font-mono text-[0.64rem] uppercase tracking-widest text-ink/50 mt-2">
+              Monthly. Unsubscribe anytime.
+            </p>
+          </form>
         </div>
-
-        {/* Decorative terminal footer */}
-        <div className="border-t-2 border-accent/30 px-6 py-2 bg-background-secondary/30">
-          <p className="text-xs font-mono text-foreground-secondary">
-            Monthly. Unsubscribe anytime.
-          </p>
-        </div>
-      </BrutalistBlock>
+      </div>
     </section>
   );
 }

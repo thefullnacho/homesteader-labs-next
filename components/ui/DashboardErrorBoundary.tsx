@@ -2,8 +2,6 @@
 
 import { Component, type ReactNode } from "react";
 import { AlertCircle } from "lucide-react";
-import BrutalistBlock from "./BrutalistBlock";
-import Typography from "./Typography";
 
 interface Props {
   children: ReactNode;
@@ -24,15 +22,15 @@ export default class DashboardErrorBoundary extends Component<Props, State> {
   render() {
     if (this.state.hasError) {
       return (
-        <BrutalistBlock className="p-8 text-center border-red-500/40 bg-red-500/5">
-          <AlertCircle size={28} className="text-red-500 mx-auto mb-3 opacity-50" />
-          <Typography variant="small" className="font-mono uppercase tracking-widest text-red-400 mb-1">
+        <div className="bg-paper border-2 border-rust/60 p-8 text-center">
+          <AlertCircle size={28} className="text-rust mx-auto mb-3 opacity-70" />
+          <p className="font-mono uppercase tracking-widest text-rust text-sm mb-1">
             {this.props.label ?? "DASHBOARD"}{" // RENDER_FAULT"}
-          </Typography>
-          <Typography variant="small" className="font-mono text-[10px] opacity-40 uppercase mb-0">
-            Malformed telemetry — reload to re-establish link
-          </Typography>
-        </BrutalistBlock>
+          </p>
+          <p className="font-mono text-[10px] text-ink/50 uppercase mb-0">
+            Malformed telemetry, reload to re-establish link
+          </p>
+        </div>
       );
     }
 

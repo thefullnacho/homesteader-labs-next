@@ -2,9 +2,6 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { AlertTriangle } from 'lucide-react';
 import { isSurvivalPlanPublic } from '@/lib/survivalPlan/visibility';
-import FieldStationLayout from '@/components/ui/FieldStationLayout';
-import BrutalistBlock from '@/components/ui/BrutalistBlock';
-import Typography from '@/components/ui/Typography';
 import CompanionView from '@/components/survivalPlan/CompanionView';
 import { decodeInputs } from '@/lib/survivalPlan/inputEncoding';
 import { buildSurvivalPlan } from '@/lib/survivalPlan/generator';
@@ -33,7 +30,7 @@ export default async function CompanionPage(props: PageProps) {
 
   const input = decodeInputs(token);
   if (!input) {
-    return <EmptyState message="Could not read this plan link. It may be malformed — try scanning the QR code again." />;
+    return <EmptyState message="Could not read this plan link. It may be malformed, try scanning the QR code again." />;
   }
 
   const zone = getGrowingZoneFromZip(input.zipCode) ?? '6a';
@@ -41,49 +38,55 @@ export default async function CompanionPage(props: PageProps) {
   const plan = buildSurvivalPlan(input, frostDates);
 
   return (
-    <FieldStationLayout stationId="SGP_COMPANION" gridLines>
-      <div className="max-w-4xl mx-auto py-8 px-4 space-y-6">
-
-        <header className="space-y-2">
-          <Typography variant="small" className="font-mono opacity-50 uppercase tracking-widest">
-            Homesteader_Labs // Live_Companion
-          </Typography>
-          <h1 className="text-3xl md:text-4xl font-bold uppercase tracking-tight leading-none">
-            Your plan,<br />
-            <span className="text-accent">live.</span>
+    <>
+      {/* Header band */}
+      <section className="bg-kraft grain border-b-2 border-ink relative">
+        <div className="max-w-6xl mx-auto px-4 pt-10 pb-8 relative z-[2]">
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-2 font-mono text-[0.68rem] uppercase tracking-[0.18em] text-ink/60 mb-5">
+            <Link href="/survival-garden-plan/" className="hover:text-marker underline underline-offset-4">
+              Survival Garden Plan
+            </Link>
+            <span>/</span>
+            <span>Live companion</span>
+            <span className="ml-auto">
+              Zone {plan.growingZone} · {plan.input.adults + plan.input.kids}-person household · {plan.input.squareFeet} sq ft · {plan.input.goal.replace('-', ' ')}
+            </span>
+          </div>
+          <h1 className="font-display uppercase text-3xl sm:text-5xl leading-[0.98] max-w-3xl text-balance">
+            Your plan, live.
           </h1>
-          <p className="text-xs font-mono opacity-50 uppercase">
-            Zone {plan.growingZone} · {plan.input.adults + plan.input.kids}-person household · {plan.input.squareFeet} sq ft · {plan.input.goal.replace('-', ' ')}
+          <p className="mt-4 text-lg leading-relaxed max-w-2xl text-ink/85 italic">
+            The same plan as your PDF, recomputed on every visit. Adjust inputs
+            in the wizard and this page follows.
           </p>
-        </header>
+        </div>
+      </section>
 
+      <div className="max-w-4xl mx-auto py-10 px-4">
         <CompanionView plan={plan} encodedToken={token} />
-
       </div>
-    </FieldStationLayout>
+    </>
   );
 }
 
 function EmptyState({ message }: { message: string }) {
   return (
-    <FieldStationLayout stationId="SGP_COMPANION" gridLines>
-      <div className="max-w-xl mx-auto py-12 px-4">
-        <BrutalistBlock>
-          <div className="flex items-start gap-3">
-            <AlertTriangle size={20} className="text-accent shrink-0 mt-1" />
-            <div>
-              <p className="text-sm font-mono font-bold uppercase mb-2">No plan loaded</p>
-              <p className="text-xs font-mono opacity-70 leading-relaxed mb-4">{message}</p>
-              <Link
-                href="/survival-garden-plan/wizard/"
-                className="inline-flex items-center justify-center font-bold uppercase bg-accent text-white border-2 border-accent px-4 py-2 text-xs shadow-brutalist"
-              >
-                Build_a_plan
-              </Link>
-            </div>
+    <div className="max-w-xl mx-auto py-16 px-4">
+      <div className="border-2 border-dashed border-ink/40 p-8">
+        <div className="flex items-start gap-3">
+          <AlertTriangle size={20} className="text-rust shrink-0 mt-1" />
+          <div>
+            <p className="font-mono font-bold uppercase text-sm mb-2">No plan loaded</p>
+            <p className="text-[0.95rem] text-ink/80 leading-relaxed mb-4">{message}</p>
+            <Link
+              href="/survival-garden-plan/wizard/"
+              className="inline-flex items-center justify-center bg-ink text-paper border-2 border-ink px-5 py-3 font-mono text-[0.78rem] uppercase tracking-wider hover:bg-marker hover:border-marker transition-colors"
+            >
+              Build a plan
+            </Link>
           </div>
-        </BrutalistBlock>
+        </div>
       </div>
-    </FieldStationLayout>
+    </div>
   );
 }

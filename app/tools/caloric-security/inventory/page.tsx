@@ -1,13 +1,11 @@
 'use client';
 
 import { useState, useMemo, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { useLiveQuery } from 'dexie-react-hooks';
-import { Plus, Trash2, Edit3, ArrowLeft, Package, Search, Download, X, Mail, Leaf } from 'lucide-react';
+import { Trash2, Edit3, Search, X } from 'lucide-react';
 import Link from 'next/link';
-import FieldStationLayout from '@/components/ui/FieldStationLayout';
-import BrutalistBlock from '@/components/ui/BrutalistBlock';
-import Button from '@/components/ui/Button';
-import Typography from '@/components/ui/Typography';
+import DrawerBand from '@/components/tools/caloric-security/DrawerBand';
 import { getDB } from '@/lib/caloric-security/db';
 import { putInventoryItem, deleteInventoryItem } from '@/lib/caloric-security/homesteadStore';
 import { getCropById, getAllCrops } from '@/lib/tools/planting-calendar/cropLoader';
@@ -17,7 +15,7 @@ import LogHarvestModal from '@/components/tools/caloric-security/LogHarvestModal
 import type { InventoryItem } from '@/lib/caloric-security/types';
 
 // ============================================================
-// Inventory Management Page
+// Inventory Management Page — the stock book.
 //
 // Full CRUD for InventoryItem records stored in Dexie.
 // Reactive via useLiveQuery — updates reflect immediately
@@ -44,8 +42,14 @@ const BLANK_FORM: FormState = {
 
 const STATUS_LABELS: Record<InventoryItem['status'], string> = {
   planned: 'Planned',
-  active:  'Active',
-  stored:  'Stored',
+  active:  'In the ground',
+  stored:  'On the shelf',
+};
+
+const STATUS_TAG: Record<InventoryItem['status'], string> = {
+  planned: 'border-slateblue text-slateblue',
+  active:  'border-moss text-moss',
+  stored:  'border-ink text-ink/80',
 };
 
 const PRESERVATION_LABELS: Record<NonNullable<InventoryItem['preservationMethod']>, string> = {
@@ -53,13 +57,18 @@ const PRESERVATION_LABELS: Record<NonNullable<InventoryItem['preservationMethod'
   canned:         'Canned',
   dehydrated:     'Dehydrated',
   frozen:         'Frozen',
-  'cold-storage': 'Cold Storage',
+  'cold-storage': 'Cold storage',
 };
 
+const FIELD_LABEL = 'block font-mono text-[0.68rem] uppercase tracking-widest text-ink/60 mb-1';
+const FIELD_INPUT = 'w-full px-3 py-2.5 bg-paper border-2 border-ink/40 focus:border-marker outline-none font-mono text-sm transition-colors placeholder:text-ink/40';
+const BTN_GHOST   = 'px-4 py-2.5 border-2 border-ink bg-paper font-mono text-[0.7rem] font-bold uppercase tracking-wider hover:bg-kraft transition-colors';
+const BTN_SOLID   = 'px-4 py-2.5 bg-ink text-paper border-2 border-ink font-mono text-[0.7rem] font-bold uppercase tracking-wider hover:bg-marker hover:border-marker transition-colors disabled:opacity-60';
+
 function phaseColor(phase: string) {
-  if (phase === 'spoiled')  return 'text-red-400';
-  if (phase === 'declining') return 'text-yellow-400';
-  return 'opacity-40';
+  if (phase === 'spoiled')   return 'text-rust';
+  if (phase === 'declining') return 'text-marker';
+  return 'text-ink/50';
 }
 
 const EMAIL_SESSION_KEY = 'hl_import_email_shown';
@@ -196,108 +205,81 @@ export default function InventoryPage() {
   }
 
   return (
-    <FieldStationLayout stationId="HL_INVENTORY_V1.0">
-      <div className="max-w-5xl mx-auto space-y-8">
+    <>
+      <DrawerBand
+        drawer="The stock book"
+        title="The stock book"
+        sub={`Every crop the clocks count, ${inventory.length} line${inventory.length !== 1 ? 's' : ''} on the page.`}
+        right={
+          <>
+            <button onClick={() => setShowLogHarvest(true)} className={BTN_GHOST}>
+              Log harvest
+            </button>
+            <button onClick={openAdd} className={BTN_SOLID}>
+              + Add a line
+            </button>
+          </>
+        }
+      />
 
-        {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 border-b-2 border-border-primary pb-6">
-          <div>
-            <Link
-              href="/tools/caloric-security"
-              className="inline-flex items-center gap-1.5 text-[10px] font-mono uppercase opacity-40 hover:opacity-80 transition-opacity mb-3"
-            >
-              <ArrowLeft size={10} /> Dashboard
-            </Link>
-            <Typography variant="h1" className="mb-1 uppercase tracking-tight font-mono text-2xl md:text-4xl">
-              Food Inventory
-            </Typography>
-            <Typography variant="small" className="opacity-40 font-mono text-[11px] uppercase tracking-widest">
-              Crop inventory // {inventory.length} items tracked
-            </Typography>
-          </div>
-          <div className="flex items-center gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setShowLogHarvest(true)}
-              className="flex items-center gap-2"
-            >
-              <Leaf size={12} /> Log Harvest
-            </Button>
-            <Button variant="primary" size="sm" onClick={openAdd} className="flex items-center gap-2">
-              <Plus size={12} /> Add Item
-            </Button>
-          </div>
-        </div>
+      <section className="max-w-6xl mx-auto px-4 pt-10 pb-16 space-y-6">
 
         {/* Planting Calendar import banner */}
         {preview && preview.items.length > 0 && !importSuccess && (
-          <BrutalistBlock className="p-4 border-l-4 border-accent bg-accent/5" refTag="IMPORT_READY">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-              <div className="flex items-start gap-3">
-                <Download size={14} className="text-accent mt-0.5 shrink-0" />
-                <div>
-                  <p className="text-xs font-mono font-bold uppercase tracking-widest text-accent mb-0.5">
-                    {preview.items.length} crop{preview.items.length !== 1 ? 's' : ''} ready from Planting Calendar
-                  </p>
-                  <p className="text-[9px] font-mono opacity-50 uppercase">
-                    {preview.cropNames.join(' · ')}
-                  </p>
-                </div>
-              </div>
-              <div className="flex items-center gap-2 shrink-0">
-                <button
-                  onClick={dismiss}
-                  className="text-[9px] font-mono uppercase opacity-40 hover:opacity-70 transition-opacity px-2 py-1"
-                >
-                  Dismiss
-                </button>
-                <Button
-                  variant="primary"
-                  size="sm"
-                  onClick={handleImport}
-                  disabled={importing}
-                  className="flex items-center gap-2"
-                >
-                  <Download size={11} />
-                  {importing ? 'Importing...' : `Import ${preview.items.length} Crop${preview.items.length !== 1 ? 's' : ''}`}
-                </Button>
-              </div>
+          <div className="border-2 border-moss bg-paper px-4 py-3 flex flex-col sm:flex-row sm:items-center gap-3">
+            <div className="flex-1 text-[0.92rem] leading-snug text-ink/85">
+              <strong className="text-moss">
+                {preview.items.length} crop{preview.items.length !== 1 ? 's' : ''}
+              </strong>{' '}
+              carried over from the planting calendar: {preview.cropNames.join(', ')}.
             </div>
-          </BrutalistBlock>
+            <div className="flex items-center gap-3 shrink-0">
+              <button
+                onClick={dismiss}
+                className="font-mono text-[0.64rem] uppercase tracking-wider text-ink/45 hover:text-ink transition-colors"
+              >
+                Dismiss
+              </button>
+              <button
+                onClick={handleImport}
+                disabled={importing}
+                className={BTN_SOLID}
+              >
+                {importing ? 'Writing them in...' : 'Write them in'}
+              </button>
+            </div>
+          </div>
         )}
 
         {importSuccess && (
-          <div className="text-[10px] font-mono uppercase text-green-400 flex items-center gap-2 px-1">
-            <span>✓</span> {preview === null ? 'Crops imported' : ''} Successfully added to inventory as Planned.
-          </div>
+          <p className="font-hand font-semibold text-moss text-xl -rotate-1">
+            ✓ in the book as planned, the food clock has them now
+          </p>
         )}
 
         {/* Search + filter bar */}
         {inventory.length > 0 && (
           <div className="flex flex-col sm:flex-row gap-3">
             <div className="relative flex-1">
-              <Search size={11} className="absolute left-3 top-1/2 -translate-y-1/2 opacity-30" />
+              <Search size={12} className="absolute left-3 top-1/2 -translate-y-1/2 text-ink/40" />
               <input
                 type="text"
-                placeholder="Search crops..."
+                placeholder="Find a crop..."
                 value={searchQuery}
                 onChange={e => setSearchQuery(e.target.value)}
-                className="w-full bg-black/20 border border-border-primary/30 focus:border-accent outline-none pl-8 pr-3 py-2 text-xs font-mono uppercase placeholder:opacity-30 transition-colors"
+                className="w-full pl-9 pr-3 py-2 bg-paper border-2 border-ink/40 focus:border-marker outline-none font-mono text-sm transition-colors placeholder:text-ink/40"
               />
             </div>
-            <div className="flex gap-1">
+            <div className="flex gap-2">
               {(['all', 'planned', 'active', 'stored'] as const).map(s => (
                 <button
                   key={s}
                   onClick={() => setStatusFilter(s)}
-                  className={`px-3 py-2 text-[10px] font-mono uppercase border transition-colors ${
-                    statusFilter === s
-                      ? 'border-accent text-accent bg-accent/10'
-                      : 'border-border-primary/20 opacity-40 hover:opacity-70'
+                  className={`px-3 py-2 border-2 border-ink font-mono text-[0.68rem] uppercase tracking-wider transition-colors ${
+                    statusFilter === s ? 'bg-ink text-paper' : 'bg-paper hover:bg-kraft'
                   }`}
                 >
-                  {s}
+                  {s === 'all' ? 'All' : STATUS_LABELS[s]}
                 </button>
               ))}
             </div>
@@ -306,98 +288,100 @@ export default function InventoryPage() {
 
         {/* Empty state */}
         {inventory.length === 0 && (
-          <BrutalistBlock refTag="NO_ITEMS">
-            <div className="py-12 flex flex-col items-center gap-4 opacity-40">
-              <Package size={32} />
-              <div className="text-center font-mono uppercase text-[11px]">
-                <div>No items in inventory.</div>
-                <div>Add crops to start tracking caloric security.</div>
-              </div>
-            </div>
-          </BrutalistBlock>
+          <div className="border-2 border-dashed border-ink/40 p-10 text-center">
+            <p className="font-display uppercase text-xl mb-2">A blank page</p>
+            <p className="text-ink/70 max-w-md mx-auto">
+              Nothing counted yet. Add a line, log a harvest, or carry crops over
+              from the{' '}
+              <Link href="/tools/planting-calendar/" className="underline underline-offset-4 hover:text-marker">
+                planting calendar
+              </Link>
+              .
+            </p>
+          </div>
         )}
 
         {/* Inventory table */}
         {inventory.length > 0 && (
-          <BrutalistBlock refTag="INVENTORY_MANIFEST" className="overflow-x-auto">
-            {filteredInventory.length === 0 && (
-              <div className="py-8 text-center font-mono text-[10px] uppercase opacity-30">
-                No items match &quot;{searchQuery}&quot; {statusFilter !== 'all' && `+ status: ${statusFilter}`}
+          <div className="card-paper grain overflow-hidden">
+            {filteredInventory.length === 0 ? (
+              <div className="py-10 text-center font-mono text-[0.72rem] uppercase tracking-wider text-ink/50 relative z-[2]">
+                Nothing matches &quot;{searchQuery}&quot;
+                {statusFilter !== 'all' && ` under ${STATUS_LABELS[statusFilter]}`}
+              </div>
+            ) : (
+              <div className="ruled px-4 py-2 relative z-[2] overflow-x-auto">
+                <table className="w-full font-mono text-[0.76rem] min-w-[560px]">
+                  <thead>
+                    <tr className="text-left uppercase tracking-widest text-[0.62rem] text-ink/55">
+                      <th className="py-1.5 pr-3 font-semibold">Crop</th>
+                      <th className="py-1.5 pr-3 font-semibold text-right">Plants</th>
+                      <th className="py-1.5 pr-3 font-semibold">Status</th>
+                      <th className="py-1.5 pr-3 font-semibold">Put up as</th>
+                      <th className="py-1.5 pr-3 font-semibold">Shelf life</th>
+                      <th className="py-1.5 font-semibold text-right">&nbsp;</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {filteredInventory.map(item => {
+                      const crop  = getCropById(item.cropId);
+                      const decay = crop ? calculateItemDecay(item, crop) : null;
+
+                      return (
+                        <tr key={item.id} className="h-[36px] group">
+                          <td className="pr-3 font-semibold">
+                            <span className="mr-2">{crop?.icon}</span>
+                            {crop?.name ?? item.cropId}
+                          </td>
+                          <td className="pr-3 text-right tabular-nums">{item.plantCount}</td>
+                          <td className="pr-3">
+                            <span className={`text-[0.62rem] uppercase tracking-wide border px-1.5 py-0.5 whitespace-nowrap ${STATUS_TAG[item.status]}`}>
+                              {STATUS_LABELS[item.status]}
+                            </span>
+                          </td>
+                          <td className="pr-3 text-ink/60">
+                            {item.preservationMethod ? PRESERVATION_LABELS[item.preservationMethod] : '—'}
+                          </td>
+                          <td className={`pr-3 tabular-nums whitespace-nowrap ${decay ? phaseColor(decay.phase) : 'text-ink/50'}`}>
+                            {decay && item.status === 'stored' ? (
+                              decay.phase === 'spoiled'
+                                ? 'spoiled, pull it'
+                                : `${Math.round(decay.daysRemaining)} d left (${(decay.modifier * 100).toFixed(0)}%)`
+                            ) : '—'}
+                          </td>
+                          <td className="text-right">
+                            <span className="inline-flex items-center gap-2 opacity-40 group-hover:opacity-100 transition-opacity">
+                              <button
+                                onClick={() => openEdit(item)}
+                                className="p-1 hover:text-marker transition-colors"
+                                title="Edit"
+                              >
+                                <Edit3 size={12} />
+                              </button>
+                              <button
+                                onClick={() => handleDelete(item.id)}
+                                className="p-1 hover:text-rust transition-colors"
+                                title="Remove"
+                              >
+                                <Trash2 size={12} />
+                              </button>
+                            </span>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
               </div>
             )}
-            {filteredInventory.length > 0 && (
-            <table className="w-full text-[10px] font-mono uppercase">
-              <thead>
-                <tr className="border-b border-border-primary/20">
-                  {['Crop', 'Plants', 'Status', 'Preservation', 'Shelf Life', 'Actions'].map(h => (
-                    <th key={h} className="text-left py-2 pr-4 opacity-40 font-bold">{h}</th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-border-primary/10">
-                {filteredInventory.map(item => {
-                  const crop  = getCropById(item.cropId);
-                  const decay = crop ? calculateItemDecay(item, crop) : null;
-
-                  return (
-                    <tr key={item.id} className="hover:bg-black/20 transition-colors group">
-                      <td className="py-2 pr-4 font-bold">
-                        <span className="mr-2">{crop?.icon}</span>
-                        {crop?.name ?? item.cropId}
-                      </td>
-                      <td className="py-2 pr-4 tabular-nums">{item.plantCount}</td>
-                      <td className="py-2 pr-4">
-                        <span className={`px-1.5 py-0.5 border ${
-                          item.status === 'active'  ? 'border-green-500/50 text-green-400'  :
-                          item.status === 'stored'  ? 'border-blue-500/50 text-blue-400'    :
-                          'border-border-primary/30 opacity-50'
-                        }`}>
-                          {STATUS_LABELS[item.status]}
-                        </span>
-                      </td>
-                      <td className="py-2 pr-4 opacity-60">
-                        {item.preservationMethod ? PRESERVATION_LABELS[item.preservationMethod] : '—'}
-                      </td>
-                      <td className={`py-2 pr-4 tabular-nums ${decay ? phaseColor(decay.phase) : 'opacity-40'}`}>
-                        {decay && item.status === 'stored' ? (
-                          <>
-                            {Math.round(decay.daysRemaining)}d remaining
-                            {' '}({(decay.modifier * 100).toFixed(0)}%)
-                          </>
-                        ) : '—'}
-                      </td>
-                      <td className="py-2">
-                        <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                          <button
-                            onClick={() => openEdit(item)}
-                            className="p-1 hover:text-accent transition-colors"
-                            title="Edit"
-                          >
-                            <Edit3 size={11} />
-                          </button>
-                          <button
-                            onClick={() => handleDelete(item.id)}
-                            className="p-1 hover:text-red-400 transition-colors"
-                            title="Delete"
-                          >
-                            <Trash2 size={11} />
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-            )}
-          </BrutalistBlock>
+          </div>
         )}
 
         {/* Unit assumption note */}
-        <div className="text-[9px] font-mono uppercase opacity-20 text-center">
-          Yield assumptions: bunches ~100g · bulbs ~40g · ears ~90g edible · heads ~300g
-        </div>
-      </div>
+        <p className="font-mono text-[0.64rem] uppercase tracking-widest text-ink/45 text-center">
+          Yield assumptions: bunches ~100 g · bulbs ~40 g · ears ~90 g edible · heads ~300 g
+        </p>
+      </section>
 
       {/* Log Harvest modal */}
       {showLogHarvest && (
@@ -405,107 +389,98 @@ export default function InventoryPage() {
       )}
 
       {/* Post-import email modal */}
-      {showEmailModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60">
-          <BrutalistBlock className="w-full max-w-sm relative" refTag="IMPORT_EMAIL">
-            <button
-              onClick={() => setShowEmailModal(false)}
-              className="absolute top-3 right-3 p-1 opacity-40 hover:opacity-80 transition-opacity"
-            >
-              <X size={14} />
-            </button>
+      {showEmailModal && createPortal(
+        <div className="fixed inset-0 bg-ink/70 flex items-center justify-center p-4 z-[100]">
+          <div className="card-paper grain w-full max-w-sm">
+            <div className="flex justify-between items-center px-5 py-3 border-b-2 border-ink relative z-[2]">
+              <span className="font-mono text-[0.72rem] font-bold uppercase tracking-[0.18em]">
+                Rotation reminders
+              </span>
+              <button onClick={() => setShowEmailModal(false)} aria-label="Close" className="hover:text-marker">
+                <X size={18} />
+              </button>
+            </div>
 
-            {emailSuccess ? (
-              <div className="py-6 text-center space-y-2">
-                <div className="text-2xl">✓</div>
-                <p className="text-xs font-mono uppercase font-bold text-green-400">Subscribed</p>
-                <p className="text-[10px] font-mono opacity-40 uppercase">
-                  We&apos;ll remind you when to rotate stock.
-                </p>
-              </div>
-            ) : (
-              <>
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 bg-accent/10 border-2 border-accent flex items-center justify-center shrink-0">
-                    <Mail size={16} className="text-accent" />
-                  </div>
-                  <div>
-                    <Typography variant="h4" className="mb-0 text-sm uppercase tracking-tight">
-                      Preservation Reminders
-                    </Typography>
-                    <p className="text-[9px] font-mono opacity-40 uppercase">
-                      Know when to rotate your stores
-                    </p>
-                  </div>
+            <div className="p-5 relative z-[2]">
+              {emailSuccess ? (
+                <div className="py-6 text-center">
+                  <p className="font-hand font-semibold text-moss text-3xl -rotate-1">✓ on the list</p>
+                  <p className="mt-2 font-mono text-[0.68rem] uppercase tracking-wider text-ink/55">
+                    We&apos;ll write when it&apos;s time to rotate stock.
+                  </p>
                 </div>
-                <p className="text-[10px] font-mono opacity-50 uppercase mb-5">
-                  Get monthly alerts when your canned and frozen goods approach their shelf-life limit.
-                </p>
-                <form onSubmit={handleEmailSubmit} className="space-y-4">
-                  <input
-                    type="email"
-                    required
-                    placeholder="homesteader@example.com"
-                    value={emailValue}
-                    onChange={e => setEmailValue(e.target.value)}
-                    className="w-full bg-black/30 border-2 border-border-primary/40 focus:border-accent outline-none px-3 py-2 text-sm font-mono"
-                  />
-                  <label className="flex items-start gap-2 cursor-pointer">
+              ) : (
+                <>
+                  <p className="text-[0.95rem] text-ink/80 leading-snug mb-5">
+                    A monthly note when your canned and frozen goods get close to
+                    their shelf-life limit. Nothing else.
+                  </p>
+                  <form onSubmit={handleEmailSubmit} className="space-y-4">
                     <input
-                      type="checkbox"
-                      checked={emailConsent}
-                      onChange={e => setEmailConsent(e.target.checked)}
-                      className="mt-0.5"
+                      type="email"
                       required
+                      placeholder="homesteader@example.com"
+                      value={emailValue}
+                      onChange={e => setEmailValue(e.target.value)}
+                      className={FIELD_INPUT}
                     />
-                    <span className="text-[9px] font-mono uppercase opacity-50 leading-tight">
-                      Send me preservation reminders for my inventory. Unsubscribe anytime.
-                    </span>
-                  </label>
-                  <div className="flex gap-3 pt-2">
-                    <Button variant="outline" size="sm" onClick={() => setShowEmailModal(false)} className="flex-1" type="button">
-                      Skip
-                    </Button>
-                    <Button
-                      variant="primary"
-                      size="sm"
-                      disabled={!emailConsent || emailSubmitting}
-                      className="flex-1"
-                      type="submit"
-                    >
-                      {emailSubmitting ? 'Subscribing...' : 'Subscribe'}
-                    </Button>
-                  </div>
-                </form>
-              </>
-            )}
-          </BrutalistBlock>
-        </div>
+                    <label className="flex items-start gap-2 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={emailConsent}
+                        onChange={e => setEmailConsent(e.target.checked)}
+                        className="mt-1 accent-marker"
+                        required
+                      />
+                      <span className="font-mono text-[0.64rem] uppercase tracking-wide text-ink/60 leading-tight">
+                        Send me preservation reminders for my inventory. Unsubscribe anytime.
+                      </span>
+                    </label>
+                    <div className="flex gap-3 pt-2">
+                      <button type="button" onClick={() => setShowEmailModal(false)} className={`${BTN_GHOST} flex-1`}>
+                        Skip
+                      </button>
+                      <button
+                        type="submit"
+                        disabled={!emailConsent || emailSubmitting}
+                        className={`${BTN_SOLID} flex-1`}
+                      >
+                        {emailSubmitting ? 'Signing you up...' : 'Sign me up'}
+                      </button>
+                    </div>
+                  </form>
+                </>
+              )}
+            </div>
+          </div>
+        </div>,
+        document.body
       )}
 
       {/* Add / Edit modal */}
-      {formOpen && (
-        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-4 bg-black/60">
-          <BrutalistBlock className="w-full max-w-sm" refTag="ITEM_FORM">
-            <div className="flex items-center justify-between mb-6">
-              <Typography variant="h3" className="uppercase tracking-tight mb-0 text-base">
-                {editId ? 'Edit Item' : 'Add to Inventory'}
-              </Typography>
+      {formOpen && createPortal(
+        <div className="fixed inset-0 bg-ink/70 flex items-end sm:items-center justify-center p-4 z-[100]">
+          <div className="card-paper grain w-full max-w-sm">
+            <div className="flex justify-between items-center px-5 py-3 border-b-2 border-ink relative z-[2]">
+              <span className="font-mono text-[0.72rem] font-bold uppercase tracking-[0.18em]">
+                {editId ? 'Correct the line' : 'Add a line'}
+              </span>
+              <button onClick={() => setFormOpen(false)} aria-label="Close" className="hover:text-marker">
+                <X size={18} />
+              </button>
             </div>
 
-            <div className="space-y-4">
+            <div className="p-5 relative z-[2] space-y-4">
               {/* Crop */}
               <div>
-                <label className="block text-xs font-mono uppercase tracking-widest mb-1 opacity-70">
-                  Crop
-                </label>
+                <label className={FIELD_LABEL}>Crop</label>
                 <select
                   value={form.cropId}
                   onChange={e => setForm(f => ({ ...f, cropId: e.target.value }))}
-                  className="w-full bg-black/30 border-2 border-border-primary/40 focus:border-accent outline-none px-3 py-2 text-sm font-mono uppercase"
+                  className={FIELD_INPUT}
                 >
                   {allCrops.map(c => (
-                    <option key={c.id} value={c.id} className="bg-background-primary">
+                    <option key={c.id} value={c.id}>
                       {c.icon} {c.name}
                     </option>
                   ))}
@@ -514,31 +489,27 @@ export default function InventoryPage() {
 
               {/* Plant count */}
               <div>
-                <label className="block text-xs font-mono uppercase tracking-widest mb-1 opacity-70">
-                  Plant Count
-                </label>
+                <label className={FIELD_LABEL}>Plant count</label>
                 <input
                   type="number"
                   min={1}
                   value={form.plantCount}
                   onChange={e => setForm(f => ({ ...f, plantCount: parseInt(e.target.value) || 1 }))}
-                  className="w-full bg-black/30 border-2 border-border-primary/40 focus:border-accent outline-none px-3 py-2 text-sm font-mono"
+                  className={FIELD_INPUT}
                 />
               </div>
 
               {/* Status */}
               <div>
-                <label className="block text-xs font-mono uppercase tracking-widest mb-1 opacity-70">
-                  Status
-                </label>
+                <label className={FIELD_LABEL}>Status</label>
                 <select
                   value={form.status}
                   onChange={e => setForm(f => ({ ...f, status: e.target.value as InventoryItem['status'] }))}
-                  className="w-full bg-black/30 border-2 border-border-primary/40 focus:border-accent outline-none px-3 py-2 text-sm font-mono uppercase"
+                  className={FIELD_INPUT}
                 >
-                  <option value="planned"  className="bg-background-primary">Planned</option>
-                  <option value="active"   className="bg-background-primary">Active (in ground)</option>
-                  <option value="stored"   className="bg-background-primary">Stored (harvested)</option>
+                  <option value="planned">Planned</option>
+                  <option value="active">In the ground</option>
+                  <option value="stored">On the shelf (harvested)</option>
                 </select>
               </div>
 
@@ -546,8 +517,8 @@ export default function InventoryPage() {
               {form.status === 'stored' && (
                 <>
                   <div>
-                    <label className="block text-xs font-mono uppercase tracking-widest mb-1 opacity-70">
-                      Weight (lbs) <span className="opacity-40 normal-case">— optional</span>
+                    <label className={FIELD_LABEL}>
+                      Weight (lbs) <span className="text-ink/45 normal-case">[optional]</span>
                     </label>
                     <input
                       type="number"
@@ -556,24 +527,22 @@ export default function InventoryPage() {
                       placeholder="e.g. 5.5"
                       value={form.weightLbs}
                       onChange={e => setForm(f => ({ ...f, weightLbs: e.target.value }))}
-                      className="w-full bg-black/30 border-2 border-border-primary/40 focus:border-accent outline-none px-3 py-2 text-sm font-mono"
+                      className={FIELD_INPUT}
                     />
-                    <p className="text-[9px] font-mono opacity-30 uppercase mt-1">
-                      Actual weight overrides plant-count estimate for caloric math.
+                    <p className="mt-1 font-mono text-[0.62rem] uppercase tracking-wide text-ink/50">
+                      What the scale said beats the plant-count estimate.
                     </p>
                   </div>
 
                   <div>
-                    <label className="block text-xs font-mono uppercase tracking-widest mb-1 opacity-70">
-                      Preservation Method
-                    </label>
+                    <label className={FIELD_LABEL}>Preservation method</label>
                     <select
                       value={form.preservationMethod}
                       onChange={e => setForm(f => ({ ...f, preservationMethod: e.target.value as InventoryItem['preservationMethod'] }))}
-                      className="w-full bg-black/30 border-2 border-border-primary/40 focus:border-accent outline-none px-3 py-2 text-sm font-mono uppercase"
+                      className={FIELD_INPUT}
                     >
                       {(Object.keys(PRESERVATION_LABELS) as Array<keyof typeof PRESERVATION_LABELS>).map(k => (
-                        <option key={k} value={k} className="bg-background-primary">
+                        <option key={k} value={k}>
                           {PRESERVATION_LABELS[k]}
                         </option>
                       ))}
@@ -581,41 +550,38 @@ export default function InventoryPage() {
                   </div>
 
                   <div>
-                    <label className="block text-xs font-mono uppercase tracking-widest mb-1 opacity-70">
-                      Date Harvested
-                    </label>
+                    <label className={FIELD_LABEL}>Date harvested</label>
                     <input
                       type="date"
                       max={new Date().toISOString().slice(0, 10)}
                       value={form.dateHarvested}
                       onChange={e => setForm(f => ({ ...f, dateHarvested: e.target.value }))}
-                      className="w-full bg-black/30 border-2 border-border-primary/40 focus:border-accent outline-none px-3 py-2 text-sm font-mono"
+                      className={FIELD_INPUT}
                     />
-                    <p className="text-[9px] font-mono opacity-30 uppercase mt-1">
-                      Used to calculate decay and shelf life remaining.
+                    <p className="mt-1 font-mono text-[0.62rem] uppercase tracking-wide text-ink/50">
+                      Sets the decay clock and shelf life remaining.
                     </p>
                   </div>
                 </>
               )}
-            </div>
 
-            <div className="flex gap-3 mt-8 pt-5 border-t border-border-primary/20">
-              <Button variant="outline" size="sm" onClick={() => setFormOpen(false)} className="flex-1">
-                Cancel
-              </Button>
-              <Button
-                variant="primary"
-                size="sm"
-                onClick={handleSave}
-                className="flex-1"
-                disabled={saving || !form.cropId}
-              >
-                {saving ? 'Saving...' : editId ? 'Update' : 'Add to Inventory'}
-              </Button>
+              <div className="flex gap-3 pt-3 border-t-2 border-ink">
+                <button onClick={() => setFormOpen(false)} className={`${BTN_GHOST} flex-1`}>
+                  Cancel
+                </button>
+                <button
+                  onClick={handleSave}
+                  disabled={saving || !form.cropId}
+                  className={`${BTN_SOLID} flex-1`}
+                >
+                  {saving ? 'Writing it in...' : editId ? 'Save the line' : 'Write it in'}
+                </button>
+              </div>
             </div>
-          </BrutalistBlock>
-        </div>
+          </div>
+        </div>,
+        document.body
       )}
-    </FieldStationLayout>
+    </>
   );
 }
