@@ -183,7 +183,7 @@ export default function HourlyChart({ hourly }: HourlyChartProps) {
         </svg>
 
         {/* Legend */}
-        <div className="flex justify-center gap-6 mt-2 pb-2 border-b border-border-primary/20">
+        <div className="flex justify-center gap-6 mt-2 pb-2 border-b border-ink/20">
           <div className="flex items-center gap-2">
             <div className="w-3 h-0.5 bg-marker" />
             <span className="text-[8px] font-mono opacity-40 uppercase">Temp</span>

@@ -39,7 +39,7 @@ export default function PlantingEmailCapture({
   if (isSuccess) {
     return (
       <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-        <div className="brutalist-block bg-background-primary max-w-md w-full p-6 text-center">
+        <div className="border-2 border-ink bg-paper shadow-brutalist max-w-md w-full p-6 text-center">
           <div className="flex justify-center mb-4">
             <div className="w-16 h-16 bg-green-600 rounded-full flex items-center justify-center">
               <CheckCircle size={32} className="text-white" />
@@ -60,11 +60,11 @@ export default function PlantingEmailCapture({
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="brutalist-block bg-background-primary max-w-md w-full p-6 relative">
+      <div className="border-2 border-ink bg-paper shadow-brutalist max-w-md w-full p-6 relative">
         {/* Close button */}
         <button 
           onClick={onDismiss}
-          className="absolute top-3 right-3 p-1 hover:bg-background-secondary transition-colors"
+          className="absolute top-3 right-3 p-1 hover:bg-manila transition-colors"
           aria-label="Dismiss"
         >
           <X size={18} />
@@ -72,7 +72,7 @@ export default function PlantingEmailCapture({
 
         {/* Header */}
         <div className="flex items-center gap-3 mb-4">
-          <div className="w-12 h-12 bg-[var(--accent)] rounded-full flex items-center justify-center">
+          <div className="w-12 h-12 bg-marker rounded-full flex items-center justify-center">
             <Calendar size={24} className="text-white" />
           </div>
           <div>
@@ -82,7 +82,7 @@ export default function PlantingEmailCapture({
         </div>
 
         {/* Value props */}
-        <div className="bg-background-secondary/50 p-3 mb-4 text-xs space-y-1">
+        <div className="bg-manila/50 p-3 mb-4 text-xs space-y-1">
           <div className="flex items-center gap-2">
             <span>✓</span>
             <span>&quot;Time to start your tomatoes indoors&quot;</span>
@@ -95,7 +95,7 @@ export default function PlantingEmailCapture({
             <span>✓</span>
             <span>&quot;Last chance to plant fall crops&quot;</span>
           </div>
-          <div className="mt-2 pt-2 border-t border-border-primary/30 text-xs opacity-60">
+          <div className="mt-2 pt-2 border-t border-ink/30 text-xs opacity-60">
             Customized for: {zipCode} • {cropCount} crops • Based on your frost dates
           </div>
         </div>
@@ -111,7 +111,7 @@ export default function PlantingEmailCapture({
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="homesteader@example.com"
-                className="w-full bg-background-secondary border border-border-primary pl-10 pr-3 py-2 text-sm focus:outline-none focus:border-[var(--accent)]"
+                className="w-full bg-manila border border-ink pl-10 pr-3 py-2 text-sm focus:outline-none focus:border-marker"
                 required
               />
             </div>
@@ -135,7 +135,7 @@ export default function PlantingEmailCapture({
           <button
             type="submit"
             disabled={isSubmitting || !consent}
-            className="w-full bg-[var(--accent)] text-white py-3 font-bold uppercase text-sm hover:brightness-110 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full bg-marker text-white py-3 font-bold uppercase text-sm hover:brightness-110 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isSubmitting ? (
               <span className="flex items-center justify-center gap-2">
@@ -153,7 +153,7 @@ export default function PlantingEmailCapture({
         )}
 
         {/* Trust signals */}
-        <div className="mt-4 pt-3 border-t border-border-primary/30 text-center">
+        <div className="mt-4 pt-3 border-t border-ink/30 text-center">
           <p className="text-xs opacity-50">
             🔒 We never share your email • Powered by Homesteader Labs
           </p>

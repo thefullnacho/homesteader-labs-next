@@ -23,24 +23,6 @@ const config: Config = {
         moss: '#5c6b3c',
         rust: '#a8442a',
         slateblue: '#3f5d6b',
-        // Legacy tokens, mapped onto the paper palette in globals.css.
-        // Unported pages keep working; remove once every page uses the
-        // palette names above.
-        background: {
-          primary: 'var(--bg-primary)',
-          secondary: 'var(--bg-secondary)',
-        },
-        foreground: {
-          primary: 'var(--text-primary)',
-          secondary: 'var(--text-secondary)',
-        },
-        accent: 'var(--accent)',
-        border: {
-          primary: 'var(--border-primary)',
-        },
-        terminal: {
-          glow: 'var(--terminal-glow)',
-        },
       },
       fontFamily: {
         display: ['var(--font-display)', 'sans-serif'],

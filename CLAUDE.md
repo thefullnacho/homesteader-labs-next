@@ -81,7 +81,7 @@ Kraft header band (`bg-kraft grain border-b-2 border-ink`, `torn-top` on article
 
 ### Legacy (do not extend)
 
-The old brutalist component wrappers (`FieldStationLayout`, `BrutalistBlock`, `Typography`, `Badge`, `Button`) have been deleted — nothing imports them. What remains of the old system is the **token bridge**: legacy tokens `text-accent` / `border-border-primary` / `shadow-brutalist*` are still remapped onto the paper palette in globals.css so any lingering class references keep rendering. Removing that remap (and the last `text-accent`/`shadow-brutalist*` class usages) is the final teardown pass; do not add new uses of these tokens.
+The old brutalist system is fully gone: the component wrappers (`FieldStationLayout`, `BrutalistBlock`, `Typography`, `Badge`, `Button`), the `.brutalist-block` CSS class, and the token bridge (`--bg-primary`/`--accent`/`--border-primary` etc. and the `background`/`foreground`/`accent`/`border`/`terminal` Tailwind color aliases) have all been removed. Use only the paper palette names (`paper`, `ink`, `marker`, `kraft`, `manila`, `moss`, `rust`, `slateblue`, `soil`). The `shadow-brutalist*` utilities and `--shadow-color` remain — they are the retained hard-shadow system, not legacy.
 
 ## Content Conventions
 
@@ -103,7 +103,7 @@ Add entries to the relevant JSON in `content/crops/` following the existing sche
 ## Current Status (2026-07-18)
 
 - Branch `redesign/paper-field-notebook`: **redesign complete for all routes**. Latest commits: KB as the crop files (`13af908`), field notes drawer pulls + at-a-glance cards (`b814b7c`), forager game as the field quiz (`59cae0d`), survival garden plan as the intake worksheet (`ba9344c`).
-- Legacy component teardown done: 5 dead weather/caloric dashboards + `FieldStationLayout` deleted, and the 4 live consumers (`TerminalOverlay`, `ContextualRequisition`, `RadarView`, `DashboardErrorBoundary`) ported off the old wrappers. Remaining: remove the globals.css token remap and the last `text-accent`/`shadow-brutalist*` class usages; per-page copy + em-dash sweep.
+- Legacy teardown complete: the old component wrappers, `.brutalist-block`, and the globals.css/tailwind token bridge are all removed; every route runs on the paper palette directly. Remaining: per-page copy + em-dash sweep.
 
 ### Parked idea: open research + agent reporting layer
 
