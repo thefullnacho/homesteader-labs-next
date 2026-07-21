@@ -1,6 +1,5 @@
 import { notFound } from 'next/navigation';
 import Wizard from '@/components/survivalPlan/Wizard';
-import FieldStationLayout from '@/components/ui/FieldStationLayout';
 import { isSurvivalPlanPublic } from '@/lib/survivalPlan/visibility';
 
 export const metadata = {
@@ -12,10 +11,8 @@ export const metadata = {
 export default function WizardPage() {
   if (!isSurvivalPlanPublic()) notFound();
   return (
-    <FieldStationLayout stationId="SGP_WIZ_01" gridLines>
-      <div className="py-8 px-4">
-        <Wizard />
-      </div>
-    </FieldStationLayout>
+    <div className="py-8 px-4">
+      <Wizard />
+    </div>
   );
 }

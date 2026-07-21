@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import { CheckCircle, AlertTriangle } from 'lucide-react';
-import Button from '@/components/ui/Button';
 
 type FormState = 'idle' | 'submitting' | 'success' | 'error';
 
@@ -40,19 +39,22 @@ export default function PreviewForm() {
   if (status === 'success' && downloadUrl) {
     return (
       <div className="space-y-3">
-        <div className="flex items-center gap-2 text-accent">
+        <div className="flex items-center gap-2 text-moss">
           <CheckCircle size={16} />
-          <span className="text-xs font-mono uppercase font-bold">Preview ready</span>
+          <span className="font-mono text-[0.72rem] uppercase tracking-wider font-bold">Preview ready</span>
         </div>
         <a
           href={downloadUrl}
           download={`survival-garden-preview-${zip}.pdf`}
-          className="inline-flex items-center justify-center font-bold uppercase bg-accent text-white border-2 border-accent px-6 py-2 text-sm shadow-brutalist"
+          className="inline-flex items-center justify-center bg-ink text-paper border-2 border-ink px-6 py-3 font-mono text-[0.78rem] uppercase tracking-wider hover:bg-marker hover:border-marker transition-colors"
         >
-          Download_Preview_PDF
+          Download preview PDF
         </a>
-        <p className="text-[10px] font-mono opacity-50 uppercase">
-          A copy was sent to {email}. Want the full plan? <a href="/survival-garden-plan/wizard/" className="text-accent underline">Build it →</a>
+        <p className="font-mono text-[0.68rem] uppercase tracking-wider text-ink/50">
+          A copy was sent to {email}. Want the full plan?{' '}
+          <a href="/survival-garden-plan/wizard/" className="underline decoration-marker decoration-2 underline-offset-4 hover:text-marker">
+            Build it →
+          </a>
         </p>
       </div>
     );
@@ -67,7 +69,7 @@ export default function PreviewForm() {
           value={zip}
           onChange={e => setZip(e.target.value.replace(/\D/g, '').slice(0, 5))}
           placeholder="ZIP code"
-          className="bg-black/30 border-2 border-foreground-primary/40 focus:border-accent outline-none px-3 py-2 text-sm font-mono"
+          className="bg-paper border-2 border-ink px-3 py-2 font-mono text-sm focus:border-marker focus:outline-none transition-colors"
         />
         <input
           type="email"
@@ -75,25 +77,23 @@ export default function PreviewForm() {
           value={email}
           onChange={e => setEmail(e.target.value)}
           placeholder="you@example.com"
-          className="bg-black/30 border-2 border-foreground-primary/40 focus:border-accent outline-none px-3 py-2 text-sm font-mono"
+          className="bg-paper border-2 border-ink px-3 py-2 font-mono text-sm focus:border-marker focus:outline-none transition-colors"
         />
       </div>
       {error && (
-        <div className="flex items-center gap-2 px-3 py-2 border border-red-500/40 bg-red-500/10 text-red-300 text-xs font-mono">
+        <div className="flex items-center gap-2 px-3 py-2 border-2 border-rust/50 bg-rust/10 text-rust font-mono text-[0.72rem]">
           <AlertTriangle size={14} />
           {error}
         </div>
       )}
-      <Button
-        variant="primary"
-        size="md"
+      <button
         type="submit"
         disabled={status === 'submitting' || zip.length !== 5 || !email.includes('@')}
-        className="w-full"
+        className="w-full bg-ink text-paper border-2 border-ink px-5 py-3 font-mono text-[0.78rem] uppercase tracking-wider hover:bg-marker hover:border-marker disabled:opacity-40 transition-colors"
       >
-        {status === 'submitting' ? 'Generating...' : 'Get_Free_Preview'}
-      </Button>
-      <p className="text-[10px] font-mono opacity-40 uppercase text-center">
+        {status === 'submitting' ? 'Generating…' : 'Get free preview'}
+      </button>
+      <p className="font-mono text-[0.64rem] uppercase tracking-[0.18em] text-ink/40 text-center">
         We send one preview + occasional seasonal updates. No spam, no data sale.
       </p>
     </form>

@@ -4,10 +4,6 @@ import { useState, useEffect, useCallback } from 'react';
 import {
   MapPin, Users, Maximize2, Target, Sprout, Ban, ChevronRight, ChevronLeft, AlertTriangle, CheckCircle,
 } from 'lucide-react';
-import BrutalistBlock from '@/components/ui/BrutalistBlock';
-import Button from '@/components/ui/Button';
-import Typography from '@/components/ui/Typography';
-import Badge from '@/components/ui/Badge';
 import { useFieldStation } from '@/app/context/FieldStationContext';
 import { decodeInputs } from '@/lib/survivalPlan/inputEncoding';
 import type {
@@ -29,6 +25,20 @@ const STEPS = [
   { id: 'exclusions',  label: 'Exclusions',  icon: Ban },
   { id: 'review',      label: 'Review',      icon: CheckCircle },
 ];
+
+/* Paper-system form primitives */
+const inputCls =
+  'bg-paper border-2 border-ink px-3 py-2 font-mono text-sm focus:border-marker focus:outline-none transition-colors';
+const primaryBtn =
+  'bg-ink text-paper border-2 border-ink px-5 py-3 font-mono text-[0.78rem] uppercase tracking-wider hover:bg-marker hover:border-marker disabled:opacity-40 transition-colors';
+const secondaryBtn =
+  'inline-flex items-center border-2 border-ink bg-paper px-4 py-2 font-mono text-[0.72rem] uppercase tracking-wider hover:bg-kraft disabled:opacity-40 transition-colors';
+const optionBtn = (selected: boolean) =>
+  `border-2 transition-colors ${
+    selected
+      ? 'border-marker bg-kraft/60'
+      : 'border-ink/30 bg-paper hover:border-ink hover:bg-kraft/40'
+  }`;
 
 interface WizardState extends SurvivalPlanInput {
   zoneDetected: string | null;
@@ -97,20 +107,29 @@ function StepIndicator({ current }: { current: number }) {
         return (
           <div key={step.id} className="flex items-center shrink-0">
             <div className={`flex items-center gap-1.5 px-2 py-1 border-2 text-[10px] font-mono font-bold uppercase ${
-              active ? 'border-accent text-accent bg-accent/10'
-              : done ? 'border-foreground-primary/60 text-foreground-primary/60'
-              : 'border-foreground-primary/20 text-foreground-primary/20'
+              active ? 'border-marker text-marker bg-kraft'
+              : done ? 'border-ink/60 text-ink/60'
+              : 'border-ink/20 text-ink/30'
             }`}>
               <Icon size={10} />
               <span className="hidden md:inline">{step.label}</span>
               <span className="md:hidden">{i + 1}</span>
             </div>
             {i < STEPS.length - 1 && (
-              <div className={`w-2 h-0.5 ${done ? 'bg-foreground-primary/60' : 'bg-foreground-primary/20'}`} />
+              <div className={`w-2 h-0.5 ${done ? 'bg-ink/60' : 'bg-ink/20'}`} />
             )}
           </div>
         );
       })}
+    </div>
+  );
+}
+
+function StepHeading({ title, sub }: { title: string; sub: string }) {
+  return (
+    <div>
+      <h2 className="font-display uppercase text-2xl tracking-tight mb-1">{title}</h2>
+      <p className="font-mono text-[0.68rem] uppercase tracking-[0.18em] text-ink/50">{sub}</p>
     </div>
   );
 }
@@ -131,13 +150,10 @@ function LocationStep({ state, set }: StepProps) {
 
   return (
     <div className="space-y-6">
-      <div>
-        <Typography variant="h3" className="uppercase tracking-tight mb-1">Where_Are_You</Typography>
-        <p className="text-xs font-mono opacity-40 uppercase">Determines your zone, frost dates, growing window</p>
-      </div>
+      <StepHeading title="Where are you" sub="Determines your zone, frost dates, growing window" />
 
       <div>
-        <label className="block text-xs font-mono font-bold uppercase tracking-widest mb-2 text-foreground-primary/70">
+        <label className="block font-mono text-[0.72rem] font-bold uppercase tracking-wider mb-2 text-ink/70">
           ZIP Code
         </label>
         <div className="flex gap-2">
@@ -146,28 +162,27 @@ function LocationStep({ state, set }: StepProps) {
             value={state.zipCode}
             onChange={e => set('zipCode', e.target.value.replace(/\D/g, '').slice(0, 5))}
             placeholder="e.g. 04401"
-            className="flex-1 bg-black/30 border-2 border-foreground-primary/40 focus:border-accent outline-none px-3 py-2 text-sm font-mono"
+            className={`flex-1 ${inputCls}`}
           />
-          <Button
-            variant="primary"
-            size="sm"
+          <button
             onClick={handleLookup}
             disabled={state.zipCode.length !== 5 || frostLoading}
+            className={primaryBtn}
           >
-            {frostLoading ? '...' : 'Look_up'}
-          </Button>
+            {frostLoading ? '…' : 'Look up'}
+          </button>
         </div>
         {frostError && (
-          <div className="mt-2 px-3 py-2 bg-yellow-500/10 border border-yellow-500/40 text-yellow-200 text-[10px] font-mono uppercase">
+          <div className="mt-2 px-3 py-2 border-2 border-rust/50 bg-rust/10 text-rust font-mono text-[0.68rem] uppercase">
             {frostError}
           </div>
         )}
       </div>
 
       {state.zoneDetected && (
-        <div className="px-3 py-3 bg-accent/5 border-2 border-accent/40">
-          <p className="text-[10px] font-mono opacity-60 uppercase">Detected</p>
-          <p className="text-lg font-mono font-bold text-accent">Zone {state.zoneDetected}</p>
+        <div className="px-4 py-3 border-2 border-ink bg-kraft">
+          <p className="font-mono text-[0.64rem] uppercase tracking-[0.18em] text-ink/55">Detected</p>
+          <p className="font-display uppercase text-xl text-moss">Zone {state.zoneDetected}</p>
         </div>
       )}
     </div>
@@ -182,54 +197,50 @@ function HouseholdStep({ state, set }: StepProps) {
     set('dietaryRestrictions', next);
   }
 
+  const stepperBtn =
+    'w-9 h-9 border-2 border-ink bg-paper flex items-center justify-center font-bold hover:bg-kraft transition-colors';
+
   return (
     <div className="space-y-6">
-      <div>
-        <Typography variant="h3" className="uppercase tracking-tight mb-1">Who_Eats</Typography>
-        <p className="text-xs font-mono opacity-40 uppercase">Daily calorie target = household size × 2000 kcal</p>
-      </div>
+      <StepHeading title="Who eats" sub="Daily calorie target = household size × 2000 kcal" />
 
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label className="block text-[10px] font-mono font-bold uppercase tracking-widest mb-2 text-foreground-primary/70">Adults</label>
+          <label className="block font-mono text-[0.68rem] font-bold uppercase tracking-wider mb-2 text-ink/70">Adults</label>
           <div className="flex items-center gap-3">
-            <button onClick={() => set('adults', Math.max(1, state.adults - 1))} className="w-9 h-9 border-2 border-foreground-primary flex items-center justify-center font-bold hover:border-accent hover:text-accent">−</button>
-            <span className="text-2xl font-mono font-bold w-10 text-center">{state.adults}</span>
-            <button onClick={() => set('adults', Math.min(12, state.adults + 1))} className="w-9 h-9 border-2 border-foreground-primary flex items-center justify-center font-bold hover:border-accent hover:text-accent">+</button>
+            <button onClick={() => set('adults', Math.max(1, state.adults - 1))} className={stepperBtn}>−</button>
+            <span className="text-2xl font-display w-10 text-center tabular-nums">{state.adults}</span>
+            <button onClick={() => set('adults', Math.min(12, state.adults + 1))} className={stepperBtn}>+</button>
           </div>
         </div>
 
         <div>
-          <label className="block text-[10px] font-mono font-bold uppercase tracking-widest mb-2 text-foreground-primary/70">Kids</label>
+          <label className="block font-mono text-[0.68rem] font-bold uppercase tracking-wider mb-2 text-ink/70">Kids</label>
           <div className="flex items-center gap-3">
-            <button onClick={() => set('kids', Math.max(0, state.kids - 1))} className="w-9 h-9 border-2 border-foreground-primary flex items-center justify-center font-bold hover:border-accent hover:text-accent">−</button>
-            <span className="text-2xl font-mono font-bold w-10 text-center">{state.kids}</span>
-            <button onClick={() => set('kids', Math.min(12, state.kids + 1))} className="w-9 h-9 border-2 border-foreground-primary flex items-center justify-center font-bold hover:border-accent hover:text-accent">+</button>
+            <button onClick={() => set('kids', Math.max(0, state.kids - 1))} className={stepperBtn}>−</button>
+            <span className="text-2xl font-display w-10 text-center tabular-nums">{state.kids}</span>
+            <button onClick={() => set('kids', Math.min(12, state.kids + 1))} className={stepperBtn}>+</button>
           </div>
         </div>
       </div>
 
-      <div className="px-3 py-2 bg-black/20 border border-foreground-primary/20 text-[10px] font-mono uppercase opacity-60">
+      <div className="px-3 py-2 bg-kraft/60 border border-ink/20 font-mono text-[0.68rem] uppercase tracking-wider text-ink/60">
         Daily target: {(state.adults + state.kids) * 2000} kcal
       </div>
 
       <div>
-        <label className="block text-[10px] font-mono font-bold uppercase tracking-widest mb-3 text-foreground-primary/70">
-          Dietary restrictions <span className="opacity-40 normal-case">[optional]</span>
+        <label className="block font-mono text-[0.68rem] font-bold uppercase tracking-wider mb-3 text-ink/70">
+          Dietary restrictions <span className="text-ink/40 normal-case">[optional]</span>
         </label>
         <div className="space-y-2">
           {DIETARY_OPTIONS.map(opt => (
             <button
               key={opt.value}
               onClick={() => toggleDietary(opt.value)}
-              className={`w-full text-left px-3 py-2 border-2 ${
-                state.dietaryRestrictions.includes(opt.value)
-                  ? 'border-accent bg-accent/10 text-accent'
-                  : 'border-foreground-primary/30 hover:border-foreground-primary'
-              }`}
+              className={`w-full text-left px-3 py-2 ${optionBtn(state.dietaryRestrictions.includes(opt.value))}`}
             >
               <span className="text-xs font-mono font-bold uppercase block">{opt.label}</span>
-              <span className="text-[10px] font-mono opacity-50 uppercase">{opt.sub}</span>
+              <span className="text-[10px] font-mono text-ink/50 uppercase">{opt.sub}</span>
             </button>
           ))}
         </div>
@@ -241,13 +252,10 @@ function HouseholdStep({ state, set }: StepProps) {
 function SpaceStep({ state, set }: StepProps) {
   return (
     <div className="space-y-6">
-      <div>
-        <Typography variant="h3" className="uppercase tracking-tight mb-1">Garden_Space</Typography>
-        <p className="text-xs font-mono opacity-40 uppercase">Total square footage available for food crops</p>
-      </div>
+      <StepHeading title="Garden space" sub="Total square footage available for food crops" />
 
       <div>
-        <label className="block text-[10px] font-mono font-bold uppercase tracking-widest mb-2 text-foreground-primary/70">
+        <label className="block font-mono text-[0.68rem] font-bold uppercase tracking-wider mb-2 text-ink/70">
           Square feet
         </label>
         <input
@@ -256,23 +264,19 @@ function SpaceStep({ state, set }: StepProps) {
           onChange={e => set('squareFeet', Math.max(10, parseInt(e.target.value || '0', 10)))}
           min={10}
           max={5000}
-          className="w-full bg-black/30 border-2 border-foreground-primary/40 focus:border-accent outline-none px-3 py-2 text-sm font-mono"
+          className={`w-full ${inputCls}`}
         />
-        <p className="text-[10px] font-mono opacity-30 uppercase mt-1">A 4×8 ft raised bed = 32 sq ft</p>
+        <p className="font-mono text-[0.64rem] text-ink/40 uppercase mt-1">A 4×8 ft raised bed = 32 sq ft</p>
       </div>
 
       <div>
-        <label className="block text-[10px] font-mono font-bold uppercase tracking-widest mb-2 text-foreground-primary/70">Garden type</label>
+        <label className="block font-mono text-[0.68rem] font-bold uppercase tracking-wider mb-2 text-ink/70">Garden type</label>
         <div className="grid grid-cols-2 gap-2">
           {GARDEN_TYPE_OPTIONS.map(opt => (
             <button
               key={opt.value}
               onClick={() => set('gardenType', opt.value)}
-              className={`px-3 py-2 border-2 text-xs font-mono font-bold uppercase ${
-                state.gardenType === opt.value
-                  ? 'border-accent bg-accent/10 text-accent'
-                  : 'border-foreground-primary/30 hover:border-foreground-primary'
-              }`}
+              className={`px-3 py-2 text-xs font-mono font-bold uppercase ${optionBtn(state.gardenType === opt.value)}`}
             >
               {opt.label}
             </button>
@@ -286,24 +290,17 @@ function SpaceStep({ state, set }: StepProps) {
 function GoalStep({ state, set }: StepProps) {
   return (
     <div className="space-y-6">
-      <div>
-        <Typography variant="h3" className="uppercase tracking-tight mb-1">Primary_Goal</Typography>
-        <p className="text-xs font-mono opacity-40 uppercase">Drives which crops we surface for your plan</p>
-      </div>
+      <StepHeading title="Primary goal" sub="Drives which crops we surface for your plan" />
 
       <div className="space-y-2">
         {GOAL_OPTIONS.map(opt => (
           <button
             key={opt.value}
             onClick={() => set('goal', opt.value)}
-            className={`w-full text-left px-3 py-3 border-2 ${
-              state.goal === opt.value
-                ? 'border-accent bg-accent/10 text-accent'
-                : 'border-foreground-primary/30 hover:border-foreground-primary'
-            }`}
+            className={`w-full text-left px-3 py-3 ${optionBtn(state.goal === opt.value)}`}
           >
             <span className="text-sm font-mono font-bold uppercase block">{opt.label}</span>
-            <span className="text-[10px] font-mono opacity-60 uppercase">{opt.sub}</span>
+            <span className="text-[10px] font-mono text-ink/60 uppercase">{opt.sub}</span>
           </button>
         ))}
       </div>
@@ -314,24 +311,17 @@ function GoalStep({ state, set }: StepProps) {
 function ExperienceStep({ state, set }: StepProps) {
   return (
     <div className="space-y-6">
-      <div>
-        <Typography variant="h3" className="uppercase tracking-tight mb-1">Your_Experience</Typography>
-        <p className="text-xs font-mono opacity-40 uppercase">Filters crop difficulty + applies skill-level yield modifier</p>
-      </div>
+      <StepHeading title="Your experience" sub="Filters crop difficulty + applies skill-level yield modifier" />
 
       <div className="space-y-2">
         {EXPERIENCE_OPTIONS.map(opt => (
           <button
             key={opt.value}
             onClick={() => set('experience', opt.value)}
-            className={`w-full text-left px-3 py-3 border-2 ${
-              state.experience === opt.value
-                ? 'border-accent bg-accent/10 text-accent'
-                : 'border-foreground-primary/30 hover:border-foreground-primary'
-            }`}
+            className={`w-full text-left px-3 py-3 ${optionBtn(state.experience === opt.value)}`}
           >
             <span className="text-sm font-mono font-bold uppercase block">{opt.label}</span>
-            <span className="text-[10px] font-mono opacity-60 uppercase">{opt.sub}</span>
+            <span className="text-[10px] font-mono text-ink/60 uppercase">{opt.sub}</span>
           </button>
         ))}
       </div>
@@ -349,20 +339,15 @@ function ExclusionsStep({ state, set }: StepProps) {
 
   return (
     <div className="space-y-6">
-      <div>
-        <Typography variant="h3" className="uppercase tracking-tight mb-1">Won&apos;t_Grow</Typography>
-        <p className="text-xs font-mono opacity-40 uppercase">Skip crops you won&apos;t plant — optional</p>
-      </div>
+      <StepHeading title="Won't grow" sub="Skip crops you won't plant — optional" />
 
       <div className="grid grid-cols-2 gap-2">
         {COMMON_CROPS.map(crop => (
           <button
             key={crop.id}
             onClick={() => toggle(crop.id)}
-            className={`px-3 py-2 border-2 text-left ${
-              state.excludedCropIds.includes(crop.id)
-                ? 'border-accent bg-accent/10 text-accent line-through'
-                : 'border-foreground-primary/30 hover:border-foreground-primary'
+            className={`px-3 py-2 text-left ${optionBtn(state.excludedCropIds.includes(crop.id))} ${
+              state.excludedCropIds.includes(crop.id) ? 'line-through' : ''
             }`}
           >
             <span className="text-xs font-mono font-bold uppercase">{crop.name}</span>
@@ -386,39 +371,36 @@ function ReviewStep({ state, generating, error, onGenerate }: { state: WizardSta
 
   return (
     <div className="space-y-6">
-      <div>
-        <Typography variant="h3" className="uppercase tracking-tight mb-1">Review_Plan</Typography>
-        <p className="text-xs font-mono opacity-40 uppercase">Confirm before generating your personalized PDF</p>
-      </div>
+      <StepHeading title="Review plan" sub="Confirm before generating your personalized PDF" />
 
-      <div className="divide-y divide-foreground-primary/20">
+      <div>
         {rows.map(([label, value]) => (
-          <div key={label} className="flex justify-between items-center py-2.5">
-            <span className="text-xs font-mono uppercase opacity-50">{label}</span>
+          <div key={label} className="flex justify-between items-center py-2.5 border-b border-dotted border-ink/40 last:border-b-0">
+            <span className="font-mono text-[0.72rem] uppercase tracking-wider text-ink/55">{label}</span>
             <span className="text-xs font-mono font-bold">{value}</span>
           </div>
         ))}
       </div>
 
-      <div className="border-2 border-accent/40 bg-accent/5 px-4 py-3">
-        <p className="text-[10px] font-mono uppercase opacity-60 mb-1">One-time purchase</p>
-        <p className="text-2xl font-mono font-bold text-accent">$19</p>
-        <p className="text-[10px] font-mono uppercase opacity-50 mt-1">PDF download · email backup · re-download for 30 days</p>
+      <div className="border-2 border-ink bg-kraft px-4 py-3">
+        <p className="font-mono text-[0.64rem] uppercase tracking-[0.18em] text-ink/55 mb-1">One-time purchase</p>
+        <p className="font-display text-3xl">$19</p>
+        <p className="font-mono text-[0.64rem] uppercase tracking-wider text-ink/50 mt-1">PDF download · email backup · re-download for 30 days</p>
       </div>
 
       {error && (
-        <div className="flex items-center gap-2 px-3 py-2 border border-red-500/40 bg-red-500/10 text-red-300 text-xs font-mono">
+        <div className="flex items-center gap-2 px-3 py-2 border-2 border-rust/50 bg-rust/10 text-rust font-mono text-[0.72rem]">
           <AlertTriangle size={14} />
           {error}
         </div>
       )}
 
-      <Button variant="primary" size="lg" onClick={onGenerate} disabled={generating || !state.zoneDetected} className="w-full">
-        {generating ? 'Generating...' : 'Generate_My_Plan ($19)'}
-      </Button>
+      <button onClick={onGenerate} disabled={generating || !state.zoneDetected} className={`w-full ${primaryBtn}`}>
+        {generating ? 'Generating…' : 'Generate my plan ($19)'}
+      </button>
 
       {!state.zoneDetected && (
-        <p className="text-[10px] font-mono opacity-50 uppercase text-center">Go back to step 1 and look up your ZIP first</p>
+        <p className="font-mono text-[0.64rem] text-ink/50 uppercase text-center">Go back to step 1 and look up your ZIP first</p>
       )}
     </div>
   );
@@ -512,48 +494,52 @@ export default function Wizard() {
 
   return (
     <div className="max-w-xl mx-auto">
-      <div className="mb-6 flex items-start justify-between">
+      <div className="mb-6 flex items-start justify-between gap-4">
         <div>
-          <Typography variant="h2" className="uppercase tracking-tight mb-1">Survival_Garden_Plan</Typography>
-          <Typography variant="small" className="opacity-40 font-mono text-[11px] uppercase tracking-widest">
-            Personalize // Generate
-          </Typography>
+          <h1 className="font-display uppercase text-3xl tracking-tight mb-1">Survival Garden Plan</h1>
+          <p className="font-mono text-[0.68rem] uppercase tracking-[0.18em] text-ink/50">
+            Intake worksheet
+          </p>
         </div>
-        <Badge variant="status" pulse>Step_{step + 1}_of_{total}</Badge>
+        <span className="font-mono text-[0.68rem] uppercase tracking-[0.18em] bg-kraft border border-ink/40 px-2 py-1 shrink-0">
+          Step {step + 1} of {total}
+        </span>
       </div>
 
       <StepIndicator current={step} />
 
-      <BrutalistBlock refTag={`STEP_${step + 1}_OF_${total}`}>
-        {step === 0 && <LocationStep   {...stepProps} />}
-        {step === 1 && <HouseholdStep  {...stepProps} />}
-        {step === 2 && <SpaceStep      {...stepProps} />}
-        {step === 3 && <GoalStep       {...stepProps} />}
-        {step === 4 && <ExperienceStep {...stepProps} />}
-        {step === 5 && <ExclusionsStep {...stepProps} />}
-        {step === 6 && <ReviewStep state={state} generating={generating} error={error} onGenerate={handleGenerate} />}
+      <div className="card-paper grain p-6">
+        <div className="relative z-[2]">
+          {step === 0 && <LocationStep   {...stepProps} />}
+          {step === 1 && <HouseholdStep  {...stepProps} />}
+          {step === 2 && <SpaceStep      {...stepProps} />}
+          {step === 3 && <GoalStep       {...stepProps} />}
+          {step === 4 && <ExperienceStep {...stepProps} />}
+          {step === 5 && <ExclusionsStep {...stepProps} />}
+          {step === 6 && <ReviewStep state={state} generating={generating} error={error} onGenerate={handleGenerate} />}
 
-        {step < 6 && (
-          <div className="flex items-center justify-between mt-8 pt-6 border-t border-foreground-primary/20">
-            <Button variant="outline" size="sm" onClick={() => setStep(s => s - 1)} disabled={step === 0} className={step === 0 ? 'invisible' : ''}>
-              <ChevronLeft size={14} className="mr-1" /> Back
-            </Button>
-            <Button variant="primary" size="sm" onClick={() => setStep(s => s + 1)} disabled={!canAdvance()}>
-              Next <ChevronRight size={14} className="ml-1" />
-            </Button>
-          </div>
-        )}
+          {step < 6 && (
+            <div className="flex items-center justify-between mt-8 pt-6 border-t border-ink/20">
+              <button onClick={() => setStep(s => s - 1)} disabled={step === 0} className={`${secondaryBtn} ${step === 0 ? 'invisible' : ''}`}>
+                <ChevronLeft size={14} className="mr-1" /> Back
+              </button>
+              <button onClick={() => setStep(s => s + 1)} disabled={!canAdvance()} className={primaryBtn}>
+                Next <ChevronRight size={14} className="ml-1 inline" />
+              </button>
+            </div>
+          )}
 
-        {step === 6 && (
-          <div className="flex items-center justify-start mt-8 pt-6 border-t border-foreground-primary/20">
-            <Button variant="outline" size="sm" onClick={() => setStep(s => s - 1)}>
-              <ChevronLeft size={14} className="mr-1" /> Back
-            </Button>
-          </div>
-        )}
-      </BrutalistBlock>
+          {step === 6 && (
+            <div className="flex items-center justify-start mt-8 pt-6 border-t border-ink/20">
+              <button onClick={() => setStep(s => s - 1)} className={secondaryBtn}>
+                <ChevronLeft size={14} className="mr-1" /> Back
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
 
-      <p className="text-[10px] font-mono opacity-20 uppercase text-center mt-4">
+      <p className="font-mono text-[0.64rem] text-ink/40 uppercase text-center mt-4">
         Wizard state saved locally · No account required
       </p>
     </div>
