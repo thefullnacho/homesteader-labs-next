@@ -4,10 +4,10 @@ import { SectionHead, Stamp } from "@/components/field/kit";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Hardware Catalog — Off-Grid Survival & Mesh Networking Equipment",
+  title: "Hardware Catalog: Off-Grid Survival & Mesh Networking Equipment",
   description: "Authorized hardware for self-reliant homesteaders. Off-grid electronics, mesh networking gear, and custom-fabricated survival equipment.",
   openGraph: {
-    title: "Hardware Catalog — Off-Grid Survival & Mesh Networking Equipment",
+    title: "Hardware Catalog: Off-Grid Survival & Mesh Networking Equipment",
     description: "Authorized hardware for self-reliant homesteaders. Off-grid electronics, mesh networking gear, and custom-fabricated survival equipment.",
     type: "website",
   },

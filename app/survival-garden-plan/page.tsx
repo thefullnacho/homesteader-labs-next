@@ -32,15 +32,15 @@ const FAQS = [
   },
   {
     q: "What if my plan isn't quite right? Can I regenerate?",
-    a: "Yes. The PDF includes a QR code that links to a live companion page where you can adjust inputs and see the new plan instantly. The companion page works on any device with a browser — no app install. You can re-render the PDF after changes (Annual Pass tier).",
+    a: "Yes. The PDF includes a QR code that links to a live companion page where you can adjust inputs and see the new plan instantly. The companion page works on any device with a browser, no app install. You can re-render the PDF after changes (Annual Pass tier).",
   },
   {
     q: "Where does the data come from?",
     a: "Frost normals from NOAA 1991–2020 climate data via api.frost.date. Caloric and macro values from USDA nutrient databases. Yield averages from agricultural extension publications and seed catalog norms. Spacing from standard horticultural references. All calculations are documented and the underlying engine is in our open-source caloric-security toolkit.",
   },
   {
-    q: "I'm a beginner — will I be overwhelmed?",
-    a: "The wizard adjusts crop selection by experience level. Beginner mode filters out finicky crops (cauliflower, celery, perennials) and applies a 60% yield-realization coefficient. The PDF includes step-by-step timing for indoor starts, hardening off, and transplanting — anchored to your specific frost dates so you don't have to guess.",
+    q: "I'm a beginner, will I be overwhelmed?",
+    a: "The wizard adjusts crop selection by experience level. Beginner mode filters out finicky crops (cauliflower, celery, perennials) and applies a 60% yield-realization coefficient. The PDF includes step-by-step timing for indoor starts, hardening off, and transplanting, anchored to your specific frost dates so you don't have to guess.",
   },
   {
     q: "Do the affiliate links increase the price I pay?",
@@ -48,7 +48,7 @@ const FAQS = [
   },
   {
     q: "What's your refund policy?",
-    a: "Because the PDF is generated immediately upon purchase, we don't offer refunds — but if there's a bug or your plan doesn't match your inputs, email us and we'll regenerate or refund at our discretion. Try the free 1-page preview first to see exactly what your zone produces.",
+    a: "Because the PDF is generated immediately upon purchase, we don't offer refunds, but if there's a bug or your plan doesn't match your inputs, email us and we'll regenerate or refund at our discretion. Try the free 1-page preview first to see exactly what your zone produces.",
   },
 ];
 
@@ -92,7 +92,7 @@ export default function SurvivalGardenPlanLanding() {
           <p className="mt-4 text-lg md:text-xl leading-relaxed max-w-2xl text-ink/85 italic">
             Built from the same calculation engines that power our planting
             calendar, caloric-security tools, and frost-risk dashboards.
-            Generated for your exact ZIP, household, and goals — not a generic
+            Generated for your exact ZIP, household, and goals, not a generic
             template.
           </p>
           <div className="mt-6 flex flex-wrap items-center gap-3">
@@ -100,7 +100,7 @@ export default function SurvivalGardenPlanLanding() {
               href="/survival-garden-plan/wizard/"
               className="inline-flex items-center bg-ink text-paper border-2 border-ink px-5 py-3 font-mono text-[0.78rem] uppercase tracking-wider hover:bg-marker hover:border-marker transition-colors"
             >
-              Build my plan — $19 <ArrowRight size={16} className="ml-2" />
+              Build my plan for $19 <ArrowRight size={16} className="ml-2" />
             </Link>
             <Link
               href={`/survival-garden-plan/companion/?p=${SAMPLE_TOKEN}`}
@@ -161,7 +161,7 @@ export default function SurvivalGardenPlanLanding() {
           <SectionHead no="§3" title="Free preview" right="1 page · your zone" />
           <div className="border-2 border-ink bg-kraft grain p-6 md:p-8 max-w-2xl">
             <p className="font-mono text-[0.66rem] uppercase tracking-[0.2em] text-ink/60 mb-4 relative z-[2]">
-              Enter your ZIP and email — we&apos;ll send back a 1-page calorie summary for your zone.
+              Enter your ZIP and email. We&apos;ll send back a 1-page calorie summary for your zone.
             </p>
             <div className="relative z-[2]">
               <PreviewForm />

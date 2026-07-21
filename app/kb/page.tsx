@@ -5,11 +5,11 @@ import { getAllKbCrops } from "@/lib/kb";
 import KbBrowser from "./KbBrowser";
 
 export const metadata: Metadata = {
-  title: "Crop Knowledge Base — Growing Guides for 350+ Plants",
+  title: "Crop Knowledge Base: Growing Guides for 350+ Plants",
   description:
     "An open, searchable reference for growing vegetables, herbs, fruits, and more. Botanical names, sun and spacing needs, and sowing methods for over 350 crops. Free and public domain.",
   openGraph: {
-    title: "Crop Knowledge Base — Homesteader Labs",
+    title: "Crop Knowledge Base: Homesteader Labs",
     description:
       "Open, searchable growing reference for 350+ crops. Botanical names, sun, spacing, and sowing methods. Public domain.",
     type: "website",
@@ -46,7 +46,7 @@ export default function KnowledgeBasePage() {
           </h1>
           <p className="mt-4 text-lg md:text-xl leading-relaxed max-w-2xl text-ink/85 italic">
             Botanical names, sun and spacing needs, and sowing methods for{" "}
-            {crops.length} crops — the broad reference layer beneath the
+            {crops.length} crops, the broad reference layer beneath the
             planting tools.
           </p>
           <p className="mt-3 font-hand font-semibold text-marker text-xl rotate-[-1deg]">

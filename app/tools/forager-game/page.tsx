@@ -6,15 +6,15 @@ import DomainPicker from '@/components/foragerGame/DomainPicker';
 
 const FEATURES = [
   { icon: Eye,         label: 'Same image, same options', sub: 'You and the AI both see the same iNaturalist photo and pick from the same 4 species options' },
-  { icon: Cpu,         label: '187 ms per scan',          sub: 'The model runs on a 4 TOPS Hailo chip in the WALKING MAN PRO — offline, in your hand, faster than you can read' },
+  { icon: Cpu,         label: '187 ms per scan',          sub: 'The model runs on a 4 TOPS Hailo chip in the WALKING MAN PRO, offline, in your hand, faster than you can read' },
   { icon: ShieldAlert, label: 'Real deadly lookalikes',   sub: 'Distractors prefer the documented lookalikes a forager actually confuses. Get one wrong → see why' },
-  { icon: Sparkles,    label: '109 curated rounds',       sub: 'Across berries, edible mushrooms, psilocybes, and medicinal plants — all CC-BY / CC-0 with full attribution' },
+  { icon: Sparkles,    label: '109 curated rounds',       sub: 'Across berries, edible mushrooms, psilocybes, and medicinal plants, all CC-BY / CC-0 with full attribution' },
 ];
 
 const FAQS = [
   {
     q: "Is the AI's score really fair?",
-    a: "The AI's prediction is restricted to the same 4 options you see — it can't pick a class that wasn't on your screen. Confidence shown is the softmax over those 4 options. This is the same model that runs on WALKING MAN PRO, just running on a browser-friendly CPU build for the curated dataset.",
+    a: "The AI's prediction is restricted to the same 4 options you see. It can't pick a class that wasn't on your screen. Confidence shown is the softmax over those 4 options. This is the same model that runs on WALKING MAN PRO, just running on a browser-friendly CPU build for the curated dataset.",
   },
   {
     q: "Where do the images come from?",
@@ -26,15 +26,15 @@ const FAQS = [
   },
   {
     q: "Will the device replace expert identification?",
-    a: "No. Wild plant and mushroom identification carries fatal risk — amatoxin poisoning has no field antidote. Both the game and the device are educational and confirmatory tools. Always verify with an expert before consumption decisions.",
+    a: "No. Wild plant and mushroom identification carries fatal risk. Amatoxin poisoning has no field antidote. Both the game and the device are educational and confirmatory tools. Always verify with an expert before consumption decisions.",
   },
   {
     q: "Why is the AI sometimes wrong?",
-    a: "Vision models struggle with the same things humans do — partial views, atypical specimens, juvenile vs mature growth stages, and especially the visually-similar deadly lookalikes the model was trained to flag. The mycologist domain (psilocybes vs Galerinas) is the hardest by design, and the AI scores roughly 60% there — your best chance to win.",
+    a: "Vision models struggle with the same things humans do: partial views, atypical specimens, juvenile vs mature growth stages, and especially the visually-similar deadly lookalikes the model was trained to flag. The mycologist domain (psilocybes vs Galerinas) is the hardest by design, and the AI scores roughly 60% there, your best chance to win.",
   },
   {
     q: "How do I get the actual device?",
-    a: "WALKING MAN PRO is the field tool — Raspberry Pi 5 + Hailo 8L accelerator + 5\" e-ink display + offline voice trigger. Runs the same models you just played against, plus the domain router that picks the right expert automatically. Available at /shop/wlk-mn-pro/.",
+    a: "WALKING MAN PRO is the field tool: Raspberry Pi 5 + Hailo 8L accelerator + 5\" e-ink display + offline voice trigger. Runs the same models you just played against, plus the domain router that picks the right expert automatically. Available at /shop/wlk-mn-pro/.",
   },
 ];
 
@@ -60,7 +60,7 @@ export default function ForagerGameLanding() {
             Can you beat the AI?
           </h1>
           <p className="mt-4 text-lg md:text-xl leading-relaxed max-w-2xl text-ink/85 italic">
-            Ten rounds. Real iNaturalist photos. You pick a species — then see how
+            Ten rounds. Real iNaturalist photos. You pick a species, then see how
             the vision model that runs the WALKING MAN PRO scored on the same image.
           </p>
           <p className="mt-3 font-hand font-semibold text-marker text-xl rotate-[-1deg]">
@@ -119,7 +119,7 @@ export default function ForagerGameLanding() {
           <div className="bg-ink text-paper border-2 border-ink p-6 md:p-8 text-center">
             <p className="font-display uppercase text-xl md:text-2xl">The real device</p>
             <p className="mt-3 text-[0.95rem] text-paper/75 max-w-md mx-auto leading-relaxed">
-              You just played against the brain. The body is WALKING MAN PRO — a
+              You just played against the brain. The body is WALKING MAN PRO, a
               5&quot; field tool that runs the same model in your pocket, offline,
               at 187 ms per scan.
             </p>

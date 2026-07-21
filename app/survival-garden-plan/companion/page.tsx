@@ -30,7 +30,7 @@ export default async function CompanionPage(props: PageProps) {
 
   const input = decodeInputs(token);
   if (!input) {
-    return <EmptyState message="Could not read this plan link. It may be malformed — try scanning the QR code again." />;
+    return <EmptyState message="Could not read this plan link. It may be malformed, try scanning the QR code again." />;
   }
 
   const zone = getGrowingZoneFromZip(input.zipCode) ?? '6a';

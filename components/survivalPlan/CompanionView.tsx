@@ -226,7 +226,7 @@ export default function CompanionView({ plan, encodedToken }: { plan: SurvivalPl
           <div>
             <p className="font-mono font-bold uppercase text-sm">Re-run with different inputs?</p>
             <p className="font-mono text-[0.68rem] text-ink/60 uppercase mt-1">
-              The wizard pre-fills with your current plan — adjust and regenerate
+              The wizard pre-fills with your current plan, adjust and regenerate
             </p>
           </div>
           <Link

@@ -143,13 +143,13 @@ export default async function ArchivePage(props: { searchParams: Promise<{ tag?:
             How these notes work
           </p>
           <p className="text-[1.05rem] leading-relaxed text-ink/90 relative z-[2]">
-            Every note opens with an <strong className="font-bold">at-a-glance card</strong> —
+            Every note opens with an <strong className="font-bold">at-a-glance card</strong>:{" "}
             season, skill, time, region, gear. If the card answers your question,
             close the tab and go outside. If it doesn&apos;t, the long version is
             written to be read <span className="hl">standing up, with gloves on.</span>
           </p>
           <p className="font-hand font-semibold text-marker text-xl mt-4 rotate-[-1deg] relative z-[2]">
-            ✎ print any note — it fits on one page, both sides.
+            ✎ print any note, it fits on one page, both sides.
           </p>
         </div>
       </section>

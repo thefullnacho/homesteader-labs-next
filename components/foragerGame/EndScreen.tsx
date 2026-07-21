@@ -93,7 +93,7 @@ export default function EndScreen({ result, onReplay }: Props) {
         <div className="relative z-[2]">
           <p className="font-display uppercase text-lg mb-3">Field guide</p>
           <p className="text-[0.95rem] text-ink/80 leading-relaxed mb-3">
-            Drop your email — we&apos;ll send the printable lookalike field guide for every species you saw, plus seasonal foraging windows for your zone.
+            Drop your email. We&apos;ll send the printable lookalike field guide for every species you saw, plus seasonal foraging windows for your zone.
           </p>
           {emailStatus === 'success' ? (
             <div className="flex items-center gap-2 text-moss">
@@ -166,7 +166,7 @@ export default function EndScreen({ result, onReplay }: Props) {
       <div className="bg-ink text-paper border-2 border-ink p-6 md:p-8 text-center">
         <p className="font-display uppercase text-xl">The real device</p>
         <p className="mt-3 text-[0.95rem] text-paper/75 max-w-md mx-auto leading-relaxed">
-          That same model — running on a 4 TOPS Hailo chip in your hand, offline, in 187 ms per scan. WALKING MAN PRO is a 5&quot; field tool that does this in your pocket.
+          That same model, running on a 4 TOPS Hailo chip in your hand, offline, in 187 ms per scan. WALKING MAN PRO is a 5&quot; field tool that does this in your pocket.
         </p>
         <Link
           href="/shop/wlk-mn-pro/"

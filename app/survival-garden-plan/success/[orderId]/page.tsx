@@ -37,7 +37,7 @@ export default async function SuccessPage(props: PageProps) {
           </h1>
           <p className="mt-4 text-[0.95rem] text-ink/80 leading-relaxed">
             We&apos;ve generated your personalized survival garden plan and
-            emailed a copy to your inbox. Download below — the link stays active
+            emailed a copy to your inbox. Download below. The link stays active
             for 30 days.
           </p>
 

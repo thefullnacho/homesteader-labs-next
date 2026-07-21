@@ -339,7 +339,7 @@ function ExclusionsStep({ state, set }: StepProps) {
 
   return (
     <div className="space-y-6">
-      <StepHeading title="Won't grow" sub="Skip crops you won't plant — optional" />
+      <StepHeading title="Won't grow" sub="Skip crops you won't plant (optional)" />
 
       <div className="grid grid-cols-2 gap-2">
         {COMMON_CROPS.map(crop => (

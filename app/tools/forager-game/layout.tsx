@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: {
-    default: 'Can You Beat the AI? — Wild Plant ID Game',
+    default: 'Can You Beat the AI? Wild Plant ID Game',
     template: '%s · Forager Game',
   },
   description:
@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Can You Beat the AI? · Wild Plant ID Game',
     description:
-      'Identify wild plants, berries, and mushrooms — then see how the trained AI did on the same image. 10 rounds vs the WALKING MAN PRO brain.',
+      'Identify wild plants, berries, and mushrooms, then see how the trained AI did on the same image. 10 rounds vs the WALKING MAN PRO brain.',
     type: 'website',
   },
 };
