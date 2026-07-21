@@ -1,50 +1,50 @@
 ---
 title: "We Built a Pocket Forager for the Build Small Hackathon"
-description: "We entered Hugging Face's Build Small Hackathon with Forager's Field Station — a tiny AI that identifies wild plants and mushrooms from a photo and refuses when it isn't sure. Try the browser version, no install required."
+description: "We entered Hugging Face's Build Small Hackathon with Forager's Field Station, a tiny AI that identifies wild plants and mushrooms from a photo and refuses when it isn't sure. Try the browser version, no install required."
 date: "2026-06-18"
 author: "Alex de Brantes"
 tags: ["build-log", "foraging", "machine-learning", "hackathon", "off-grid"]
 category: "build-log"
-excerpt: "Most AI gets bigger every year. This one had to get smaller. Here's the story of the pocket-sized forager we built for Hugging Face's Build Small Hackathon — and how you can try it in your browser right now."
+excerpt: "Most AI gets bigger every year. This one had to get smaller. Here's the story of the pocket-sized forager we built for Hugging Face's Build Small Hackathon, and how you can try it in your browser right now."
 ---
 
 
-Most of the AI news you read is about things getting *bigger*. Bigger models, bigger data centers, bigger electricity bills. So when Hugging Face and Gradio announced a hackathon called **Build Small** — points for building AI that's tiny, runs on a phone, and works without the cloud — it felt like it was written for us.
+Most of the AI news you read is about things getting *bigger*. Bigger models, bigger data centers, bigger electricity bills. So when Hugging Face and Gradio announced a hackathon called **Build Small** (points for building AI that's tiny, runs on a phone, and works without the cloud), it felt like it was written for us.
 
 That's the whole Homesteader Labs thesis, really. The tools that keep you going off-grid don't get to phone home. So we signed up, blocked out the June build window, and made the thing we'd actually want in our own pocket: a forager.
 
 ## What we built
 
-It's called **Forager's Field Station**. You take a photo of a wild plant, berry, or mushroom, and it tells you what it thinks you're looking at — *or it tells you it doesn't know.* That second part is the whole point.
+It's called **Forager's Field Station**. You take a photo of a wild plant, berry, or mushroom, and it tells you what it thinks you're looking at, *or it tells you it doesn't know.* That second part is the whole point.
 
 Here's the honest version of why it has to be small. Picture where you actually use a thing like this: standing in a damp forest, two miles from the trailhead, no cell signal, deciding whether something is safe to eat. There's no cloud out there to ask. A giant model that needs a data center is useless in the woods. A tiny one that runs on the device in your hand is the only thing that works.
 
-So that's what it is — four small models (a "router" that sorts your photo into berry, mushroom, or plant, then a specialist that makes the actual call) totaling about 40 million parameters. In 2026 terms, that's a rounding error. It runs on a plain processor, no fancy graphics card, no internet.
+So that's what it is: four small models (a "router" that sorts your photo into berry, mushroom, or plant, then a specialist that makes the actual call) totaling about 40 million parameters. In 2026 terms, that's a rounding error. It runs on a plain processor, no fancy graphics card, no internet.
 
 ## The version you can try is the same brain as the handheld
 
-We're building this for real as a handheld field device — a little box you can carry on a walk. The Space we entered in the hackathon is the **exact same models**, just running in your web browser on a regular computer instead of on the gadget. Same brain, different body. So if you want to see what the device does without waiting for the hardware, you can poke at it today:
+We're building this for real as a handheld field device, a little box you can carry on a walk. The Space we entered in the hackathon is the **exact same models**, just running in your web browser on a regular computer instead of on the gadget. Same brain, different body. So if you want to see what the device does without waiting for the hardware, you can poke at it today:
 
 **👉 [Try Forager's Field Station in your browser](https://build-small-hackathon-forager-field-notes.hf.space/)**
 
-Point it at a photo and watch it work. It's also fun to try to break it — show it your shoe, or a car, or your dog, and see if it correctly says "that's not food, I'm not playing."
+Point it at a photo and watch it work. It's also fun to try to break it: show it your shoe, or a car, or your dog, and see if it correctly says "that's not food, I'm not playing."
 
 ## The one rule: when in doubt, shut up
 
 The thing we're proudest of isn't the accuracy. It's the *refusing*.
 
-Anybody can build an identifier that always gives you an answer. The trouble is that a confident wrong answer about a mushroom can end somebody's life — amanita and a few of its cousins are genuinely deadly, and they have edible-looking doubles. So we built the whole system to **refuse by default**. If it isn't sure, it says so. If a "safe" guess and a "deadly" warning disagree, the deadly warning wins, every time. Across our tests it never once labeled a deadly specimen as something you could eat.
+Anybody can build an identifier that always gives you an answer. The trouble is that a confident wrong answer about a mushroom can end somebody's life. Amanita and a few of its cousins are genuinely deadly, and they have edible-looking doubles. So we built the whole system to **refuse by default**. If it isn't sure, it says so. If a "safe" guess and a "deadly" warning disagree, the deadly warning wins, every time. Across our tests it never once labeled a deadly specimen as something you could eat.
 
 To be crystal clear, because it matters: **this is an identification aid, never an authority.** Nothing it says should send food to your mouth without a qualified human double-checking. We'd rather it annoy you with a shrug than hurt you with confidence.
 
 ## Want the gory details?
 
-This post is the friendly version. If you're the kind of person who wants the engineering — the architecture decisions, the safety-versus-usefulness tradeoff, and the embarrassing one-line bug that convinced us our safety net was broken when it had been working all along — we wrote the whole build story up as field notes:
+This post is the friendly version. If you're the kind of person who wants the engineering (the architecture decisions, the safety-versus-usefulness tradeoff, and the embarrassing one-line bug that convinced us our safety net was broken when it had been working all along), we wrote the whole build story up as field notes:
 
 - 📓 **[Read the full build story (Field Notes)](https://huggingface.co/spaces/build-small-hackathon/Forager-Field-Notes/blob/main/FIELD_NOTES.md)**
-- 🎬 **[Watch the 4-minute demo](https://youtu.be/VsLo-ZmxIaU)** — real backyard photos, including a deadly lookalike getting refused
-- 📦 **[Download the models](https://huggingface.co/HomesteaderLabs/forager-field-station-models)** — open weights, Apache-2.0, do what you like with them
+- 🎬 **[Watch the 4-minute demo](https://youtu.be/VsLo-ZmxIaU)**: real backyard photos, including a deadly lookalike getting refused
+- 📦 **[Download the models](https://huggingface.co/HomesteaderLabs/forager-field-station-models)**: open weights, Apache-2.0, do what you like with them
 
-We open-sourced the models on purpose. The point was never to lock anyone in. It was to prove that small, honest, offline AI is good enough to trust your feet to — and to keep the forager in you sharp instead of replacing them.
+We open-sourced the models on purpose. The point was never to lock anyone in. It was to prove that small, honest, offline AI is good enough to trust your feet to, and to keep the forager in you sharp instead of replacing them.
 
 That's the kind of tool we want to build. More of them coming.
