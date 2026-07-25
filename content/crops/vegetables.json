@@ -2095,5 +2095,305 @@
     "pestVulnerabilities": ["cabbage-worm", "aphid", "looper"],
     "binomialName": "Brassica oleracea",
     "description": "Cabbage is a member of the Brassica family and related to kale, broccoli, brussels sprouts, and cauliflower. It's dense, layered heads grow on stalks and are surrounded by looser outer leaves. It's leaves can be green, white, or purple in color, and smooth or crinkly in texture. Depending on the variety, the head can be round, oblong, or flat. Cabbage prefers cooler temperatures and is best planted in the spring or fall."
+  },
+  {
+    "id": "turnip",
+    "lunarAffinity": "waning",
+    "name": "Turnips",
+    "category": "vegetable",
+    "icon": "🥬",
+    "varieties": [
+      {
+        "id": "purple-top-white-globe",
+        "name": "Purple Top White Globe",
+        "daysToMaturity": 55,
+        "type": "Storage",
+        "special": [
+          "heirloom"
+        ]
+      },
+      {
+        "id": "hakurei",
+        "name": "Hakurei",
+        "daysToMaturity": 38,
+        "type": "Salad",
+        "special": [
+          "fast",
+          "raw-eating"
+        ]
+      },
+      {
+        "id": "golden-ball",
+        "name": "Golden Ball",
+        "daysToMaturity": 60,
+        "type": "Storage",
+        "special": [
+          "heirloom",
+          "sweet"
+        ]
+      }
+    ],
+    "startIndoors": null,
+    "transplant": null,
+    "directSow": -14,
+    "daysToMaturity": 55,
+    "successionEnabled": true,
+    "successionInterval": 2,
+    "successionMax": 3,
+    "sun": "full",
+    "spacing": "4-6\" apart",
+    "rowSpacing": "12-18\" rows",
+    "notes": [
+      "Direct sow; roots fork if transplanted",
+      "Sow late summer for a fall crop; flavour sweetens after frost",
+      "Thin to 4\" or roots stay small",
+      "Greens are edible and worth harvesting separately"
+    ],
+    "growthHabit": "annual",
+    "yearsToFirstHarvest": 0,
+    "waterNeedsPerWeek": 1,
+    "yield": {
+      "avgPerPlant": 0.35,
+      "unit": "lbs",
+      "caloriesPer100g": 28,
+      "proteinPer100g": 0.9,
+      "carbsPer100g": 6.4,
+      "fatPer100g": 0.1,
+      "storageLifeDays": 120
+    },
+    "preservation": [
+      {
+        "method": "root-cellar",
+        "shelfLifeMonths": 4,
+        "notes": "Trim tops to 1\"; pack in damp sand at 32-40°F"
+      },
+      {
+        "method": "fermentation",
+        "shelfLifeMonths": 6,
+        "notes": "Classic in kimchi and sauerruben"
+      },
+      {
+        "method": "freezing",
+        "shelfLifeMonths": 12,
+        "notes": "Blanch 3 minutes, cube, then freeze"
+      }
+    ],
+    "uses": [
+      "cooking",
+      "livestock-feed"
+    ],
+    "companions": [
+      "peas",
+      "onion"
+    ],
+    "antagonists": [
+      "potato"
+    ],
+    "pestVulnerabilities": [
+      "flea-beetle",
+      "aphid",
+      "cabbage-worm"
+    ],
+    "binomialName": "Brassica Rapa",
+    "description": "A fast brassica grown for its swollen root and its greens. Turnips size up in under two months, tolerate frost, and sweeten as temperatures drop, which makes them one of the few roots that can be sown in late summer and still finish. The greens carry more nutrition than the root and can be cut while the root is still growing."
+  },
+  {
+    "id": "rutabaga",
+    "lunarAffinity": "waning",
+    "name": "Rutabaga",
+    "category": "vegetable",
+    "icon": "🥔",
+    "varieties": [
+      {
+        "id": "american-purple-top",
+        "name": "American Purple Top",
+        "daysToMaturity": 90,
+        "type": "Storage",
+        "special": [
+          "heirloom",
+          "keeper"
+        ]
+      },
+      {
+        "id": "laurentian",
+        "name": "Laurentian",
+        "daysToMaturity": 95,
+        "type": "Storage",
+        "special": [
+          "keeper"
+        ]
+      },
+      {
+        "id": "joan",
+        "name": "Joan",
+        "daysToMaturity": 85,
+        "type": "Storage",
+        "special": [
+          "uniform"
+        ]
+      }
+    ],
+    "startIndoors": null,
+    "transplant": null,
+    "directSow": -21,
+    "daysToMaturity": 90,
+    "successionEnabled": false,
+    "successionInterval": 0,
+    "successionMax": 1,
+    "sun": "full",
+    "spacing": "6-8\" apart",
+    "rowSpacing": "18-24\" rows",
+    "notes": [
+      "Direct sow midsummer for autumn harvest; needs ~90 days",
+      "Too slow for an August sowing north of about zone 6",
+      "Leave in ground through several frosts to sweeten",
+      "The best keeper in the root bed, months in a cellar"
+    ],
+    "growthHabit": "annual",
+    "yearsToFirstHarvest": 0,
+    "waterNeedsPerWeek": 1,
+    "yield": {
+      "avgPerPlant": 1.25,
+      "unit": "lbs",
+      "caloriesPer100g": 37,
+      "proteinPer100g": 1.1,
+      "carbsPer100g": 8.6,
+      "fatPer100g": 0.2,
+      "storageLifeDays": 180
+    },
+    "preservation": [
+      {
+        "method": "root-cellar",
+        "shelfLifeMonths": 6,
+        "notes": "Waxing or damp sand at 32-40°F; the longest-keeping root here"
+      },
+      {
+        "method": "freezing",
+        "shelfLifeMonths": 12,
+        "notes": "Blanch 3 minutes, cube, then freeze"
+      },
+      {
+        "method": "canning",
+        "shelfLifeMonths": 18,
+        "notes": "Pressure can cubed"
+      }
+    ],
+    "uses": [
+      "cooking",
+      "livestock-feed"
+    ],
+    "companions": [
+      "peas",
+      "onion"
+    ],
+    "antagonists": [
+      "potato"
+    ],
+    "pestVulnerabilities": [
+      "flea-beetle",
+      "aphid",
+      "cabbage-worm"
+    ],
+    "binomialName": "Brassica Napus",
+    "description": "A cross between turnip and cabbage, grown for a dense yellow-fleshed root that stores longer than anything else in the root bed. Rutabaga needs roughly three months, so it is a midsummer sowing rather than a late one, and it repays the wait by keeping until spring in a cold cellar."
+  },
+  {
+    "id": "daikon",
+    "lunarAffinity": "waning",
+    "name": "Daikon Radish",
+    "category": "vegetable",
+    "icon": "🥕",
+    "varieties": [
+      {
+        "id": "minowase",
+        "name": "Minowase",
+        "daysToMaturity": 60,
+        "type": "Long",
+        "special": [
+          "large"
+        ]
+      },
+      {
+        "id": "miyashige",
+        "name": "Miyashige",
+        "daysToMaturity": 60,
+        "type": "Long",
+        "special": [
+          "storage"
+        ]
+      },
+      {
+        "id": "tillage-radish",
+        "name": "Tillage Radish",
+        "daysToMaturity": 55,
+        "type": "Cover crop",
+        "special": [
+          "soil-breaking",
+          "cover-crop"
+        ]
+      }
+    ],
+    "startIndoors": null,
+    "transplant": null,
+    "directSow": -14,
+    "daysToMaturity": 60,
+    "successionEnabled": true,
+    "successionInterval": 3,
+    "successionMax": 2,
+    "sun": "full",
+    "spacing": "4-6\" apart",
+    "rowSpacing": "18\" rows",
+    "notes": [
+      "Direct sow late summer; spring sowings bolt",
+      "Needs loose soil to 12\" or the root stunts and forks",
+      "Doubles as a cover crop: the taproot breaks hardpan and rots in place",
+      "Frost tolerant; harvest before the ground freezes solid"
+    ],
+    "growthHabit": "annual",
+    "yearsToFirstHarvest": 0,
+    "waterNeedsPerWeek": 1,
+    "yield": {
+      "avgPerPlant": 1,
+      "unit": "lbs",
+      "caloriesPer100g": 18,
+      "proteinPer100g": 0.6,
+      "carbsPer100g": 4.1,
+      "fatPer100g": 0.1,
+      "storageLifeDays": 90
+    },
+    "preservation": [
+      {
+        "method": "fermentation",
+        "shelfLifeMonths": 6,
+        "notes": "The standard radish for kimchi and takuan"
+      },
+      {
+        "method": "root-cellar",
+        "shelfLifeMonths": 3,
+        "notes": "Damp sand at 32-40°F; shorter keeper than rutabaga"
+      },
+      {
+        "method": "drying",
+        "shelfLifeMonths": 12,
+        "notes": "Shred and dry as kiriboshi daikon"
+      }
+    ],
+    "uses": [
+      "cooking",
+      "fermentation"
+    ],
+    "companions": [
+      "peas",
+      "lettuce"
+    ],
+    "antagonists": [
+      "potato"
+    ],
+    "pestVulnerabilities": [
+      "flea-beetle",
+      "aphid"
+    ],
+    "binomialName": "Raphanus Sativus",
+    "description": "A large white autumn radish, mild rather than peppery, grown across East Asia for fresh use and for pickling. It sizes up fast enough for a late sowing and its taproot penetrates compacted soil, which is why the same plant is sold to farmers as a tillage cover crop."
   }
 ]
