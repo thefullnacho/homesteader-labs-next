@@ -10,7 +10,7 @@ skill: "Beginner. You need a first frost date and a tape measure."
 region: "North America, zones 4–9"
 gear: "Your first frost date, a bed you can spare, row cover if you have it"
 pairsWith: "Planting Calendar, to count back from your own frost date"
-stamp: "Data-backed"
+stamp: "12 crops ranked"
 excerpt: "Every August planting list hands you the same leafy greens. Almost none of them tell you what those plants are worth. We ranked them by calories per plant, and the honest answer is that a fall garden is not a calorie garden."
 ---
 
@@ -93,10 +93,10 @@ What August is genuinely good for is extending the season, filling beds that wou
 
 ## Notes on the data
 
-Every figure here comes from `content/crops/` in this site's own repository, the same file the planting calendar reads. Calories per plant are computed from average yield per plant times caloric density, so they assume a plant that actually finishes. A cabbage killed by frost at day 70 is worth zero.
+Every figure here comes from [`content/crops/`](https://github.com/thefullnacho/homesteader-labs-next/tree/master/content/crops), the same files the planting calendar reads. Calories per plant are average yield per plant times caloric density, which assumes a plant that actually finishes. A cabbage killed by frost at day 70 is worth zero.
 
-Herbs are excluded from the table on purpose, the same way our caloric ROI tool excludes them. Their calories per 100g are culinary trace amounts rather than dietary staples, so letting them into a calorie ranking produces nonsense like sage outranking winter squash. They belong in a different tool, not this one.
+Herbs are excluded, the same way our caloric ROI tool excludes them. Their calories per 100g are culinary trace amounts rather than dietary staples, so letting them into the ranking produces nonsense like sage outranking winter squash.
 
-One genuine gap, said plainly because you should know the limits of numbers you are being handed: we have no turnip, rutabaga, or daikon in the dataset yet. Those are the traditional high-calorie autumn roots, and their absence is the biggest hole in a fall list. It is on the fix list.
+We have no turnip, rutabaga, or daikon in the dataset yet. Those are the traditional high-calorie autumn roots, and their absence is the biggest hole in this list.
 
 If you want the same treatment for your whole growing year rather than one month, the [caloric security tool](/tools/caloric-security/roi/) ranks crops by calories against the space they occupy, which is the version of this question that matters when you are planning a whole plot.
