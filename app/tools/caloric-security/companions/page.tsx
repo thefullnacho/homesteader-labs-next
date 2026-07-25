@@ -13,6 +13,7 @@ import type { InventoryItem } from '@/lib/caloric-security/types';
 import { useFieldStation } from '@/app/context/FieldStationContext';
 import { fetchWeatherData } from '@/lib/weatherApi';
 import { calculatePlantingIndex } from '@/lib/plantingIndex';
+import { fetchDailyTemps, accumulateGdd, defaultBiofix } from '@/lib/growingDegreeDays';
 import companionData from '@/content/crops/companion-planting.json';
 import pestCompanionData from '@/content/crops/pest-companions.json';
 import FaqAccordion from '@/components/ui/FaqAccordion';
@@ -96,15 +97,17 @@ function getDaysUntilPestActive(
 function getPressureLabel(
   pressure:     PestPressure,
   gddThreshold: number | undefined,
-  currentGDD:   number,
+  currentGDD:   number | null,
   forecastGDD:  number,
 ): string {
   if (pressure === 'peak')    return 'PEAK · high risk now';
   if (pressure === 'active')  return 'ACTIVE · act now';
   if (pressure === 'unknown') return '—';
 
-  // For 'soon' and 'dormant', try to add a GDD-based day estimate
-  if (gddThreshold && forecastGDD > 0) {
+  // For 'soon' and 'dormant', try to add a GDD-based day estimate.
+  // currentGDD is null until the accumulation fetch resolves, and stays null if
+  // it fails; fall through to the plain label rather than guess.
+  if (gddThreshold && currentGDD !== null && forecastGDD > 0) {
     const days = getDaysUntilPestActive(currentGDD, gddThreshold, forecastGDD);
     if (days !== null) {
       return pressure === 'soon'
@@ -168,6 +171,9 @@ export default function CompanionsPage() {
   const { activeLocation } = useFieldStation();
   const [soilTemp,    setSoilTemp]    = useState<number | null>(null);
   const [forecastGDD, setForecastGDD] = useState<number>(0);
+  // Heat accumulated since Jan 1, which is what pest thresholds are stated
+  // against. Distinct from forecastGDD, which is the next 14 days.
+  const [accumGDD,    setAccumGDD]    = useState<number | null>(null);
 
   useEffect(() => {
     setUnlocked(localStorage.getItem(GATE_KEY) === 'true');
@@ -182,6 +188,12 @@ export default function CompanionsPage() {
         setForecastGDD(index.growingDegreeDays.current);
       })
       .catch(() => {});
+
+    fetchDailyTemps(activeLocation.lat, activeLocation.lon, defaultBiofix())
+      .then(days => {
+        setAccumGDD(days ? Math.round(accumulateGdd(days, { base: 50 })) : null);
+      })
+      .catch(() => setAccumGDD(null));
   }, [activeLocation]);
 
   const inventory = useLiveQuery(
@@ -320,7 +332,7 @@ export default function CompanionsPage() {
       <div className="hidden print:block mb-6 pb-4 border-b-2 border-black px-4">
         <div className="text-xs font-mono uppercase tracking-widest mb-1">Homesteader Labs · Pest Defense Plan</div>
         <div className="text-[10px] font-mono opacity-60">
-          {currentMonth} · Soil temp: {soilTempDisplay} · GDD (base 50): {Math.round(forecastGDD)}
+          {currentMonth} · Soil temp: {soilTempDisplay} · GDD since Jan 1 (base 50): {accumGDD ?? '—'}
         </div>
       </div>
 
@@ -348,8 +360,8 @@ export default function CompanionsPage() {
         <div className="max-w-5xl mx-auto px-4 pt-6 print:hidden">
           <p className="font-mono text-[0.68rem] uppercase tracking-[0.18em] text-ink/60">
             Soil temp <strong className="text-marker">{soilTempDisplay}</strong>
-            {' '}· GDD base 50 <strong className="text-marker">{Math.round(forecastGDD)}</strong>
-            {' '}· pressure calls below use these numbers
+            {' '}· GDD since Jan 1 <strong className="text-marker">{accumGDD ?? '—'}</strong>
+            {' '}(base 50) · pressure calls below use these numbers
           </p>
         </div>
       )}
@@ -399,7 +411,12 @@ export default function CompanionsPage() {
                     {block.pests.map(pest => {
                       const pressure = getPestPressure(soilTemp, pest.soilTempThreshold);
                       const ps    = PRESSURE_STYLES[pressure];
-                      const label = getPressureLabel(pressure, pest.gddThreshold, forecastGDD, forecastGDD);
+                      // accumGDD is heat since Jan 1, which is what the pest
+                      // thresholds mean; forecastGDD is the next 14 days, used
+                      // only to project a rate. Passing forecastGDD for both,
+                      // as this did, compared incompatible quantities and made
+                      // the day estimate silently never render.
+                      const label = getPressureLabel(pressure, pest.gddThreshold, accumGDD, forecastGDD);
 
                       return (
                         <div
