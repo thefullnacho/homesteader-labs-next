@@ -30,12 +30,27 @@ const LS_LOCATIONS_KEY  = "homesteader-locations";
 const LS_FROST_KEY      = "homesteader-frost-dates";
 const FROST_API_BASE    = "https://api.frost.date/v1/frost";
 
-// Re-export from server-safe module so existing imports keep working.
-export { getGrowingZoneFromZip } from "@/lib/zoneLookup";
-import { getGrowingZoneFromZip } from "@/lib/zoneLookup";
+// Zone lookup deliberately does NOT import @/lib/zoneLookup: that module holds
+// the ~529KB PRISM table and is server-only. We fetch /api/zone/[zip] instead,
+// which is force-static and immutably cached, so it costs one request per ZIP
+// per browser and nothing thereafter.
+export async function fetchGrowingZone(zipCode: string): Promise<string | undefined> {
+  const zip = zipCode.trim().slice(0, 5);
+  if (!/^\d{5}$/.test(zip)) return undefined;
+  try {
+    // Trailing slash matters: next.config.mjs sets trailingSlash, so omitting
+    // it costs a 308 round trip on every lookup.
+    const res = await fetch(`/api/zone/${zip}/`);
+    if (!res.ok) return undefined;
+    const data = await res.json();
+    return data.zone ?? undefined;
+  } catch {
+    return undefined;
+  }
+}
 
-export const getMockFrostData = (zipCode: string): FrostDates => {
-  const zone = getGrowingZoneFromZip(zipCode) ?? "6a";
+export const getMockFrostData = async (zipCode: string): Promise<FrostDates> => {
+  const zone = (await fetchGrowingZone(zipCode)) ?? "6a";
   return getFrostDatesByZone(zone, zipCode);
 };
 
@@ -216,7 +231,7 @@ export function FieldStationProvider({ children }: { children: ReactNode }) {
         firstFallFrost:             firstFrostDate,
         firstFallFrostConfidence:   firstConf,
         frostFreeDays,
-        growingZone:                getGrowingZoneFromZip(zipPrefix),
+        growingZone:                await fetchGrowingZone(zipPrefix),
       };
 
       setFrostDates(result);
@@ -240,7 +255,7 @@ export function FieldStationProvider({ children }: { children: ReactNode }) {
       console.warn("API failed, using fallback data:", message);
       try {
         const zipPrefix  = zipCode.substring(0, 5);
-        const mockData   = getMockFrostData(zipPrefix);
+        const mockData   = await getMockFrostData(zipPrefix);
         setFrostDates(mockData);
         setFrostError("Using estimated frost dates. Confirm with your local extension office for precision.");
 
