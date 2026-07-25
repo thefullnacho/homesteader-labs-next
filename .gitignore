@@ -48,8 +48,10 @@ post-digital-dirt.md
 graphic-convenience-manifesto.html
 graphic-convenience-manifesto-warm.html
 
-# Local Claude Code settings (machine-specific)
-.claude/settings.local.json
+# Claude Code working directory (machine-specific settings, agent worktrees).
+# Worktrees created here carry their own node_modules and full branch
+# checkouts, which is how 1.4GB and 117 stale test files accumulated.
+.claude/
 
 # /brag launch video output (generated, not app code)
 brag-output/
