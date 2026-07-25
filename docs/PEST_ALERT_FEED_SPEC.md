@@ -93,10 +93,28 @@ Candidates, in order:
 | Squash bug | 134 | moderate | none in data |
 
 **Every threshold needs sourcing before launch.** The two values already in the file (`100` for
-both colorado-beetle and cabbage-worm, `150` for hornworm) look low for base-50 season accumulation
-and may have come from a different model or base temperature. Treat them as unverified. Each pest
-needs a citable extension-service source, stored in the data and linked on the page, because the
-citation is the product.
+both colorado-beetle and cabbage-worm, `150` for hornworm) are certainly not base-50-from-Jan-1
+figures: Waterford CT stands at 1608 GDD on 25 July, so a threshold of 100 would have been crossed
+in April and the tool would call every pest active all summer. Treat them as unverified.
+
+Sourced so far, both base 50°F accumulated from January 1:
+
+| Pest | Threshold | Upper cutoff | Note |
+|---|---|---|---|
+| Squash vine borer | **900 to 1000** | not specified | genuine disagreement between sources; use both ends as the window |
+| Japanese beetle | **1030** | **100°F** | sources converge; emergence *continues* to 2150 GDD |
+
+Two things this settled. The published sources agree on the frame, base 50 accumulated from
+January 1, so there is no unit conversion to untangle and a spread like 900-to-1000 is real
+disagreement rather than the same figure in different units. And the upper cutoff is per pest
+(100°F for Japanese beetle, not the 86°F assumed earlier), so it must be stored alongside each
+threshold rather than applied globally.
+
+Japanese beetle's 1030-to-2150 span is not uncertainty. It is a genuinely protracted emergence of
+roughly two months, and it should be presented as an activity period rather than folded into the
+window.
+
+Still to source: Colorado potato beetle, cabbage worm, squash bug.
 
 ## Architecture: no cron, no storage
 
@@ -129,16 +147,41 @@ Recomputing six months of daily GDD per request is wasteful. Use route segment r
 One `VEVENT` per pest per season. Emit a **window**, never a point:
 
 ```
-SUMMARY:     Squash vine borer window opens (zone 6b)
-DTSTART;VALUE=DATE:  <crossing date>
-DTEND;VALUE=DATE:    <crossing date + 10 days>
-DESCRIPTION: Accumulated 947 GDD (base 50F, from Jan 1) against a 900 GDD
-             threshold. Scout stem bases now. Source: <extension link>
+SUMMARY:     Squash vine borer window (zone 6b)
+DTSTART;VALUE=DATE:  <date the LOW published threshold is crossed>
+DTEND;VALUE=DATE:    <date the HIGH published threshold is crossed>
+DESCRIPTION: Sources put emergence between 900 and 1000 GDD (base 50F, from
+             Jan 1). Your area crossed 900 on Jun 26. Scout stem bases now.
+             Sources: <extension link>, <extension link>
 URL:         https://homesteaderlabs.com/pests/squash-vine-borer/zone-6b/
 ```
 
-Never promise a date. GDD thresholds carry real variance, and this audience will notice a miss. The
-event says a window is opening and tells them what to go look at.
+**Window width is derived, never a fixed number of days.** The original draft of this spec said
+"crossing date + 10 days", which was an invented hedge. Measured against real data, the published
+900-to-1000 GDD spread for squash vine borer converts to:
+
+```
+  Waterford CT     900 Jun 26 -> 1000 Jul 01   =  5 days
+  Minneapolis MN   900 Jun 26 -> 1000 Jun 30   =  4 days
+  Raleigh NC       900 May 04 -> 1000 May 11   =  7 days
+```
+
+because the day-cost of 100 GDD depends entirely on the local accumulation rate:
+
+```
+  Waterford, April   2.9 GDD/day   100 GDD = 34 days
+              May    9.1 GDD/day   100 GDD = 11 days
+              June  20.6 GDD/day   100 GDD =  5 days
+              July  23.9 GDD/day   100 GDD =  4 days
+```
+
+The same uncertainty is nearly seven times wider in spring than in midsummer, so any fixed day
+count is wrong by construction. Take both published thresholds, run each through
+`findThresholdCrossing` against the subscriber's own series, and let the dates fall where they fall.
+The window is then exactly the range the sources disagree over, which is defensible and citable.
+
+Never promise a single date. Where sources agree on one threshold, the window collapses to a day
+and any protracted emergence period is shown separately (see Japanese beetle below).
 
 Include the accumulated figure and the source link in every description, so the claim is checkable
 from inside the calendar without visiting the site.
