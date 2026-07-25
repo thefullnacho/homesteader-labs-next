@@ -14,6 +14,8 @@ export interface Post {
   title: string;
   description: string;
   date: string;
+  /** Set only when a published note is materially revised; drives sitemap lastmod. */
+  updated?: string;
   author: string;
   tags: string[];
   category: string;
@@ -81,6 +83,7 @@ export function getAllPosts(): Post[] {
         title: data.title || '',
         description: data.description || '',
         date: data.date || '',
+        updated: data.updated,
         author: data.author || '',
         tags: data.tags || [],
         category: data.category || '',
@@ -128,6 +131,7 @@ export function getPostBySlug(slug: string): Post | null {
       title: data.title || '',
       description: data.description || '',
       date: data.date || '',
+      updated: data.updated,
       author: data.author || '',
       tags: data.tags || [],
       category: data.category || '',

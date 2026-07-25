@@ -53,3 +53,5 @@ graphic-convenience-manifesto-warm.html
 
 # /brag launch video output (generated, not app code)
 brag-output/
+# Keyword research working notes (local only)
+docs/KEYWORD_RESEARCH_*.md
