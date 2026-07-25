@@ -8,6 +8,15 @@ export default defineConfig({
     environment: 'jsdom',
     globals: true,
     setupFiles: './vitest.setup.ts',
+    // .claude/worktrees holds full checkouts of other branches. Without this,
+    // vitest collects their stale test files alongside the real suite and
+    // reports failures for code that is not in this working tree.
+    exclude: [
+      '**/node_modules/**',
+      '**/dist/**',
+      '**/.next/**',
+      '**/.claude/**',
+    ],
   },
   resolve: {
     alias: {
