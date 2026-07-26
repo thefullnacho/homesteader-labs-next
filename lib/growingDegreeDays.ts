@@ -8,6 +8,12 @@
 //
 // All temperatures are Fahrenheit, matching lib/weatherApi.ts which requests
 // temperature_unit=fahrenheit.
+//
+// CONVENTION: pest thresholds are base 50°F accumulated from Jan 1, because we
+// consume published extension thresholds and cannot restate them in another
+// frame. Do not compare a figure accumulated from any other biofix against one.
+// Canonical statement, sourced thresholds and citations:
+//   forager-wiki/entities/gdd-convention.md
 
 export interface DailyTemp {
   /** ISO date, YYYY-MM-DD. */
