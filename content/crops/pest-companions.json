@@ -35,11 +35,13 @@
         "companions": [
           {
             "companion": "Marigold",
-            "reason": "French/African marigold roots release alpha-terthienyl — strongest evidence for nematode suppression. Most effective as preceding cover crop tilled in, but interplanting suppresses too.",
+            "reason": "French/African marigold roots release alpha-terthienyl, the strongest evidence for nematode suppression. Most effective as preceding cover crop tilled in, but interplanting suppresses too.",
             "placement": "border",
             "evidenceLevel": "strong"
           }
-        ]
+        ],
+        "alertable": false,
+        "notAlertableReason": "soil-resident, present or absent rather than emerging"
       },
       {
         "name": "aphid",
@@ -47,11 +49,13 @@
         "companions": [
           {
             "companion": "Nasturtium",
-            "reason": "Classic trap crop — aphids strongly prefer nasturtium; plant at borders and remove/discard when infested",
+            "reason": "Classic trap crop, aphids strongly prefer nasturtium; plant at borders and remove/discard when infested",
             "placement": "border",
             "evidenceLevel": "strong"
           }
-        ]
+        ],
+        "alertable": false,
+        "notAlertableReason": "continuous, multi-generational, no emergence event"
       }
     ]
   },
@@ -68,7 +72,9 @@
             "placement": "border",
             "evidenceLevel": "strong"
           }
-        ]
+        ],
+        "alertable": false,
+        "notAlertableReason": "soil-resident, present or absent rather than emerging"
       },
       {
         "name": "colorado-beetle",
@@ -102,7 +108,7 @@
           {
             "companion": "Thyme",
             "companionId": "thyme",
-            "reason": "Top performer in Iowa State trials — significantly reduced cabbage looper and worm damage when interplanted",
+            "reason": "Top performer in Iowa State trials, significantly reduced cabbage looper and worm damage when interplanted",
             "placement": "interplant",
             "evidenceLevel": "strong"
           },
@@ -125,7 +131,9 @@
             "placement": "border",
             "evidenceLevel": "strong"
           }
-        ]
+        ],
+        "alertable": false,
+        "notAlertableReason": "continuous, multi-generational, no emergence event"
       }
     ]
   },
@@ -155,7 +163,9 @@
             "placement": "border",
             "evidenceLevel": "strong"
           }
-        ]
+        ],
+        "alertable": false,
+        "notAlertableReason": "continuous, multi-generational, no emergence event"
       }
     ]
   },
@@ -185,7 +195,9 @@
             "placement": "border",
             "evidenceLevel": "strong"
           }
-        ]
+        ],
+        "alertable": false,
+        "notAlertableReason": "continuous, multi-generational, no emergence event"
       }
     ]
   },
@@ -285,7 +297,9 @@
             "placement": "border",
             "evidenceLevel": "strong"
           }
-        ]
+        ],
+        "alertable": false,
+        "notAlertableReason": "continuous, multi-generational, no emergence event"
       }
     ]
   },
@@ -302,7 +316,9 @@
             "placement": "border",
             "evidenceLevel": "strong"
           }
-        ]
+        ],
+        "alertable": false,
+        "notAlertableReason": "continuous, multi-generational, no emergence event"
       },
       {
         "name": "bean-beetle",
@@ -331,7 +347,9 @@
             "placement": "interplant",
             "evidenceLevel": "strong"
           }
-        ]
+        ],
+        "alertable": false,
+        "notAlertableReason": "continuous, multi-generational, no emergence event"
       }
     ]
   }
