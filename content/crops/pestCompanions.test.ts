@@ -25,6 +25,11 @@ interface Pest {
   name: string;
   soilTempThreshold: number;
   gddThreshold?: number;
+  gddBase?: number;
+  gddBiofix?: string;
+  gddEvent?: string;
+  source?: string;
+  thresholdNote?: string;
   alertable?: boolean;
   notAlertableReason?: string;
   companions?: Companion[];
@@ -64,6 +69,34 @@ describe('the alertable contract with hestia', () => {
     }
   });
 
+  it('marks pests whose model needs an observed biofix as not alertable', () => {
+    // Colorado potato beetle is not continuous: it has a real emergence event.
+    // But its published model counts 120-200 GDD base 52 from the first adult
+    // you actually see, and a calendar accumulation cannot supply that
+    // observation. Firing it from Jan 1 would be inventing a date.
+    for (const [cropId, pest] of allPests) {
+      if (pest.name !== 'colorado-beetle') continue;
+      expect(pest.alertable, `${cropId}:${pest.name}`).toBe(false);
+      expect(pest.notAlertableReason).toMatch(/biofix/i);
+      expect(pest.gddThreshold, 'must not carry a calendar-frame threshold').toBeUndefined();
+    }
+  });
+
+  it('never leaves a threshold in place without a source', () => {
+    // hornworm carried an unsourced 150, which is also cabbageworm's
+    // first-flight figure, suggesting it was copied across.
+    for (const [cropId, pest] of allPests) {
+      if (pest.gddThreshold !== undefined) continue;
+      if (pest.alertable === false) continue;
+      // No threshold and still alertable means soil-temp only, which hestia
+      // labels as lower confidence. That is fine, but say so.
+      expect(
+        pest.thresholdNote !== undefined || pest.companions !== undefined,
+        `${cropId}:${pest.name} silently falls back to soil temp`
+      ).toBe(true);
+    }
+  });
+
   it('marks alertable:false only where a reason is given', () => {
     for (const [cropId, pest] of allPests) {
       if (pest.alertable === false) {
@@ -75,10 +108,9 @@ describe('the alertable contract with hestia', () => {
 
 describe('threshold consistency', () => {
   it('gives the same pest the same threshold on every crop', () => {
-    // cabbage:cabbage-worm carries 100 while broccoli and kale carry none. That
-    // is a known inconsistency, tracked as a VERIFY in the wiki, so this test
-    // records the current state rather than asserting a fix that has not
-    // happened. Tighten it to a hard equality once the thresholds are sourced.
+    // Was recorded as a known inconsistency: cabbage:cabbage-worm carried 100
+    // while broccoli and kale carried none. Sourced 2026-07-26 to 150 on all
+    // three, so this is now a hard equality.
     const byName = new Map<string, Set<number | undefined>>();
     for (const [, pest] of allPests) {
       if (!byName.has(pest.name)) byName.set(pest.name, new Set());
@@ -87,7 +119,20 @@ describe('threshold consistency', () => {
     const inconsistent = [...byName.entries()]
       .filter(([, vals]) => vals.size > 1)
       .map(([name]) => name);
-    expect(inconsistent, 'unexpected new threshold inconsistency').toEqual(['cabbage-worm']);
+    expect(inconsistent, 'same pest carries different thresholds on different crops').toEqual([]);
+  });
+
+  it('states the frame and a source for every threshold it publishes', () => {
+    // A threshold without its base and biofix is unreproducible, and mixing
+    // frames is exactly what made the whole table unusable. 900 GDD means
+    // nothing until you know it is base 50 accumulated from Jan 1.
+    for (const [cropId, pest] of allPests) {
+      if (pest.gddThreshold === undefined) continue;
+      const where = `${cropId}:${pest.name}`;
+      expect(pest.gddBase, `${where} needs gddBase`).toBe(50);
+      expect(pest.gddBiofix, `${where} needs gddBiofix`).toBe('jan-1');
+      expect(pest.source, `${where} needs a citable source`).toMatch(/^https?:\/\//);
+    }
   });
 });
 

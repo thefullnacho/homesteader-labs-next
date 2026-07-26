@@ -5,7 +5,6 @@
       {
         "name": "hornworm",
         "soilTempThreshold": 60,
-        "gddThreshold": 150,
         "companions": [
           {
             "companion": "Basil",
@@ -27,7 +26,8 @@
             "placement": "border",
             "evidenceLevel": "moderate"
           }
-        ]
+        ],
+        "thresholdNote": "no citable extension GDD threshold found; soil-temp gate only"
       },
       {
         "name": "nematode",
@@ -79,7 +79,6 @@
       {
         "name": "colorado-beetle",
         "soilTempThreshold": 59,
-        "gddThreshold": 100,
         "companions": [
           {
             "companion": "Nasturtium",
@@ -93,7 +92,10 @@
             "placement": "border",
             "evidenceLevel": "moderate"
           }
-        ]
+        ],
+        "alertable": false,
+        "notAlertableReason": "published model is 120-200 GDD base 52 after an OBSERVED first-adult biofix, which a calendar accumulation cannot supply",
+        "source": "https://cals.cornell.edu/integrated-pest-management/outreach-education/fact-sheets/colorado-potato-beetle-leptinotarsa-decemlineata-vegetable-ipm-fact-sheet"
       }
     ]
   },
@@ -103,7 +105,7 @@
       {
         "name": "cabbage-worm",
         "soilTempThreshold": 50,
-        "gddThreshold": 100,
+        "gddThreshold": 150,
         "companions": [
           {
             "companion": "Thyme",
@@ -119,7 +121,11 @@
             "placement": "interplant",
             "evidenceLevel": "moderate"
           }
-        ]
+        ],
+        "gddBase": 50,
+        "gddBiofix": "jan-1",
+        "gddEvent": "first adult flight (peak 240, larval feeding through 630)",
+        "source": "https://ipm.ucanr.edu/PHENOLOGY/ma-import_cabbageworm.html"
       },
       {
         "name": "aphid",
@@ -151,7 +157,12 @@
             "placement": "interplant",
             "evidenceLevel": "strong"
           }
-        ]
+        ],
+        "gddThreshold": 150,
+        "gddBase": 50,
+        "gddBiofix": "jan-1",
+        "gddEvent": "first adult flight (peak 240, larval feeding through 630)",
+        "source": "https://ipm.ucanr.edu/PHENOLOGY/ma-import_cabbageworm.html"
       },
       {
         "name": "aphid",
@@ -183,7 +194,12 @@
             "placement": "interplant",
             "evidenceLevel": "strong"
           }
-        ]
+        ],
+        "gddThreshold": 150,
+        "gddBase": 50,
+        "gddBiofix": "jan-1",
+        "gddEvent": "first adult flight (peak 240, larval feeding through 630)",
+        "source": "https://ipm.ucanr.edu/PHENOLOGY/ma-import_cabbageworm.html"
       },
       {
         "name": "aphid",
@@ -234,6 +250,16 @@
             "evidenceLevel": "moderate"
           }
         ]
+      },
+      {
+        "name": "squash-vine-borer",
+        "soilTempThreshold": 65,
+        "gddThreshold": 900,
+        "gddBase": 50,
+        "gddBiofix": "jan-1",
+        "gddEvent": "adult emergence; egg-laying begins at 1000, so 900-1000 is the scouting window",
+        "source": "https://ohioline.osu.edu/factsheet/ent-0106",
+        "companions": []
       }
     ]
   },
@@ -263,6 +289,16 @@
             "evidenceLevel": "moderate"
           }
         ]
+      },
+      {
+        "name": "squash-vine-borer",
+        "soilTempThreshold": 65,
+        "gddThreshold": 900,
+        "gddBase": 50,
+        "gddBiofix": "jan-1",
+        "gddEvent": "adult emergence; egg-laying begins at 1000, so 900-1000 is the scouting window",
+        "source": "https://ohioline.osu.edu/factsheet/ent-0106",
+        "companions": []
       }
     ]
   },
