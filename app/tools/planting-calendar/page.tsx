@@ -15,6 +15,9 @@ import { getCropById } from "@/lib/tools/planting-calendar/crops";
 import { calculateCropYield } from "@/lib/caloric-security/yieldCalculations";
 import { calculateCropSchedule, canStillPlant } from "@/lib/tools/planting-calendar/plantingCalculations";
 import { SectionHead, Stamp } from "@/components/field/kit";
+// Zone list only: this is a "use client" file, so it must not reach for
+// getZonePageData, which pulls the whole crop table into the browser bundle.
+import { ZONE_PAGES } from "@/lib/tools/planting-calendar/zonePages";
 import FaqAccordion from "@/components/ui/FaqAccordion";
 
 // SEO FAQ, also serialized as FAQPage JSON-LD for rich results
@@ -807,6 +810,25 @@ export default function PlantingCalendarPage() {
               beginners who can&apos;t always plant on the optimal day. Export the full
               season to .ics for any calendar app. No account, no email required.
             </p>
+          </div>
+
+          <h3 className="font-display uppercase text-base md:text-lg mt-10 mb-4">
+            Browse by growing zone
+          </h3>
+          <p className="mb-4">
+            Prefer a fixed page to a tool? Each zone has its own calendar with frost dates, the
+            full sowing schedule, and what can still go in the ground before first frost.
+          </p>
+          <div className="flex flex-wrap gap-2 mb-4">
+            {ZONE_PAGES.map((z) => (
+              <Link
+                key={z}
+                href={`/tools/planting-calendar/zone/${z}/`}
+                className="font-mono text-[0.7rem] uppercase tracking-wider border-2 border-ink/30 px-3 py-1.5 hover:border-marker hover:text-marker"
+              >
+                Zone {z}
+              </Link>
+            ))}
           </div>
 
           <h3 className="font-display uppercase text-base md:text-lg mt-10 mb-4">

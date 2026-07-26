@@ -1,0 +1,133 @@
+import { describe, it, expect } from 'vitest';
+import {
+  ZONE_PAGES,
+  getZonePageData,
+  isPageZone,
+  caloriesPerPlant,
+  FALL_FACTOR_DAYS,
+} from './zonePages';
+import { getAllCrops } from './cropLoader';
+
+describe('zone page coverage', () => {
+  it('covers the ten zones holding 88% of US ZIPs', () => {
+    expect(ZONE_PAGES).toHaveLength(10);
+    expect(ZONE_PAGES[0]).toBe('5a');
+    expect(ZONE_PAGES[ZONE_PAGES.length - 1]).toBe('9b');
+  });
+
+  it('rejects zones without a page', () => {
+    expect(isPageZone('6b')).toBe(true);
+    expect(isPageZone('13b')).toBe(false); // real zone, no frost data, no page
+    expect(isPageZone('nonsense')).toBe(false);
+  });
+});
+
+describe('every zone renders a usable page', () => {
+  it.each(ZONE_PAGES)('%s has a full spring schedule', (zone) => {
+    const d = getZonePageData(zone);
+    // Regression: keying `overwinters` on the calendar year collapsed zone 9b to
+    // 5 rows, because its Jan 10 last frost pushes start-indoors dates into the
+    // previous December. Every zone should carry the same spring crop set.
+    const spring = d.rows.filter((r) => !r.overwinters);
+    expect(spring.length).toBeGreaterThanOrEqual(25);
+  });
+
+  it('gives every zone the same spring crop count', () => {
+    const counts = ZONE_PAGES.map(
+      (z) => getZonePageData(z).rows.filter((r) => !r.overwinters).length
+    );
+    expect(new Set(counts).size).toBe(1);
+  });
+
+  it('classifies garlic as overwintering and nothing else', () => {
+    const d = getZonePageData('6b');
+    const ow = d.rows.filter((r) => r.overwinters).map((r) => r.cropId);
+    expect(ow).toEqual(['garlic']);
+  });
+
+  it('sorts overwintering crops last despite their earlier date', () => {
+    const rows = getZonePageData('6b').rows;
+    expect(rows[rows.length - 1].overwinters).toBe(true);
+  });
+});
+
+describe('zones are genuinely distinct, not doorway pages', () => {
+  it('shifts every crop start date between adjacent zones', () => {
+    for (let i = 1; i < ZONE_PAGES.length; i++) {
+      const a = getZonePageData(ZONE_PAGES[i - 1]).rows;
+      const b = getZonePageData(ZONE_PAGES[i]).rows;
+      const byId = new Map(b.map((r) => [r.cropId, r]));
+      const shared = a.filter((r) => byId.has(r.cropId));
+      const identical = shared.filter(
+        (r) => r.startDate.getTime() === byId.get(r.cropId)!.startDate.getTime()
+      );
+      expect(identical).toHaveLength(0);
+    }
+  });
+
+  it('lengthens the season monotonically from 5a to 9b', () => {
+    const days = ZONE_PAGES.map((z) => getZonePageData(z).frostFreeDays);
+    expect(days).toEqual([...days].sort((a, b) => a - b));
+  });
+
+  it('bands the constraint guidance by season length', () => {
+    expect(getZonePageData('5a').constraint.band).toBe('short');   // 168d
+    expect(getZonePageData('6b').constraint.band).toBe('moderate'); // 240d
+    expect(getZonePageData('9b').constraint.band).toBe('long');     // 352d
+  });
+});
+
+describe('fall sowing', () => {
+  it('derives the deadline as first frost minus maturity plus the fall factor', () => {
+    const d = getZonePageData('6b');
+    const cabbage = d.fallSowing(new Date('2026-01-01')).find((r) => r.cropId === 'cabbage');
+    expect(cabbage).toBeDefined();
+    expect(cabbage!.adjustedDays).toBe(cabbage!.daysToMaturity + FALL_FACTOR_DAYS);
+    const expected = new Date(d.firstFallFrost);
+    expected.setDate(expected.getDate() - cabbage!.adjustedDays);
+    expect(cabbage!.sowBy.toDateString()).toBe(expected.toDateString());
+  });
+
+  it('excludes warm-season crops whose maturity maths lies', () => {
+    // A tomato "finishes" before frost on paper, but fruit set collapses as
+    // nights cool. Peppers were leaking through on an id mismatch.
+    const ids = getZonePageData('9b').fallSowing(new Date('2026-01-01')).map((r) => r.cropId);
+    for (const warm of ['tomato', 'pepper-bell', 'pepper-hot', 'eggplant', 'corn']) {
+      expect(ids).not.toContain(warm);
+    }
+  });
+
+  it('offers a longer season more crops than a shorter one', () => {
+    const from = new Date('2026-07-26');
+    expect(getZonePageData('9b').fallSowing(from).length)
+      .toBeGreaterThan(getZonePageData('5a').fallSowing(from).length);
+  });
+
+  it('returns nothing once every deadline has passed', () => {
+    expect(getZonePageData('5a').fallSowing(new Date('2026-12-15'))).toHaveLength(0);
+  });
+
+  it('orders by deadline so the most urgent sits first', () => {
+    const rows = getZonePageData('6b').fallSowing(new Date('2026-01-01'));
+    const times = rows.map((r) => r.sowBy.getTime());
+    expect(times).toEqual([...times].sort((a, b) => a - b));
+  });
+});
+
+describe('caloriesPerPlant', () => {
+  it('converts pounds to calories via the crop yield', () => {
+    const cabbage = getAllCrops().find((c) => c.id === 'cabbage')!;
+    // 3 lbs * 453.592 g * 25 kcal/100g = 340
+    expect(caloriesPerPlant(cabbage)).toBe(340);
+  });
+
+  it('handles ounce-denominated yields without inflating them', () => {
+    // Radishes are 1 oz, not 1 lb. Treating the unit as pounds read 160 instead of 5.
+    const radish = getAllCrops().find((c) => c.id === 'radish')!;
+    expect(caloriesPerPlant(radish)).toBe(5);
+  });
+
+  it('returns null rather than 0 when yield data is missing', () => {
+    expect(caloriesPerPlant({ id: 'x', name: 'X' } as never)).toBeNull();
+  });
+});

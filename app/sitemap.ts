@@ -3,6 +3,7 @@ import { getAllProducts } from "@/lib/products";
 import { getAllPosts } from "@/lib/posts";
 import { getAllKbCrops, isKbCropIndexable } from "@/lib/kb";
 import { isSurvivalPlanPublic } from "@/lib/survivalPlan/visibility";
+import { ZONE_PAGES } from "@/lib/tools/planting-calendar/zonePages";
 
 const SITE_URL = "https://homesteaderlabs.com";
 
@@ -86,5 +87,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.5,
     }));
 
-  return [...staticRoutes, ...productRoutes, ...archiveRoutes, ...kbRoutes];
+  // Per-zone planting calendars. No lastmod: the schedule is derived from fixed
+  // frost normals, so the page changes only when the crop data or the normals do.
+  const zoneRoutes: MetadataRoute.Sitemap = ZONE_PAGES.map((zone) => ({
+    url: `${SITE_URL}/tools/planting-calendar/zone/${zone}/`,
+    changeFrequency: "monthly",
+    priority: 0.7,
+  }));
+
+  return [...staticRoutes, ...productRoutes, ...archiveRoutes, ...zoneRoutes, ...kbRoutes];
 }
