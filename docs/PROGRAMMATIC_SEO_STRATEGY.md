@@ -1,9 +1,35 @@
 # Programmatic SEO Strategy
 ## Location-Specific Landing Pages for Planting Calendar
 
-**Document Version:** 1.0  
-**Created:** February 12, 2026  
+**Document Version:** 1.0
+**Created:** February 12, 2026
 **Goal:** Generate 500+ location-specific pages for organic traffic
+
+> ## ⚠️ SUPERSEDED 2026-07-26 — the unit below is wrong
+>
+> This document plans **city** pages. We built **zone** pages instead, at
+> `/tools/planting-calendar/zone/[zone]/`, and the city plan should not be revived without
+> re-reading this note.
+>
+> **Two cities in the same zone share a frost date and therefore render an identical schedule.**
+> Buffalo and Rochester are both 6a. Five hundred pages differing only in the H1 is the definition
+> of a doorway page, and Google judges the set rather than the page.
+>
+> Measured before building: every crop's sow date shifts between every adjacent zone pair, because
+> frost normals move 10-20 days per half-zone. Measured after: zero byte-identical data rows
+> between any two rendered pages, and 39-46% of visible text is per-zone.
+>
+> Ten zones (5a-9b) cover 35,589 of 40,502 US ZIPs, or 88%, so ten substantive pages beat five
+> hundred thin ones. The July 2026 keyword research agrees the demand is zone- and state-shaped
+> (`what to plant in august zone 7`, `zone 8a vegetable planting calendar` Breakout), not
+> city-shaped.
+>
+> **What survives from this document:** the URL/metadata patterns, the internal-linking plan, the
+> technical SEO checklist, and the static-generation approach. **What does not:** the city
+> selection strategy, the tiering, and the traffic projections built on 500 pages.
+>
+> **Still open and genuinely different in shape:** state pages. A state spans several zones, so the
+> page's job is helping a reader find theirs rather than restating a calendar.
 
 ---
 
