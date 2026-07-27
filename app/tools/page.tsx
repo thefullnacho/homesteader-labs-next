@@ -77,6 +77,20 @@ const ops = [
       "Built on WALKING MAN PRO",
     ],
   },
+  {
+    no: "06",
+    code: "Zone Calendars",
+    mission: "Fixed pages per growing zone. Nothing to fill in, nothing to wait for.",
+    href: "/tools/planting-calendar/zone/",
+    need: "Nothing",
+    capabilities: [
+      "Zones 5a to 9b, 88% of US ZIPs",
+      "Frost dates & season length",
+      "Fall sowing deadlines",
+      "Free printable planner",
+      "NOAA 1991-2020 normals",
+    ],
+  },
 ];
 
 export default function FieldStationPage() {

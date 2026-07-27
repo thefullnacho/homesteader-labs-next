@@ -817,7 +817,14 @@ export default function PlantingCalendarPage() {
           </h3>
           <p className="mb-4">
             Prefer a fixed page to a tool? Each zone has its own calendar with frost dates, the
-            full sowing schedule, and what can still go in the ground before first frost.
+            full sowing schedule, and what can still go in the ground before first frost. The{" "}
+            <Link
+              href="/tools/planting-calendar/zone/"
+              className="underline decoration-marker decoration-2 underline-offset-4 hover:text-marker"
+            >
+              zone index
+            </Link>{" "}
+            compares all ten side by side, and each page offers a free printable planner.
           </p>
           <div className="flex flex-wrap gap-2 mb-4">
             {ZONE_PAGES.map((z) => (
