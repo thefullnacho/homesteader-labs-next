@@ -1,0 +1,108 @@
+---
+title: "What Is Meshtastic? Off-Grid Texting, Honestly Explained"
+description: "Meshtastic sends text messages with no cell service, no carrier and no licence, using cheap LoRa radios that relay for each other. Here is what it actually does, what it cannot do, and the privacy default nearly every guide skips."
+date: "2026-07-26"
+author: "Alex de Brantes"
+tags: ["meshtastic", "lora", "off-grid", "communications", "gear"]
+category: "field-guide"
+season: "Any. Useful most when the grid is not."
+skill: "Beginner. Flashing a board and pairing a phone, roughly an evening."
+region: "US on 915 MHz, EU on 868 MHz, licence-free in both"
+gear: "Two nodes minimum, because one node talks to nobody"
+pairsWith: "Data Sovereignty Is Seed Saving, the same argument in a different medium"
+stamp: "No licence, no carrier"
+excerpt: "Cheap radios that pass text messages to each other with no cell tower, no subscription and no licence exam. The technology is genuinely good. Most of the writing about it oversells the range and skips the part where your messages are readable by anyone with a stock node."
+---
+
+Here is the short version. Meshtastic is free open-source software that runs on cheap LoRa radios, roughly 20 to 60 dollars each, and lets them pass text messages between one another with no cell tower, no internet, no subscription and no licence exam. Each radio relays for the others, so a message can hop across several nodes to reach someone none of them could reach alone.
+
+You pair a node to your phone over Bluetooth and type into an app. The node does the radio work.
+
+That is the whole idea, and it is a genuinely good one. What follows is the part most explainers skip.
+
+## How it actually works
+
+**LoRa** is the radio technique underneath. It trades bandwidth for distance, and it trades hard. You get remarkable range from a fraction of a watt, and in exchange you get a data rate closer to a 1990s pager than to anything you would call internet.
+
+That trade defines everything Meshtastic is good and bad at.
+
+**The mesh** is the other half. Every node rebroadcasts what it hears, so coverage is the union of everyone's radios rather than the reach of yours. The default hop limit is 3, and the project recommends leaving it there. Higher numbers sound better and in practice cause congestion, because every hop is another transmission competing for the same air.
+
+What travels across it: **text messages, GPS positions, and telemetry** like battery voltage and sensor readings.
+
+What does not: **voice, images, files, or internet access of any kind.** Meshtastic is not a walkie-talkie and it is not a way to get online. If you want to talk, this is the wrong tool. If you want to send "back by dark, north fence is down," it is close to perfect.
+
+## The range question, answered honestly
+
+This is where most Meshtastic writing goes soft, because the record numbers are irresistible and the everyday numbers are not.
+
+The honest version: **most people get at least a couple of kilometres even in poor conditions.** From there it depends almost entirely on what is between the two radios. Line of sight across open ground or water goes far. Suburban sprawl with buildings in the way does not. Trees and terrain eat signal, and a hill between you and the other node is close to a wall.
+
+The hundred-kilometre records you will see quoted are real and they are all the same story: elevation. A node on a mountain, a balloon, or a tall building talking to another node with nothing in between. Those numbers describe physics working perfectly, not a Tuesday.
+
+The practical lever is height, not power. Getting an antenna above the treeline does more than any hardware upgrade you can buy.
+
+## No licence, and why that matters
+
+In the US, Meshtastic runs on **915 MHz**, in Europe **868 MHz**, both licence-free ISM bands. You do not need a callsign, an exam, or a registration.
+
+Compare that with the alternatives and it is the whole reason this category is growing:
+
+**GMRS** carries voice and real power, but it needs a licence in the US, it is voice-first with no practical texting, and it does not mesh. **Ham** gives you the most capability and the steepest entry, exam included. **Satellite messengers** like an inReach work anywhere on earth, which nothing here does, and charge a subscription forever to do it.
+
+Meshtastic's pitch is narrower than any of those and cheaper than all of them: text, licence-free, no recurring cost, and the infrastructure belongs to you.
+
+## The default that nearly every guide skips
+
+Meshtastic encrypts channel traffic with AES-256. That sounds like the end of the sentence. It is not.
+
+**The default channel uses a publicly known key.** The stock primary channel, the one everybody lands on out of the box, is the `LongFast` preset with a default pre-shared key that appears as the base64 string `AQ==`. It is published. It is in the source. Every stock node ships with it.
+
+Which means anything you send on the default channel is readable by **any Meshtastic node within earshot**, and "encrypted" is technically true and practically meaningless. The default channel is a public square with a lock on the gate that everyone has the key to.
+
+This is fine, as long as you know it. The public channel is how you find neighbours and how community meshes work at all. It is not where you discuss anything you would mind a stranger reading.
+
+**Create your own channel with your own key for anything private.** It takes about a minute in the app. Everyone you want to talk to needs the same key, shared by QR code or by hand, and once it is set, that traffic really is private in the way people assume the default already is.
+
+If you take one thing from this article, take that. Search results are full of guides that say "AES-256 encrypted" and stop, and that omission has a way of finding people who assumed otherwise.
+
+## The catch nobody mentions to rural buyers
+
+Here is the limitation that matters most for anyone reading this from a homestead.
+
+**A mesh needs other nodes.** In a city with an active community mesh, buying one node connects you to dozens and the coverage is genuinely impressive. That is the experience most of the enthusiastic writing describes, and it is written by people in metro areas.
+
+Out where the nearest neighbour is a mile off, there is no mesh to join. You are not plugging into a network, **you are the network.** That changes the purchase completely:
+
+- **Buy in pairs, minimum.** One node talks to nobody. Two nodes is the smallest useful system, house to barn, house to truck, base to whoever is out walking the property.
+- **Think about a repeater early.** A cheap node up high, solar powered, doing nothing but relaying, is what turns two-radio point-to-point into actual property coverage. This is the single highest-value node you will own and it is the one nobody buys first.
+- **Coverage is a thing you build**, over a season, by putting nodes where the terrain is unhelpful. It is not a thing you buy.
+
+None of that is a criticism. It is the same proposition as a well or a woodpile: infrastructure you own outright, which costs effort up front and nothing thereafter. But if you buy one node expecting to join a network, you will be disappointed, and the disappointment is avoidable.
+
+## What to buy
+
+The full supported list lives on the [Meshtastic devices page](https://meshtastic.org/docs/hardware/devices/), and it is long. Practically, most people start in one of three places.
+
+| If you want | Look at | Roughly | Why |
+|---|---|---|---|
+| The cheapest way in | Heltec LoRa32 (V3, and now V4) | 20 to 30 USD | Bare development board with a small OLED. Flash it in a browser. Best way to find out whether you care. |
+| A finished thing you carry | [SenseCAP T1000-E](https://www.seeedstudio.com/SenseCAP-Card-Tracker-T1000-E-for-Meshtastic-p-5913.html?sensecap_affiliate=DRZN6mJ&referring_service=link) | around 40 USD | Card-sized, GPS, IP65, no assembly. The easy recommendation if fiddling is not the appeal. |
+| The same job, other maker | RAK WisMesh Tag | around 40 USD | Same price, same idea, and some reviewers rate it above the T1000-E for daily carry. We earn nothing if you buy it. It is in the table anyway. |
+| A standalone handheld | LilyGO T-Deck Plus | more | Has its own keyboard and screen, so it works without a phone paired to it. |
+
+Add an antenna and a battery to the bare-board options and the price gap narrows, which is worth knowing before the cheap one looks cheapest.
+
+We do not sell Meshtastic hardware. The SenseCAP link above is an affiliate link, so Seeed pays us a small commission if you buy through it, at no extra cost to you. Nothing else in that table pays us anything, and every recommendation in it was written down before the affiliate account existed. If a commission ever changes what this page tells you to buy, we have failed at the only thing this site is for.
+
+## Is it for you?
+
+**Yes, if** you want text and location between known people across a property or a valley, you like infrastructure you own, and a monthly fee for something you already bought offends you on principle.
+
+**No, if** you need voice, need to reach anyone anywhere, or need it to work reliably the first day you take it out of the box in an area with no other nodes. Those are real needs and this is the wrong tool for all three.
+
+**The homestead case** is narrow and strong. Property-scale text and position, running on solar, with no carrier, no cloud, no subscription and no account. It keeps working when the cell network does not, and it keeps working when the company that sold it to you stops existing, because there is no company in the loop.
+
+That is the same argument as [saving your own seed](/archive/data-sovereignty-is-seed-saving/), in a different medium. A system you can maintain yourself beats a better system you rent, at exactly the moment you most need it to work.
+
+Start with two nodes and low expectations. Put the third one up high.
