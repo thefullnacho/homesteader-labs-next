@@ -117,7 +117,27 @@ export default async function KbCropPage(props: PageProps) {
           )}
         </div>
 
-        {/* Calculator cross-link */}
+        {/* Calculator cross-link.
+            Only 47 of the 340 KB crops map to a calculator crop, so without the
+            fallback below the other 293 pages render no exit at all. */}
+        {!crop.calculatorCropId && (
+          <div className="mt-10 no-print">
+            <Link
+              href="/tools/planting-calendar/zone/"
+              className="flex items-center justify-between gap-4 bg-ink text-paper border-2 border-ink px-5 py-4 hover:bg-marker hover:border-marker transition-colors group"
+            >
+              <span>
+                <span className="block font-mono text-[0.78rem] uppercase tracking-wider">
+                  Find your zone
+                </span>
+                <span className="block mt-1 text-[0.85rem] text-paper/70">
+                  Frost dates and sowing deadlines for zones 5a to 9b
+                </span>
+              </span>
+              <ArrowRight size={18} className="shrink-0" />
+            </Link>
+          </div>
+        )}
         {crop.calculatorCropId && (
           <div className="mt-10 no-print">
             <Link

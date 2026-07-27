@@ -89,11 +89,20 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   // Per-zone planting calendars. No lastmod: the schedule is derived from fixed
   // frost normals, so the page changes only when the crop data or the normals do.
-  const zoneRoutes: MetadataRoute.Sitemap = ZONE_PAGES.map((zone) => ({
-    url: `${SITE_URL}/tools/planting-calendar/zone/${zone}/`,
-    changeFrequency: "monthly",
-    priority: 0.7,
-  }));
+  const zoneRoutes: MetadataRoute.Sitemap = [
+    // The index, which is also where posts and unmapped KB pages send readers
+    // who do not know their zone yet.
+    {
+      url: `${SITE_URL}/tools/planting-calendar/zone/`,
+      changeFrequency: "monthly" as const,
+      priority: 0.8,
+    },
+    ...ZONE_PAGES.map((zone) => ({
+      url: `${SITE_URL}/tools/planting-calendar/zone/${zone}/`,
+      changeFrequency: "monthly" as const,
+      priority: 0.7,
+    })),
+  ];
 
   return [...staticRoutes, ...productRoutes, ...archiveRoutes, ...zoneRoutes, ...kbRoutes];
 }

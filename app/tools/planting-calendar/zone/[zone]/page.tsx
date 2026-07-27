@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { SectionHead, Stamp } from "@/components/field/kit";
+import PlannerCapture from "@/components/zonePlanner/PlannerCapture";
 import {
   ZONE_PAGES,
   getZonePageData,
@@ -182,6 +183,7 @@ export default async function ZonePage(props: Props) {
                 </Link>{" "}
                 for why storage matters more than calories here.
               </p>
+              <PlannerCapture zone={zone} cropCount={fall.length} />
             </>
           )}
         </section>
