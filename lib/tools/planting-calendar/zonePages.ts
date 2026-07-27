@@ -118,8 +118,9 @@ export interface ZonePageData {
   /** Spring schedule, sorted by first action. Overwintering crops sort last. */
   rows: ZoneCropRow[];
   /**
-   * Crops that still finish if sown now, latest-deadline first. Empty once the
-   * season has closed, which is itself the answer for a late-autumn visitor.
+   * Crops that still finish if sown now, earliest-deadline first, so the head
+   * of the list is the most urgent. Empty once the season has closed, which is
+   * itself the answer for a late-autumn visitor.
    */
   fallSowing: (from?: Date) => FallSowRow[];
   /** What the season length actually constrains here. Differs by band, not by wording. */
