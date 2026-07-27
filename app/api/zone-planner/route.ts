@@ -10,8 +10,11 @@ const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KE
 const audienceId = process.env.RESEND_AUDIENCE_ID;
 
 /** Contact properties this route sets. Both must already exist in the Resend
- *  workspace; see scripts/setup-resend-properties.mjs. */
-export const PLANNER_SOURCE = "fall-planner";
+ *  workspace; see scripts/setup-resend-properties.mjs.
+ *
+ *  Not exported: a route file may only export the HTTP handlers and Next's
+ *  reserved config fields, and anything else fails the build. */
+const PLANNER_SOURCE = "fall-planner";
 
 /**
  * Adds the subscriber, tagged with their zone where possible.
