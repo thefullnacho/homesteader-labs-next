@@ -1,5 +1,23 @@
 import type { MDXComponents } from 'mdx/types';
 
+/**
+ * Query params that identify a paid link. Google's link spam policy requires
+ * affiliate links to be qualified with rel="sponsored" or "nofollow"; an
+ * unqualified paid link passes PageRank and can earn a manual action, which on
+ * an organic-search-funded site is the expensive kind of mistake.
+ *
+ * Add a marker here when a new affiliate programme goes live.
+ */
+const AFFILIATE_MARKERS = ['sensecap_affiliate='];
+
+function relFor(href: string | undefined): string | undefined {
+  if (!href?.startsWith('http')) return undefined;
+  const external = !href.includes('homesteaderlabs.com');
+  if (!external) return undefined;
+  const paid = AFFILIATE_MARKERS.some((m) => href.includes(m));
+  return paid ? 'sponsored nofollow noopener noreferrer' : 'noopener noreferrer';
+}
+
 export function useMDXComponents(components: MDXComponents): MDXComponents {
   return {
     h1: ({ children }) => (
@@ -50,6 +68,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     a: ({ href, children }) => (
       <a
         href={href}
+        rel={relFor(href)}
         className="text-ink underline decoration-marker decoration-2 underline-offset-4 hover:text-marker transition-colors"
       >
         {children}
