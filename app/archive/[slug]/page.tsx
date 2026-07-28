@@ -35,10 +35,26 @@ export async function generateMetadata(props: PageProps) {
       description: post.description,
       type: "article",
       publishedTime: post.date,
+      modifiedTime: post.updated ?? post.date,
       authors: [post.author],
       tags: post.tags,
     },
   };
+}
+
+const SITE_URL = "https://homesteaderlabs.com";
+
+/**
+ * First image the note actually renders, absolute, for Article.image.
+ *
+ * Google wants a real image of the content rather than a site-wide card, and
+ * the notes that have one are the ones where it matters most: the ID guides.
+ * Returns undefined rather than a stand-in when a note has no image, since a
+ * generic logo in this slot is worse than an absent field.
+ */
+function firstImage(content: string): string | undefined {
+  const match = content.match(/!\[[^\]]*\]\((\/images\/[^)\s]+)\)/);
+  return match ? `${SITE_URL}${match[1]}` : undefined;
 }
 
 export default async function ArchivePostPage(props: PageProps) {
@@ -73,8 +89,42 @@ export default async function ArchivePostPage(props: PageProps) {
     )
     .slice(0, 2);
 
+  const image = firstImage(post.content);
+
   return (
     <article>
+      {/* Article JSON-LD. The author is a real, named person on every note since
+          the fictional bylines were retired, which is the whole point of
+          declaring one: it is the E-E-A-T claim made machine-readable. */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Article",
+            headline: post.title,
+            description: post.description,
+            ...(image ? { image: [image] } : {}),
+            datePublished: post.date,
+            dateModified: post.updated ?? post.date,
+            author: { "@type": "Person", name: post.author },
+            publisher: {
+              "@type": "Organization",
+              name: "Homesteader Labs",
+              logo: {
+                "@type": "ImageObject",
+                url: `${SITE_URL}/images/homesteaderlabs_logo_flask_seedlingv2.jpeg`,
+              },
+            },
+            mainEntityOfPage: {
+              "@type": "WebPage",
+              "@id": `${SITE_URL}/archive/${slug}/`,
+            },
+            keywords: post.tags.join(", "),
+          }),
+        }}
+      />
+
       {/* Note header band */}
       <section className="bg-kraft grain border-b-2 border-ink torn-top relative">
         <div className="max-w-6xl mx-auto px-4 pt-10 pb-12 relative z-[2]">
