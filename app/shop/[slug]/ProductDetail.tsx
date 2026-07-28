@@ -123,7 +123,9 @@ export default function ProductDetail({ product }: ProductDetailProps) {
               {product.category === "AFFILIATE" ? (
                 <a
                   href={product.affiliate?.url}
-                  rel="noopener"
+                  // Paid link: see the note in ProductCard for why this needs
+                  // sponsored rather than bare noopener.
+                  rel="sponsored nofollow noopener noreferrer"
                   className="block text-center bg-ink text-paper px-5 py-3 border-2 border-ink font-mono text-[0.78rem] uppercase tracking-wider hover:bg-marker hover:border-marker transition-colors"
                 >
                   View at supplier →
