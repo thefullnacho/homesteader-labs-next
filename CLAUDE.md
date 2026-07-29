@@ -35,7 +35,7 @@ npx vitest run lib/plantingIndex.test.ts
 |--------|----------|---------|
 | Crop database | `content/crops/*.json` | Vegetables, herbs, fruits with varieties, timing, caloric data, companion planting |
 | Knowledge base | `content/kb/crops.json` | 340 public-domain crop entries (OpenFarm.cc, CC0, via Internet Archive), loaded by `lib/kb.ts` |
-| Product catalog | `lib/products.ts` | Hardcoded hardware product list (WALKING MAN PRO, HELTEC V3) |
+| Product catalog | `lib/products.ts` | Hardcoded hardware list. **WALKING MAN PRO only.** `/shop/` is first-party: hardware Homesteader Labs makes and ships |
 | Archive posts | `content/archive/*.mdx` | Field guides and articles parsed by `lib/posts.ts` via gray-matter |
 | Weather data | Open-Meteo API (free, no auth) | Fetched in `lib/weatherApi.ts` |
 | Cart & preferences | localStorage | Cart key: `homesteader_requisition_data`, locations key: `homesteader-locations` |
@@ -88,6 +88,31 @@ The old brutalist system is fully gone: the component wrappers (`FieldStationLay
 ### Archive posts (field notes)
 
 MDX with gray-matter frontmatter. Required: `title`, `description`, `date`, `author`. Optional: `tags`, `category`, `excerpt`, plus at-a-glance fields `season`, `skill`, `region`, `gear`, `pairsWith`, `stamp` (drive the sticky SpecBox on the article page and the specs line on index cards — see `lib/posts.ts`: `getReadMinutes`, `getPostNo`, `getSpecsLine`).
+
+### Affiliate links
+
+Live programmes: **Seeed Studio** (SenseCAP T1000-E) and **Baofeng**. Rokland pending.
+
+**Where they go:** inside content, at the end of a recommendation the article has earned. The
+buying table in `what-is-meshtastic.mdx` is the reference implementation. A gear page ("what we
+actually use") is the other sanctioned shape.
+
+**Where they do not go: `/shop/`.** A catalog implies fulfilment, warranty and returns, and an
+affiliate listing voids all three at the moment of purchase. `ProductCard`/`ProductDetail` still
+carry an `AFFILIATE` branch rendering "View at supplier"; it is unused and staying that way.
+
+**Rules, both load-bearing:**
+
+1. **`rel="sponsored nofollow noopener noreferrer"` on every paid link.** Unqualified paid links
+   pass PageRank and violate Google's link spam policy, which on an organic-search-funded site is
+   an expensive mistake. In MDX this is automatic: add the tracking param to `AFFILIATE_MARKERS`
+   in `mdx-components.tsx` when a new programme goes live. Outside MDX, set it by hand.
+2. **Disclose next to the link, not in a footer**, and say which link pays. The recommendation is
+   fixed before the commission exists and does not move for it. If every option in a table becomes
+   monetised, say that too, and say the rates differ.
+
+HELTEC V3 is worth recommending in an article or on a gear page. It is not a product we sell, and
+older notes claiming the catalog holds one were wrong.
 
 ### Adding Crops
 
