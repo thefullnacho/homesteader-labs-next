@@ -20,13 +20,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # v5 of both actions runs on the Node 24 action runtime. v4 targets Node
+      # 20, which GitHub has deprecated and currently force-runs on 24 anyway.
+      # This is the actions' own runtime and is unrelated to node-version below.
       - name: Check out
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       # Pinned to the major version used locally. Next 16 needs 20.9 or newer,
       # so letting the runner pick could pass here and fail on the machine.
       - name: Set up Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: '20'
           cache: npm
