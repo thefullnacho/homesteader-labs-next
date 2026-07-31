@@ -4,7 +4,17 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ArrowRight, ExternalLink } from "lucide-react";
 import { SectionHead, SpecBox, Stamp } from "@/components/field/kit";
-import { getKbCrop, getKbSlugs, getKbCompanions, isKbCropIndexable } from "@/lib/kb";
+import {
+  getKbCrop,
+  getKbSlugs,
+  getKbCompanions,
+  isKbCropIndexable,
+  getKbTitle,
+  getKbDescription,
+  getKbSchemaSpecs,
+} from "@/lib/kb";
+
+const SITE_URL = "https://homesteaderlabs.com";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -19,15 +29,13 @@ export async function generateMetadata(props: PageProps): Promise<Metadata> {
   const crop = getKbCrop(params.slug);
   if (!crop) return { title: "Crop Not Found" };
 
-  const desc =
-    crop.description ??
-    `Growing reference for ${crop.name}${crop.binomialName ? ` (${crop.binomialName})` : ""}.`;
-  const title = `How to Grow ${crop.name}${crop.binomialName ? ` (${crop.binomialName})` : ""}`;
+  const desc = getKbDescription(crop);
+  const title = getKbTitle(crop);
 
   return {
     title,
-    description: desc.slice(0, 300),
-    openGraph: { title, description: desc.slice(0, 300), type: "article" },
+    description: desc,
+    openGraph: { title, description: desc, type: "article" },
     // Thin, near-empty entries stay live for browsing but out of the index
     // until they gain real content (avoids scaled/thin-content signals).
     robots: isKbCropIndexable(crop) ? undefined : { index: false, follow: true },
@@ -41,6 +49,8 @@ export default async function KbCropPage(props: PageProps) {
 
   const companions = getKbCompanions(crop.slug);
   const entryRef = crop.slug.toUpperCase().replace(/-/g, "_");
+  const pageUrl = `${SITE_URL}/kb/${crop.slug}/`;
+  const schemaSpecs = getKbSchemaSpecs(crop);
 
   const specs: [string, ReactNode][] = [];
   if (crop.sun) specs.push(["Sun", crop.sun]);
@@ -54,6 +64,84 @@ export default async function KbCropPage(props: PageProps) {
 
   return (
     <article>
+      {/* Entry JSON-LD.
+          No Article type and no author: these entries are recovered public-domain
+          data, not authored notes, and claiming a byline would be an E-E-A-T claim
+          we have not earned. What the page can honestly declare is what it is (a
+          reference page), what it is about (the crop, with its growing specs made
+          machine-readable), and where the data came from (licence plus the capture
+          it was recovered from). The breadcrumb is the part search engines render. */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@graph": [
+              {
+                "@type": "BreadcrumbList",
+                itemListElement: [
+                  {
+                    "@type": "ListItem",
+                    position: 1,
+                    name: "Knowledge Base",
+                    item: `${SITE_URL}/kb/`,
+                  },
+                  {
+                    "@type": "ListItem",
+                    position: 2,
+                    name: crop.name,
+                    item: pageUrl,
+                  },
+                ],
+              },
+              {
+                "@type": "WebPage",
+                "@id": pageUrl,
+                url: pageUrl,
+                name: getKbTitle(crop),
+                description: getKbDescription(crop),
+                inLanguage: "en",
+                isPartOf: {
+                  "@type": "WebSite",
+                  name: "Homesteader Labs",
+                  url: SITE_URL,
+                },
+                publisher: {
+                  "@type": "Organization",
+                  name: "Homesteader Labs",
+                  logo: {
+                    "@type": "ImageObject",
+                    url: `${SITE_URL}/images/homesteaderlabs_logo_flask_seedlingv2.jpeg`,
+                  },
+                },
+                license: crop.source.license,
+                ...(crop.source.waybackUrl
+                  ? { isBasedOn: crop.source.waybackUrl }
+                  : {}),
+                about: {
+                  "@type": "Thing",
+                  name: crop.name,
+                  ...(crop.binomialName
+                    ? { alternateName: crop.binomialName }
+                    : {}),
+                  ...(crop.description ? { description: crop.description } : {}),
+                  ...(schemaSpecs.length > 0
+                    ? {
+                        additionalProperty: schemaSpecs.map((spec) => ({
+                          "@type": "PropertyValue",
+                          name: spec.name,
+                          value: spec.value,
+                          ...(spec.unitText ? { unitText: spec.unitText } : {}),
+                        })),
+                      }
+                    : {}),
+                },
+              },
+            ],
+          }),
+        }}
+      />
+
       {/* Entry header band */}
       <section className="bg-kraft grain border-b-2 border-ink torn-top relative">
         <div className="max-w-6xl mx-auto px-4 pt-10 pb-12 relative z-[2]">

@@ -90,6 +90,46 @@ export function isKbCropIndexable(crop: KbCrop): boolean {
   return hasDescription || specCount >= 4;
 }
 
+/**
+ * Page title for a crop entry.
+ *
+ * Shared by the route's metadata and its JSON-LD so the two cannot drift. A
+ * schema `name` that disagrees with the `<title>` is a mismatch signal, and the
+ * fix is to have one source rather than two copies of the same template.
+ */
+export function getKbTitle(crop: KbCrop): string {
+  return `How to Grow ${crop.name}${crop.binomialName ? ` (${crop.binomialName})` : ""}`;
+}
+
+/** Description for a crop entry, falling back to a generated line for sparse entries. */
+export function getKbDescription(crop: KbCrop): string {
+  const desc =
+    crop.description ??
+    `Growing reference for ${crop.name}${crop.binomialName ? ` (${crop.binomialName})` : ""}.`;
+  return desc.slice(0, 300);
+}
+
+/**
+ * Growing specs as flat name/value pairs for structured data.
+ *
+ * Mirrors the spec rows the page renders, minus the JSX, so the machine-readable
+ * copy stays in step with what a reader sees.
+ */
+export function getKbSchemaSpecs(
+  crop: KbCrop
+): { name: string; value: string | number; unitText?: string }[] {
+  const specs: { name: string; value: string | number; unitText?: string }[] = [];
+  if (crop.sun) specs.push({ name: "Sun requirement", value: crop.sun });
+  if (crop.sowingMethod) specs.push({ name: "Sowing method", value: crop.sowingMethod });
+  if (crop.growingDegreeDays != null)
+    specs.push({ name: "Growing degree days", value: crop.growingDegreeDays, unitText: "days" });
+  if (crop.spreadCm != null) specs.push({ name: "Spread", value: crop.spreadCm, unitText: "cm" });
+  if (crop.rowSpacingCm != null)
+    specs.push({ name: "Row spacing", value: crop.rowSpacingCm, unitText: "cm" });
+  if (crop.heightCm != null) specs.push({ name: "Height", value: crop.heightCm, unitText: "cm" });
+  return specs;
+}
+
 /** Case-insensitive search across name, binomial name, and description. */
 export function searchKbCrops(query: string): KbCrop[] {
   const q = query.trim().toLowerCase();
