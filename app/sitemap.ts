@@ -1,6 +1,6 @@
 import { MetadataRoute } from "next";
 import { getAllProducts } from "@/lib/products";
-import { getAllPosts } from "@/lib/posts";
+import { getAllPosts, getPostImages } from "@/lib/posts";
 import { getAllKbCrops, isKbCropIndexable } from "@/lib/kb";
 import { isSurvivalPlanPublic } from "@/lib/survivalPlan/visibility";
 import { ZONE_PAGES } from "@/lib/tools/planting-calendar/zonePages";
@@ -70,12 +70,19 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.8,
   }));
 
-  const archiveRoutes: MetadataRoute.Sitemap = posts.map((p) => ({
-    url: `${SITE_URL}/archive/${p.slug}/`,
-    lastModified: parsePostDate(p),
-    changeFrequency: "yearly",
-    priority: 0.6,
-  }));
+  // Images are listed per note. The ID guides rank against image-first result
+  // pages, and first-party photographs Google has never been told about cannot
+  // compete there no matter how good the alt text is.
+  const archiveRoutes: MetadataRoute.Sitemap = posts.map((p) => {
+    const images = getPostImages(p.content).map((image) => `${SITE_URL}${image.src}`);
+    return {
+      url: `${SITE_URL}/archive/${p.slug}/`,
+      lastModified: parsePostDate(p),
+      changeFrequency: "yearly" as const,
+      priority: 0.6,
+      ...(images.length > 0 ? { images } : {}),
+    };
+  });
 
   // Thin/near-empty KB entries are noindex; keep them out of the sitemap too.
   const kbRoutes: MetadataRoute.Sitemap = getAllKbCrops()

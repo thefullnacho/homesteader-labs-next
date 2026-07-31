@@ -44,6 +44,41 @@ export function getPostNo(slug: string): string {
   return String(posts.length - index).padStart(3, "0");
 }
 
+export interface PostImage {
+  /** Site-root-relative path, e.g. /images/pokeweed-stem.jpg */
+  src: string;
+  /** Markdown alt text. Doubles as the caption the note renders. */
+  alt: string;
+}
+
+/**
+ * Every local image a note renders, in document order.
+ *
+ * The identification guides are the reason this exists. Their queries resolve
+ * to image-first result pages, so the photographs are the part of the note
+ * with a real chance of being found, and they need to reach the sitemap and
+ * the structured data rather than only the rendered page.
+ *
+ * Only `/images/...` paths are collected. Remote images are not ours to list
+ * in our own sitemap, and Google reads an image sitemap as a claim of
+ * ownership.
+ */
+export function getPostImages(content: string): PostImage[] {
+  const pattern = /!\[([^\]]*)\]\((\/images\/[^)\s]+)\)/g;
+  const images: PostImage[] = [];
+  const seen = new Set<string>();
+
+  for (const match of content.matchAll(pattern)) {
+    const [, alt, src] = match;
+    // A note may show the same photograph twice; the sitemap wants it once.
+    if (seen.has(src)) continue;
+    seen.add(src);
+    images.push({ src, alt: alt.trim() });
+  }
+
+  return images;
+}
+
 /* The "Season · Skill · N min" line on archive cards */
 export function getSpecsLine(post: Post): string {
   return [post.season, post.skill, `${getReadMinutes(post.content)} min`]
