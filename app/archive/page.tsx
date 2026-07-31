@@ -1,6 +1,8 @@
 import { getAllPosts, getAllCategories, getPostNo, getSpecsLine } from "@/lib/posts";
 import Link from "next/link";
 import { PaperClip, Stamp, Tape } from "@/components/field/kit";
+import JsonLd from "@/components/JsonLd";
+import { SITE_URL, orgRef, siteRef, breadcrumbList, pageGraph } from "@/lib/schema";
 
 export const metadata = {
   title: "Field Notes",
@@ -27,8 +29,34 @@ export default async function ArchivePage(props: { searchParams: Promise<{ tag?:
       ? allPosts.filter((post) => post.tags.includes(activeTag))
       : allPosts;
 
+  // Describes the unfiltered archive on every variant. The ?drawer= and ?tag=
+  // URLs all canonicalise to /archive/, so the graph has to match the canonical
+  // rather than whichever subset happens to be on screen.
+  const archiveGraph = pageGraph(
+    breadcrumbList([{ name: "Field Notes", path: "/archive/" }]),
+    {
+      "@type": "Blog",
+      "@id": `${SITE_URL}/archive/`,
+      url: `${SITE_URL}/archive/`,
+      name: "Field Notes",
+      description:
+        "Field documentation, foraging guides, and survival knowledge from the community.",
+      isPartOf: siteRef,
+      publisher: orgRef,
+      blogPost: allPosts.map((post) => ({
+        "@type": "BlogPosting",
+        headline: post.title,
+        url: `${SITE_URL}/archive/${post.slug}/`,
+        datePublished: post.date,
+        ...(post.updated ? { dateModified: post.updated } : {}),
+        author: { "@type": "Person", name: post.author },
+      })),
+    }
+  );
+
   return (
     <>
+      <JsonLd data={archiveGraph} />
       {/* Header band */}
       <section className="bg-kraft grain border-b-2 border-ink relative">
         <div className="max-w-6xl mx-auto px-4 pt-10 pb-10 relative z-[2]">

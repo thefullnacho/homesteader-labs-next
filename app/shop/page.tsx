@@ -2,6 +2,8 @@ import { getAllProducts } from "@/lib/products";
 import ProductCard from "@/components/shop/ProductCard";
 import { SectionHead, Stamp } from "@/components/field/kit";
 import type { Metadata } from "next";
+import JsonLd from "@/components/JsonLd";
+import { SITE_URL, siteRef, breadcrumbList, pageGraph } from "@/lib/schema";
 
 export const metadata: Metadata = {
   title: "Hardware Catalog: Off-Grid Survival & Mesh Networking Equipment",
@@ -18,6 +20,31 @@ export default function ShopPage() {
 
   return (
     <>
+      <JsonLd
+        data={pageGraph(
+          breadcrumbList([{ name: "The Catalog", path: "/shop/" }]),
+          {
+            "@type": "CollectionPage",
+            "@id": `${SITE_URL}/shop/`,
+            url: `${SITE_URL}/shop/`,
+            name: "The catalog",
+            description:
+              "First-party hardware Homesteader Labs makes and ships. Field-tested off-grid equipment, no subscriptions.",
+            isPartOf: siteRef,
+            mainEntity: {
+              "@type": "ItemList",
+              numberOfItems: allProducts.length,
+              itemListElement: allProducts.map((product, i) => ({
+                "@type": "ListItem",
+                position: i + 1,
+                name: product.name,
+                url: `${SITE_URL}/shop/${product.id.toLowerCase()}/`,
+              })),
+            },
+          }
+        )}
+      />
+
       {/* Header band */}
       <section className="bg-kraft grain border-b-2 border-ink relative">
         <div className="max-w-6xl mx-auto px-4 pt-10 pb-10 relative z-[2]">

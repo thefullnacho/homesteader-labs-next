@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Stamp } from "@/components/field/kit";
-import { getAllKbCrops } from "@/lib/kb";
+import { getAllKbCrops, isKbCropIndexable } from "@/lib/kb";
 import KbBrowser from "./KbBrowser";
+import JsonLd from "@/components/JsonLd";
+import { SITE_URL, siteRef, breadcrumbList, pageGraph } from "@/lib/schema";
 
 export const metadata: Metadata = {
   title: "Crop Knowledge Base: Growing Guides for 350+ Plants",
@@ -21,6 +23,28 @@ export default function KnowledgeBasePage() {
 
   return (
     <>
+      {/* Counts the indexable entries, not all 340. The thin ones are noindex and
+          out of the sitemap, so claiming them here would overstate the collection. */}
+      <JsonLd
+        data={pageGraph(
+          breadcrumbList([{ name: "Knowledge Base", path: "/kb/" }]),
+          {
+            "@type": "CollectionPage",
+            "@id": `${SITE_URL}/kb/`,
+            url: `${SITE_URL}/kb/`,
+            name: "Crop Knowledge Base",
+            description:
+              "An open, searchable growing reference: botanical names, sun and spacing needs, and sowing methods. Public-domain data recovered from OpenFarm via the Internet Archive.",
+            isPartOf: siteRef,
+            license: "CC0-1.0",
+            mainEntity: {
+              "@type": "ItemList",
+              numberOfItems: crops.filter(isKbCropIndexable).length,
+            },
+          }
+        )}
+      />
+
       {/* Header band */}
       <section className="bg-kraft grain border-b-2 border-ink relative">
         <div className="max-w-6xl mx-auto px-4 pt-10 pb-10 relative z-[2]">
