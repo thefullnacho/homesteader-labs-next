@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import SetupWizard from '@/components/tools/caloric-security/SetupWizard';
 import AutonomyDashboard from '@/components/tools/caloric-security/AutonomyDashboard';
+import DeeperDrawers from '@/components/tools/caloric-security/DeeperDrawers';
 import FaqAccordion from '@/components/ui/FaqAccordion';
 import { Stamp } from '@/components/field/kit';
 import { isFirstRun, getConfig } from '@/lib/caloric-security/homesteadStore';
@@ -150,6 +151,16 @@ export default function CaloricSecurityPage() {
               typically pushes that past 90.
             </p>
           </div>
+
+          {/* Crawlable entry points to the deeper tools. The dashboard links to
+              these as well, but it only mounts once `ready` flips in an effect
+              and the visitor already has a saved config, so a crawler never
+              reaches those and neither does a first-time reader. Both pages sit
+              in the sitemap yet had no followable internal link until this. */}
+          <h3 className="font-display uppercase text-base md:text-lg mt-10 mb-4">
+            Go deeper
+          </h3>
+          <DeeperDrawers />
 
           <h3 className="font-display uppercase text-base md:text-lg mt-10 mb-4">
             Frequently asked questions
