@@ -1,4 +1,4 @@
-import { getAllSlugs, getPostBySlug, getAllPosts, getPostNo, getReadMinutes } from "@/lib/posts";
+import { getAllSlugs, getPostBySlug, getAllPosts, getPostNo, getReadMinutes, getPostImages } from "@/lib/posts";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { PaperClip, SpecBox, Stamp } from "@/components/field/kit";
@@ -45,16 +45,24 @@ export async function generateMetadata(props: PageProps) {
 const SITE_URL = "https://homesteaderlabs.com";
 
 /**
- * First image the note actually renders, absolute, for Article.image.
+ * Every image the note renders, as ImageObject, for Article.image.
  *
- * Google wants a real image of the content rather than a site-wide card, and
- * the notes that have one are the ones where it matters most: the ID guides.
- * Returns undefined rather than a stand-in when a note has no image, since a
- * generic logo in this slot is worse than an absent field.
+ * Google wants real images of the content rather than a site-wide card, and the
+ * notes that have them are the ones where it matters most: the ID guides, whose
+ * queries resolve to image-first result pages. Each carries its alt text as
+ * `caption`, which is the field that describes the photograph itself rather
+ * than the page it sits on.
+ *
+ * Returns an empty array rather than a stand-in when a note has no image, since
+ * a generic logo in this slot is worse than an absent field.
  */
-function firstImage(content: string): string | undefined {
-  const match = content.match(/!\[[^\]]*\]\((\/images\/[^)\s]+)\)/);
-  return match ? `${SITE_URL}${match[1]}` : undefined;
+function imageObjects(content: string) {
+  return getPostImages(content).map((image) => ({
+    "@type": "ImageObject",
+    url: `${SITE_URL}${image.src}`,
+    contentUrl: `${SITE_URL}${image.src}`,
+    ...(image.alt ? { caption: image.alt } : {}),
+  }));
 }
 
 export default async function ArchivePostPage(props: PageProps) {
@@ -89,7 +97,7 @@ export default async function ArchivePostPage(props: PageProps) {
     )
     .slice(0, 2);
 
-  const image = firstImage(post.content);
+  const images = imageObjects(post.content);
 
   return (
     <article>
@@ -104,7 +112,7 @@ export default async function ArchivePostPage(props: PageProps) {
             "@type": "Article",
             headline: post.title,
             description: post.description,
-            ...(image ? { image: [image] } : {}),
+            ...(images.length > 0 ? { image: images } : {}),
             datePublished: post.date,
             dateModified: post.updated ?? post.date,
             author: { "@type": "Person", name: post.author },
