@@ -1,0 +1,54 @@
+name: CI
+
+# master is the deploy branch, so it is the one that must never be broken. dev
+# is covered too, because catching a failure before the merge is the whole point
+# of having somewhere to catch it.
+on:
+  push:
+    branches: [master, dev]
+  pull_request:
+    branches: [master]
+
+# A newer push to the same branch makes the in-flight run irrelevant.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    name: Lint, test, build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out
+        uses: actions/checkout@v4
+
+      # Pinned to the major version used locally. Next 16 needs 20.9 or newer,
+      # so letting the runner pick could pass here and fail on the machine.
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+
+      # ci, not install: installs from the lockfile exactly and fails if
+      # package.json and the lockfile disagree, which is a real thing to catch.
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      # --run is explicit rather than relying on vitest reading CI=true. The
+      # default is watch mode, and a CI job that hangs is worse than one that
+      # fails.
+      - name: Test
+        run: npm run test -- --run
+
+      # No secrets are provided on purpose. Every consumer of a key guards with
+      # a null fallback, so a clean build proves the site still builds for
+      # someone cloning it without an .env.local. If this step ever starts
+      # needing a secret, that is the signal to check whether a key leaked into
+      # build-time code.
+      - name: Build
+        run: npm run build
