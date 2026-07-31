@@ -106,7 +106,10 @@ export default function ProductCard({
               {product.category === "AFFILIATE" ? (
                 <a
                   href={product.affiliate?.url}
-                  rel="noopener"
+                  // A supplier link is a paid link. Google's link spam policy
+                  // requires sponsored or nofollow; unqualified, it passes
+                  // PageRank to the merchant and risks a manual action.
+                  rel="sponsored nofollow noopener noreferrer"
                   className="bg-ink text-paper px-5 py-3 border-2 border-ink font-mono text-[0.72rem] uppercase tracking-wider hover:bg-marker hover:border-marker transition-colors whitespace-nowrap"
                 >
                   View at supplier →

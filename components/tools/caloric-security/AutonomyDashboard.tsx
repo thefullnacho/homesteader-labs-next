@@ -9,6 +9,7 @@ import CanningDayBanner from './CanningDayBanner';
 import DecayAlerts from './DecayAlerts';
 import FocusCardDeck from './FocusCardDeck';
 import LogHarvestModal from './LogHarvestModal';
+import DeeperDrawers from './DeeperDrawers';
 import { useSurvivalData } from '@/lib/caloric-security/useSurvivalData';
 import { resetConfig, getActuals, saveActuals } from '@/lib/caloric-security/homesteadStore';
 import { getCropById } from '@/lib/tools/planting-calendar/cropLoader';
@@ -553,36 +554,7 @@ export default function AutonomyDashboard({
         </div>
 
         {/* deeper drawers */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-10">
-          <Link
-            href="/tools/caloric-security/roi/"
-            className="group border-2 border-ink bg-paper px-5 py-4 flex items-center gap-4 hover:bg-kraft transition-colors"
-          >
-            <span className="flex-1">
-              <span className="block font-display uppercase text-base group-hover:text-marker transition-colors">
-                Caloric ROI report
-              </span>
-              <span className="block font-mono text-[0.64rem] uppercase tracking-widest text-ink/55 mt-0.5">
-                kcal per square foot, ranked
-              </span>
-            </span>
-            <span className="font-display text-xl text-ink/40 group-hover:text-marker transition-colors">→</span>
-          </Link>
-          <Link
-            href="/tools/caloric-security/companions/"
-            className="group border-2 border-ink bg-paper px-5 py-4 flex items-center gap-4 hover:bg-kraft transition-colors"
-          >
-            <span className="flex-1">
-              <span className="block font-display uppercase text-base group-hover:text-marker transition-colors">
-                Companion planting
-              </span>
-              <span className="block font-mono text-[0.64rem] uppercase tracking-widest text-ink/55 mt-0.5">
-                antagonist alerts + suggestions
-              </span>
-            </span>
-            <span className="font-display text-xl text-ink/40 group-hover:text-marker transition-colors">→</span>
-          </Link>
-        </div>
+        <DeeperDrawers className="mt-10" />
 
         <p className="mt-10 pt-5 border-t border-ink/20 text-center font-mono text-[0.64rem] uppercase tracking-[0.2em] text-ink/45">
           Clocks update on inventory change · everything stays in your browser · no server sync

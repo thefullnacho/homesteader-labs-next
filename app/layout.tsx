@@ -5,6 +5,8 @@ import Navigation from "@/components/layout/Navigation";
 import Footer from "@/components/layout/Footer";
 import TerminalOverlay from "@/components/terminal/TerminalOverlay";
 import { Providers } from "@/components/providers";
+import JsonLd from "@/components/JsonLd";
+import { siteGraph } from "@/lib/schema";
 
 const archivo = Archivo_Black({
   subsets: ["latin"],
@@ -66,6 +68,9 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${archivo.variable} ${newsreader.variable} ${plexMono.variable} ${caveat.variable}`}>
       <body className="min-h-screen bg-paper text-ink font-serif flex flex-col relative overflow-x-hidden">
+        {/* Organization and WebSite, declared once for the whole site. Page-level
+            graphs reference these by @id rather than restating the publisher. */}
+        <JsonLd data={siteGraph()} />
         <Providers>
           <Navigation />
           <main id="main-content" className="flex-grow relative z-10" role="main">

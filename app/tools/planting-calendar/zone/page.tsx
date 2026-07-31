@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { SectionHead, Stamp } from "@/components/field/kit";
 import { ZONE_PAGES, getZonePageData } from "@/lib/tools/planting-calendar/zonePages";
+import JsonLd from "@/components/JsonLd";
+import { SITE_URL, siteRef, breadcrumbList, pageGraph } from "@/lib/schema";
 
 // Same reasoning as the zone pages themselves: a pure function of the frost
 // normals, so it prerenders.
@@ -25,6 +27,34 @@ export default function ZoneIndexPage() {
 
   return (
     <>
+      <JsonLd
+        data={pageGraph(
+          breadcrumbList([
+            { name: "Planting Calendar", path: "/tools/planting-calendar/" },
+            { name: "By Zone", path: "/tools/planting-calendar/zone/" },
+          ]),
+          {
+            "@type": "CollectionPage",
+            "@id": `${SITE_URL}/tools/planting-calendar/zone/`,
+            url: `${SITE_URL}/tools/planting-calendar/zone/`,
+            name: "Planting Calendar by Zone",
+            description:
+              "Frost dates, season length and fall sowing deadlines for USDA zones 5a through 9b.",
+            isPartOf: siteRef,
+            mainEntity: {
+              "@type": "ItemList",
+              numberOfItems: zones.length,
+              itemListElement: zones.map(({ zone }, i) => ({
+                "@type": "ListItem",
+                position: i + 1,
+                name: `Zone ${zone}`,
+                url: `${SITE_URL}/tools/planting-calendar/zone/${zone}/`,
+              })),
+            },
+          }
+        )}
+      />
+
       <section className="bg-kraft grain border-b-2 border-ink">
         <div className="max-w-5xl mx-auto px-4 py-10 relative z-[2]">
           <div className="flex items-start justify-between gap-4 mb-5 font-mono text-[0.64rem] uppercase tracking-[0.18em] text-ink/60">

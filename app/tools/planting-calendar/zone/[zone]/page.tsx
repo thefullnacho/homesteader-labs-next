@@ -3,6 +3,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { SectionHead, Stamp } from "@/components/field/kit";
 import PlannerCapture from "@/components/zonePlanner/PlannerCapture";
+import JsonLd from "@/components/JsonLd";
+import { SITE_URL, orgRef, siteRef, breadcrumbList, pageGraph } from "@/lib/schema";
 import {
   ZONE_PAGES,
   getZonePageData,
@@ -59,6 +61,25 @@ export default async function ZonePage(props: Props) {
 
   return (
     <>
+      <JsonLd
+        data={pageGraph(
+          breadcrumbList([
+            { name: "Planting Calendar", path: "/tools/planting-calendar/" },
+            { name: "By Zone", path: "/tools/planting-calendar/zone/" },
+            { name: `Zone ${zone}`, path: `/tools/planting-calendar/zone/${zone}/` },
+          ]),
+          {
+            "@type": "WebPage",
+            "@id": `${SITE_URL}/tools/planting-calendar/zone/${zone}/`,
+            url: `${SITE_URL}/tools/planting-calendar/zone/${zone}/`,
+            name: `USDA Zone ${zone} Planting Calendar`,
+            isPartOf: siteRef,
+            publisher: orgRef,
+            inLanguage: "en",
+          }
+        )}
+      />
+
       {/* ---------- HEADER BAND ---------- */}
       <section className="bg-kraft grain border-b-2 border-ink">
         <div className="max-w-5xl mx-auto px-4 py-10 relative z-[2]">
