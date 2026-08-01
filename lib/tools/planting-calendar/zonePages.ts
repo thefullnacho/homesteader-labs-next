@@ -6,19 +6,33 @@
 // crop's first sow date shifts between every adjacent pair, because the frost
 // normals move 10-20 days per half-zone.
 //
-// Coverage: the ten zones here hold 35,589 of the 40,502 ZIPs in the PRISM
-// table, or 88% of the country. The remaining sixteen zones each hold under
-// 1,300 ZIPs and several hold under 30, so they are not worth a page until the
-// first ten prove out.
+// Coverage: the fourteen zones here hold 39,673 of the 40,502 ZIPs in the PRISM
+// table, or 98% of the country.
+//
+// It was ten zones (5a-9b, 88%) until 2026-08-01. The state pages forced the
+// extension: a state page hands its reader to a zone page, and at 5a-9b that
+// dead-ended for 42% of Florida and 46% of California, which are the second and
+// third largest state queries in the keyword data. Adding 4a, 4b, 10a and 10b
+// cost no new data, since content/frost-zones.json already carried normals for
+// all four, and cut the list of states under 90% covered from thirteen to five.
+//
+// The four were also exactly the zones carrying the bad frost data repaired in
+// effb671, which is not a coincidence: nothing rendered them, so nothing caught
+// them. Do not extend further without checking frostNormals.test.ts passes for
+// the new zones first.
+//
+// The remaining twelve zones each hold under 250 ZIPs. 11a and above have no
+// frost normals at all, and a frost-free tropical zone wants a different page
+// than a frost-anchored calendar, so they stay out.
 
 import { getFrostDatesByZone } from "@/lib/frostNormals";
 import { getAllCrops } from "./cropLoader";
 import { calculateCropSchedule } from "./plantingCalculations";
 import type { Crop, PlantingDate, SelectedCrop } from "./types";
 
-/** Ordered coldest to warmest. 88% of US ZIPs. */
+/** Ordered coldest to warmest. 98% of US ZIPs. */
 export const ZONE_PAGES = [
-  "5a", "5b", "6a", "6b", "7a", "7b", "8a", "8b", "9a", "9b",
+  "4a", "4b", "5a", "5b", "6a", "6b", "7a", "7b", "8a", "8b", "9a", "9b", "10a", "10b",
 ] as const;
 
 export type PageZone = (typeof ZONE_PAGES)[number];

@@ -9,15 +9,20 @@ import {
 import { getAllCrops } from './cropLoader';
 
 describe('zone page coverage', () => {
-  it('covers the ten zones holding 88% of US ZIPs', () => {
-    expect(ZONE_PAGES).toHaveLength(10);
-    expect(ZONE_PAGES[0]).toBe('5a');
-    expect(ZONE_PAGES[ZONE_PAGES.length - 1]).toBe('9b');
+  it('covers the fourteen zones holding 98% of US ZIPs', () => {
+    // Was ten (5a-9b, 88%) until 2026-08-01. Extended for the state pages,
+    // which dead-ended for 42% of Florida and 46% of California at 5a-9b.
+    expect(ZONE_PAGES).toHaveLength(14);
+    expect(ZONE_PAGES[0]).toBe('4a');
+    expect(ZONE_PAGES[ZONE_PAGES.length - 1]).toBe('10b');
   });
 
   it('rejects zones without a page', () => {
     expect(isPageZone('6b')).toBe(true);
+    expect(isPageZone('10b')).toBe(true);
+    expect(isPageZone('11a')).toBe(false); // real zone, no frost normals, no page
     expect(isPageZone('13b')).toBe(false); // real zone, no frost data, no page
+    expect(isPageZone('3b')).toBe(false);  // has normals, too few ZIPs to earn a page
     expect(isPageZone('nonsense')).toBe(false);
   });
 });
@@ -65,7 +70,7 @@ describe('zones are genuinely distinct, not doorway pages', () => {
     }
   });
 
-  it('lengthens the season monotonically from 5a to 9b', () => {
+  it('lengthens the season monotonically from 4a to 10b', () => {
     const days = ZONE_PAGES.map((z) => getZonePageData(z).frostFreeDays);
     expect(days).toEqual([...days].sort((a, b) => a - b));
   });

@@ -66,7 +66,7 @@ export default function ZoneIndexPage() {
               </Link>
               {" / "}Zones
             </span>
-            <span className="text-right shrink-0">{ZONE_PAGES.length} zones, 88% of US ZIPs</span>
+            <span className="text-right shrink-0">{ZONE_PAGES.length} zones, 98% of US ZIPs</span>
           </div>
 
           <div className="flex flex-wrap gap-2 mb-4">
