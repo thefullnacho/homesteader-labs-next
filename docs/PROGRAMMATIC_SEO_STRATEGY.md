@@ -30,6 +30,9 @@
 >
 > **Still open and genuinely different in shape:** state pages. A state spans several zones, so the
 > page's job is helping a reader find theirs rather than restating a calendar.
+>
+> **Specced 2026-08-01 in `STATE_PAGES_SPEC.md`.** That document supersedes this paragraph and
+> carries the measurements, the three blockers found while measuring, and the build sequence.
 
 ---
 
