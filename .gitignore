@@ -58,3 +58,8 @@ brag-output/
 # Keyword research working notes (local only)
 docs/KEYWORD_RESEARCH_*.md
 docs/PHOTO_TODO.md
+
+# Content planning, ideation and strategy working notes. Local only: this is the
+# editorial pipeline, not engineering documentation, and it does not belong in a
+# public repo. Anything dropped in here stays out of git without a new pattern.
+docs/private/

@@ -396,10 +396,32 @@ underneath.
 
 ## §10 Open decisions
 
-1. **48 states or fewer at launch.** The spec says ship all 48 that pass §8. The alternative is a
-   ten-state pilot on the states the keyword data names (TX, FL, CA, GA, NC and neighbours),
-   proving indexation before committing the rest. The pilot is the more conservative read of the
-   city-plan lesson and costs one sprint of delay.
+1. ~~48 states or fewer at launch.~~ **DECIDED 2026-08-01: ten-state pilot.** Wave 2 is gated on
+   GSC coverage status at roughly three weeks, not on ranking at sixty days. The distinction
+   matters: indexation and duplicate classification are what the pilot buys, and they resolve in
+   about three weeks, so the time-decay cost of piloting is a fraction of what it first appears.
+
+   The ten are demand-weighted and deliberately span all three `StateShape` branches, so the
+   pilot exercises every prose path rather than only the wide one:
+
+   ```
+   state  ZIPs   bands  range        coverage   shape
+   TX     2569     7    6b -> 10b      100%     wide
+   CA     2554     5    5b -> 11a       99%     wide
+   NY     2123     7    4a ->  7b      100%     wide
+   PA     2108     5    5b ->  8a      100%     wide
+   FL     1454     5    8b -> 11b       88%     wide
+   MI     1154     5    4a ->  7a      100%     wide
+   OH     1391     3    6a ->  7a      100%     broad
+   NC     1072     4    6b ->  9a      100%     broad
+   GA      937     4    7a ->  9a      100%     broad
+   KY      933     2    6b ->  7b      100%     narrow
+   ```
+
+   Coverage above assumes phase 2 has landed. Without it FL is 42% and CA 54%, so **phase 2 is a
+   hard prerequisite for the pilot, not just for wave 2.** KY is the only narrow state in the set
+   and is carrying the entire `narrow` branch; if it fails §8's text-share bar, that branch needs
+   rethinking before wave 2 adds the dozen other two-band states.
 2. **Whether 11a/11b earn frost normals** or whether tropical Florida and Hawaii get a different
    page type entirely. Deferred, and it caps Florida at 88%.
 3. **ZIP count as a proxy for readership.** Share-of-ZIPs is an area-weighted measure and biases
