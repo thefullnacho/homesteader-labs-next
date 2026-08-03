@@ -15,6 +15,17 @@ function targetYear(): number {
 }
 
 /**
+ * Whether a zone has real normals, as opposed to being served the 6a fallback
+ * below. 11a and warmer have no 32°F date at all, and the state pages must be
+ * able to say "this band is frost-free" rather than print 6a's March 20 over a
+ * tenth of Florida. Call this before getFrostDatesByZone anywhere the zone is
+ * not already known to be in ZONE_PAGES.
+ */
+export function hasFrostNormals(zone: string): boolean {
+  return zone.toLowerCase() in frostZones.zones;
+}
+
+/**
  * Returns frost date normals from NOAA 1991-2020 data for a given USDA
  * growing zone (e.g. "6b"). Falls back to zone "6a" if the key is unknown.
  * Data is US-centric — use as a fallback when api.frost.date is unavailable.
