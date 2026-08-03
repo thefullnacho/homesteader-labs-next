@@ -285,8 +285,12 @@ The page's thesis and its most defensible content. Three stat cards: coldest ban
 frost, warmest band and its last frost, spread in days. Then the `StateShape` body in a
 `card-paper`.
 
-For Texas this reads as a 64-day spread between 6b and 10b. For Rhode Island it reads as 10 days.
+For Texas this reads as a 59-day spread between 7a and 10a. For Kentucky it reads as 10 days.
 That difference is the page.
+
+(Corrected in phase 3. The 64-day figure this section first carried runs 6b to 10b, and both of
+those are minor zones the page never tabulates. `spreadDays` counts material bands only, so the
+number matches what a reader actually sees in §5.5.)
 
 ### 5.3 §2 Find your zone
 
@@ -364,8 +368,25 @@ Add to `statePages.test.ts`, failing the build:
 1. **No two state pages share a band table.** For every pair, the set of `(zone, share rounded to
    whole percent)` tuples must differ. A collision means two pages will render identical §5.5
    tables and at least one of them should not exist.
-2. **Per-state text share >= 35%.** Compute rendered visible text, subtract the tokens common to
-   all fifty, assert the remainder clears the bar. Zones measured 39-46%; 35% is the floor.
+2. **Per-state text share.** Compute rendered visible text, subtract the tokens common to all
+   fifty, assert the remainder clears the bar.
+
+   **The 35% floor is withdrawn, and the 39-46% this section attributed to the zone pages was
+   wrong.** Measured on built HTML in phase 4 by `scripts/measure-text-share.mjs`, the zone
+   pages, live and indexed, come in at **14.6% to 20.6%**. The number does not move materially
+   whether global chrome is counted or stripped to `<main>`. Nothing on this site has ever
+   cleared 35%, so a gate set there would have blocked the pages that are currently the best
+   thing we have.
+
+   The replacement is comparative and reproducible: **no state page may be thinner than the
+   thinnest live zone page.** The state pages measure **18.7% to 30.9%**, so the set clears it,
+   and the wide states clear it by half again. Kentucky at 18.7% is the floor of the set and the
+   narrow branch is why, which is exactly the risk §10.1 flagged. It passes, and it is the number
+   to watch when wave 2 adds the other two-band states.
+
+   The unit test in `statePages.test.ts` still asserts 35% against the **data layer**, where the
+   figure is 65-69%. That is a weaker and different claim: that the data feeding a page is
+   state-specific, not that the rendered page is. Keep both and do not confuse them.
 3. **Every material band resolves.** Either `hasPage` is true, or the page renders the §5.6
    fallback. No band is silently dropped.
 4. **Monotonicity.** Within a state, bands sorted coldest to warmest must have monotonically
@@ -385,7 +406,7 @@ whole lesson of the city plan.
 | 1 | Vendor Census ZCTA-to-state, add integrity test | join covers >=99% of PRISM ZIPs |
 | 2 | Extend `ZONE_PAGES` to 4a, 4b, 10a, 10b | national coverage 98%, FL to 88% |
 | 3 | `statePages.ts` plus `StateShape`, unit tested | pure, no page yet |
-| 4 | Route, index, sitemap, schema | §8 green on all 48 |
+| 4 | Route, index, sitemap, schema | §8 green on the ten pilot states |
 | 5 | Reciprocal links on zone pages | |
 
 Phases 0 through 2 are prerequisites and none of them are state page work as such. That is the

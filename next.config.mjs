@@ -12,6 +12,25 @@ const nextConfig = {
   allowedDevOrigins: ['127.0.0.1'],
   trailingSlash: true,
   pageExtensions: ['js', 'jsx', 'mdx', 'ts', 'tsx'],
+  async redirects() {
+    // State pages canonicalise on the full name, since the demand is "what to
+    // plant in august in texas" rather than "in tx" (spec §3). The abbreviated
+    // form is a real minority query, so it gets a permanent redirect to the
+    // canonical rather than a page of its own or a 404.
+    //
+    // Only the ten states that have pages. Redirecting /state/wy/ to a URL
+    // that 404s trades one dead end for a slower one.
+    const STATE_ABBRS = {
+      tx: 'texas', ca: 'california', ny: 'new-york', pa: 'pennsylvania',
+      fl: 'florida', mi: 'michigan', oh: 'ohio', nc: 'north-carolina',
+      ga: 'georgia', ky: 'kentucky',
+    };
+    return Object.entries(STATE_ABBRS).map(([abbr, slug]) => ({
+      source: `/tools/planting-calendar/state/${abbr}`,
+      destination: `/tools/planting-calendar/state/${slug}/`,
+      permanent: true,
+    }));
+  },
   async headers() {
     return [
       {

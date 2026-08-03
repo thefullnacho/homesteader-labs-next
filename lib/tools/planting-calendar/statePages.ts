@@ -180,17 +180,24 @@ function stateShape(
   const domShare = pct(dominant.share);
 
   if (n <= 2) {
+    const cold = bands[0];
+    const warm = bands[bands.length - 1];
+    const seasonGap = (warm.frostFreeDays ?? 0) - (cold.frostFreeDays ?? 0);
     return {
       band: "narrow",
       headline: "One calendar, and an edge worth knowing about",
       body:
-        `${name} is close to a single planting calendar. Zone ${dominant.zone} covers ${domShare}% ` +
-        `of the state, and the ${spreadDays} days separating ${lo} from ${hi} is a smaller gap than ` +
-        `the year-to-year variance in the frost date itself. A date taken from ${dominant.zone} will ` +
-        `be roughly right almost everywhere here, which is not true of most states. ` +
-        `The edge still matters at the margins: elevation and the ${hi} pocket run later in spring ` +
-        `and close earlier in autumn, so if you garden there, plan against ${hi} rather than the ` +
-        `state average and treat the difference as a week, not a season.`,
+        `${name} is close to a single planting calendar, which most states are not. Zone ` +
+        `${dominant.zone} covers ${domShare}% of it, ${lo} and ${hi} are the only bands that carry ` +
+        `real acreage, and the ${spreadDays} days between their last frosts is a smaller gap than ` +
+        `the year-to-year variance in the frost date itself. Put plainly: a ${dominant.zone} date ` +
+        `used anywhere in ${name} will be inside the noise. ` +
+        `The two bands still differ where it counts at the end of the season. ${lo} runs ` +
+        `${cold.frostFreeDays} frost-free days against ${warm.frostFreeDays} in ${hi}, so the ` +
+        `${seasonGap} days you gain at the warm end are autumn days, and autumn days are the ones ` +
+        `a late sowing needs. Take the spring dates from the state, take the autumn deadlines from ` +
+        `your own band, and the ${pct(cold.share)} of ${name} sitting in ${lo} will stop losing the ` +
+        `tail of the season to advice written for ${hi}.`,
     };
   }
 

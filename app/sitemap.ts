@@ -4,6 +4,7 @@ import { getAllPosts, getPostImages } from "@/lib/posts";
 import { getAllKbCrops, isKbCropIndexable } from "@/lib/kb";
 import { isSurvivalPlanPublic } from "@/lib/survivalPlan/visibility";
 import { ZONE_PAGES } from "@/lib/tools/planting-calendar/zonePages";
+import { STATE_PAGES } from "@/lib/tools/planting-calendar/statePages";
 
 const SITE_URL = "https://homesteaderlabs.com";
 
@@ -111,5 +112,27 @@ export default function sitemap(): MetadataRoute.Sitemap {
     })),
   ];
 
-  return [...staticRoutes, ...productRoutes, ...archiveRoutes, ...zoneRoutes, ...kbRoutes];
+  // Per-state pages, same no-lastmod treatment and for the same reason: the
+  // data is fixed normals and a decennial census file, not dated content.
+  const stateRoutes: MetadataRoute.Sitemap = [
+    {
+      url: `${SITE_URL}/tools/planting-calendar/state/`,
+      changeFrequency: "monthly" as const,
+      priority: 0.8,
+    },
+    ...STATE_PAGES.map((state) => ({
+      url: `${SITE_URL}/tools/planting-calendar/state/${state}/`,
+      changeFrequency: "monthly" as const,
+      priority: 0.7,
+    })),
+  ];
+
+  return [
+    ...staticRoutes,
+    ...productRoutes,
+    ...archiveRoutes,
+    ...zoneRoutes,
+    ...stateRoutes,
+    ...kbRoutes,
+  ];
 }

@@ -7,7 +7,8 @@
     "build": "next build --webpack",
     "start": "next start",
     "lint": "eslint .",
-    "test": "vitest"
+    "test": "vitest",
+    "measure:text-share": "node scripts/measure-text-share.mjs"
   },
   "dependencies": {
     "@keystatic/core": "^0.5.51",
