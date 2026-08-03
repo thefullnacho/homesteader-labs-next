@@ -12,6 +12,7 @@ import {
   FALL_FACTOR_DAYS,
   type PageZone,
 } from "@/lib/tools/planting-calendar/zonePages";
+import { statesForZone } from "@/lib/tools/planting-calendar/statePages";
 
 // Static at build time: the schedule is a pure function of the zone's frost
 // normals, so there is nothing to compute per request.
@@ -58,6 +59,10 @@ export default async function ZonePage(props: Props) {
   const fall = d.fallSowing();
   const spring = d.rows.filter((r) => !r.overwinters);
   const overwinter = d.rows.filter((r) => r.overwinters);
+  // The reciprocal half of spec §7: state pages link down to their bands, and
+  // this links back up. Capped at eight, since it is a link section and not a
+  // directory.
+  const states = statesForZone(zone);
 
   return (
     <>
@@ -254,9 +259,58 @@ export default async function ZonePage(props: Props) {
           )}
         </section>
 
-        {/* ---------- §4 OTHER ZONES ---------- */}
+        {/* ---------- §4 WHERE THIS ZONE IS ---------- */}
         <section className="pt-14">
-          <SectionHead no="§4" title="Other zones" />
+          <SectionHead
+            no="§4"
+            title={`Where zone ${zone} is`}
+            right={
+              states.length > 0 ? (
+                <span className="font-mono text-[0.64rem]">
+                  {states.length} {states.length === 1 ? "state" : "states"}
+                </span>
+              ) : undefined
+            }
+          />
+          {states.length > 0 ? (
+            <>
+              <p className="font-serif text-ink/75 mb-4 max-w-2xl">
+                Zone {zone} is a material band in {states.length === 1 ? "this state" : "these states"},
+                meaning it holds at least 2% of their ZIP codes. The share tells you how much of
+                each state gardens on the dates above, and in most of them it is a minority: a
+                state is not a growing region.
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {states.map((s) => (
+                  <Link
+                    key={s.slug}
+                    href={`/tools/planting-calendar/state/${s.slug}/`}
+                    className="font-mono text-[0.7rem] uppercase tracking-wider border-2 border-ink/30 px-3 py-1.5 hover:border-marker hover:text-marker"
+                  >
+                    {s.name}{" "}
+                    <span className="text-ink/50">{Math.round(s.share * 100)}%</span>
+                  </Link>
+                ))}
+              </div>
+            </>
+          ) : (
+            <p className="font-serif text-ink/75 max-w-2xl">
+              None of the states with pages so far carries zone {zone} as a material band, so this
+              is a zone that turns up in pockets rather than across whole states. The{" "}
+              <Link
+                href="/tools/planting-calendar/state/"
+                className="underline decoration-marker decoration-2 underline-offset-4 hover:text-marker"
+              >
+                state pages
+              </Link>{" "}
+              cover ten states at the moment, and more will be added.
+            </p>
+          )}
+        </section>
+
+        {/* ---------- §5 OTHER ZONES ---------- */}
+        <section className="pt-14">
+          <SectionHead no="§5" title="Other zones" />
           <p className="font-serif text-ink/75 mb-4 max-w-2xl">
             Not sure which is yours? The{" "}
             <Link href="/tools/planting-calendar/" className="underline decoration-marker decoration-2 underline-offset-4 hover:text-marker">

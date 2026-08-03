@@ -8,7 +8,7 @@ import {
   type StatePageData,
 } from './statePages';
 import { STATE_TABLE, stateByAbbr, stateBySlug } from './stateTable';
-import { isPageZone } from './zonePages';
+import { ZONE_PAGES, isPageZone } from './zonePages';
 import { hasFrostNormals } from '@/lib/frostNormals';
 
 // Built once. getStatePageData walks every ZIP in the state, and ten states
@@ -319,6 +319,23 @@ describe('reciprocal linking', () => {
 
   it('returns nothing for a zone no pilot state carries materially', () => {
     expect(statesForZone('4a')).toEqual([]);
+  });
+
+  it('caps every zone page at eight states by default', () => {
+    // The zone pages call this unbounded. Eight is a link section; fifty would
+    // be a directory, and wave 2 is what would turn one into the other.
+    for (const zone of ZONE_PAGES) {
+      expect(statesForZone(zone).length, zone).toBeLessThanOrEqual(8);
+    }
+  });
+
+  it('is reciprocal: a state links its band, and the band links back', () => {
+    for (const p of PAGES) {
+      for (const band of p.bands.filter((b) => b.hasPage)) {
+        const back = statesForZone(band.zone, 50).map((s) => s.slug);
+        expect(back, `zone ${band.zone} does not link back to ${p.slug}`).toContain(p.slug);
+      }
+    }
   });
 
   it('puts neighbours with pages of their own first', () => {

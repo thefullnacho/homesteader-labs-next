@@ -236,11 +236,21 @@ function stateShape(
  * The route's generateStaticParams is driven by the same list, so a throw here
  * means the two have drifted and the build should stop.
  */
+const CACHE = new Map<string, StatePageData>();
+
 export function getStatePageData(slug: string): StatePageData {
   const entry: StateEntry | undefined = stateBySlug(slug);
   if (!entry || !isPageState(entry.slug)) {
     throw new Error(`No state page for "${slug}". Add it to STATE_PAGES first.`);
   }
+
+  // Memoised because statesForZone builds all ten states and the zone pages
+  // now call it fourteen times, so an uncached build walks 350,000 ZIPs to
+  // produce ten answers that cannot differ. Safe precisely because this is
+  // pure: the only clock read is inside nowSowing, which takes its date at
+  // call time rather than at construction.
+  const hit = CACHE.get(entry.slug);
+  if (hit) return hit;
 
   const counts = new Map<string, number>();
   let zipCount = 0;
@@ -284,7 +294,7 @@ export function getStatePageData(slug: string): StatePageData {
 
   const linkable = bands.filter((b) => b.hasPage);
 
-  return {
+  const data: StatePageData = {
     slug: entry.slug,
     name: entry.name,
     abbr: entry.abbr,
@@ -306,6 +316,9 @@ export function getStatePageData(slug: string): StatePageData {
         rows: getZonePageData(band.zone as PageZone).fallSowing(from),
       })),
   };
+
+  CACHE.set(entry.slug, data);
+  return data;
 }
 
 /**

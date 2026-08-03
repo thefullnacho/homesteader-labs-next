@@ -10,10 +10,10 @@ import { SITE_URL, siteRef, breadcrumbList, pageGraph } from "@/lib/schema";
 export const dynamic = "force-static";
 
 export const metadata: Metadata = {
-  title: "Planting Calendar by Zone: Frost Dates for Zones 5a to 9b",
+  title: "Planting Calendar by Zone: Frost Dates for Zones 4a to 10b",
   description:
-    "Frost dates, season length and fall sowing deadlines for USDA zones 5a through 9b, " +
-    "covering 88% of US ZIP codes. Pick your zone for its full sowing schedule.",
+    "Frost dates, season length and fall sowing deadlines for USDA zones 4a through 10b, " +
+    "covering 98% of US ZIP codes. Pick your zone for its full sowing schedule.",
   alternates: { canonical: "/tools/planting-calendar/zone/" },
 };
 
@@ -70,7 +70,7 @@ export default function ZoneIndexPage() {
           </div>
 
           <div className="flex flex-wrap gap-2 mb-4">
-            <Stamp>Zones 5a-9b</Stamp>
+            <Stamp>Zones 4a-10b</Stamp>
             <Stamp>NOAA 1991-2020</Stamp>
           </div>
 
@@ -100,8 +100,21 @@ export default function ZoneIndexPage() {
               planting calendar
             </Link>{" "}
             resolves it from your ZIP against the USDA 2023 map, rather than asking you to read a
-            colour off a picture. These ten zones hold 35,589 of the 40,502 ZIPs in that table. The
-            sixteen we have left out each hold under 1,300, and several under thirty.
+            colour off a picture. These fourteen zones hold 39,673 of the 40,502 ZIPs in that
+            table. The twelve left out hold 829 between them: the largest is 3b at 230 ZIPs, and
+            above 10b there are no frost normals to build a calendar from at all.
+          </p>
+          <p className="font-serif text-ink/75 mb-6 max-w-2xl">
+            Or start from{" "}
+            <Link
+              href="/tools/planting-calendar/state/"
+              className="underline decoration-marker decoration-2 underline-offset-4 hover:text-marker"
+            >
+              your state
+            </Link>
+            , which is the easier question if you do not know your zone yet. No state is one
+            growing region, so a state page&apos;s job is to show you which of its zones is yours
+            and send you back here.
           </p>
 
           <div className="card-paper grain overflow-hidden">
@@ -151,8 +164,8 @@ export default function ZoneIndexPage() {
             Two cities in the same zone share a frost date, so they render an identical schedule.
             Buffalo and Rochester are both 6a. Zones differ from each other in a way cities in the
             same zone do not: every crop&apos;s sowing date shifts between every adjacent pair,
-            because frost normals move ten to twenty days per half-zone. Ten substantive pages beat
-            five hundred thin ones.
+            because frost normals move ten to twenty days per half-zone. Fourteen substantive pages
+            beat five hundred thin ones.
           </p>
         </section>
 
