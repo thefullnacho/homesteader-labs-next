@@ -10,7 +10,7 @@ import {
   getStatePageData,
   isPageState,
 } from "@/lib/tools/planting-calendar/statePages";
-import { ZONE_PAGES } from "@/lib/tools/planting-calendar/zonePages";
+import { ZONE_PAGES, getZonePageData } from "@/lib/tools/planting-calendar/zonePages";
 import { stateBySlug } from "@/lib/tools/planting-calendar/stateTable";
 
 // Static at build time, same reasoning as the zone route: everything on the
@@ -61,6 +61,13 @@ export default async function StatePage(props: Props) {
   const sowing = d.nowSowing().filter((s) => s.rows.length > 0);
   const uncovered = d.bands.filter((b) => !b.hasPage);
   const path = `/tools/planting-calendar/state/${d.slug}/`;
+
+  // Every zone, not just this state's bands: a reader's ZIP can resolve to a
+  // minor band the table never shows, and the planner offer needs a real crop
+  // count for whichever zone they actually land in.
+  const fallCounts = Object.fromEntries(
+    ZONE_PAGES.map((z) => [z, getZonePageData(z).fallSowing().length])
+  );
 
   return (
     <>
@@ -189,7 +196,7 @@ export default async function StatePage(props: Props) {
             asking you to read a colour off a picture, and it sends you to that zone&apos;s full
             schedule.
           </p>
-          <StateZipResolver stateName={d.name} pageZones={ZONE_PAGES} />
+          <StateZipResolver stateName={d.name} pageZones={ZONE_PAGES} fallCounts={fallCounts} />
         </section>
 
         {/* ---------- §3 WHAT TO PLANT NOW, BY BAND ---------- */}

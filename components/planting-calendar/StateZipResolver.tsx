@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { ArrowRight, AlertTriangle } from 'lucide-react';
+import PlannerCapture from '@/components/zonePlanner/PlannerCapture';
 
 type Result =
   | { kind: 'zone'; zip: string; zone: string; hasPage: boolean }
@@ -27,9 +28,17 @@ type Result =
 export default function StateZipResolver({
   stateName,
   pageZones,
+  fallCounts,
 }: {
   stateName: string;
   pageZones: readonly string[];
+  /**
+   * Zone to still-sowable crop count, computed on the server for every zone
+   * that has a page. The planner offer needs a real number for whichever zone
+   * the reader lands in, and that zone may not be one of this state's material
+   * bands, so the whole table comes across rather than just this page's.
+   */
+  fallCounts: Record<string, number>;
 }) {
   const [zip, setZip] = useState('');
   const [busy, setBusy] = useState(false);
@@ -91,15 +100,39 @@ export default function StateZipResolver({
         </form>
 
         {result?.kind === 'zone' && result.hasPage && (
-          <p className="font-serif text-ink/85 mt-4">
-            {result.zip} is zone <strong>{result.zone}</strong>.{' '}
-            <Link
-              href={`/tools/planting-calendar/zone/${result.zone}/`}
-              className="underline decoration-marker decoration-2 underline-offset-4 hover:text-marker inline-flex items-center gap-1"
-            >
-              Its full sowing schedule <ArrowRight className="w-3.5 h-3.5" />
-            </Link>
-          </p>
+          <>
+            <p className="font-serif text-ink/85 mt-4">
+              {result.zip} is zone <strong>{result.zone}</strong>.{' '}
+              <Link
+                href={`/tools/planting-calendar/zone/${result.zone}/`}
+                className="underline decoration-marker decoration-2 underline-offset-4 hover:text-marker inline-flex items-center gap-1"
+              >
+                Its full sowing schedule <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
+            </p>
+
+            {/*
+              The offer waits until the reader has a zone, and it offers that
+              zone rather than the state's dominant band. A "Texas planner" on
+              the Texas page would contradict the page's own argument, which is
+              that the state is not the unit deciding your dates. It also means
+              nobody is asked for an address before they have been given
+              something, which is the order the funnel should run in.
+            */}
+            {fallCounts[result.zone] > 0 && (
+              <PlannerCapture
+                zone={result.zone}
+                cropCount={fallCounts[result.zone]}
+                blurb={
+                  `The ${fallCounts[result.zone]} crops that still finish in zone ${result.zone} ` +
+                  `if they go in now, as a printable four-page sheet: every sowing deadline, the ` +
+                  `pests worth watching for what you are sowing, a blank grid for your own beds, ` +
+                  `and a checklist for before you sow. Built for your zone rather than for ` +
+                  `${stateName}, because ${stateName} does not have one set of dates.`
+                }
+              />
+            )}
+          </>
         )}
 
         {result?.kind === 'zone' && !result.hasPage && (

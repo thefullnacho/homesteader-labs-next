@@ -13,7 +13,21 @@ type FormState = 'idle' | 'submitting' | 'success' | 'error';
  * copy here says only what the route actually does. It downloads the PDF in the
  * browser and adds the address to the list; it does not email the file.
  */
-export default function PlannerCapture({ zone, cropCount }: { zone: string; cropCount: number }) {
+export default function PlannerCapture({
+  zone,
+  cropCount,
+  blurb,
+}: {
+  zone: string;
+  cropCount: number;
+  /**
+   * Overrides the description. The default says "the deadlines above", which is
+   * true on a zone page and false anywhere else. The state pages resolve a zone
+   * from a ZIP and show only the top five per band, so they supply their own
+   * sentence rather than inheriting a claim the page does not support.
+   */
+  blurb?: string;
+}) {
   const [email, setEmail] = useState('');
   const [status, setStatus] = useState<FormState>('idle');
   const [error, setError] = useState<string | null>(null);
@@ -51,10 +65,14 @@ export default function PlannerCapture({ zone, cropCount }: { zone: string; crop
           Zone {zone} fall planner
         </h3>
         <p className="font-serif text-ink/75 mt-3 max-w-xl">
-          The {cropCount} deadlines above as a printable four-page sheet, plus the pests worth
-          watching for what you are sowing, a blank grid for your own beds, and a checklist for
-          before you sow. Everything on it is on this page already. The sheet is for the pocket of
-          a coat.
+          {blurb ?? (
+            <>
+              The {cropCount} deadlines above as a printable four-page sheet, plus the pests worth
+              watching for what you are sowing, a blank grid for your own beds, and a checklist for
+              before you sow. Everything on it is on this page already. The sheet is for the pocket
+              of a coat.
+            </>
+          )}
         </p>
 
         {status === 'success' && downloadUrl ? (
