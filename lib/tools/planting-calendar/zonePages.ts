@@ -29,6 +29,11 @@ import { getFrostDatesByZone } from "@/lib/frostNormals";
 import { getAllCrops } from "./cropLoader";
 import { calculateCropSchedule } from "./plantingCalculations";
 import type { Crop, PlantingDate, SelectedCrop } from "./types";
+import {
+  isOverwintering,
+  overwinterWindow,
+  type OverwinterWindow,
+} from "./overwintering";
 
 /** Ordered coldest to warmest. 98% of US ZIPs. */
 export const ZONE_PAGES = [
@@ -60,76 +65,6 @@ const WARM_SEASON = new Set([
   // Sown in autumn deliberately, to overwinter. Handled by `overwinters`.
   "garlic",
 ]);
-
-/**
- * Sown in autumn to overwinter. Ordinary crops direct-sow within a few weeks of
- * last frost (carrot -21, cabbage -21); garlic sits at -180, four months before
- * it, which is a different act. The gap between the two is wide enough that a
- * threshold here is safe.
- */
-function isOverwintering(crop: Crop): boolean {
-  return typeof crop.directSow === "number" && crop.directSow <= -120;
-}
-
-export interface OverwinterWindow {
-  /** Mid-window date, for sorting and for any single-date display. */
-  date: Date;
-  /** The window as a grower would state it. */
-  label: string;
-  /** Weeks of refrigerator pre-chill, or null where the winter supplies it. */
-  preChillWeeks: [number, number] | null;
-}
-
-/**
- * Autumn planting windows for overwintering crops, by zone.
- *
- * This table exists because the offset model is wrong here, and was wrong in
- * production. Every other date on these pages is computed from last spring
- * frost, and garlic's own offset is -180 days. That works while the last frost
- * is in spring. In zone 9b the last frost is January 10, so the model landed on
- * July 14 and the page described July as "the previous autumn". Zone 10b came
- * out at July 5. Nobody plants garlic in a Florida July.
- *
- * The failure is the same shape as a frost date printed for a frost-free zone:
- * a temperate assumption run past the point where its anchor means anything.
- * The further the last frost drifts back toward midwinter, the further the
- * subtraction reaches into the previous summer.
- *
- * There is no clean replacement formula. Garlic tracks ground freeze rather
- * than air frost, and the gap between the two widens as you go north, so
- * anchoring to first fall frost fits the warm end and runs weeks early in the
- * cold one. So: a lookup, from extension and grower guidance, matching the
- * windows published in /archive/how-to-grow-garlic/. Keep the two in step.
- */
-const OVERWINTER_WINDOWS: Record<PageZone, { month: number; day: number; label: string; preChillWeeks: [number, number] | null }> = {
-  "4a": { month: 10, day: 5, label: "late September to mid October", preChillWeeks: null },
-  "4b": { month: 10, day: 5, label: "late September to mid October", preChillWeeks: null },
-  "5a": { month: 10, day: 8, label: "late September to mid October", preChillWeeks: null },
-  "5b": { month: 10, day: 10, label: "late September to mid October", preChillWeeks: null },
-  "6a": { month: 10, day: 20, label: "mid October to early November", preChillWeeks: null },
-  "6b": { month: 10, day: 22, label: "mid October to early November", preChillWeeks: null },
-  "7a": { month: 10, day: 25, label: "mid October to early November", preChillWeeks: null },
-  "7b": { month: 10, day: 28, label: "mid October to early November", preChillWeeks: null },
-  "8a": { month: 11, day: 5, label: "late October to late November", preChillWeeks: null },
-  "8b": { month: 11, day: 10, label: "late October to late November", preChillWeeks: null },
-  "9a": { month: 11, day: 30, label: "mid November to mid December", preChillWeeks: [4, 6] },
-  "9b": { month: 12, day: 1, label: "mid November to mid December", preChillWeeks: [4, 6] },
-  "10a": { month: 12, day: 15, label: "December into early January", preChillWeeks: [6, 8] },
-  "10b": { month: 12, day: 15, label: "December into early January", preChillWeeks: [6, 8] },
-};
-
-/**
- * The window falls in the autumn *preceding* the spring the rest of the page is
- * counted from, which is what "of the year before" means in the copy.
- */
-function overwinterWindowFor(zone: PageZone, frostYear: number): OverwinterWindow {
-  const w = OVERWINTER_WINDOWS[zone];
-  return {
-    date: new Date(frostYear - 1, w.month - 1, w.day),
-    label: w.label,
-    preChillWeeks: w.preChillWeeks,
-  };
-}
 
 /** Calories in a whole plant's yield, or null when the crop carries no usable yield data. */
 export function caloriesPerPlant(crop: Crop): number | null {
@@ -278,12 +213,11 @@ export function getZonePageData(zone: PageZone): ZonePageData {
     const start = sorted.find((d) => d.action !== "harvest") ?? sorted[0];
     const harvest = sorted.find((d) => d.action === "harvest") ?? null;
 
-    // Overwintering crops take the looked-up window, never the -180 offset.
-    // See OVERWINTER_WINDOWS for why the offset cannot be trusted here.
+    // Overwintering crops already carry the looked-up window rather than the
+    // -180 offset, applied inside calculateCropSchedule so that the interactive
+    // tool and the survival plan get the same correction. See ./overwintering.ts.
     const overwinters = isOverwintering(crop);
-    const startDate = overwinters
-      ? overwinterWindowFor(zone, frost.lastSpringFrost.getFullYear()).date
-      : start.date;
+    const startDate = start.date;
 
     rows.push({
       cropId: crop.id,
@@ -343,8 +277,6 @@ export function getZonePageData(zone: PageZone): ZonePageData {
         .filter((r) => r.sowBy.getTime() >= from.getTime())
         .sort((a, b) => a.sowBy.getTime() - b.sowBy.getTime()),
     constraint: seasonConstraint(frost.frostFreeDays, zone),
-    overwinterWindow: rows.some((r) => r.overwinters)
-      ? overwinterWindowFor(zone, frost.lastSpringFrost.getFullYear())
-      : null,
+    overwinterWindow: rows.some((r) => r.overwinters) ? overwinterWindow(frost) : null,
   };
 }

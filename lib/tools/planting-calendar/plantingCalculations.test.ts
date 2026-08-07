@@ -140,3 +140,80 @@ describe('plantingCalculations', () => {
     });
   });
 });
+
+// Garlic was anchored to last spring frost at -180 days. That anchor drifts
+// into the previous summer as the last frost moves toward midwinter, and it
+// shipped Aug 26 in zone 7b, Jul 14 in 9b and Jul 5 in 10b, on the zone pages,
+// the interactive tool and the survival garden plan alike. It was also two to
+// four weeks late in 4a and four to five weeks early in 6b, so the offset was
+// wrong in both directions and merely passed through the right answer near 5b.
+//
+// These assert at the calculateCropSchedule layer, which is where all three
+// consumers call in, rather than at any one surface.
+describe('overwintering crops are not scheduled from the frost offset', () => {
+  const garlic: Crop = {
+    id: 'garlic',
+    name: 'Garlic',
+    category: 'vegetable',
+    varieties: [],
+    startIndoors: null,
+    transplant: null,
+    directSow: -180,
+    daysToMaturity: 240,
+    successionEnabled: false,
+    successionInterval: 0,
+    successionMax: 1,
+  } as Crop;
+  const variety = { id: 'music', name: 'Music', daysToMaturity: 240 } as Variety;
+  const selected = { cropId: 'garlic', varietyId: 'music', successionEnabled: false } as SelectedCrop;
+
+  const frostFor = (zone: string, lastFrost: string, firstFrost: string, days: number): FrostDates => ({
+    zipCode: '00000',
+    lastSpringFrost: new Date(lastFrost),
+    lastSpringFrostConfidence: 10,
+    firstFallFrost: new Date(firstFrost),
+    firstFallFrostConfidence: 10,
+    frostFreeDays: days,
+    growingZone: zone,
+  });
+
+  const cases: Array<[string, FrostDates]> = [
+    ['4a', frostFor('4a', '2026-04-27', '2026-09-25', 151)],
+    ['6b', frostFor('6b', '2026-03-15', '2026-11-10', 240)],
+    ['7b', frostFor('7b', '2026-02-22', '2026-11-28', 279)],
+    ['9b', frostFor('9b', '2026-01-10', '2026-12-28', 352)],
+    ['10b', frostFor('10b', '2026-01-01', '2026-12-31', 364)],
+  ];
+
+  it.each(cases)('%s sows garlic in autumn, never in summer', (_zone, frost) => {
+    const dates = calculateCropSchedule(garlic, variety, selected, frost, false);
+    const sow = dates.find((d) => d.action === 'direct-sow');
+    expect(sow).toBeDefined();
+    const month = sow!.date.getMonth(); // 0-indexed
+    expect(month).toBeGreaterThanOrEqual(8); // September at the earliest
+    expect(month).toBeLessThanOrEqual(11);   // December at the latest
+  });
+
+  it('never returns an empty schedule, whatever the season length', () => {
+    // The old path tested harvest against first frost and could drop the crop
+    // entirely. An overwintering crop is not confined between the two frosts,
+    // so that test was meaningless for it.
+    for (const [, frost] of cases) {
+      expect(calculateCropSchedule(garlic, variety, selected, frost, false).length).toBe(2);
+    }
+  });
+
+  it('tells warm zones to pre-chill, and does not tell cold zones to', () => {
+    const warm = calculateCropSchedule(garlic, variety, selected, cases[4][1], false);
+    expect(warm.find((d) => d.action === 'direct-sow')!.notes!.join(' ')).toMatch(/[Rr]efrigerate/);
+    const cold = calculateCropSchedule(garlic, variety, selected, cases[0][1], false);
+    expect(cold.find((d) => d.action === 'direct-sow')!.notes!.join(' ')).not.toMatch(/[Rr]efrigerate/);
+  });
+
+  it('falls back to season length when no zone is supplied', () => {
+    const noZone = { ...cases[4][1], growingZone: undefined };
+    const sow = calculateCropSchedule(garlic, variety, selected, noZone, false)
+      .find((d) => d.action === 'direct-sow')!;
+    expect(sow.date.getMonth()).toBe(11); // December, same as zone 10b
+  });
+});

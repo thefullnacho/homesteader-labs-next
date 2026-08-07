@@ -1,5 +1,6 @@
 import { Crop, Variety, FrostDates, PlantingDate, SelectedCrop } from './types';
 import { getMoonPhase } from '@/lib/weatherApi';
+import { isOverwintering, overwinterWindow } from './overwintering';
 
 /**
  * Calculate all planting dates for a selected crop
@@ -14,6 +15,13 @@ export function calculateCropSchedule(
   const dates: PlantingDate[] = [];
   const lastFrost = new Date(frostDates.lastSpringFrost);
   const firstFrost = new Date(frostDates.firstFallFrost);
+
+  // Overwintering crops do not take the frost offset at all. Anchoring garlic
+  // to last spring frost put it in a Florida July on every surface that
+  // scheduled it. See ./overwintering.ts for the measurements and the why.
+  if (isOverwintering(crop)) {
+    return overwinterSchedule(crop, variety, frostDates);
+  }
 
   // Calculate main planting dates
   const mainDates = calculateSinglePlanting(crop, variety, lastFrost, firstFrost, 0, lunarSync);
@@ -59,6 +67,52 @@ export function calculateCropSchedule(
   }
 
   return dates;
+}
+
+/**
+ * Schedule for a crop that goes in the previous autumn and sits through winter.
+ *
+ * Deliberately simple and separate from the frost-offset path: one sowing, one
+ * harvest, no succession, no viability check against first frost. The whole
+ * point is that this crop is not confined between the two frosts, so testing it
+ * against them is meaningless. Harvest is maturity days from sowing, which for
+ * garlic lands in early summer.
+ */
+function overwinterSchedule(
+  crop: Crop,
+  variety: Variety,
+  frostDates: FrostDates
+): PlantingDate[] {
+  const w = overwinterWindow(frostDates);
+  const maturityDays = variety.daysToMaturity || crop.daysToMaturity;
+
+  const notes = [`Plant ${w.label}, the autumn before harvest`];
+  if (w.preChillWeeks) {
+    notes.push(
+      `This zone does not stay cold long enough to set the bulb. Refrigerate whole bulbs ` +
+        `${w.preChillWeeks[0]} to ${w.preChillWeeks[1]} weeks before planting, or expect ` +
+        `single undivided rounds.`
+    );
+  }
+
+  return [
+    {
+      cropId: crop.id,
+      cropName: crop.name,
+      varietyName: variety.name,
+      action: 'direct-sow',
+      date: w.date,
+      notes,
+    },
+    {
+      cropId: crop.id,
+      cropName: crop.name,
+      varietyName: variety.name,
+      action: 'harvest',
+      date: addDays(w.date, maturityDays),
+      notes: [`Harvest when a third to a half of the leaves have browned`],
+    },
+  ];
 }
 
 /**
