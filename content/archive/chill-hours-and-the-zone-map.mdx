@@ -1,0 +1,135 @@
+---
+title: "Chill Hours: The Number Your Hardiness Zone Never Tells You"
+description: "The USDA zone map measures what survives winter, not what produces fruit. Three separate cold and daylight clocks govern production, the map shows none of them, and below zone 9 that gap is why your garlic came up as one round clove."
+date: "2026-08-07"
+author: "Alex de Brantes"
+tags: ["chill-hours", "vernalization", "hardiness-zones", "fruit-trees", "garlic", "seed-saving"]
+category: "field-guide"
+season: "Read it before you buy a fruit tree, which for bare root means autumn"
+skill: "Intermediate. No new tools, but it will change what you order."
+region: "Bites hardest in zone 8 and warmer. Florida, the Gulf, southern California, Hawaii."
+gear: "Nothing. A thermometer and a willingness to check a cultivar tag."
+pairsWith: "Planting Calendar, which is where the zone map stops being enough"
+stamp: "Measured"
+excerpt: "I went looking for the frost date in zone 11a and there isn't one. What I found instead was that the hardiness map answers a question almost nobody is actually asking."
+---
+
+I spent this week building planting calendars for ten states, and the code stopped and refused to answer in exactly one place.
+
+Zone 11a. The bottom tip of Florida, most of Hawaii, a sliver of coastal California. My function asked for the last spring frost date and got nothing back, because NOAA has no 32°F date to average there. Frost happens in those places roughly never, so there is no normal to compute.
+
+I went and looked at what the other planting calendar sites do with the same gap. One of the larger ones publishes, for zone 11a, a last spring frost of **January 1**, a first fall frost of **December 31**, and a growing season of **364 days**.
+
+Those are not frost dates. That is a calendar year with the ends filed off, printed in the slot where a measurement should go. The model ran out of data and kept going anyway.
+
+I made mine return nothing instead, and print a line saying so. Then I spent an evening working out what the honest answer would have been, and it turned out to be more interesting than the question.
+
+## The map is answering a different question than the one you asked
+
+Here is the thing that took me embarrassingly long to internalize.
+
+**The USDA Plant Hardiness Zone Map is a map of average annual minimum winter temperature.** That is its entire contents. Zone 6b means the coldest night of an average year lands between -5°F and 0°F. It is a survival map. It answers: will this perennial be alive in spring.
+
+That is a genuinely useful question. It is just not the question most people bring to it. Gardeners use it as a growing season map, a planting date map, and a "what can I grow here" map, and it is none of those. It has no information about heat, about rainfall, about daylength, or about summer at all.
+
+And it has almost nothing to say about the thing that actually decides whether a plant *produces*.
+
+## Three clocks, and the map shows you none of them
+
+A temperate plant is not running on the calendar. It is running on three separate internal counters, and they are triggered by different things.
+
+| Clock | What advances it | What it unlocks | Fails when |
+|---|---|---|---|
+| Vernalization | Accumulated cold | Permission to flower or differentiate | Winter is too warm |
+| Chill hours | Accumulated cold | Breaking dormancy in spring | Winter is too warm |
+| Photoperiod | Daylength | Bulbing, tuberizing, flowering | Latitude is too low |
+
+The first two are both cold counters but they do different jobs, and the third has nothing to do with temperature at all. Conflating them is the usual mistake and it produces advice that is confidently wrong.
+
+The critical property of all three: **they are counters, not switches.** The plant is tallying. That is why the unit is chill *hours* rather than a threshold date, and it is why the failure mode is a gradual, confusing underperformance rather than a clean stop. In some models a warm spell actively subtracts from the total you have banked. You can lose winter you already had.
+
+## Clock one: vernalization, or the lock that stops a plant blooming into a blizzard
+
+The evolutionary logic here is elegant and worth understanding, because once you have it you can predict which crops will misbehave.
+
+A biennial germinates in year one, stores energy, and flowers in year two. But it needs to be sure it is flowering in *spring* and not in the mild autumn a few weeks after it sprouted, because an autumn flower means seed set going into winter, which means no descendants. So it locks itself. It will not flower until it has banked a certain quantity of cold, which is the only reliable signal that winter has genuinely happened and passed.
+
+That lock is vernalization. It is a molecular counter, and prolonged cold progressively silences a floral repressor gene until the brake comes off.
+
+**Garlic is the cleanest example on a homestead.** Garlic wants roughly [six to eight weeks between 32°F and 50°F](https://www.groworganic.com/blogs/articles/how-to-vernalize-garlic-for-success-in-warmer-growing-zones) before it will divide. Without that cold, the apical meristem never receives the signal to differentiate, and the plant does not build a segmented head. You plant one clove and you harvest one clove, swollen into a single undivided ball. Growers call these rounds. They are edible and they are not garlic as you wanted it.
+
+This is why garlic is an autumn planting almost everywhere. You are not being traditional. You are putting the clove in the ground so it can sit through winter and count.
+
+Softneck varieties tolerate a warmer winter than hardneck, which is why warm regions grow softneck. It is a lower requirement, not an exemption.
+
+## Clock two: chill hours, and the reason your peach never fruited
+
+Same mechanism, different job. Deciduous fruit trees go dormant in autumn and will not break dormancy properly until they have accumulated enough hours in a cold band, conventionally between 32°F and 45°F.
+
+Miss the requirement and the tree does not die. It does something worse for your patience. It leafs out late and unevenly, blooms erratically over weeks instead of in one flush, sets poorly, and gives you a fraction of a crop. The tree looks fine. The tree is fine. It is simply waiting for a signal that never arrived.
+
+The requirements are large and they vary enormously by cultivar:
+
+| Crop | Typical chill hours | Low chill option |
+|---|---|---|
+| Apple | 500 to 1,000 | Under 500 for some cultivars |
+| Peach | 800 to 1,000 | 100 to 525 in Florida bred varieties |
+| Southern highbush blueberry | 200 to 300 | Already the low chill answer |
+
+This is the single most expensive gap in the zone map, because fruit trees cost money and reveal the mistake three years later. Two cultivars of the same species, both perfectly hardy in your zone, can differ by 700 chill hours. The zone tag on the pot tells you nothing about it. You have to read the cultivar.
+
+Two things worth knowing before you trust a chill hour number:
+
+**There is more than one model.** The simple version counts hours between 32°F and 45°F. The Utah model weights them and subtracts for warm spells. The Dynamic model counts chill portions and handles mild climates better. A "500 hour" cultivar figure means little unless you know which model produced it, and almost nobody says. If that sounds familiar, it is the same disclosure problem as frost dates, where I found two published sources disagreeing by 47 days on the same zone.
+
+**Commercial growers cheat, chemically.** In places that cannot bank the chill, [orchards spray hydrogen cyanamide to force uniform budbreak](https://hos.ifas.ufl.edu/media/hosifasufledu/stone-fruit/documents/field-day-presentations-2021/Hydrogen-Cyanamide-for-Uniform-Bud-break---Dr.-Tripti.pdf). It works. It is a restricted, genuinely nasty compound, and it exists because faking a winter is worth that much money. That is the clearest evidence I know that the requirement is real rather than folklore.
+
+## Clock three: photoperiod, which no amount of cold will fix
+
+This one is not about temperature, and it is the one that catches people who have moved.
+
+Onions bulb on daylength. A long-day onion needs 14 to 16 hours of light before it will stop making leaves and start making a bulb. Short-day varieties start at 10 to 12 hours, intermediates in between.
+
+Now, daylength is a function of latitude, and it is not negotiable. South Florida in midsummer does not reach 14 hours. Plant a long-day onion there and it grows cheerful green tops all season and never bulbs, and there is nothing you can do about it, because you cannot amend latitude. Roughly, short-day below about 35°N, long-day above about 38°N, intermediate in the overlap.
+
+Potatoes carry a milder version of the same behaviour in some varieties. So do a number of flowering ornamentals.
+
+## Here is the part that surprised me
+
+I started out assuming the story was "you cannot grow winter crops in the tropics." That turns out to be mostly false, and finding out why is what made this worth writing.
+
+Cabbage, broccoli, lettuce, carrots and spinach grow perfectly well in Florida and Hawaii. They are grown there in enormous quantity. [Florida's prime vegetable season runs October through April](https://ask.ifas.ufl.edu/publication/EP452), and the reason those crops fail in a Florida July is **heat**, not absent cold. The season is not missing. The season is inverted. Summer is the dead time and winter is when the garden works.
+
+So the annual vegetables port to the tropics fine. What actually breaks is narrower, and it is worse:
+
+1. **Garlic** gives you rounds, as above.
+2. **Temperate fruit trees and berries** underperform or fail, unless you buy specifically for low chill.
+3. **Seed saving from biennials stops working entirely.**
+
+That third one deserves its own heading.
+
+## The one that matters for self-sufficiency
+
+Carrot, beet, cabbage, onion, celery, parsley and chard are biennials. Every one of them needs vernalization to bolt and set seed in year two.
+
+In a climate that never delivers the cold, they never bolt. They sit there being perfectly good vegetables and they never make you a single seed.
+
+You can grow the food. You cannot close the loop. Annual crops are unaffected, so tomatoes, peppers, beans, squash and lettuce will still hand you viable seed year after year. But for a meaningful part of the staple garden, a warm winter means permanent dependence on somebody else's seed supply, or a refrigerator and a deliberate artificial chill.
+
+That is a real sovereignty limit and I have never seen it written down plainly. It is the kind of constraint that only becomes visible when you actually try to be self-sufficient rather than just productive, and it does not show up anywhere on a hardiness zone map.
+
+## What to actually do
+
+**Before you buy any fruit tree or cane fruit,** find your local chill hour accumulation and read the cultivar's requirement, not just its hardiness zone. If the tag lists a zone and not a chill figure, that is a question to ask, not a detail to skip.
+
+**Below roughly 35°N, buy short-day onions.** This one is cheap to get right and impossible to fix later.
+
+**If your winter is mild and you want real garlic,** plant softneck, plant in autumn so it banks what cold there is, or pre-chill the cloves in a refrigerator for six to eight weeks before planting.
+
+**If you are serious about seed,** work out now which of your crops are biennials, and decide whether you are chilling roots deliberately over winter or accepting that you will buy that seed forever. Deciding on purpose beats discovering it in year two.
+
+**And treat the zone number as what it is.** It tells you what will survive your worst night. That is one useful fact. It is not a growing season, it is not a planting date, and below zone 9 it is quietly silent about the thing that decides whether you get a crop at all.
+
+Which brings me back to that empty field in my own data. When our calendar reaches zone 11a it says there is no frost date, because there is not one. The honest version of a tropical planting calendar is not a frost calendar with the dates shuffled. It is a different instrument measuring heat, rainfall and daylength, and I have not built it yet.
+
+I would rather leave the field blank than print January 1 and call it a measurement.
