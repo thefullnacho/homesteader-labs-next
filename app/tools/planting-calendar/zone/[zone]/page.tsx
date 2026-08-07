@@ -250,11 +250,27 @@ export default async function ZonePage(props: Props) {
             </div>
           </div>
 
-          {overwinter.length > 0 && (
+          {overwinter.length > 0 && d.overwinterWindow && (
             <p className="font-serif text-ink/75 mt-5 max-w-2xl">
               Sown the previous autumn to overwinter, so they sit outside this season&apos;s
-              schedule: {overwinter.map((r) => r.cropName).join(", ")}. In zone {zone} that means
-              putting them in around {fmtShort(overwinter[0].startDate)} of the year before.
+              schedule: {overwinter.map((r) => r.cropName).join(", ")}. In zone {zone} that window
+              is <strong>{d.overwinterWindow.label}</strong> of the year before.
+              {d.overwinterWindow.preChillWeeks && (
+                <>
+                  {" "}
+                  Zone {zone} does not stay cold for long enough to set the bulb on its own, so the
+                  cloves want {d.overwinterWindow.preChillWeeks[0]} to{" "}
+                  {d.overwinterWindow.preChillWeeks[1]} weeks in a refrigerator first, or they come
+                  up as a single undivided round.
+                </>
+              )}{" "}
+              <Link
+                href="/archive/how-to-grow-garlic/"
+                className="underline decoration-marker decoration-2 underline-offset-4 hover:text-marker"
+              >
+                The full garlic guide
+              </Link>{" "}
+              covers depth, spacing, harvest and curing.
             </p>
           )}
         </section>

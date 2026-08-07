@@ -56,17 +56,75 @@ describe('every zone renders a usable page', () => {
   });
 });
 
+// The -180 offset from last spring frost shipped garlic dates of Jul 14 in zone
+// 9b and Jul 5 in zone 10b, on live pages describing July as "the previous
+// autumn". The anchor drifts into the previous summer as the last frost moves
+// toward midwinter. These are the assertions that would have caught it.
+describe('overwintering crops plant in autumn, in every zone', () => {
+  it.each(ZONE_PAGES)('%s puts garlic in between September and early January', (zone) => {
+    const w = getZonePageData(zone).overwinterWindow;
+    expect(w, `${zone} has garlic but no window`).not.toBeNull();
+    const month = w!.date.getMonth(); // 0-indexed
+    expect(month, `${zone} plants garlic in month ${month + 1}`).toBeGreaterThanOrEqual(8);
+    expect(month).toBeLessThanOrEqual(11);
+  });
+
+  it('plants later as the zone warms, never earlier', () => {
+    const days = ZONE_PAGES.map((z) => {
+      const d = getZonePageData(z).overwinterWindow!.date;
+      return d.getMonth() * 31 + d.getDate();
+    });
+    for (let i = 1; i < days.length; i++) {
+      expect(days[i], `${ZONE_PAGES[i]} plants before ${ZONE_PAGES[i - 1]}`).toBeGreaterThanOrEqual(
+        days[i - 1]
+      );
+    }
+  });
+
+  it('asks for a refrigerator pre-chill only where winter cannot do it', () => {
+    const needsChill = ZONE_PAGES.filter(
+      (z) => getZonePageData(z).overwinterWindow!.preChillWeeks !== null
+    );
+    expect(needsChill).toEqual(['9a', '9b', '10a', '10b']);
+  });
+
+  it('uses the window, not the offset, for the crop row itself', () => {
+    // Regression: the row date and the stated window must agree, or the page
+    // says one thing in the table and another in the prose.
+    for (const zone of ZONE_PAGES) {
+      const d = getZonePageData(zone);
+      const garlic = d.rows.find((r) => r.overwinters);
+      expect(garlic!.startDate.getTime(), zone).toBe(d.overwinterWindow!.date.getTime());
+    }
+  });
+
+  it('places the window in the autumn before the spring the page counts from', () => {
+    const d = getZonePageData('6b');
+    expect(d.overwinterWindow!.date.getFullYear()).toBe(d.lastSpringFrost.getFullYear() - 1);
+  });
+});
+
 describe('zones are genuinely distinct, not doorway pages', () => {
-  it('shifts every crop start date between adjacent zones', () => {
+  it('shifts every frost-anchored crop start date between adjacent zones', () => {
+    // Overwintering crops are excluded deliberately. Their dates come from a
+    // banded lookup, not from the frost offset, and the horticultural guidance
+    // behind it does not distinguish half-zones: 4a and 4b share a window, as
+    // do 10a and 10b. Manufacturing a two-day gap between them to satisfy this
+    // assertion would be inventing precision the source does not have, which is
+    // the exact failure the lookup was added to fix.
+    //
+    // The doorway-page guarantee is unaffected. It rests on the ~28 spring
+    // crops below, every one of which still shifts between every adjacent pair.
     for (let i = 1; i < ZONE_PAGES.length; i++) {
-      const a = getZonePageData(ZONE_PAGES[i - 1]).rows;
+      const a = getZonePageData(ZONE_PAGES[i - 1]).rows.filter((r) => !r.overwinters);
       const b = getZonePageData(ZONE_PAGES[i]).rows;
       const byId = new Map(b.map((r) => [r.cropId, r]));
       const shared = a.filter((r) => byId.has(r.cropId));
       const identical = shared.filter(
         (r) => r.startDate.getTime() === byId.get(r.cropId)!.startDate.getTime()
       );
-      expect(identical).toHaveLength(0);
+      expect(identical, `${ZONE_PAGES[i - 1]} vs ${ZONE_PAGES[i]}`).toHaveLength(0);
+      expect(shared.length).toBeGreaterThanOrEqual(25);
     }
   });
 
