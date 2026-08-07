@@ -84,7 +84,6 @@ function overwinterSchedule(
   frostDates: FrostDates
 ): PlantingDate[] {
   const w = overwinterWindow(frostDates);
-  const maturityDays = variety.daysToMaturity || crop.daysToMaturity;
 
   const notes = [`Plant ${w.label}, the autumn before harvest`];
   if (w.preChillWeeks) {
@@ -109,8 +108,11 @@ function overwinterSchedule(
       cropName: crop.name,
       varietyName: variety.name,
       action: 'harvest',
-      date: addDays(w.date, maturityDays),
-      notes: [`Harvest when a third to a half of the leaves have browned`],
+      // Window, not daysToMaturity. See ./overwintering.ts: a flat day count
+      // from sowing put this in August for zone 10b, where the crop comes out
+      // in May. The signal below is the real test; the date is an estimate.
+      date: w.harvestDate,
+      notes: [`Usually ${w.harvestLabel}. ${w.harvestSignal}`],
     },
   ];
 }

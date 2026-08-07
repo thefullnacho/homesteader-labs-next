@@ -155,6 +155,7 @@ describe('overwintering crops are not scheduled from the frost offset', () => {
     id: 'garlic',
     name: 'Garlic',
     category: 'vegetable',
+    icon: '🧄',
     varieties: [],
     startIndoors: null,
     transplant: null,
@@ -163,7 +164,10 @@ describe('overwintering crops are not scheduled from the frost offset', () => {
     successionEnabled: false,
     successionInterval: 0,
     successionMax: 1,
-  } as Crop;
+    sun: 'full',
+    spacing: '6-8" apart',
+    notes: [],
+  };
   const variety = { id: 'music', name: 'Music', daysToMaturity: 240 } as Variety;
   const selected = { cropId: 'garlic', varietyId: 'music', successionEnabled: false } as SelectedCrop;
 
@@ -215,5 +219,45 @@ describe('overwintering crops are not scheduled from the frost offset', () => {
     const sow = calculateCropSchedule(garlic, variety, selected, noZone, false)
       .find((d) => d.action === 'direct-sow')!;
     expect(sow.date.getMonth()).toBe(11); // December, same as zone 10b
+  });
+
+  // daysToMaturity is a flat count from sowing. Dec 15 + 240 gave August in
+  // zone 10b, where the crop actually comes out in May.
+  it.each(cases)('%s harvests in early summer, not on a day count', (_zone, frost) => {
+    const harvest = calculateCropSchedule(garlic, variety, selected, frost, false)
+      .find((d) => d.action === 'harvest')!;
+    const month = harvest.date.getMonth(); // 0-indexed
+    expect(month).toBeGreaterThanOrEqual(4); // May at the earliest
+    expect(month).toBeLessThanOrEqual(6);    // July at the latest
+  });
+
+  it('harvests earlier as the zone warms, and always after the sowing', () => {
+    const harvests = cases.map(([, frost]) => {
+      const d = calculateCropSchedule(garlic, variety, selected, frost, false);
+      const sow = d.find((x) => x.action === 'direct-sow')!.date;
+      const harvest = d.find((x) => x.action === 'harvest')!.date;
+      expect(harvest.getTime()).toBeGreaterThan(sow.getTime());
+      return harvest.getMonth() * 31 + harvest.getDate();
+    });
+    // cases run coldest to warmest; harvest should move earlier, never later.
+    for (let i = 1; i < harvests.length; i++) {
+      expect(harvests[i]).toBeLessThanOrEqual(harvests[i - 1]);
+    }
+  });
+
+  it('states the observational signal, since the date is only an estimate', () => {
+    const harvest = calculateCropSchedule(garlic, variety, selected, cases[1][1], false)
+      .find((d) => d.action === 'harvest')!;
+    expect(harvest.notes!.join(' ')).toMatch(/third to a half of the leaves/);
+  });
+
+  it('ignores daysToMaturity entirely for these crops', () => {
+    // A variety with a wildly different maturity must not move the harvest.
+    const slow = { ...variety, daysToMaturity: 400 } as Variety;
+    const a = calculateCropSchedule(garlic, variety, selected, cases[4][1], false);
+    const b = calculateCropSchedule(garlic, slow, selected, cases[4][1], false);
+    expect(b.find((d) => d.action === 'harvest')!.date.getTime()).toBe(
+      a.find((d) => d.action === 'harvest')!.date.getTime()
+    );
   });
 });

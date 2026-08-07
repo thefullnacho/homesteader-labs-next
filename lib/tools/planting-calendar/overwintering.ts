@@ -24,6 +24,20 @@
 // runs weeks early in the cold one. The windows below come from extension and
 // grower guidance and match the table published in /archive/how-to-grow-garlic/.
 // Keep the two in step.
+//
+// Harvest is a lookup for the same class of reason. `daysToMaturity` is a flat
+// count from sowing, which is defensible for a spring crop growing through one
+// warm season and meaningless here: sowing December 15 in zone 10b and adding
+// 240 days gives August, when that crop actually comes out in May. Garlic does
+// not finish a fixed number of days after planting. It finishes when the leaves
+// begin dying back, which is temperature and daylength driven.
+//
+// So the date below is an estimate and `harvestSignal` is the actual test. That
+// ordering is deliberate. A grower checking leaves will beat a calendar every
+// time, and the honest thing is to say so rather than print a false-precision
+// date and let it be believed. Building a GDD maturity model was considered and
+// rejected: it needs per-crop base temperatures and daily temperature normals,
+// neither of which is in the repo, to improve a number readers do not act on.
 
 import type { Crop, FrostDates } from "./types";
 
@@ -34,6 +48,12 @@ export interface OverwinterWindow {
   label: string;
   /** Weeks of refrigerator pre-chill, or null where the winter supplies it. */
   preChillWeeks: [number, number] | null;
+  /** Mid-window harvest date, in the summer following the sowing. */
+  harvestDate: Date;
+  /** The harvest window as a grower would state it. */
+  harvestLabel: string;
+  /** What actually tells you it is ready. The date is the estimate; this is the test. */
+  harvestSignal: string;
 }
 
 type WindowSpec = {
@@ -41,32 +61,45 @@ type WindowSpec = {
   day: number;
   label: string;
   preChillWeeks: [number, number] | null;
+  harvestMonth: number;
+  harvestDay: number;
+  harvestLabel: string;
 };
 
 const COLD: WindowSpec = {
   month: 10, day: 5,
   label: "late September to mid October",
   preChillWeeks: null,
+  harvestMonth: 7, harvestDay: 5,
+  harvestLabel: "late June into July",
 };
 const TEMPERATE: WindowSpec = {
   month: 10, day: 21,
   label: "mid October to early November",
   preChillWeeks: null,
+  harvestMonth: 6, harvestDay: 25,
+  harvestLabel: "June into early July",
 };
 const MILD: WindowSpec = {
   month: 11, day: 8,
   label: "late October to late November",
   preChillWeeks: null,
+  harvestMonth: 6, harvestDay: 5,
+  harvestLabel: "late May into June",
 };
 const WARM: WindowSpec = {
   month: 11, day: 30,
   label: "mid November to mid December",
   preChillWeeks: [4, 6],
+  harvestMonth: 5, harvestDay: 25,
+  harvestLabel: "May into June",
 };
 const HOT: WindowSpec = {
   month: 12, day: 15,
   label: "December into early January",
   preChillWeeks: [6, 8],
+  harvestMonth: 5, harvestDay: 15,
+  harvestLabel: "May",
 };
 
 const BY_ZONE: Record<string, WindowSpec> = {
@@ -110,9 +143,18 @@ export function isOverwintering(crop: Pick<Crop, "directSow">): boolean {
 export function overwinterWindow(frost: FrostDates): OverwinterWindow {
   const zone = frost.growingZone?.toLowerCase();
   const spec = (zone && BY_ZONE[zone]) || byFrostFreeDays(frost.frostFreeDays);
+  const springYear = frost.lastSpringFrost.getFullYear();
   return {
-    date: new Date(frost.lastSpringFrost.getFullYear() - 1, spec.month - 1, spec.day),
+    date: new Date(springYear - 1, spec.month - 1, spec.day),
     label: spec.label,
     preChillWeeks: spec.preChillWeeks,
+    // Harvest lands in the summer *after* the sowing, so it takes the spring
+    // year rather than the autumn one.
+    harvestDate: new Date(springYear, spec.harvestMonth - 1, spec.harvestDay),
+    harvestLabel: spec.harvestLabel,
+    harvestSignal:
+      "Harvest when a third to a half of the leaves have browned and the rest are still green. " +
+      "Each green leaf is a wrapper layer, and waiting for them all to die back gives you bulbs " +
+      "that split and will not store.",
   };
 }
