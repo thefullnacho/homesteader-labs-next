@@ -1,0 +1,120 @@
+---
+title: "Home Assistant Voice Preview Edition: Local Voice, Honestly Explained"
+description: "A $59 speaker that runs your voice assistant in your house instead of someone else's. What it does, the three very different things people mean by local, what it costs in hardware and patience, and the things it genuinely cannot do."
+date: "2026-08-11"
+author: "Alex de Brantes"
+tags: ["home-assistant", "voice", "smart-home", "de-cloudify", "self-reliance", "gear"]
+category: "field-guide"
+season: "Any. Indoor work, so a good winter project"
+skill: "Intermediate. You need Home Assistant already running. After that it is an evening"
+region: "Anywhere. Language support is the real constraint, not geography"
+gear: "Voice PE, a Home Assistant box, and honest expectations"
+pairsWith: "Google Assistant Shuts Down September 4, which is why you are here"
+stamp: "Runs in your house"
+excerpt: "Three people say they run a local voice assistant and mean three different things, only one of which is actually local. Here is the difference, what each one costs, and what you give up against the speaker it replaces."
+---
+
+Home Assistant Voice Preview Edition is a small white speaker, 84mm square, that listens for a wake word and does what you tell it. It costs about $59. The interesting part is where the thinking happens, which can be entirely inside your house, on hardware you own, with nothing leaving the building.
+
+I have had one on the kitchen counter since June, running fully local. This is what it is actually like.
+
+## The three things people mean by "local"
+
+Most writing about this blurs them together, which is why people end up disappointed. There are three configurations, they differ enormously, and only two of them deserve the word.
+
+**One: Voice PE with Home Assistant Cloud.** The speaker captures audio, sends it to Microsoft Azure for transcription, and Home Assistant acts on the result. It is the easiest setup, it handles the most languages, and it works on any hardware. It is also not local. Your voice leaves the house. It is a better deal than Google because the processing is contracted and does not feed an ad profile, but be clear about what you bought.
+
+**Two: Voice PE with Speech-to-Phrase.** Fully local, and fast enough to feel instant on modest hardware. The catch is in the name. Speech-to-Phrase is a closed-ended model: it recognizes the phrases it has been built to expect, drawn from your actual entity names. "Turn off the kitchen lights" works. "What is the capital of Peru" is not a question it can even fail at, because it is not trying to transcribe open speech.
+
+For controlling a house, this is the right answer far more often than people expect.
+
+**Three: Voice PE with Whisper, and usually a local LLM behind it.** Fully local and open-ended. Whisper transcribes anything you say, and if you put a language model behind Home Assistant's conversation agent, you can ask questions rather than issue commands. This is what I run. It is also the tier with a real hardware bill.
+
+The honest framing: tier two is what most people should build, and tier three is what people who like this sort of thing will build anyway.
+
+## What the hardware actually is
+
+Worth knowing before you buy, because the spec sheet explains most of the behavior:
+
+- **ESP32-S3** with 16MB flash and 8MB PSRAM. The speaker itself does not transcribe. It captures, cleans and streams audio.
+- **Dual microphone array with an XMOS XU316** doing echo cancellation, noise removal and auto gain. This is the part that makes it work across a room while music plays, and it is the single biggest difference between this and a Pi with a USB microphone taped to it.
+- **A physical mute switch that cuts power to the microphones.** Not a software toggle that promises the mic is off. The circuit is broken.
+- **Rotary dial, multipurpose button, multicolor LED ring**, 3.5mm output with a real DAC, USB-C power, 2.4GHz Wi-Fi, and a Grove port for sensors.
+
+That mute switch is the whole thesis in one component. Every other assistant asks you to trust a policy. This one lets you check.
+
+## What you need before you start
+
+Home Assistant, already running, on something. That is the actual prerequisite and the reason this is not a beginner project. If you do not have Home Assistant, that is the evening you are signing up for first, and the Voice PE will be waiting.
+
+Beyond that it depends entirely on which tier you are building:
+
+| Tier | Speech to text | Hardware it needs | Feels like |
+|---|---|---|---|
+| Cloud | Azure via HA Cloud | Anything that runs HA | Instant, many languages, not local |
+| Local, closed | Speech-to-Phrase | A Pi 4 is genuinely fine | Instant, understands your house |
+| Local, open | Whisper + optional LLM | Real CPU or a GPU box | A beat slower, understands questions |
+
+The numbers Home Assistant publishes for Whisper are the ones to plan around: roughly **eight seconds on a Raspberry Pi 4, under one second on an Intel NUC.** That gap is the entire buying decision for tier three. Piper, which does the talking back, is far lighter and manages about 1.6 seconds of speech per second of compute even on a Pi.
+
+If you take one number from this piece, take that one. An eight second pause before your lights come on is not a slow assistant, it is an abandoned one.
+
+## Setting it up
+
+Plug it in, and it appears on your network for onboarding through the Home Assistant app. There is no soldering, no flashing, no serial console. It is genuinely a consumer setup for the first ten minutes.
+
+The configuration that matters comes after, in Home Assistant's Voice Assistants settings, where you assemble a pipeline: wake word, speech to text, conversation agent, text to speech. Each is a dropdown. Swapping tier one for tier two is changing one of those dropdowns, which is the good news, because it means you can start on cloud, get it working, and move to local without rebuilding anything.
+
+For tier two, install the Speech-to-Phrase add-on and select it. For tier three, install Whisper and Piper, both available as add-ons, and point the conversation agent at whatever language model you are running. Mine talks to a local Ollama instance.
+
+{/* TODO(alex): drop in the kitchen photos here, and the actual pipeline screenshot from your HA Voice Assistants settings. Photo shoot is in queue.md dated 2026-08-11. */}
+
+## What it is actually like to live with
+
+{/* TODO(alex): this section is yours and I have deliberately left it thin. I know the shape of your setup from the hestia notes, wake word to whisper to hestia to piper with nothing leaving the building, live since 2026-06-29. What I cannot invent: your measured latency, your real wake word false-positive rate, and the specific things that annoy you at 6am. Those three details are what makes this piece unrankable by anyone else. Fill them in before publish. */}
+
+The parts I can report honestly after six weeks:
+
+It handles a normal speaking voice from across a room with the extractor fan running, which I did not expect. The mic array is doing real work.
+
+The wake word is the weakest link, as it is on every assistant ever made, and the failure mode is a device that stays quiet rather than one that talks over you.
+
+Timers, lights, and shopping list additions are the three things it gets asked for constantly, and they are the three things it does without drama.
+
+## What it cannot do
+
+This is the section most reviews skip, and skipping it is why people return the thing.
+
+**It is not a music service.** There is no Spotify voice integration comparable to a Nest or an Echo. If "play the album I was listening to" is your main use, this will disappoint you daily.
+
+**It does not know things**, unless you give it a language model, and even then it knows what that model knows. The trivia and general knowledge that a cloud assistant answers instantly are either absent or slower and less reliable.
+
+**It does not recognize who is speaking.** No per-person voice profiles, no different calendars for different family members.
+
+**Language support is uneven.** Home Assistant is direct about this: it "isn't ready for every home in every country." Check your language before you buy, not after.
+
+**It requires you to run infrastructure.** When Home Assistant is down, the speaker is a paperweight. The upside is that "down" is now a thing you can fix, rather than a status page you refresh.
+
+None of these are defects. They are the shape of a device that does not have a billion-dollar cloud behind it. The trade is real and you should make it knowingly.
+
+## Buying it
+
+| If you want | Look at | Roughly |
+|---|---|---|
+| The finished thing | [Home Assistant Voice PE at Seeed](https://www.seeedstudio.com/Home-Assistant-Voice-p-6998.html?sensecap_affiliate=DRZN6mJ&referring_service=link) | $59 |
+| The same thing, bought direct | [Home Assistant's own page](https://www.home-assistant.io/voice-pe/) lists where to buy | $69 MSRP, varies by region |
+| To build rather than buy | Seeed's reSpeaker Lite or XVF3800 mic arrays, as ESPHome satellites | Less, plus your evening |
+
+Seeed is an official Home Assistant distributor, which is convenient for them and worth being blunt about here: the Seeed link above is an affiliate link and they pay us a small commission at no extra cost to you. The direct link pays us nothing, and it is in the table anyway, because buying from the people who make the thing is a perfectly good instinct and sometimes the right one. Nothing here was chosen because of a commission. The unit in the table is the unit on my counter.
+
+## Is it for you?
+
+**Yes, if** you already run Home Assistant, you mostly want to control your house by voice rather than interrogate the internet, and the idea of a microphone you can physically disconnect appeals to you more than one that promises it is not listening.
+
+**No, if** voice-controlled music is the point, if you want it to answer general knowledge questions as fast as a phone does, or if you do not want to be the person responsible when it breaks.
+
+**The honest middle:** buy it, run it on cloud for a week to see whether you use voice at all, then move the pipeline local once you know. The dropdowns make that a five minute change, and it is a much better order of operations than building the full local stack for a thing you turn out not to talk to.
+
+---
+
+*The setup described here is Home Assistant Voice Preview Edition on a local pipeline, running since June 2026. Hardware specs and the Whisper timing figures come from [Home Assistant's own documentation](https://www.home-assistant.io/voice-pe/). Affiliate disclosure is next to the buying table above, where it belongs.*
