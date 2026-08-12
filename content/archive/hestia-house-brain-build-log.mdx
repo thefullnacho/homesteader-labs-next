@@ -1,0 +1,103 @@
+---
+title: "I Gave the House a Brain, and the Useful Part Was Making It Dumber"
+description: "A build log for Hestia, the local assistant behind my kitchen speaker. One local model on my own hardware, ten tools, and a deliberate rule that anything with a right answer never touches the LLM."
+date: "2026-08-12"
+author: "Alex de Brantes"
+tags: ["hestia", "home-assistant", "local-ai", "de-cloudify", "self-reliance", "build-log"]
+category: "field-guide"
+season: "Any. This one lives indoors"
+skill: "Advanced. This is a build log, not a tutorial"
+region: "Anywhere with a spare GPU and a stubborn streak"
+gear: "A box that stays on, Home Assistant, and a willingness to own the outage"
+pairsWith: "Home Assistant Voice Preview Edition, which is the speaker this thing answers"
+stamp: "Nothing leaves the house"
+excerpt: "Most AI for the home points the model at exactly what it is worst at: remembering a schedule, watching a threshold, firing a reminder on time. I built mine to do the opposite, and the result is more reliable because it is less clever."
+---
+
+The Voice PE piece ended on a half-sentence: the conversation agent points at a local model, and mine talks to a local Ollama instance. Several people asked what is actually behind that. This is the honest answer, including the parts that are worse than the cloud.
+
+It is called Hestia, it runs on a box in my house, and the code is public under AGPL.
+
+## The mistake almost everyone makes
+
+Point an assistant at your home and the obvious move is to let the model run the place. Ask it to remember the bins go out Tuesday. Ask it to watch the soil moisture. Ask it to fire a reminder at 7am.
+
+Every one of those is a thing language models are genuinely bad at. They are non-deterministic by construction. You are asking a system that produces a plausible answer to instead produce the *correct* answer, on a schedule, forever, and to notice when it is wrong. It will work for a week and then quietly not.
+
+So the rule I built around is the opposite one. **Anything with a right answer never touches the model.** A chore is due, the soil is dry, the trash goes out Tuesday: those are timers, thresholds, and rows in a database. Dumb, boring, reliable. The model is left with the one job it is actually good at, which is judgment and conversation.
+
+The goal was never a smarter house. It was a more reliable one, and getting there meant making the clever part smaller.
+
+## The one decision everything hangs on
+
+The brain exposes an OpenAI-compatible endpoint. That is the whole keystone, and it sounds like plumbing until you see what it prevents.
+
+The obvious wiring is to let Home Assistant talk to Ollama directly. It works, it is well documented, and it is wrong for this. If Home Assistant owns the loop, then the kitchen microphone gets a raw model with no memory and no tools. It does not know what you told it this morning, because the thing holding that context was never in the path.
+
+Point everything at one brain instead and the relationship inverts. Home Assistant becomes an input device when you speak to it, and a tool when the brain needs to turn something on. It stops being the intelligence and goes back to being the hub, which is what it is good at.
+
+The practical payoff is that the terminal at my desk, the phone in my pocket, and the speaker in the kitchen are three windows onto the same thing. Same memory, same tools, same conversation. Ask the kitchen a follow-up to something you typed at your desk and it just works, because there is only one of it.
+
+## What it actually does, in a week where nothing broke
+
+The garden is the part that earns its place here.
+
+**Pest watch.** It accumulates growing degree days and tells me when something is about to emerge, before I find the damage. Squash vine borer at 900 for emergence, Japanese beetle at 1030, all base 50°F from January 1. That runs on a timer against published thresholds, and the model's only job is to narrate the result. If the model is down, the alert still fires.
+
+**The morning briefing** lands on my phone and the kitchen speaker at 7:10. Weather, what is due, and anything the pest watch flagged overnight.
+
+**The nightly house journal** writes itself at 23:45 from the day's records, and a household almanac page regenerates from it. That is why "how late was the last freeze this year" is a question I can ask out loud and get a real answer to, rather than a guess.
+
+**Records, by voice.** "Vaccinated the dogs today" becomes a dated event in a database against a real entity. "We're out of olive oil" goes on the shopping list, deduplicated.
+
+Two of those lean on data from this site. The pest thresholds and the frost normals are the same files that drive the tools here, vendored into the house. The site and the homestead run on one set of numbers, which was the point.
+
+## What I deliberately did not build
+
+Inference engines. Transcoders. Wake word models. Speech to text. Text to speech. VPN meshes. Torrent clients.
+
+All commodity, all mature, all somebody else's hard-won problem, and every hour spent rebuilding one is an hour not spent on the only part that is actually mine. I build one brain and the thin glue to the house. Everything else, I wire to.
+
+This is the most useful discipline in the whole project and the easiest to abandon. There is always a reason your case is special. It usually is not.
+
+## Memory is the part that matters
+
+Anyone can wire a model to a light switch in an afternoon. The thing that makes it feel like a system rather than a toy is that it remembers, and that the remembering is inspectable.
+
+Two halves. Markdown files for soft facts, the sort of thing you would tell a person. A SQLite database for the things in your life that have shape: pets, garden beds, wildlife, chores, each with a dated event log.
+
+The wildlife one has a specific origin. A mole moved into the yard this spring, which after three years of rebuilding that soil was [genuinely good news](/archive/mole-earthworms-soil-health/), and standing there looking at it I realized I had no record of what else had shown up here or when. One sighting is an anecdote. A decade of dated sightings is a record of whether the place is getting richer or poorer, and there is no way to reconstruct it after the fact. So now I can say "saw a mole in the north bed" out loud while holding a shovel, and it lands in a database as a dated event against a real entity. That is the whole feature, and it only exists because something with fur made the case for it.
+
+The part I am most attached to is that the background note-taker **proposes** durable facts and waits for approval instead of writing them silently. A system that edits its own memory of your life without asking is a system you will stop trusting the first time it is confidently wrong, and it will be confidently wrong.
+
+## Voice was the only real build-out
+
+Everything else was wiring. Voice was work.
+
+The chain is wake word on the satellite, then Whisper for speech to text on the GPU box, then the brain, then Chatterbox-Turbo for the voice coming back, with Piper as a CPU fallback when the GPU is busy. Home Assistant orchestrates it and reaches the heavy models over the Wyoming protocol.
+
+The single wire that matters is setting Home Assistant's conversation agent to the brain's endpoint rather than to Ollama. That one setting is what puts memory and tools in the kitchen microphone's path, and lets the brain call back into the house to actually switch things.
+
+Far-field microphones, wake words, and whole-house audio are the reason Amazon and Google won this category. I did not try to beat them at it. I bought the satellite and spent the effort on the part nobody sells.
+
+## The honest costs
+
+**It is a single point of failure and that point is me.** When the box is down, the house is dumb. There is no status page to refresh and nobody to call. The upside is that "down" is now something I can fix rather than something I wait out, but that is a trade and you should make it with your eyes open.
+
+**It has no built-in authentication.** The brain can control devices, so it lives on a private network behind Tailscale and is never exposed to the internet. That is a deliberate trade recorded in the security doc, not an oversight, and it is the first thing to understand before running any of this.
+
+**Being wrong in public is part of the design.** Last week I recommended a DNS change on the grounds that a resolver was leaking a share of household browsing unfiltered. I had asserted that from general behavior and never measured it. When I did measure it afterward, the query rate returned to baseline rather than stepping up, which is not what a real leak looks like. The claim was withdrawn and logged as withdrawn. The change stayed, for a smaller reason than the one I gave.
+
+That is the same rule the model runs under. Refusing to answer beats answering confidently and wrong, and it applies to the operator too.
+
+## Would I recommend it
+
+Not to most people, and not yet.
+
+If you want a voice assistant that works, buy the Voice PE, run it on Speech-to-Phrase, and stop there. It will do the thing and it will do it fast. Everything in this post is what you build after that stops being enough, and the honest reason I built it is that I wanted to, which is a perfectly good reason and not one I am going to dress up as research.
+
+What I will defend is the thesis. Making the clever part smaller made the house more reliable, and I have not found a case yet where the reverse was true.
+
+---
+
+*Hestia is [public on GitHub](https://github.com/thefullnacho/hestia) under AGPL-3.0. It runs a local model on hardware I own, and nothing it hears leaves the building. The kitchen satellite it answers is covered in the [Voice PE writeup](/archive/home-assistant-voice-preview-edition-local-voice/).*
