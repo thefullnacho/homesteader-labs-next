@@ -9,6 +9,28 @@ true inside this repo.
 
 ---
 
+## 2026-09-08 - Homepage refresh ready for preview review
+
+Built the approved homepage direction on `codex/homepage-refresh` in an isolated
+worktree. Compact split hero puts planting first; three direct tool links replace
+the decorated cards. The latest field note uses its own article photograph and
+links to two more notes. Workshop, hardware, and newsletter remain accessible.
+Existing images are reused; no new photography is required for this preview.
+Homepage CSS is scoped; shared navigation, article layouts, and tool logic are
+unchanged. Newsletter styling is simplified with a visible, accessible Join action
+and a mobile input that can shrink without overflowing.
+
+Validation: lint passed (0 errors, 19 existing warnings); all 1,111 tests passed;
+production build and TypeScript passed. Browser checks covered desktop, 1024px
+tablet, 390px mobile, loaded images, page overflow, keyboard focus, mobile menu,
+planting entry navigation, and the featured article in the production build.
+No live newsletter subscription was submitted.
+
+Next step is review, then publishing: [non-production] Alex reviews the branch
+preview at 15:00 before a merge to master. Keep production unchanged until review.
+This item is recorded in ~/me/queue.md. No wiki change: this is single-repo work.
+
+
 ## 2026-09-08 - Frontend design review
 
 Reviewed the live desktop homepage, planting-calendar entry screen, and September
