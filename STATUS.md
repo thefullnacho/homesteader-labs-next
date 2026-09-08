@@ -9,6 +9,20 @@ true inside this repo.
 
 ---
 
+## 2026-09-08 - Frontend design review
+
+Reviewed the live desktop homepage, planting-calendar entry screen, and September
+foraging article against the current source. No application changes made. The field
+notebook identity and article layout are strong. Recommended next design work:
+bring the homepage's purpose and primary action into the first viewport, reduce
+repeated decorative treatments, improve small label legibility, and make tool
+entry controls more prominent. These are design judgments, not measured conversion
+findings. Mobile and populated tool states were not tested in this review.
+
+Next concrete action if design work proceeds: refine the homepage hero while
+preserving the existing identity. No user-only jobs or cross-repo wiki changes.
+
+
 ## 2026-08-21 — September forage post shipped, GSC sync fixed, forager BOM pivot researched
 
 **`what-to-forage-september` published end to end.** Third post in the monthly foraging cadence
