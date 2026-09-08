@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useRef } from "react";
 import { Send } from "lucide-react";
-import { Stamp } from "@/components/field/kit";
 
 export default function NewsletterSignup() {
   const [email, setEmail] = useState("");
@@ -41,24 +40,24 @@ export default function NewsletterSignup() {
 
   return (
     <section className="mb-16">
-      <div className="border-2 border-ink bg-kraft grain p-6 md:p-8 relative">
+      <div className="border-t border-ink/30 bg-kraft p-5 md:p-8 relative">
         <div className="relative z-[2] flex flex-col md:flex-row md:items-center md:justify-between gap-6">
           {/* Text */}
           <div className="flex-grow">
-            <p className="font-mono text-[0.66rem] uppercase tracking-[0.2em] text-ink/60 mb-2">
+            <p className="text-base text-soil mb-2">
               The dispatch
             </p>
-            <h2 className="font-display uppercase text-xl leading-tight mb-2">
+            <h2 className="font-display text-2xl leading-tight mb-2">
               Field reports, by mail
             </h2>
-            <p className="text-[0.98rem] text-ink/80 max-w-md leading-snug">
+            <p className="text-lg text-ink max-w-md leading-snug">
               New guides, hardware drops, and what to do outside this month.
               No spam, no tracking, just signal.
             </p>
           </div>
 
           {/* Form */}
-          <form onSubmit={handleSubmit} className="flex-shrink-0 w-full md:w-auto">
+          <form onSubmit={handleSubmit} className="w-full min-w-0 md:w-auto md:max-w-[45%]">
             <div className="flex gap-2">
               <label htmlFor="newsletter-email" className="sr-only">Email address</label>
               <input
@@ -67,14 +66,15 @@ export default function NewsletterSignup() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="your@email.com"
-                className="flex-grow md:w-64 px-3 py-2 bg-paper border-2 border-ink text-ink placeholder:text-ink/40 focus:outline-none focus:border-marker font-mono text-sm"
+                className="min-w-0 w-full flex-grow md:w-64 px-3 py-2 bg-paper border-2 border-ink text-ink placeholder:text-ink/40 focus:outline-none focus:border-marker font-mono text-sm"
               />
               <button
                 type="submit"
-                className="bg-ink text-paper px-4 py-2 border-2 border-ink font-mono text-xs uppercase tracking-wider hover:bg-marker hover:border-marker transition-colors flex items-center gap-2"
+                aria-label="Join the newsletter"
+                className="bg-ink text-paper px-4 py-2 border-2 border-ink text-base hover:bg-marker hover:border-marker transition-colors flex items-center gap-2"
               >
-                <Send size={14} />
-                <span className="hidden sm:inline">Join</span>
+                <Send size={16} aria-hidden="true" />
+                <span>Join</span>
               </button>
             </div>
 
@@ -90,7 +90,7 @@ export default function NewsletterSignup() {
                 </p>
               )}
             </div>
-            <p className="font-mono text-[0.64rem] uppercase tracking-widest text-ink/50 mt-2">
+            <p className="text-sm text-soil mt-2">
               Monthly. Unsubscribe anytime.
             </p>
           </form>

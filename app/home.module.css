@@ -1,0 +1,130 @@
+/* Homepage only: preserve the field-notebook palette while giving actions and
+   real field notes more room. Shared tool and article styles are untouched. */
+.home {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 clamp(20px, 4vw, 56px);
+}
+
+.hero {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(28px, 4vw, 56px);
+  align-items: center;
+  padding: 40px 0 32px;
+}
+
+.intro, .heroFigure, .tool > div, .hardware > div { min-width: 0; }
+.headline, .sectionTitle, .noteCopy h3, .workshop h3 {
+  font-family: var(--font-display), sans-serif;
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+}
+.headline {
+  font-size: clamp(32px, 3.9vw, 55px);
+  line-height: 1.12;
+}
+.headline span { display: block; }
+.lede {
+  font-size: clamp(19px, 1.65vw, 23px);
+  line-height: 1.45;
+  max-width: 48ch;
+  margin-top: 22px;
+}
+.actions { display: flex; align-items: center; flex-wrap: wrap; gap: 12px 26px; margin-top: 24px; }
+.primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  background: var(--ink);
+  color: var(--paper);
+  padding: 12px 22px;
+  font-size: 19px;
+  font-weight: 600;
+  min-height: 48px;
+}
+.primary:hover { background: var(--soil); }
+.textLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  min-height: 44px;
+  text-decoration: underline;
+  text-underline-offset: 5px;
+  text-decoration-thickness: 1px;
+  font-size: 18px;
+  line-height: 1.35;
+}
+.textLink:hover, .noteCopy h3 a:hover, .moreNotes h3 a:hover { color: var(--rust); }
+.reassurance { display: flex; align-items: center; gap: 9px; color: var(--moss); font-size: 16px; margin-top: 16px; }
+.heroImage { position: relative; height: clamp(340px, 31vw, 430px); }
+.cover { object-fit: cover; }
+.caption { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 8px; margin-top: 9px; font-size: 15px; color: var(--soil); }
+.handwritten { font-family: var(--font-hand), cursive; color: var(--rust); font-size: 23px; }
+.sectionTitle { font-size: clamp(24px, 2.15vw, 30px); line-height: 1.2; }
+.toolkit, .notes, .workshop { border-top: 1px solid rgb(38 34 26 / 28%); }
+.toolkit { padding: 26px 0 30px; }
+.tools { display: grid; grid-template-columns: repeat(3, 1fr); margin-top: 24px; }
+.tool { display: flex; align-items: flex-start; gap: 18px; padding: 0 24px; border-left: 1px solid rgb(38 34 26 / 24%); }
+.tool:first-child { padding-left: 0; border-left: 0; }
+.tool:last-child { padding-right: 0; }
+.toolIcon { color: var(--moss); flex-shrink: 0; }
+.tool h3 { font-size: 22px; font-weight: 700; line-height: 1.25; }
+.tool p { font-size: 18px; line-height: 1.4; margin: 6px 0; }
+.tool .textLink { font-size: 17px; }
+.notes { padding: 28px 0 38px; }
+.sectionHeading { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 26px; }
+.featuredNote { display: grid; grid-template-columns: 0.85fr 1.15fr; gap: 36px; align-items: center; }
+.textOnlyNote { grid-template-columns: 1fr; }
+.noteImage { position: relative; min-height: 290px; align-self: stretch; }
+.meta { color: var(--soil); font-size: 15px; line-height: 1.4; margin-bottom: 12px; }
+.meta span { padding: 0 6px; }
+.noteCopy h3 { font-size: clamp(24px, 2.35vw, 33px); line-height: 1.18; }
+.excerpt { margin: 16px 0 12px; font-size: 20px; line-height: 1.5; max-width: 56ch; }
+.moreNotes { display: grid; grid-template-columns: 1fr 1fr; gap: 36px; margin-top: 32px; }
+.moreNotes article { border-top: 1px solid rgb(38 34 26 / 20%); padding-top: 22px; }
+.moreNotes h3 { font-size: 25px; font-weight: 600; line-height: 1.25; max-width: 36ch; }
+.moreNotes h3 a { text-decoration: underline; text-decoration-color: rgb(38 34 26 / 30%); text-underline-offset: 4px; }
+.moreNotes article > p:last-child { margin-top: 12px; font-size: 18px; line-height: 1.5; max-width: 58ch; }
+.workshop { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; padding: 34px 0 40px; }
+.workshopIntro > svg { margin-bottom: 14px; }
+.workshopIntro > p { max-width: 45ch; font-size: 19px; line-height: 1.5; margin: 16px 0 10px; }
+.hardware { display: flex; align-items: center; gap: 24px; }
+.hardwareImage { position: relative; width: 42%; height: 210px; flex-shrink: 0; }
+.hardware h3 { font-size: 21px; line-height: 1.25; }
+.hardware p:not(.meta) { font-size: 18px; line-height: 1.4; margin: 10px 0; }
+
+@media (min-width: 768px) and (max-width: 1050px) {
+  .hero { gap: 24px; }
+  .headline { font-size: 3.8vw; }
+  .tool { gap: 12px; padding: 0 16px; }
+  .toolIcon { width: 28px; }
+  .tool h3 { font-size: 20px; }
+  .workshop { gap: 28px; }
+}
+
+@media (max-width: 767px) {
+  .hero { grid-template-columns: 1fr; padding-top: 28px; gap: 28px; }
+  .headline { font-size: clamp(29px, 7.8vw, 50px); }
+  .lede { margin-top: 18px; font-size: 20px; }
+  .actions { gap: 8px 20px; margin-top: 20px; }
+  .primary { font-size: 18px; }
+  .reassurance { margin-top: 12px; }
+  .heroImage { height: auto; aspect-ratio: 4 / 3; }
+  .tools { grid-template-columns: 1fr; gap: 0; margin-top: 10px; }
+  .tool, .tool:first-child, .tool:last-child { padding: 22px 0; border-left: 0; border-bottom: 1px solid rgb(38 34 26 / 18%); gap: 20px; }
+  .tool:last-child { border-bottom: 0; padding-bottom: 0; }
+  .toolkit { padding-top: 24px; }
+  .sectionHeading { flex-wrap: wrap; gap: 4px; margin-bottom: 20px; }
+  .featuredNote, .moreNotes, .workshop { grid-template-columns: 1fr; gap: 24px; }
+  .noteImage { min-height: 0; aspect-ratio: 4 / 3; }
+  .noteCopy h3 { font-size: 27px; }
+  .excerpt { font-size: 19px; }
+  .moreNotes { margin-top: 26px; }
+  .moreNotes h3 { font-size: 24px; }
+  .workshop { padding: 28px 0; gap: 28px; }
+  .hardware { border-top: 1px solid rgb(38 34 26 / 18%); padding-top: 24px; gap: 20px; }
+  .hardwareImage { width: 36%; height: 185px; }
+  .hardware h3 { font-size: 19px; }
+}
