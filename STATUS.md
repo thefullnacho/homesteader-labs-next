@@ -9,6 +9,19 @@ true inside this repo.
 
 ---
 
+## 2026-09-08 - Homepage refresh approved and merged
+
+Alex approved the preview and explicitly requested merge and push. PR #12 merged
+to master as `11b015b`; the original checkout is updated. The PR's lint, test,
+build, and Vercel preview checks all passed before merging. Production deployment
+verification follows this log push. The homepage review is complete in the
+personal queue; no further design approval is pending.
+
+Next content step: [non-production] look for the mole-trail photograph at 15:00,
+already recorded in ~/me/queue.md. Lead photography for future posts is the
+preferred direction; a dedicated cover-image field is an idea, not implemented.
+No wiki change: this work stays within this repository.
+
 ## 2026-09-08 - Homepage refresh ready for preview review
 
 Built the approved homepage direction on `codex/homepage-refresh` in an isolated
