@@ -9,6 +9,59 @@ true inside this repo.
 
 ---
 
+## 2026-09-17 - Drip irrigation post shipped, with the first self-hosted video
+
+**Published:** `/archive/diy-drip-irrigation-raised-beds/`, live on master (`da5eef3`, ff-merged
+from `content/drip-irrigation-raised-beds`), deploy verified: page 200, video serving, sponsored
+rel present, in the sitemap. Keyword targets from a same-day CrawlSEO pull: "drip irrigation
+raised beds" 3,600/mo KD 0, "diy drip irrigation system" 3,600/mo KD 3, "raised bed irrigation
+system" 2,400/mo KD 0, with section-level pressure regulator 4,400, timer 1,300, filter 720,
+manifold 590. "automate your garden" has no measurable volume, so the post is titled around drip
+irrigation and the automation language stays in the body.
+
+**DripWorks affiliate is live.** `ref=homesteaderlabs` added to `AFFILIATE_MARKERS` in
+`mdx-components.tsx`, so any DripWorks link gets `rel="sponsored nofollow noopener noreferrer"`
+automatically; CLAUDE.md's live-programme list updated. Disclosure sits next to the link in the
+post, per the affiliate policy.
+
+**New primitive: `<FieldVideo>` in `mdx-components.tsx`.** Plain `<video>`, `preload="none"`,
+poster image, caption in mono, vertical clips capped at a narrow column. Self-hosted on purpose:
+a YouTube embed sets cookies on load, which `/privacy` rules out in writing. Alex's 79s install
+clip was HDR (bt2020 / arib-std-b67) and needed tonemapping to bt709 before encode, otherwise it
+renders washed out; 112MB MOV to 12MB 720p, metadata stripped. Reusable for future posts.
+
+**The moisture chart was killed, not shipped, and that is the most useful finding.** Home
+Assistant holds hourly soil-moisture statistics per bed back to 2025-12, but the Jun 27 to Jul 3
+window (hottest dry week after the 2026-06-13 install) is flat in every bed: only one clean
+watering signal all week (Jul 1 05:00-06:00, +3 to +6 across three beds). No pre-drip baseline
+exists either, the WH51 gateway was frozen or zero 2026-06-02 to 06-07 and live data starts
+06-08 11:00, four days before install. So the post states the watering finding as observation
+(an hour every morning, twice on the hottest days, ~84 GPH over ~140ft of line, ~0.9in/hr) and
+has a section on what the sensors cannot tell you, instead of a chart implying measurement.
+
+**In flight:** the ranking-settle read on this post and on `/archive/identify-sugar-maple/`
+around 2026-10-01. Sugar maple already showed the pattern Alex named: positions 1 to 4 on
+"how to identify sugar maple" for two days from Sep 8, then ~43 and spread across looser
+queries. Not a problem, and worth confirming as a repeatable shape rather than n=1.
+
+**Next concrete action:** [non-production] request indexing for the new URL, then at the
+2026-10-01 checkpoint compare its position curve against the sugar maple one.
+
+**[non-production] jobs from this session, all in `~/me/queue.md`:** request indexing for the new
+URL; add the post + DripWorks links and tick "includes paid promotion" on the YouTube Short once
+the channel is verified (outbound links are restricted until then, Short is at
+youtube.com/shorts/JfGLlMqM2AQ); swap the Hot Peppers WH51 battery and carry a spare for Tomatoes;
+optionally pull zone 4 run logs from the Orbit app; photograph the winterizing clean out in late
+November for the follow-up post; decide hestia's Home Assistant recorder-retention change. Bed
+measuring is done (~140ft of emitter line, 32.5ft per rectangular bed, just under 5ft per round).
+
+Also today, outside this repo: CrawlSEO's GSC sync was dead (its `npm run dev` binds 3000 while
+`NEXTAUTH_URL` and the Google redirect URI say 3001, so the OAuth callback landed nowhere, and
+the re-auth then dropped `webmasters.readonly`), and hestia shipped a soil stale-sensor alert
+prompted by the frozen-data finding here. Both recorded in the wiki, not here.
+
+---
+
 ## 2026-09-08 - Homepage refresh approved and merged
 
 Alex approved the preview and explicitly requested merge and push. PR #12 merged
