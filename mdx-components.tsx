@@ -9,7 +9,7 @@ import { getImageSize } from '@/lib/imageSize';
  *
  * Add a marker here when a new affiliate programme goes live.
  */
-const AFFILIATE_MARKERS = ['sensecap_affiliate='];
+const AFFILIATE_MARKERS = ['sensecap_affiliate=', 'ref=homesteaderlabs'];
 
 function relFor(href: string | undefined): string | undefined {
   if (!href?.startsWith('http')) return undefined;
@@ -124,6 +124,44 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
         </div>
       );
     },
+    // Self-hosted on purpose. A YouTube embed sets cookies on page load, which the
+    // privacy page promises we never do. Nothing downloads until the reader presses
+    // play; the poster is the only request.
+    FieldVideo: ({
+      src,
+      poster,
+      caption,
+      width = 720,
+      height = 1280,
+    }: {
+      src: string;
+      poster?: string;
+      caption?: string;
+      width?: number;
+      height?: number;
+    }) => (
+      <figure className="my-6 text-center">
+        <video
+          src={src}
+          poster={poster}
+          width={width}
+          height={height}
+          controls
+          playsInline
+          preload="none"
+          className={`h-auto border-2 border-ink inline-block bg-ink ${
+            height > width ? 'w-full max-w-sm' : 'w-full'
+          }`}
+        >
+          <a href={src}>Download the video</a>
+        </video>
+        {caption && (
+          <figcaption className="text-xs mt-2 text-ink/60 font-mono uppercase tracking-widest">
+            {caption}
+          </figcaption>
+        )}
+      </figure>
+    ),
     hr: () => <hr className="divider-ink border-0 my-8" />,
     ...components,
   };
