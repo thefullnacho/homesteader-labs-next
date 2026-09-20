@@ -9,6 +9,51 @@ true inside this repo.
 
 ---
 
+## 2026-09-20 - The reference tables became endpoints, and the license split that took
+
+**Live on master:** `/api/frost/{zone}/`, `/api/pests/`, `/api/pests/{cropId}/` join the existing
+`/api/zone/{zip}/`, documented at `/data/`, summarised at `/llms.txt`, specified at
+`/openapi.json`. All `force-static` with `Access-Control-Allow-Origin: *`, so they serve from the
+CDN and cost nothing to poll. `robots.ts` now opens exactly those three reference paths and keeps
+checkout, webhooks and the mailing list closed.
+
+**Why now:** Alex's standing hypothesis that tools become endpoints for agents, and muse.ai opening
+connectors to developers as the confirmation. The positioning bet is to be early and be the
+AI-friendly gardening resource, with pest alerts as the wedge because they are natural for someone
+already outdoors. Connector submitted to Muse the same day, pointing at `/data/`; status check
+queued for 2026-10-04.
+
+**The license split is the decision worth remembering.** Pests and companions go out CC BY 4.0,
+attribution required, because which pests are worth predicting and how good the evidence is for a
+companion is our compilation. Zones and frost say "public domain source, aggregation ours,
+attribution requested" because PRISM and NOAA facts are not ours to license, and claiming otherwise
+on a site whose argument is that it does not invent numbers would be the same move as the
+competitor fabricating zone 11a frost dates. `license`, `licenseUrl`, `attribution` and
+`attributionRequired` ride in every response rather than sitting on a page no machine fetches
+(`lib/dataLicense.ts`). KB stays CC0 as received from OpenFarm.
+
+**Deliberately not built: metering.** The sellable-looking parts are public-domain derived and
+rebuildable by anyone, so a paid API of them is thin. The defensible part is the curation, and the
+strongest asset, observed days-to-maturity, does not exist yet. Stripe is already wired here for
+when it is justified. Request counting is Vercel's server-side logs, chosen over making the routes
+dynamic, which would have cost the free CDN serving for numbers we can read from the platform.
+
+**`alertable` is the differentiator, now machine-readable.** `alertable: false` plus
+`notAlertableReason` travel in the response and are called out in the spec, so anything building
+notifications skips the pests with no predictable emergence instead of firing from spring onward.
+That flag is the thing no competing dataset publishes.
+
+**Two near-misses, both caught by tests or checks rather than review:** the OpenAPI drift test was
+first written into `public/`, which Next serves verbatim, so it would have been downloadable at
+`/openapi.test.ts` (now `lib/openapi.test.ts`, and the URL 404s); and the pest route folder was
+`[crop]` while the spec said `{cropId}`, now aligned with the response field, URLs unchanged.
+
+**Next concrete action:** [non-production] check the Muse submission on or after 2026-10-04, and at
+the 2026-10-01 GSC read compare the drip post's position curve against the sugar maple one. The
+drip post was submitted for priority indexing 2026-09-20.
+
+---
+
 ## 2026-09-17 - Drip irrigation post shipped, with the first self-hosted video
 
 **Published:** `/archive/diy-drip-irrigation-raised-beds/`, live on master (`da5eef3`, ff-merged
