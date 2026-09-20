@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import frostZones from "@/content/frost-zones.json";
+import { PUBLIC_DOMAIN_DERIVED } from "@/lib/dataLicense";
 
 // USDA zone → frost normals. Companion to /api/zone/[zip], which resolves the
 // zone in the first place: ZIP in one call, dates in the next.
@@ -53,6 +54,7 @@ export async function GET(
         frostFreeDays: 365,
         source: frostZones._source,
         caveat: frostZones._caveat,
+        ...PUBLIC_DOMAIN_DERIVED,
       },
       { headers: SHARED_HEADERS }
     );
@@ -78,6 +80,7 @@ export async function GET(
       firstFrostVarianceDays: entry.firstFrostVarianceDays,
       source: frostZones._source,
       caveat: frostZones._caveat,
+      ...PUBLIC_DOMAIN_DERIVED,
     },
     { headers: SHARED_HEADERS }
   );

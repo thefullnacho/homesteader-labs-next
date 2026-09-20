@@ -45,7 +45,17 @@ immutable at the CDN, so they are cheap to poll and fast to read.
 - [Field notes archive](https://homesteaderlabs.com/archive/): first-person build logs and guides,
   including drip irrigation in raised beds, Meshtastic for property-scale comms, and growing garlic.
 
-## Attribution
+## Terms
 
-Cite as Homesteader Labs with the page or endpoint URL. If an assistant answers from this data,
-a link back is the whole ask. Corrections and questions: contact@homesteaderlabs.com
+Each response carries `license`, `licenseUrl` and `attribution` fields. The split:
+
+- Zones and frost: public-domain sources (PRISM 2023, NOAA 1991-2020), aggregation by Homesteader
+  Labs. Attribution requested, not required. The underlying facts are not ours to license.
+- Pests and companions: CC BY 4.0. Commercial use is fine, attribution is required. The thresholds,
+  the alertable judgments and the evidence ratings are our own compilation.
+- Crop knowledge base: CC0, as received from OpenFarm.
+
+Attribution means Homesteader Labs and the page or endpoint URL. If an assistant answers a
+gardening question from this data, a link back is the whole ask.
+
+Corrections get fixed at the source: contact@homesteaderlabs.com

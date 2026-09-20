@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getGrowingZoneFromZip } from "@/lib/zoneLookup";
+import { PUBLIC_DOMAIN_DERIVED } from "@/lib/dataLicense";
 
 // ZIP → hardiness zone. Exists so client code can reach the vendored PRISM
 // table without pulling ~529KB into the browser bundle.
@@ -28,13 +29,13 @@ export async function GET(
   if (!zone) {
     // Not an error: PRISM does not cover every ZIP.
     return NextResponse.json(
-      { zip: cleaned, zone: null, source: "PRISM 2023" },
+      { zip: cleaned, zone: null, source: "PRISM 2023", ...PUBLIC_DOMAIN_DERIVED },
       { status: 404, headers: { "Cache-Control": "public, max-age=86400" } }
     );
   }
 
   return NextResponse.json(
-    { zip: cleaned, zone, source: "PRISM 2023" },
+    { zip: cleaned, zone, source: "PRISM 2023", ...PUBLIC_DOMAIN_DERIVED },
     {
       headers: {
         "Cache-Control": "public, max-age=31536000, immutable",

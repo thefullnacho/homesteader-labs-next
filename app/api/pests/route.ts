@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { pestCrops } from "@/lib/pestData";
+import { CC_BY_4 } from "@/lib/dataLicense";
 
 // Index of the pest-emergence table. Lists which crops are covered and which
 // pests carry a real emergence threshold, so a caller can decide what to fetch
@@ -33,7 +34,7 @@ export async function GET() {
       dataset: "pest-companions",
       description:
         "Phenology-aware pest emergence thresholds and evidence-rated companion plantings, per crop.",
-      terms: "https://homesteaderlabs.com/data/",
+      ...CC_BY_4,
       cropCount: crops.length,
       crops,
     },

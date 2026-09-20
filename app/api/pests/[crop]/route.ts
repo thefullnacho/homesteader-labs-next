@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { pestCrops } from "@/lib/pestData";
+import { CC_BY_4 } from "@/lib/dataLicense";
 
 // Per-crop pest emergence thresholds and companion plantings.
 //
@@ -43,7 +44,7 @@ export async function GET(
   return NextResponse.json(
     {
       cropId: record.cropId,
-      terms: "https://homesteaderlabs.com/data/",
+      ...CC_BY_4,
       pests: record.pests,
     },
     { headers: SHARED_HEADERS }

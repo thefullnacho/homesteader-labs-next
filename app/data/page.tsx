@@ -176,11 +176,68 @@ export default function DataPage() {
         </section>
 
         <section className="mb-14">
-          <SectionHead no="§5" title="Terms" />
+          <SectionHead no="§5" title="Terms" right="per dataset" />
+          <p className="text-ink/85 leading-relaxed mb-6">
+            Every response carries its own <code className="font-mono">license</code>,{" "}
+            <code className="font-mono">licenseUrl</code> and{" "}
+            <code className="font-mono">attribution</code> fields, so the terms
+            travel with the data instead of living on a page nobody fetches.
+          </p>
+          <div className="overflow-x-auto mb-6">
+            <table className="w-full text-left text-sm">
+              <thead className="font-mono text-[0.7rem] uppercase tracking-widest text-ink/60 border-b-2 border-ink">
+                <tr>
+                  <th className="py-2 pr-3 font-semibold">Dataset</th>
+                  <th className="py-2 pr-3 font-semibold">Terms</th>
+                  <th className="py-2 font-semibold">Why</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr className="border-b border-ink/20">
+                  <td className="py-3 pr-3 font-mono text-xs">zones, frost</td>
+                  <td className="py-3 pr-3">
+                    Public domain source, aggregation ours. Attribution
+                    requested, not required.
+                  </td>
+                  <td className="py-3 text-ink/85">
+                    PRISM and NOAA output. The underlying facts are not ours to
+                    license, and we are not going to pretend otherwise.
+                  </td>
+                </tr>
+                <tr className="border-b border-ink/20">
+                  <td className="py-3 pr-3 font-mono text-xs">
+                    pests, companions
+                  </td>
+                  <td className="py-3 pr-3">
+                    <a
+                      href="https://creativecommons.org/licenses/by/4.0/"
+                      className="underline decoration-marker decoration-2 underline-offset-4 hover:text-marker transition-colors"
+                    >
+                      CC BY 4.0
+                    </a>
+                    . Commercial use fine, attribution required.
+                  </td>
+                  <td className="py-3 text-ink/85">
+                    Ours: which pests are worth predicting, which thresholds
+                    apply, how good the evidence is for each companion.
+                  </td>
+                </tr>
+                <tr>
+                  <td className="py-3 pr-3 font-mono text-xs">
+                    crop knowledge base
+                  </td>
+                  <td className="py-3 pr-3">CC0, unchanged</td>
+                  <td className="py-3 text-ink/85">
+                    Public-domain OpenFarm data, republished as we received it.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
           <p className="text-ink/85 leading-relaxed mb-4">
-            Use it, including commercially. Cite Homesteader Labs with the page
-            or endpoint URL. If an assistant answers a gardening question from
-            this data, a link back is the whole ask.
+            Attribution means Homesteader Labs and the page or endpoint URL. If
+            an assistant answers a gardening question from this data, a link
+            back is the whole ask.
           </p>
           <p className="text-ink/85 leading-relaxed">
             Corrections are welcome and get fixed at the source:{" "}
