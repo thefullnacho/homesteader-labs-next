@@ -1,0 +1,51 @@
+# Homesteader Labs
+
+> Field-tested growing, foraging and off-grid reference for homesteaders, plus free tools that
+> answer a question in plain words. Everything below is public and needs no account or key.
+> We do not run client-side analytics, and the tools keep their data in the reader's browser.
+
+Three reference endpoints return JSON and are safe to call directly. They are static and
+immutable at the CDN, so they are cheap to poll and fast to read.
+
+## Data endpoints
+
+- [ZIP to USDA zone](https://homesteaderlabs.com/api/zone/06385/): `/api/zone/{zip}/` returns the
+  hardiness zone for a 5-digit US ZIP, derived from the PRISM 2023 table. Not every ZIP is covered.
+- [Frost normals by zone](https://homesteaderlabs.com/api/frost/6b/): `/api/frost/{zone}/` returns
+  last spring and first fall frost as MM-DD, frost-free days, and the variance either side, from
+  NOAA 1991-2020 normals aggregated to USDA zones. Zones 11a and warmer answer `frostFree: true`.
+- [Pest emergence index](https://homesteaderlabs.com/api/pests/): `/api/pests/` lists covered
+  crops; `/api/pests/{cropId}/` returns emergence thresholds (growing degree days or soil
+  temperature) and evidence-rated companion plantings. Pests with no predictable emergence event
+  carry `alertable: false` and a reason, so a notification built on this does not fire all season.
+- [Data documentation](https://homesteaderlabs.com/data/): response shapes, sources, caveats, and
+  how to attribute.
+
+## What the data is and is not
+
+- Frost normals are aggregated to USDA zones, which are keyed on winter minimum temperature, not
+  on frost timing. Treat a zone-level date as a planning window, not a forecast for one address.
+- Pest thresholds come from published extension sources and are cited per pest. Where a threshold
+  is a fallback rather than a documented biofix, the record says so.
+- We would rather answer "no data here" than return a plausible number. Absent records are absent
+  on purpose.
+
+## Tools
+
+- [Planting calendar](https://homesteaderlabs.com/tools/planting-calendar/): zone-calibrated sowing
+  and transplant dates, succession planting, season extension.
+- [Weather and field indexes](https://homesteaderlabs.com/tools/weather/): frost probability, soil
+  workability, growing degree days, catchment and solar.
+- [Caloric security](https://homesteaderlabs.com/tools/caloric-security/): how much of a household's
+  calories a plot can actually carry.
+- [Crop knowledge base](https://homesteaderlabs.com/kb/): 340+ public-domain crop entries.
+
+## Writing
+
+- [Field notes archive](https://homesteaderlabs.com/archive/): first-person build logs and guides,
+  including drip irrigation in raised beds, Meshtastic for property-scale comms, and growing garlic.
+
+## Attribution
+
+Cite as Homesteader Labs with the page or endpoint URL. If an assistant answers from this data,
+a link back is the whole ask. Corrections and questions: contact@homesteaderlabs.com
