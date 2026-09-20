@@ -19,15 +19,15 @@ const SHARED_HEADERS = {
 };
 
 export function generateStaticParams() {
-  return pestCrops.map((crop) => ({ crop: crop.cropId }));
+  return pestCrops.map((crop) => ({ cropId: crop.cropId }));
 }
 
 export async function GET(
   _req: Request,
-  ctx: { params: Promise<{ crop: string }> }
+  ctx: { params: Promise<{ cropId: string }> }
 ) {
-  const { crop } = await ctx.params;
-  const cropId = crop?.trim().toLowerCase() ?? "";
+  const { cropId: raw } = await ctx.params;
+  const cropId = raw?.trim().toLowerCase() ?? "";
   const record = pestCrops.find((entry) => entry.cropId === cropId);
 
   if (!record) {

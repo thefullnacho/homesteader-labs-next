@@ -1,0 +1,327 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Homesteader Labs Field Data",
+    "version": "1.0.0",
+    "summary": "Growing zones, frost normals, and pest emergence data for US gardeners.",
+    "description": "Public reference data behind the Homesteader Labs tools. No key, no account, no rate limit. Every response is static and CDN-served.\n\nThe data says \"no record\" rather than guessing. A ZIP outside the PRISM table returns zone: null, and a pest with no predictable emergence event carries alertable: false with a reason. Callers should surface those rather than substituting an estimate.\n\nLicensing differs per dataset and travels in each response. Zones and frost are aggregations of public-domain PRISM and NOAA output, attribution requested. The pest and companion table is a Homesteader Labs compilation under CC BY 4.0, attribution required.",
+    "termsOfService": "https://homesteaderlabs.com/data/",
+    "contact": {
+      "name": "Homesteader Labs",
+      "url": "https://homesteaderlabs.com/data/",
+      "email": "contact@homesteaderlabs.com"
+    },
+    "license": {
+      "name": "Per dataset, see terms",
+      "url": "https://homesteaderlabs.com/data/"
+    }
+  },
+  "servers": [{ "url": "https://homesteaderlabs.com" }],
+  "paths": {
+    "/api/zone/{zip}/": {
+      "get": {
+        "operationId": "getZoneByZip",
+        "summary": "USDA hardiness zone for a US ZIP code",
+        "description": "Resolves a 5-digit US ZIP to its USDA hardiness zone using the PRISM 2023 table. Use this first when a question starts from a location, then pass the zone to /api/frost/{zone}/ for frost dates. Coverage is US only and not every ZIP is present.",
+        "parameters": [
+          {
+            "name": "zip",
+            "in": "path",
+            "required": true,
+            "description": "5-digit US ZIP code.",
+            "schema": { "type": "string", "pattern": "^\\d{5}$", "examples": ["06385"] }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Zone found.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ZoneResponse" },
+                "example": {
+                  "zip": "06385",
+                  "zone": "7a",
+                  "source": "PRISM 2023",
+                  "license": "Public domain source, aggregation by Homesteader Labs",
+                  "licenseUrl": "https://homesteaderlabs.com/data/",
+                  "attribution": "Homesteader Labs, https://homesteaderlabs.com/data/",
+                  "attributionRequired": false
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Not a 5-digit ZIP.",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/Error" } }
+            }
+          },
+          "404": {
+            "description": "Valid ZIP, no coverage. Returns zone: null. This is an answer, not a failure to retry.",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/ZoneResponse" } }
+            }
+          }
+        }
+      }
+    },
+    "/api/frost/{zone}/": {
+      "get": {
+        "operationId": "getFrostByZone",
+        "summary": "Frost normals for a USDA zone",
+        "description": "Last spring and first fall frost dates for a USDA hardiness zone, from NOAA 1991-2020 normals at 50% probability.\n\nDates are MM-DD, not full dates: the caller supplies the year. USDA zones are keyed on winter minimum temperature rather than frost timing, so treat a zone date as a planning window and use the variance fields to express the spread. Zones 11a and warmer return frostFree: true with null dates.",
+        "parameters": [
+          {
+            "name": "zone",
+            "in": "path",
+            "required": true,
+            "description": "USDA hardiness zone, such as 6b.",
+            "schema": { "type": "string", "pattern": "^\\d{1,2}[ab]$", "examples": ["6b"] }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Normals for the zone, or a frost-free answer.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/FrostResponse" },
+                "example": {
+                  "zone": "6b",
+                  "frostFree": false,
+                  "lastSpringFrost": "03-15",
+                  "firstFallFrost": "11-10",
+                  "frostFreeDays": 240,
+                  "lastFrostVarianceDays": 10,
+                  "firstFrostVarianceDays": 10,
+                  "source": "Derived from NOAA 1991-2020 U.S. Climate Normals, last/first 32°F dates at 50% probability, aggregated to USDA hardiness zones",
+                  "caveat": "USDA zones are keyed on winter minimum temperature, not on frost timing, so this table is an aggregation and not a NOAA product.",
+                  "license": "Public domain source, aggregation by Homesteader Labs",
+                  "attributionRequired": false
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Not a zone identifier.",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/Error" } }
+            }
+          },
+          "404": {
+            "description": "No normals for that zone.",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/Error" } }
+            }
+          }
+        }
+      }
+    },
+    "/api/pests/": {
+      "get": {
+        "operationId": "listPestCrops",
+        "summary": "Crops covered by the pest emergence table",
+        "description": "Lists every crop with pest records, and for each pest whether it is alertable and whether its emergence is predicted from growing degree days or soil temperature. Fetch this before guessing a crop id.",
+        "responses": {
+          "200": {
+            "description": "Index of covered crops.",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/PestIndex" } }
+            }
+          }
+        }
+      }
+    },
+    "/api/pests/{cropId}/": {
+      "get": {
+        "operationId": "getPestsByCrop",
+        "summary": "Pest emergence thresholds and companion plantings for a crop",
+        "description": "Returns each pest for the crop with its emergence threshold and evidence-rated companion plantings.\n\nTwo fields carry judgment and should not be flattened away. alertable: false means the pest has no predictable emergence event, with notAlertableReason giving the reason; aphids and nematodes are the current examples, and anything that turns this into a notification must skip them rather than fire all season. Each companion carries an evidenceLevel, so \"widely repeated\" and \"trialled\" can be told apart when answering.",
+        "parameters": [
+          {
+            "name": "cropId",
+            "in": "path",
+            "required": true,
+            "description": "Crop id from /api/pests/, such as tomato.",
+            "schema": { "type": "string", "examples": ["tomato"] }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Pest records for the crop.",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/CropPests" } }
+            }
+          },
+          "404": {
+            "description": "No record for that crop id.",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/Error" } }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "LicenseBlock": {
+        "type": "object",
+        "description": "Terms for the dataset in this response.",
+        "properties": {
+          "license": { "type": "string" },
+          "licenseUrl": { "type": "string", "format": "uri" },
+          "attribution": { "type": "string" },
+          "attributionRequired": { "type": "boolean" }
+        }
+      },
+      "ZoneResponse": {
+        "allOf": [
+          { "$ref": "#/components/schemas/LicenseBlock" },
+          {
+            "type": "object",
+            "required": ["zip", "zone", "source"],
+            "properties": {
+              "zip": { "type": "string" },
+              "zone": {
+                "type": ["string", "null"],
+                "description": "USDA hardiness zone, or null where PRISM has no coverage."
+              },
+              "source": { "type": "string" }
+            }
+          }
+        ]
+      },
+      "FrostResponse": {
+        "allOf": [
+          { "$ref": "#/components/schemas/LicenseBlock" },
+          {
+            "type": "object",
+            "required": ["zone", "frostFree", "frostFreeDays", "source"],
+            "properties": {
+              "zone": { "type": "string" },
+              "frostFree": {
+                "type": "boolean",
+                "description": "True for zones with no 32°F date at all."
+              },
+              "lastSpringFrost": {
+                "type": ["string", "null"],
+                "description": "MM-DD, or null when frost free."
+              },
+              "firstFallFrost": { "type": ["string", "null"] },
+              "frostFreeDays": { "type": "integer" },
+              "lastFrostVarianceDays": {
+                "type": "integer",
+                "description": "Typical spread either side of the date, 10th to 90th percentile."
+              },
+              "firstFrostVarianceDays": { "type": "integer" },
+              "source": { "type": "string" },
+              "caveat": { "type": "string" }
+            }
+          }
+        ]
+      },
+      "Companion": {
+        "type": "object",
+        "required": ["companion", "reason", "placement", "evidenceLevel"],
+        "properties": {
+          "companion": { "type": "string" },
+          "companionId": { "type": "string" },
+          "reason": { "type": "string" },
+          "placement": { "type": "string", "examples": ["interplant"] },
+          "evidenceLevel": {
+            "type": "string",
+            "description": "How well supported the pairing is. Do not present a weak pairing as settled."
+          }
+        }
+      },
+      "Pest": {
+        "type": "object",
+        "required": ["name", "companions"],
+        "properties": {
+          "name": { "type": "string" },
+          "alertable": {
+            "type": "boolean",
+            "description": "Absent means alertable. False means there is no predictable emergence event to notify on."
+          },
+          "notAlertableReason": { "type": "string" },
+          "soilTempThreshold": {
+            "type": "number",
+            "description": "Soil temperature in °F at which emergence is expected."
+          },
+          "thresholdNote": { "type": "string" },
+          "gddBase": { "type": "number" },
+          "gddBiofix": {
+            "type": "string",
+            "description": "The event degree-day accumulation starts from."
+          },
+          "gddEvent": { "type": "string" },
+          "gddThreshold": { "type": "number" },
+          "source": { "type": "string" },
+          "companions": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Companion" }
+          }
+        }
+      },
+      "CropPests": {
+        "allOf": [
+          { "$ref": "#/components/schemas/LicenseBlock" },
+          {
+            "type": "object",
+            "required": ["cropId", "pests"],
+            "properties": {
+              "cropId": { "type": "string" },
+              "pests": {
+                "type": "array",
+                "items": { "$ref": "#/components/schemas/Pest" }
+              }
+            }
+          }
+        ]
+      },
+      "PestIndex": {
+        "allOf": [
+          { "$ref": "#/components/schemas/LicenseBlock" },
+          {
+            "type": "object",
+            "required": ["dataset", "cropCount", "crops"],
+            "properties": {
+              "dataset": { "type": "string" },
+              "description": { "type": "string" },
+              "cropCount": { "type": "integer" },
+              "crops": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": ["cropId", "href", "pests"],
+                  "properties": {
+                    "cropId": { "type": "string" },
+                    "href": { "type": "string" },
+                    "pests": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": { "type": "string" },
+                          "alertable": { "type": "boolean" },
+                          "basis": {
+                            "type": "string",
+                            "enum": ["growing-degree-days", "soil-temperature"]
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ]
+      },
+      "Error": {
+        "type": "object",
+        "properties": { "error": { "type": "string" } }
+      }
+    }
+  }
+}
