@@ -3,17 +3,18 @@
 // The stage is a fixed 1920x1080 page. Every animation is created paused, and
 // render.mjs calls promo.seek(ms) once per frame, so a slow frame can never
 // drop or smear one. Scene lengths are counted in beats at 120 BPM, which puts
-// every cut on a beat of any 120 BPM track laid under the video.
+// every cut on a beat of any 120 BPM track laid under the video, and the three
+// chapter cards and the end card on the first beat of a bar.
 
 const BPM = 120;
 const BEAT = 60000 / BPM;
 
 // The cut, top to bottom: [scene, beats].
 const CUT = [
-  ['chapter1', 3], ['schedule', 6], ['kb', 6],
-  ['chapter2', 2], ['zone', 6], ['game', 7],
+  ['chapter1', 4], ['schedule', 6], ['kb', 6],
+  ['chapter2', 2], ['zone', 6], ['game', 8],
   ['chapter3', 2], ['notes', 6], ['drip', 6],
-  ['trust', 6], ['end', 9],
+  ['trust', 6], ['end', 8],
 ];
 
 const T = {};
@@ -366,8 +367,8 @@ function zone(t) {
   const { last, first } = s.marks;
   s.move(s.focus([last, first], 1.5, { dy: 70 }), t.start + 250, 1000);
   s.move(s.focus([last, first], 1.56, { dy: 70 }), t.start + 1250, t.end - t.start - 1100, 'linear');
-  drawStroke(s.svg, ring(last, 1), 6, t.start + 1250, 420);
-  drawStroke(s.svg, ring(first, 2), 6, t.start + 1250 + BEAT, 420);
+  drawStroke(s.svg, ring(last, 1), 6, t.start + 2 * BEAT, 420);
+  drawStroke(s.svg, ring(first, 2), 6, t.start + 3 * BEAT, 420);
   caption(node, { lines: ['Two frost dates.', 'Everything else is arithmetic.'], display: true }, t.start + 550);
 }
 
@@ -394,7 +395,8 @@ function game(t) {
     x: rect.x + BORDER + (pick.x + pick.width * 0.32) * k,
     y: rect.y + BORDER + BAR + (pick.y + pick.height * 0.55) * k,
   };
-  const click = t.start + 1400;
+  // The click lands just ahead of the third beat, so the reveal is on it.
+  const click = t.start + 3 * BEAT - 90;
   const cursor = svgEl('svg', { class: 'cursor', viewBox: '0 0 23 29' });
   cursor.append(svgEl('path', {
     d: 'M1.5 1.5 L1.5 22.5 L7 17.2 L10.6 25.8 L14.4 24.2 L10.9 15.8 L18.4 15.8 Z',
@@ -480,14 +482,14 @@ function end(t) {
     tween(span, [{ transform: 'translateY(110%)' }, { transform: 'none' }], t.start + 60 + i * BEAT, 420, EASE.snap));
   tween(figure, [{ opacity: 0, transform: 'translateX(140px)' }, { opacity: 1, transform: 'none' }], t.start + 250, 600, EASE.out);
   tween(photo, [{ transform: 'scale(1)' }, { transform: 'scale(1.07)' }], t.start + 250, t.end - t.start, 'linear');
-  fadeUp(lede, t.start + 3 * BEAT);
+  fadeUp(lede, t.start + 2.5 * BEAT);
   tween(cta, [
     { opacity: 0, transform: 'scale(.9)' },
     { opacity: 1, transform: 'scale(1.04)', offset: 0.65 },
     { opacity: 1, transform: 'none' },
-  ], t.start + 4 * BEAT, 420, EASE.out);
-  fadeUp(reassure, t.start + 4.5 * BEAT, 380, 14);
-  tween(hand, [{ clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0 0 0)' }], t.start + 5 * BEAT, 750, 'cubic-bezier(.4, .1, .6, .9)');
+  ], t.start + 3 * BEAT, 420, EASE.out);
+  fadeUp(reassure, t.start + 3.5 * BEAT, 380, 14);
+  tween(hand, [{ clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0 0 0)' }], t.start + 4 * BEAT, 750, 'cubic-bezier(.4, .1, .6, .9)');
   show(node, t.start - 380, Infinity);
 }
 

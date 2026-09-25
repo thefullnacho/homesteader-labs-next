@@ -1,6 +1,6 @@
 # Promo video
 
-A 29.5 second promo for homesteaderlabs.com, built from the site itself. The
+A 30 second promo for homesteaderlabs.com, built from the site itself. The
 stage is an HTML page in the paper field-notebook system; headless Chromium
 steps its timeline one frame at a time and ffmpeg encodes the frames. Every
 screen in the cut is a real capture of the site, and every number on screen is
@@ -16,21 +16,22 @@ up, then the promise, then the homepage as the end card.
 
 | Beats | Scene | What is on screen |
 |-------|-------|-------------------|
-| 3 | §1 Grow food. | Kraft chapter card |
+| 4 | §1 Grow food. | Kraft chapter card |
 | 6 | Planting calendar | Zone 6b spring schedule, Tomatoes row highlighted |
 | 6 | Knowledge base | "The crop files, rescued from a dead website", crops-on-file tally |
 | 2 | §2 Know your land. | Kraft chapter card |
 | 6 | Frost dates | Zone 6b's two frost dates ringed in marker |
-| 7 | Forager game | A player picks Amanita muscaria; the reveal shows the model's 98% |
+| 8 | Forager game | A player picks Amanita muscaria; the reveal shows the model's 98% |
 | 2 | §3 Make things work. | Kraft chapter card |
 | 6 | Field notes | "Tested on a real homestead" ringed, notes-on-file tally |
 | 6 | Drip build log | "It works anyway." |
 | 6 | Promise | No account. No tracking. No ads. |
-| 9 | End card | The homepage above the fold, with the address as the button |
+| 8 | End card | The homepage above the fold, with the address as the button |
 
-Scene lengths are in beats at 120 BPM, so every cut lands on a beat of a 120 BPM
-track. The storyboard is the `CUT` list at the top of `promo/promo.js`, and each
-scene is one function below it.
+Scene lengths are in beats at 120 BPM: every cut lands on a beat, and the three
+chapter cards and the end card open on the first beat of a bar. The storyboard
+is the `CUT` list at the top of `promo/promo.js`, and each scene is one function
+below it.
 
 ## Render it
 
@@ -45,10 +46,10 @@ npx playwright install chromium
 
 npm run render                            # 1080p30 H.264 -> out/promo.mp4
 npm run render -- --scale 2 --fps 60      # 4K60
-npm run render -- --audio track.mp3       # lay a track under it, faded out over the last 1.5s
+npm run render -- --audio song.mp3        # lay a track under it, faded out over the last 1.5s
 npm run render -- --prores                # ProRes 422 HQ .mov, for an editor
-npm run render -- --from 8.5 --to 11.5    # one scene, to check it
-npm run render -- --still 14.3            # one frame -> out/still-14.3.png
+npm run render -- --from 9 --to 12        # one scene, to check it
+npm run render -- --still 15              # one frame -> out/still-15.png
 npm run preview                           # a frame every half second -> out/sheet.png
 ```
 
@@ -56,6 +57,22 @@ Frames are stepped, not recorded, so a slow machine renders the same video, just
 more slowly. `--workers N` sets how many frames render in parallel (default: one
 fewer than your cores, at most four). Output goes to `out/`, which is ignored by
 git.
+
+## Adding a song
+
+The cut is 60 beats at 120 BPM, so a 120 BPM song (or a 60 BPM one at half time)
+lines up without touching the video. Find the downbeat you want the video to
+open on and pass its time:
+
+```bash
+npm run render -- --audio song.mp3 --audio-start 12.4
+```
+
+Short tracks are padded with silence and long ones cut at the last frame, with a
+1.5s fade out. A slice (`--from`, `--to`) seeks the song to match, so checking one
+scene sounds like that moment of the full render. For another tempo, change
+`BPM` in `promo/promo.js`: scene lengths scale with it (30s at 120), and the
+timing inside each scene is tuned for about 110 to 130.
 
 ## Refresh the screens
 

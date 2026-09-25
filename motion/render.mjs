@@ -6,6 +6,9 @@
 //   npm run render                          1080p30 H.264       -> out/promo.mp4
 //   npm run render -- --scale 2 --fps 60    4K at 60 fps
 //   npm run render -- --audio track.mp3     lay a track under it, faded out at the end
+//   npm run render -- --audio track.mp3 --audio-start 12.4
+//                                           start the track 12.4s in, on the downbeat
+//                                           you want the video to open on
 //   npm run render -- --prores              ProRes 422 HQ       -> out/promo.mov, for an editor
 //   npm run render -- --from 8 --to 14      one slice, to check a scene
 //   npm run render -- --still 12.5          one frame           -> out/still-12.5.png
@@ -104,7 +107,11 @@ async function video() {
 
   const list = path.join(tmp, 'parts.txt');
   fs.writeFileSync(list, segments.map((file) => `file '${file.replace(/\\/g, '/')}'`).join('\n'));
-  const audioIn = args.audio ? ['-i', path.resolve(String(args.audio))] : [];
+  // A slice seeks the track to match, so it sounds like the same moment of the
+  // full render.
+  const audioIn = args.audio
+    ? ['-ss', String(Number(args['audio-start'] ?? 0) + from), '-i', path.resolve(String(args.audio))]
+    : [];
   const audioOut = args.audio
     ? [
         '-map', '0:v', '-map', '1:a',
