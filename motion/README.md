@@ -26,7 +26,7 @@ up, then the promise, then the homepage as the end card.
 | 6 | Field notes | "Tested on a real homestead" ringed, notes-on-file tally |
 | 6 | Drip build log | "It works anyway." |
 | 6 | Promise | No account. No tracking. No ads. |
-| 8 | End card | The homepage above the fold, with the address as the button |
+| 8 | End card | The homepage above the fold, the address as the button, ringed in marker on the last hit |
 
 Scene lengths are in beats at 120 BPM: every cut lands on a beat, and the three
 chapter cards and the end card open on the first beat of a bar. The storyboard
@@ -76,8 +76,7 @@ same track:
   calls `cue(sound, ms)` beside its tween: whooshes as windows slide in and
   out, a stamp on each chapter card and checkbox, marker and highlighter
   scratches as long as their strokes, ticks as the tallies count, the mouse
-  click and a bell on the game's reveal, pencil on "Learn by doing.", and a mug
-  and a spill for the coffee. Move an animation and its sound moves with it.
+  click and a bell on the game's reveal, and pencil on "Learn by doing." Move an animation and its sound moves with it.
 
 The mix is loudness normalised to -14 LUFS, the level most platforms play at.
 

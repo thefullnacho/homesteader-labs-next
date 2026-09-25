@@ -116,17 +116,15 @@ html, body { width: 1920px; height: 1080px; overflow: hidden; background: var(--
   padding: 24px 36px; background: var(--ink); color: var(--paper);
   font: 600 42px/1 'IBM Plex Mono', monospace; letter-spacing: 0.01em;
 }
-.end .reassure { position: absolute; left: 150px; top: 902px; font: 400 32px/1 'Newsreader', serif; color: var(--moss); }
+.end .reassure { position: absolute; left: 150px; top: 936px; font: 400 32px/1 'Newsreader', serif; color: var(--moss); }
 .end figure { position: absolute; left: 1120px; top: 262px; width: 650px; }
 .end .photo { position: relative; height: 470px; overflow: hidden; border: 3px solid var(--ink); box-shadow: 12px 12px 0 var(--shadow); }
 .end .photo img { width: 100%; height: 100%; object-fit: cover; transform-origin: 55% 65%; }
 .end figcaption { display: flex; justify-content: space-between; align-items: baseline; margin-top: 20px; font: 400 28px/1 'Newsreader', serif; color: var(--soil); }
 .end .hand { margin: -14px -8px -18px 0; padding: 14px 8px 18px; font: 600 52px/1 'Caveat', cursive; color: var(--rust); }
 
-/* Coffee: multiplied into the paper, darker at the edge where it dries. */
-.coffee { position: absolute; left: 0; top: 0; z-index: 3; overflow: visible; mix-blend-mode: multiply; pointer-events: none; }
-.coffee-ring { fill: none; stroke: rgba(118, 64, 18, 0.5); stroke-width: 8; }
-.coffee-spill { fill: rgba(168, 98, 34, 0.3); stroke: rgba(110, 56, 14, 0.55); stroke-width: 5; }
+/* The coffee ring sits in the paper, under everything printed on it. */
+.coffee { position: absolute; left: 0; top: 0; overflow: visible; mix-blend-mode: multiply; pointer-events: none; }
 
 /* Film: a vignette and a grain that moves every 24th of a second. */
 #film-vignette { position: absolute; inset: 0; z-index: 90; pointer-events: none; mix-blend-mode: multiply; background: radial-gradient(ellipse 75% 70% at 50% 48%, rgba(38, 34, 26, 0) 60%, rgba(38, 34, 26, 0.12) 84%, rgba(38, 34, 26, 0.3) 100%); }

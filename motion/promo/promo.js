@@ -507,8 +507,9 @@ function end(t) {
     el('img', { src: '/site/images/homesteaderlabs_logo_flask_seedlingv2.jpeg', alt: '' }),
     el('span', { class: 'name' }, 'Homesteader Labs'),
     el('span', { class: 'tag' }, 'Field guides & tools'));
-  const sheet = el('div', { class: 'sheet grain', style: { clipPath: torn(1920, 1140, { top: 46 }, 29) } },
-    el('div', { class: 'content' }, mast, tagline, lede, cta, reassure, figure));
+  const sheet = el('div', { class: 'sheet grain', style: { clipPath: torn(1920, 1140, { top: 46 }, 29) } });
+  coffeeRing(sheet, { x: 1830, y: 1090, radius: 150 });
+  sheet.append(el('div', { class: 'content' }, mast, tagline, lede, cta, reassure, figure));
   const node = scene('end');
   node.append(sheet);
 
@@ -526,83 +527,45 @@ function end(t) {
   ], t.start + 3 * BEAT, 420, EASE.out);
   cue('card', t.start + 3 * BEAT + 80, { gain: 1.2 });
   fadeUp(reassure, t.start + 3.5 * BEAT, 380, 14);
-  coffee(sheet, t.start + 5 * BEAT, { x: 1640, y: 1000 });
-  tween(hand, [{ clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0 0 0)' }], t.start + 4 * BEAT, 750, 'cubic-bezier(.4, .1, .6, .9)');
-  cue('pencil', t.start + 4 * BEAT, { duration: 750 });
+  // The last hit rings the address, the way every scene rings its fact; the
+  // handwriting follows in the quiet after it.
+  const ink = svgEl('svg', { class: 'marks', width: 1920, height: 1140 });
+  sheet.append(ink);
+  // Layout boxes, not client rects: the button is mid-tween at build time. An
+  // oval clears a box's corners at about 1.15x its width and 1.9x its height.
+  const box = { x: cta.offsetLeft, y: cta.offsetTop + 60, width: cta.offsetWidth, height: cta.offsetHeight };
+  const oval = { x: box.x - box.width * 0.075 + 16, y: box.y - box.height * 0.45 + 14, width: box.width * 1.15 - 32, height: box.height * 1.9 - 28 };
+  drawStroke(ink, ring(oval, 6), 8, t.start + 4 * BEAT, 440);
+  tween(hand, [{ clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0 0 0)' }], t.start + 5 * BEAT, 750, 'cubic-bezier(.4, .1, .6, .9)');
+  cue('pencil', t.start + 5 * BEAT, { duration: 750 });
   show(node, t.start - 380, Infinity);
 }
 
-// A mug set down too hard at the end: the ring it leaves, and the spill
-// finding its own way across the paper. Shapes come from the seeded rng.
-function coffee(parent, at, { x, y }) {
-  const r = rng(47);
+// A dried coffee ring on the end card: set dressing, there before the sheet
+// arrives, darker at the rim where coffee dries. It never moves or makes a
+// sound, so the eye stays on the address.
+function coffeeRing(parent, { x, y, radius }) {
   const svg = svgEl('svg', { class: 'coffee', width: 1920, height: 1140, viewBox: '0 0 1920 1140' });
   const defs = svgEl('defs');
   const filter = svgEl('filter', { id: 'seep', x: '-20%', y: '-20%', width: '140%', height: '140%' });
   filter.append(
-    svgEl('feTurbulence', { type: 'fractalNoise', baseFrequency: '0.035', numOctaves: 3, seed: 5, result: 'n' }),
-    svgEl('feDisplacementMap', { in: 'SourceGraphic', in2: 'n', scale: 16, xChannelSelector: 'R', yChannelSelector: 'G' }),
+    svgEl('feTurbulence', { type: 'fractalNoise', baseFrequency: '0.045', numOctaves: 3, seed: 5, result: 'n' }),
+    svgEl('feDisplacementMap', { in: 'SourceGraphic', in2: 'n', scale: 9, xChannelSelector: 'R', yChannelSelector: 'G', result: 'd' }),
+    svgEl('feGaussianBlur', { in: 'd', stdDeviation: 0.8 }),
   );
-  defs.append(filter);
+  const stain = svgEl('radialGradient', { id: 'stain' });
+  [[0, 0.05], [0.8, 0.09], [0.93, 0.2], [0.97, 0.42], [1, 0.12]].forEach(([offset, alpha]) =>
+    stain.append(svgEl('stop', { offset, 'stop-color': '#7a4a1c', 'stop-opacity': alpha })));
+  defs.append(filter, stain);
   const g = svgEl('g', { filter: 'url(#seep)' });
+  // The full ring, and a second fainter one a little off it, where the mug
+  // was set down twice.
+  g.append(
+    svgEl('circle', { cx: x, cy: y, r: radius, fill: 'url(#stain)' }),
+    svgEl('circle', { cx: x - 26, cy: y + 14, r: radius * 0.98, fill: 'none', stroke: '#7a4a1c', 'stroke-opacity': 0.13, 'stroke-width': 5, 'stroke-dasharray': `${radius * 3.4} ${radius * 2.9}` }),
+  );
   svg.append(defs, g);
   parent.append(svg);
-
-  // The ring: a little under a full turn, heavier on one side.
-  const ringR = 118;
-  const ring = svgEl('path', {
-    d: `M${x + ringR * Math.cos(-0.4)} ${y + ringR * Math.sin(-0.4)} A${ringR} ${ringR - 4} 0 1 1 ${x + ringR * Math.cos(-0.95)} ${y + ringR * Math.sin(-0.95)}`,
-    class: 'coffee-ring',
-  });
-  g.append(ring);
-  tween(ring, [{ opacity: 0 }, { opacity: 1 }], at, 90, 'linear');
-  show(ring, at, Infinity);
-
-  // The spill: each direction runs out at its own speed, so it fingers.
-  const N = 56;
-  const cx = x - 150;
-  const cy = y + 40;
-  const reach = Array.from({ length: N }, (_, i) => {
-    const a = (i / N) * Math.PI * 2;
-    return 150 * (1 + 0.28 * Math.sin(a * 3 + 1.3) + 0.16 * Math.sin(a * 5 + 4) + 0.12 * (r() - 0.5)) * (1 + 0.45 * Math.max(0, Math.cos(a - 2.6)));
-  });
-  const speed = Array.from({ length: N }, () => 1.3 + r() * 1.9);
-  const blob = (p) => {
-    const pts = reach.map((len, i) => {
-      const a = (i / N) * Math.PI * 2;
-      const d = 10 + len * (1 - (1 - p) ** speed[i]);
-      return [cx + d * Math.cos(a), cy + d * 0.82 * Math.sin(a)];
-    });
-    // Catmull-Rom through the points, as cubic Beziers, so every keyframe
-    // has the same commands and the browser can tween between them.
-    let d = `M${pts[0][0].toFixed(1)} ${pts[0][1].toFixed(1)}`;
-    for (let i = 0; i < N; i++) {
-      const p0 = pts[(i - 1 + N) % N], p1 = pts[i], p2 = pts[(i + 1) % N], p3 = pts[(i + 2) % N];
-      const c1 = [p1[0] + (p2[0] - p0[0]) / 6, p1[1] + (p2[1] - p0[1]) / 6];
-      const c2 = [p2[0] - (p3[0] - p1[0]) / 6, p2[1] - (p3[1] - p1[1]) / 6];
-      d += ` C${c1[0].toFixed(1)} ${c1[1].toFixed(1)} ${c2[0].toFixed(1)} ${c2[1].toFixed(1)} ${p2[0].toFixed(1)} ${p2[1].toFixed(1)}`;
-    }
-    return `path("${d} Z")`;
-  };
-  const spill = svgEl('path', { class: 'coffee-spill' });
-  g.append(spill);
-  const steps = 14;
-  tween(spill, Array.from({ length: steps + 1 }, (_, i) => ({ d: blob(i / steps) })), at + 40, 1400, 'linear');
-  show(spill, at + 40, Infinity);
-
-  // Drops thrown out when it landed.
-  for (let i = 0; i < 9; i++) {
-    const a = 2.1 + r() * 1.5;
-    const dist = 250 + r() * 170;
-    const rad = 5 + r() * 11;
-    const drop = svgEl('circle', { cx: (cx + dist * Math.cos(a)).toFixed(1), cy: (cy + dist * 0.8 * Math.sin(a)).toFixed(1), r: rad.toFixed(1), class: 'coffee-spill' });
-    g.append(drop);
-    const when = at + 20 + dist * 0.18;
-    tween(drop, [{ opacity: 0 }, { opacity: 1 }], when, 60, 'linear');
-    show(drop, when, Infinity);
-  }
-  cue('mug', at);
-  cue('spill', at + 40, { duration: 1400 });
 }
 
 // The grain tile: seeded noise centred on mid grey, so under overlay it moves

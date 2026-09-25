@@ -139,7 +139,7 @@ async function video() {
   const audioOut = chains.length
     ? [
         '-filter_complex',
-        `${chains.join(';')};${labels.join('')}amix=inputs=${labels.length}:normalize=0,loudnorm=I=-14:TP=-1.5:LRA=11,aresample=48000[a]`,
+        `${chains.join(';')};${labels.join('')}amix=inputs=${labels.length}:normalize=0,loudnorm=I=-14:TP=-1.5:LRA=11,aresample=48000,alimiter=limit=0.8:level=disabled[a]`,
         '-map', '0:v', '-map', '[a]', '-t', String(to - from),
         ...(prores ? ['-c:a', 'pcm_s16le'] : ['-c:a', 'aac', '-b:a', '192k']),
       ]

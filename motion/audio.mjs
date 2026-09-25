@@ -358,28 +358,6 @@ function scratch(seconds, seed, { lo = 2600, hi = 5200, rough = 45, squeak = 0 }
   return sum([env, 1], [tone, squeak]);
 }
 
-function ceramic(seed) {
-  const partials = [[1180, 0.07], [2870, 0.05], [4410, 0.03], [6230, 0.02]];
-  return sum(
-    [thud(95, 0.3, seed, 1.2), 1],
-    ...partials.map(([f, tau], i) => [envelope(sine(0.4, f), decay(tau)), 0.18 / (i + 1)]),
-  );
-}
-
-// Coffee finding its way across paper: a wet hiss with small bubbles in it.
-function slosh(seconds, seed) {
-  const r = rng(seed);
-  const out = sum([envelope(biquad(noise(seconds, seed), 'low', (t) => 900 - 500 * (t / seconds)), (t, p) => Math.min(1, t / 0.03) * (1 - p) ** 1.6), 0.8]);
-  for (let k = 0; k < 26; k++) {
-    const at = seconds * r() ** 1.8;
-    const f = 380 + r() * 700;
-    const blip = envelope(sine(0.05, (t) => f * (1 + t * 14)), (t) => Math.sin(Math.min(1, t / 0.05) * Math.PI));
-    const start = Math.round(at * RATE);
-    for (let i = 0; i < blip.length && start + i < out.length; i++) out[start + i] += blip[i] * 0.16 * (1 - at / seconds);
-  }
-  return out;
-}
-
 export function effects(cues, duration) {
   const bus = new Bus(duration + 3);
   cues.forEach((c, i) => {
@@ -400,8 +378,6 @@ export function effects(cues, duration) {
       case 'tick': bus.add(sum([envelope(biquad(noise(0.02, seed), 'high', 3500), decay(0.002)), 1], [envelope(sine(0.03, 3100), decay(0.006)), 0.3]), at, 0.12 * g, -0.1); break;
       case 'click': bus.add(sum([envelope(biquad(noise(0.02, seed), 'band', 4200, 2), decay(0.0025)), 1], [envelope(sine(0.02, 2100), decay(0.004)), 0.4]), at, 0.35 * g, 0.4); break;
       case 'reveal': bus.add(sum([bell(midi(81), 1.4), 1], [bell(midi(86), 1.4), 0.7]), at, 0.16 * g, 0.4); break;
-      case 'mug': bus.add(ceramic(seed), at, 0.75 * g, 0.45); break;
-      case 'spill': bus.add(slosh(len, seed), at, 0.55 * g, 0.4); break;
       default: throw new Error(`no sound for cue "${c.sound}"`);
     }
   });
