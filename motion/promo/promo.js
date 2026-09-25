@@ -48,6 +48,7 @@ let F;
 // ------------------------------------------------------------------ timeline
 
 const anims = [];
+const cues = [];
 const windows = [];
 const counters = [];
 const animated = new WeakMap();
@@ -66,20 +67,41 @@ function tween(node, keyframes, start, duration, easing = EASE.out) {
   anims.push(anim);
 }
 
+// A sound on the timeline. render.mjs reads the list and lays each one under
+// the video at its time, so every sound sits on the frame that makes it.
+function cue(sound, at, opts = {}) {
+  cues.push({ sound, at: Math.round(at), ...opts });
+}
+
 // Visible from `from` until `to`. Children fall back to inheriting.
 function show(node, from, to) {
   windows.push([node, from, to]);
 }
 
 function count(node, to, start, duration) {
+  // A tick each time the tally passes another twelfth of its total, so they
+  // run fast and slow down with the number.
+  for (let i = 1; i <= 12; i++) cue('tick', start + duration * (1 - Math.cbrt(1 - i / 12)), { gain: 0.5 + i / 24 });
   counters.push((ms) => {
     const p = Math.min(1, Math.max(0, (ms - start) / duration));
     node.textContent = String(Math.round(to * (1 - (1 - p) ** 3)));
   });
 }
 
+// Film grain moves at 24 fps whatever the render rate, like a projector.
+let grainAt = -1;
+function grain(ms) {
+  const film = document.getElementById('film-grain');
+  const n = Math.floor(ms / (1000 / 24));
+  if (!film || n === grainAt) return;
+  grainAt = n;
+  const r = rng(n * 7919 + 13);
+  film.style.backgroundPosition = `${Math.floor(r() * 1024)}px ${Math.floor(r() * 1024)}px`;
+}
+
 function seek(ms, { timecode = false } = {}) {
   for (const anim of anims) anim.currentTime = ms;
+  grain(ms);
   for (const [node, from, to] of windows) node.style.visibility = ms >= from && ms < to ? '' : 'hidden';
   for (const update of counters) update(ms);
   const tc = document.getElementById('timecode');
@@ -205,6 +227,7 @@ function drawStroke(svg, d, width, start, duration, className = '') {
   svg.append(path);
   tween(path, [{ strokeDashoffset: 1 }, { strokeDashoffset: 0 }], start, duration, EASE.pen);
   show(path, start, Infinity);
+  cue(className === 'hl' ? 'highlighter' : 'marker', start, { duration, weight: width });
 }
 
 // ------------------------------------------------------------------- windows
@@ -277,12 +300,16 @@ function motion(node, t, enter, exit) {
   if (enter === 'rise') {
     from = t.start - 120;
     tween(node, [{ transform: 'translateY(170px)' }, { transform: 'none' }], from, 480, EASE.out);
+    cue('rise', from);
   } else if (enter === 'slide') {
     tween(node, [{ transform: 'translateX(2080px)' }, { transform: 'none' }], from, 460, EASE.land);
+    cue('whoosh', from - 60);
+    cue('land', from + 230);
   }
   let to = t.end + 40;
   if (exit === 'slide') {
     tween(node, [{ transform: 'none' }, { transform: 'translateX(-2120px)' }], t.end - 60, 360, EASE.in);
+    cue('whoosh', t.end - 60, { gain: 0.6 });
     to = t.end + 300;
   }
   show(node, from, to);
@@ -294,6 +321,7 @@ function caption(parent, { lines, sub, display = false }, start) {
     sub ? el('span', { class: 'sub' }, sub) : null);
   parent.append(card);
   fadeUp(card, start, 400, 26);
+  cue('card', start + 60);
 }
 
 function tally(parent, label, value, start) {
@@ -307,6 +335,7 @@ function tally(parent, label, value, start) {
     { opacity: 1, transform: 'scale(1.03)', offset: 0.7 },
     { opacity: 1, transform: 'none' },
   ], start, 420, EASE.out);
+  cue('card', start + 120);
   count(num, value, start + 60, 1000);
 }
 
@@ -333,10 +362,13 @@ function chapter(t, { no, title, next }, first = false) {
   if (!first) {
     tween(sheet, [{ transform: 'translateX(2080px)' }, { transform: 'none' }], from, 330, EASE.out);
     fadeUp(noEl, t.start - 60, 320, 16);
+    cue('whoosh', from - 80, { gain: 1.1 });
   }
+  cue('stamp', t.start);
   revealWords(h1, first ? 40 : t.start - 120, 90, 420);
   tween(nextEl, [{ opacity: 0 }, { opacity: 1 }], t.start + 480, 320);
   tween(sheet, [{ transform: 'none' }, { transform: 'translateY(-1260px)' }], t.end - 120, 380, EASE.in);
+  cue('lift', t.end - 140);
   show(node, from, t.end + 270);
 }
 
@@ -409,6 +441,8 @@ function game(t) {
   tween(cursor, [{ transform: there }, { transform: `${there} scale(.8)`, offset: 0.4 }, { transform: there }], click, 220, 'linear');
   tween(cursor, [{ opacity: 1 }, { opacity: 0 }], click + 550, 300);
   show(cursor, t.start + 600, click + 900);
+  cue('click', click + 30);
+  cue('reveal', click + 90);
   tween(ripple, [{ opacity: 1, transform: 'scale(.3)' }, { opacity: 0, transform: 'scale(2.4)' }], click + 40, 500, EASE.out);
   show(ripple, click + 40, click + 560);
 
@@ -447,6 +481,7 @@ function trust(t) {
     node.append(box, line);
     const at = t.start + 120 + i * BEAT;
     tween(box, [{ opacity: 0, transform: 'rotate(-1.5deg) scale(1.3)' }, { opacity: 1, transform: 'rotate(-1.5deg)' }], at, 260);
+    cue('stamp', at + 60, { gain: 0.75 });
     revealWords(line, at, 70, 380);
     drawStroke(ink, tick(172, y + 30, 1.24), 18, at + 330, 260);
   });
@@ -478,6 +513,7 @@ function end(t) {
   node.append(sheet);
 
   tween(sheet, [{ transform: 'translateY(1180px)' }, { transform: 'none' }], t.start - 380, 440, EASE.out);
+  cue('rise', t.start - 400, { gain: 1.2 });
   tagline.querySelectorAll('.w > span').forEach((span, i) =>
     tween(span, [{ transform: 'translateY(110%)' }, { transform: 'none' }], t.start + 60 + i * BEAT, 420, EASE.snap));
   tween(figure, [{ opacity: 0, transform: 'translateX(140px)' }, { opacity: 1, transform: 'none' }], t.start + 250, 600, EASE.out);
@@ -488,9 +524,105 @@ function end(t) {
     { opacity: 1, transform: 'scale(1.04)', offset: 0.65 },
     { opacity: 1, transform: 'none' },
   ], t.start + 3 * BEAT, 420, EASE.out);
+  cue('card', t.start + 3 * BEAT + 80, { gain: 1.2 });
   fadeUp(reassure, t.start + 3.5 * BEAT, 380, 14);
+  coffee(sheet, t.start + 5 * BEAT, { x: 1640, y: 1000 });
   tween(hand, [{ clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0 0 0)' }], t.start + 4 * BEAT, 750, 'cubic-bezier(.4, .1, .6, .9)');
+  cue('pencil', t.start + 4 * BEAT, { duration: 750 });
   show(node, t.start - 380, Infinity);
+}
+
+// A mug set down too hard at the end: the ring it leaves, and the spill
+// finding its own way across the paper. Shapes come from the seeded rng.
+function coffee(parent, at, { x, y }) {
+  const r = rng(47);
+  const svg = svgEl('svg', { class: 'coffee', width: 1920, height: 1140, viewBox: '0 0 1920 1140' });
+  const defs = svgEl('defs');
+  const filter = svgEl('filter', { id: 'seep', x: '-20%', y: '-20%', width: '140%', height: '140%' });
+  filter.append(
+    svgEl('feTurbulence', { type: 'fractalNoise', baseFrequency: '0.035', numOctaves: 3, seed: 5, result: 'n' }),
+    svgEl('feDisplacementMap', { in: 'SourceGraphic', in2: 'n', scale: 16, xChannelSelector: 'R', yChannelSelector: 'G' }),
+  );
+  defs.append(filter);
+  const g = svgEl('g', { filter: 'url(#seep)' });
+  svg.append(defs, g);
+  parent.append(svg);
+
+  // The ring: a little under a full turn, heavier on one side.
+  const ringR = 118;
+  const ring = svgEl('path', {
+    d: `M${x + ringR * Math.cos(-0.4)} ${y + ringR * Math.sin(-0.4)} A${ringR} ${ringR - 4} 0 1 1 ${x + ringR * Math.cos(-0.95)} ${y + ringR * Math.sin(-0.95)}`,
+    class: 'coffee-ring',
+  });
+  g.append(ring);
+  tween(ring, [{ opacity: 0 }, { opacity: 1 }], at, 90, 'linear');
+  show(ring, at, Infinity);
+
+  // The spill: each direction runs out at its own speed, so it fingers.
+  const N = 56;
+  const cx = x - 150;
+  const cy = y + 40;
+  const reach = Array.from({ length: N }, (_, i) => {
+    const a = (i / N) * Math.PI * 2;
+    return 150 * (1 + 0.28 * Math.sin(a * 3 + 1.3) + 0.16 * Math.sin(a * 5 + 4) + 0.12 * (r() - 0.5)) * (1 + 0.45 * Math.max(0, Math.cos(a - 2.6)));
+  });
+  const speed = Array.from({ length: N }, () => 1.3 + r() * 1.9);
+  const blob = (p) => {
+    const pts = reach.map((len, i) => {
+      const a = (i / N) * Math.PI * 2;
+      const d = 10 + len * (1 - (1 - p) ** speed[i]);
+      return [cx + d * Math.cos(a), cy + d * 0.82 * Math.sin(a)];
+    });
+    // Catmull-Rom through the points, as cubic Beziers, so every keyframe
+    // has the same commands and the browser can tween between them.
+    let d = `M${pts[0][0].toFixed(1)} ${pts[0][1].toFixed(1)}`;
+    for (let i = 0; i < N; i++) {
+      const p0 = pts[(i - 1 + N) % N], p1 = pts[i], p2 = pts[(i + 1) % N], p3 = pts[(i + 2) % N];
+      const c1 = [p1[0] + (p2[0] - p0[0]) / 6, p1[1] + (p2[1] - p0[1]) / 6];
+      const c2 = [p2[0] - (p3[0] - p1[0]) / 6, p2[1] - (p3[1] - p1[1]) / 6];
+      d += ` C${c1[0].toFixed(1)} ${c1[1].toFixed(1)} ${c2[0].toFixed(1)} ${c2[1].toFixed(1)} ${p2[0].toFixed(1)} ${p2[1].toFixed(1)}`;
+    }
+    return `path("${d} Z")`;
+  };
+  const spill = svgEl('path', { class: 'coffee-spill' });
+  g.append(spill);
+  const steps = 14;
+  tween(spill, Array.from({ length: steps + 1 }, (_, i) => ({ d: blob(i / steps) })), at + 40, 1400, 'linear');
+  show(spill, at + 40, Infinity);
+
+  // Drops thrown out when it landed.
+  for (let i = 0; i < 9; i++) {
+    const a = 2.1 + r() * 1.5;
+    const dist = 250 + r() * 170;
+    const rad = 5 + r() * 11;
+    const drop = svgEl('circle', { cx: (cx + dist * Math.cos(a)).toFixed(1), cy: (cy + dist * 0.8 * Math.sin(a)).toFixed(1), r: rad.toFixed(1), class: 'coffee-spill' });
+    g.append(drop);
+    const when = at + 20 + dist * 0.18;
+    tween(drop, [{ opacity: 0 }, { opacity: 1 }], when, 60, 'linear');
+    show(drop, when, Infinity);
+  }
+  cue('mug', at);
+  cue('spill', at + 40, { duration: 1400 });
+}
+
+// The grain tile: seeded noise centred on mid grey, so under overlay it moves
+// the paper neither lighter nor darker on average.
+function film() {
+  const size = 512;
+  const canvas = document.createElement('canvas');
+  canvas.width = canvas.height = size;
+  const ctx = canvas.getContext('2d');
+  const img = ctx.createImageData(size, size);
+  const r = rng(1895);
+  for (let i = 0; i < size * size; i++) {
+    const v = 128 + (r() + r() + r() - 1.5) * 70;
+    img.data.set([v, v, v, 255], i * 4);
+  }
+  ctx.putImageData(img, 0, 0);
+  const grainEl = el('div', { id: 'film-grain', style: { backgroundImage: `url(${canvas.toDataURL()})` } });
+  // Straight on the stage: a wrapper would be its own stacking context, and
+  // the blend would see a transparent backdrop instead of the frame.
+  stage.append(el('div', { id: 'film-vignette' }), grainEl);
 }
 
 // -------------------------------------------------------------------- build
@@ -517,10 +649,11 @@ async function build() {
   drip(T.drip);
   trust(T.trust);
   end(T.end);
+  if (!new URLSearchParams(location.search).has('clean')) film();
 
   await Promise.all([...document.images].map((img) => img.decode()));
   seek(0);
-  return { duration: DURATION, bpm: BPM, width: 1920, height: 1080 };
+  return { duration: DURATION, bpm: BPM, width: 1920, height: 1080, cues: cues.sort((a, b) => a.at - b.at) };
 }
 
 window.promo = { ready: build(), seek, duration: DURATION };

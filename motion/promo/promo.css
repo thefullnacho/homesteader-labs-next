@@ -123,5 +123,14 @@ html, body { width: 1920px; height: 1080px; overflow: hidden; background: var(--
 .end figcaption { display: flex; justify-content: space-between; align-items: baseline; margin-top: 20px; font: 400 28px/1 'Newsreader', serif; color: var(--soil); }
 .end .hand { margin: -14px -8px -18px 0; padding: 14px 8px 18px; font: 600 52px/1 'Caveat', cursive; color: var(--rust); }
 
+/* Coffee: multiplied into the paper, darker at the edge where it dries. */
+.coffee { position: absolute; left: 0; top: 0; z-index: 3; overflow: visible; mix-blend-mode: multiply; pointer-events: none; }
+.coffee-ring { fill: none; stroke: rgba(118, 64, 18, 0.5); stroke-width: 8; }
+.coffee-spill { fill: rgba(168, 98, 34, 0.3); stroke: rgba(110, 56, 14, 0.55); stroke-width: 5; }
+
+/* Film: a vignette and a grain that moves every 24th of a second. */
+#film-vignette { position: absolute; inset: 0; z-index: 90; pointer-events: none; mix-blend-mode: multiply; background: radial-gradient(ellipse 75% 70% at 50% 48%, rgba(38, 34, 26, 0) 60%, rgba(38, 34, 26, 0.12) 84%, rgba(38, 34, 26, 0.3) 100%); }
+#film-grain { position: absolute; inset: 0; z-index: 91; pointer-events: none; mix-blend-mode: overlay; opacity: 0.3; background-size: 1024px 1024px; }
+
 /* Preview sheets only. */
 #timecode { position: absolute; right: 16px; top: 12px; z-index: 99; padding: 6px 10px; background: var(--ink); color: var(--paper); font: 600 22px/1 'IBM Plex Mono', monospace; }

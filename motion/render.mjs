@@ -5,7 +5,12 @@
 //
 //   npm run render                          1080p30 H.264       -> out/promo.mp4
 //   npm run render -- --scale 2 --fps 60    4K at 60 fps
-//   npm run render -- --audio track.mp3     lay a track under it, faded out at the end
+//   npm run render                          with the built-in score and sound effects
+//   npm run render -- --audio track.mp3     a track in place of the score, faded out at the end
+//   npm run render -- --no-score            sound effects only
+//   npm run render -- --no-sfx              score (or --audio track) only
+//   npm run render -- --silent              no audio at all
+//   npm run render -- --clean               no film grain or vignette
 //   npm run render -- --audio track.mp3 --audio-start 12.4
 //                                           start the track 12.4s in, on the downbeat
 //                                           you want the video to open on
@@ -24,6 +29,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { chromium } from 'playwright';
+import { effects, mixdown, score } from './audio.mjs';
 
 const ROOT = path.dirname(fileURLToPath(import.meta.url));
 const SITE_PUBLIC = path.join(ROOT, '..', 'public');
@@ -36,6 +42,9 @@ const fps = Number(args.fps ?? 30);
 const scale = Number(args.scale ?? 1);
 const workers = Number(args.workers ?? Math.max(1, Math.min(4, os.cpus().length - 1)));
 const prores = Boolean(args.prores);
+const silent = Boolean(args.silent);
+const withScore = !args['no-score'] && !args.audio;
+const withSfx = !args['no-sfx'];
 
 const MIME = {
   '.html': 'text/html',
@@ -62,6 +71,7 @@ try {
 async function video() {
   const probe = await openStage();
   const duration = probe.info.duration / 1000;
+  const { cues, bpm } = probe.info;
   await probe.context.close();
 
   const from = Number(args.from ?? 0);
@@ -107,21 +117,35 @@ async function video() {
 
   const list = path.join(tmp, 'parts.txt');
   fs.writeFileSync(list, segments.map((file) => `file '${file.replace(/\\/g, '/')}'`).join('\n'));
-  // A slice seeks the track to match, so it sounds like the same moment of the
-  // full render.
-  const audioIn = args.audio
-    ? ['-ss', String(Number(args['audio-start'] ?? 0) + from), '-i', path.resolve(String(args.audio))]
-    : [];
-  const audioOut = args.audio
+  // The built-in sound is synthesised for the whole cut, then seeked like a
+  // track, so a slice sounds like the same moment of the full render.
+  const inputs = [];
+  const chains = [];
+  const built = [];
+  if (!silent && withScore) built.push([score(duration, bpm), 0.8]);
+  if (!silent && withSfx) built.push([effects(cues, duration), 1]);
+  if (built.length) {
+    const wav = path.join(tmp, 'sound.wav');
+    fs.writeFileSync(wav, mixdown(built, duration));
+    inputs.push('-ss', String(from), '-i', wav);
+    chains.push(`[${inputs.filter((a) => a === '-i').length}:a]anull[b]`);
+  }
+  if (!silent && args.audio) {
+    inputs.push('-ss', String(Number(args['audio-start'] ?? 0) + from), '-i', path.resolve(String(args.audio)));
+    // Pad a short track with silence and cut a long one at the last frame.
+    chains.push(`[${inputs.filter((a) => a === '-i').length}:a]apad,afade=t=out:st=${Math.max(0, to - from - 1.5).toFixed(2)}:d=1.5,volume=0.8[s]`);
+  }
+  const labels = chains.map((c) => c.slice(c.lastIndexOf('[')));
+  const audioOut = chains.length
     ? [
-        '-map', '0:v', '-map', '1:a',
-        // Pad a short track with silence and cut a long one at the last frame.
-        '-af', `apad,afade=t=out:st=${Math.max(0, to - from - 1.5).toFixed(2)}:d=1.5`, '-shortest',
+        '-filter_complex',
+        `${chains.join(';')};${labels.join('')}amix=inputs=${labels.length}:normalize=0,loudnorm=I=-14:TP=-1.5:LRA=11,aresample=48000[a]`,
+        '-map', '0:v', '-map', '[a]', '-t', String(to - from),
         ...(prores ? ['-c:a', 'pcm_s16le'] : ['-c:a', 'aac', '-b:a', '192k']),
       ]
     : [];
   await run(FFMPEG, [
-    '-y', '-loglevel', 'error', '-f', 'concat', '-safe', '0', '-i', list, ...audioIn,
+    '-y', '-loglevel', 'error', '-f', 'concat', '-safe', '0', '-i', list, ...inputs,
     '-c:v', 'copy', ...audioOut, ...(prores ? [] : ['-movflags', '+faststart']), out,
   ]);
   fs.rmSync(tmp, { recursive: true, force: true });
@@ -175,7 +199,7 @@ async function openStage() {
   const page = await context.newPage();
   const errors = [];
   page.on('pageerror', (err) => errors.push(err));
-  await page.goto(`${ORIGIN}/index.html`);
+  await page.goto(`${ORIGIN}/index.html${args.clean ? '?clean' : ''}`);
   const info = await page.evaluate(() => window.promo.ready);
   if (errors.length) throw errors[0];
   return { page, context, info };
@@ -197,7 +221,7 @@ async function frame(page, ms, options = {}) {
 function encoder(file) {
   const video = prores
     ? ['-c:v', 'prores_ks', '-profile:v', '3', '-pix_fmt', 'yuv422p10le']
-    : ['-c:v', 'libx264', '-preset', 'slow', '-crf', '16', '-pix_fmt', 'yuv420p'];
+    : ['-c:v', 'libx264', '-preset', 'slow', '-crf', '19', '-tune', 'grain', '-pix_fmt', 'yuv420p'];
   return [
     '-y', '-loglevel', 'error',
     '-f', 'image2pipe', '-framerate', String(fps), '-c:v', 'png', '-i', '-',
