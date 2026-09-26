@@ -1,0 +1,18 @@
+{
+  "name": "homesteader-labs-motion",
+  "private": true,
+  "description": "Promo video for homesteaderlabs.com, rendered frame by frame from HTML in headless Chromium",
+  "type": "module",
+  "scripts": {
+    "capture": "node capture.mjs",
+    "render": "node render.mjs",
+    "preview": "node render.mjs --sheet"
+  },
+  "dependencies": {
+    "@fontsource/archivo-black": "5.3.0",
+    "@fontsource/caveat": "5.3.0",
+    "@fontsource/ibm-plex-mono": "5.3.0",
+    "@fontsource/newsreader": "5.3.0",
+    "playwright": "1.56.1"
+  }
+}

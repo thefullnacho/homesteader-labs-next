@@ -1,0 +1,134 @@
+/* Paper field-notebook tokens and primitives, as in app/globals.css and
+   tailwind.config.ts, scaled for a 1920x1080 frame. */
+
+@font-face { font-family: 'Archivo Black'; font-weight: 400; src: url(/fonts/archivo-black/files/archivo-black-latin-400-normal.woff2) format('woff2'); }
+@font-face { font-family: 'Newsreader'; font-weight: 400; font-style: normal; src: url(/fonts/newsreader/files/newsreader-latin-400-normal.woff2) format('woff2'); }
+@font-face { font-family: 'Newsreader'; font-weight: 400; font-style: italic; src: url(/fonts/newsreader/files/newsreader-latin-400-italic.woff2) format('woff2'); }
+@font-face { font-family: 'IBM Plex Mono'; font-weight: 500; src: url(/fonts/ibm-plex-mono/files/ibm-plex-mono-latin-500-normal.woff2) format('woff2'); }
+@font-face { font-family: 'IBM Plex Mono'; font-weight: 600; src: url(/fonts/ibm-plex-mono/files/ibm-plex-mono-latin-600-normal.woff2) format('woff2'); }
+@font-face { font-family: 'Caveat'; font-weight: 600; src: url(/fonts/caveat/files/caveat-latin-600-normal.woff2) format('woff2'); }
+
+:root {
+  --paper: #f5f0e2;
+  --kraft: #e9ddc1;
+  --manila: #efe5cc;
+  --ink: #26221a;
+  --soil: #5a4630;
+  --marker: #e4571f;
+  --moss: #5c6b3c;
+  --rust: #a8442a;
+  --shadow: rgba(38, 34, 26, 0.85);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 1920px; height: 1080px; overflow: hidden; background: var(--paper); color: var(--ink); }
+#stage { position: absolute; inset: 0; overflow: hidden; font-family: 'Newsreader', serif; }
+
+/* .grain from globals.css. Children sit above the noise, so every child of a
+   grainy surface is positioned. */
+.grain { isolation: isolate; }
+.grain::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  mix-blend-mode: multiply;
+  opacity: 0.55;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.07'/%3E%3C/svg%3E");
+}
+.grain > * { z-index: 2; }
+
+#paper { position: absolute; inset: 0; background: var(--paper); }
+.scene { position: absolute; inset: 0; }
+
+/* Mask reveal: a word slides up out of its own clip box. */
+.w { display: inline-block; overflow: hidden; vertical-align: bottom; padding: 0 0.03em 0.14em; margin: 0 -0.03em -0.14em; }
+.w > span { display: inline-block; }
+
+/* Marker ink: strokes are drawn in, so they carry pathLength="1". */
+.marks { position: absolute; left: 0; top: 0; overflow: visible; mix-blend-mode: multiply; }
+.marks path { fill: none; stroke: var(--marker); stroke-linecap: round; stroke-linejoin: round; }
+.marks path.hl { stroke: rgba(228, 87, 31, 0.34); stroke-linecap: butt; }
+
+/* A browser window around a real capture of the site. */
+.win { position: absolute; background: var(--paper); border: 3px solid var(--ink); box-shadow: 14px 14px 0 var(--shadow); }
+.win-bar {
+  position: absolute; left: 0; right: 0; top: 0; height: 52px;
+  display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 0 22px;
+  background: var(--kraft); border-bottom: 2px solid var(--ink);
+  font: 500 21px/1 'IBM Plex Mono', monospace; letter-spacing: 0.02em; white-space: nowrap;
+}
+.win-bar .cap { font-size: 15px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--soil); }
+.win-screen { position: absolute; left: 0; right: 0; top: 52px; bottom: 0; overflow: hidden; background: var(--paper); }
+.cam { position: absolute; left: 0; top: 0; transform-origin: 0 0; }
+.layer { position: absolute; left: 0; top: 0; }
+.layer img { display: block; }
+
+/* Cards laid on top of a window: .card-paper, heavier for video. */
+.card { position: absolute; background: var(--manila); border: 2px solid var(--ink); box-shadow: 8px 8px 0 var(--shadow); }
+.caption { left: 96px; bottom: 58px; max-width: 1200px; padding: 26px 38px 30px; font: italic 400 46px/1.22 'Newsreader', serif; }
+.caption.display { font: 400 56px/1.04 'Archivo Black', sans-serif; letter-spacing: -0.02em; }
+.caption .sub { display: block; margin-top: 18px; font: 500 19px/1.3 'IBM Plex Mono', monospace; font-style: normal; letter-spacing: 0.16em; text-transform: uppercase; color: var(--soil); }
+.tally { right: 96px; bottom: 58px; padding: 22px 34px 20px; }
+.tally .lbl { display: block; font: 600 20px/1 'IBM Plex Mono', monospace; letter-spacing: 0.18em; text-transform: uppercase; color: var(--soil); }
+.tally .num { display: block; margin: 14px 0 0 auto; font: 400 132px/0.9 'Archivo Black', sans-serif; text-align: right; }
+
+/* Chapter cards: a kraft sheet with torn edges, the site's header band. */
+.chapter { z-index: 10; filter: drop-shadow(-9px 9px 0 var(--shadow)); }
+.chapter .sheet { position: absolute; left: -70px; top: 0; width: 1990px; height: 1150px; background: var(--kraft); }
+.chapter .body { position: absolute; left: 210px; right: 140px; top: 0; height: 1080px; display: flex; flex-direction: column; justify-content: center; }
+.chapter .no { font: 600 40px/1 'IBM Plex Mono', monospace; letter-spacing: 0.04em; color: var(--marker); }
+.chapter h1 { width: max-content; margin-top: 26px; font: 400 200px/1 'Archivo Black', sans-serif; letter-spacing: -0.025em; white-space: nowrap; }
+.chapter .next { margin-top: 74px; font: 500 26px/1 'IBM Plex Mono', monospace; letter-spacing: 0.18em; text-transform: uppercase; color: var(--soil); }
+
+/* The game: copy on the left, the play screen in a tall window. */
+.game-copy { position: absolute; left: 150px; top: 196px; width: 900px; }
+.game-copy h2 { font: 400 124px/1.02 'Archivo Black', sans-serif; letter-spacing: -0.025em; }
+.game-copy .facts { margin-top: 48px; font: 600 24px/1.4 'IBM Plex Mono', monospace; letter-spacing: 0.16em; text-transform: uppercase; color: var(--marker); }
+.game-copy .deck { margin-top: 22px; max-width: 800px; font: italic 400 42px/1.28 'Newsreader', serif; color: var(--soil); }
+.cursor { position: absolute; left: 0; top: 0; width: 46px; height: 58px; z-index: 5; transform-origin: 5px 4px; filter: drop-shadow(3px 4px 0 rgba(38, 34, 26, 0.3)); }
+.ripple { position: absolute; width: 60px; height: 60px; margin: -30px 0 0 -30px; border: 5px solid var(--marker); border-radius: 50%; z-index: 4; }
+
+/* Trust: the claims the site makes about itself, ticked off. */
+.trust { z-index: 5; }
+.trust .line { position: absolute; left: 360px; font: 400 172px/1 'Archivo Black', sans-serif; letter-spacing: -0.025em; }
+.trust .box { position: absolute; left: 172px; width: 124px; height: 124px; border: 9px solid var(--ink); border-radius: 6px; transform: rotate(-1.5deg); }
+.trust .foot { position: absolute; left: 174px; top: 904px; font: 600 28px/1 'IBM Plex Mono', monospace; letter-spacing: 0.18em; text-transform: uppercase; color: var(--moss); }
+
+/* End card: the homepage above the fold, with the address as the button. */
+.end { z-index: 20; filter: drop-shadow(0 -9px 0 var(--shadow)); }
+.end .sheet { position: absolute; left: 0; top: -60px; width: 1920px; height: 1140px; background: var(--paper); }
+.end .content { position: absolute; left: 0; top: 60px; width: 1920px; height: 1080px; }
+.end .mast {
+  position: absolute; left: 0; right: 0; top: 0; height: 124px;
+  display: flex; align-items: center; gap: 24px; padding: 0 150px;
+  background: var(--kraft); border-bottom: 3px solid var(--ink);
+}
+.end .mast img { width: 74px; height: 74px; }
+.end .mast .name { font: 400 46px/1 'Archivo Black', sans-serif; letter-spacing: 0.01em; text-transform: uppercase; }
+.end .mast .tag { margin-left: 8px; font: 500 20px/1 'IBM Plex Mono', monospace; letter-spacing: 0.18em; text-transform: uppercase; color: var(--soil); }
+.end .tagline { position: absolute; left: 150px; top: 262px; font: 400 94px/1.1 'Archivo Black', sans-serif; letter-spacing: -0.035em; }
+.end .tagline .w { display: block; width: max-content; }
+.end .lede { position: absolute; left: 150px; top: 616px; width: 820px; font: 400 38px/1.35 'Newsreader', serif; }
+.end .cta {
+  position: absolute; left: 150px; top: 770px; display: flex; align-items: center; gap: 28px;
+  padding: 24px 36px; background: var(--ink); color: var(--paper);
+  font: 600 42px/1 'IBM Plex Mono', monospace; letter-spacing: 0.01em;
+}
+.end .reassure { position: absolute; left: 150px; top: 936px; font: 400 32px/1 'Newsreader', serif; color: var(--moss); }
+.end figure { position: absolute; left: 1120px; top: 262px; width: 650px; }
+.end .photo { position: relative; height: 470px; overflow: hidden; border: 3px solid var(--ink); box-shadow: 12px 12px 0 var(--shadow); }
+.end .photo img { width: 100%; height: 100%; object-fit: cover; transform-origin: 55% 65%; }
+.end figcaption { display: flex; justify-content: space-between; align-items: baseline; margin-top: 20px; font: 400 28px/1 'Newsreader', serif; color: var(--soil); }
+.end .hand { margin: -14px -8px -18px 0; padding: 14px 8px 18px; font: 600 52px/1 'Caveat', cursive; color: var(--rust); }
+
+/* The coffee ring sits in the paper, under everything printed on it. */
+.coffee { position: absolute; left: 0; top: 0; overflow: visible; mix-blend-mode: multiply; pointer-events: none; }
+
+/* Film: a vignette and a grain that moves every 24th of a second. */
+#film-vignette { position: absolute; inset: 0; z-index: 90; pointer-events: none; mix-blend-mode: multiply; background: radial-gradient(ellipse 75% 70% at 50% 48%, rgba(38, 34, 26, 0) 60%, rgba(38, 34, 26, 0.12) 84%, rgba(38, 34, 26, 0.3) 100%); }
+#film-grain { position: absolute; inset: 0; z-index: 91; pointer-events: none; mix-blend-mode: overlay; opacity: 0.3; background-size: 1024px 1024px; }
+
+/* Preview sheets only. */
+#timecode { position: absolute; right: 16px; top: 12px; z-index: 99; padding: 6px 10px; background: var(--ink); color: var(--paper); font: 600 22px/1 'IBM Plex Mono', monospace; }

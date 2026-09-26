@@ -1,0 +1,126 @@
+{
+  "capturedAt": "2026-09-25",
+  "viewport": {
+    "width": 1440,
+    "height": 900,
+    "deviceScaleFactor": 2
+  },
+  "shots": {
+    "schedule": {
+      "file": "schedule.jpg",
+      "route": "/tools/planting-calendar/zone/6b/",
+      "width": 1440,
+      "height": 1500,
+      "marks": {
+        "tomatoes": {
+          "x": 241,
+          "y": 334,
+          "width": 958,
+          "height": 34
+        }
+      }
+    },
+    "kb": {
+      "file": "kb.jpg",
+      "route": "/kb/",
+      "width": 1440,
+      "height": 1400,
+      "marks": {
+        "headline": {
+          "x": 160,
+          "y": 232,
+          "width": 631,
+          "height": 52
+        }
+      }
+    },
+    "zone": {
+      "file": "zone.jpg",
+      "route": "/tools/planting-calendar/zone/6b/",
+      "width": 1440,
+      "height": 1100,
+      "marks": {
+        "last": {
+          "x": 224,
+          "y": 517,
+          "width": 320,
+          "height": 115
+        },
+        "first": {
+          "x": 560,
+          "y": 517,
+          "width": 320,
+          "height": 115
+        }
+      }
+    },
+    "game-round": {
+      "file": "game-round.jpg",
+      "route": "/tools/forager-game/play/?mode=mushroom_mycologist",
+      "width": 612,
+      "height": 826,
+      "marks": {
+        "pick": {
+          "x": 310,
+          "y": 704,
+          "width": 268,
+          "height": 56
+        }
+      }
+    },
+    "game-reveal": {
+      "file": "game-reveal.jpg",
+      "route": "/tools/forager-game/play/?mode=mushroom_mycologist",
+      "width": 612,
+      "height": 826,
+      "marks": {
+        "answer": {
+          "x": 34,
+          "y": 474,
+          "width": 544,
+          "height": 117
+        },
+        "ai": {
+          "x": 312,
+          "y": 607,
+          "width": 266,
+          "height": 90
+        }
+      }
+    },
+    "notes": {
+      "file": "notes.jpg",
+      "route": "/archive/",
+      "width": 1440,
+      "height": 1200,
+      "marks": {
+        "stamp": {
+          "x": 160,
+          "y": 133,
+          "width": 245,
+          "height": 36
+        }
+      }
+    },
+    "drip": {
+      "file": "drip.jpg",
+      "route": "/archive/diy-drip-irrigation-raised-beds/",
+      "width": 1440,
+      "height": 1300,
+      "marks": {
+        "works": {
+          "x": 160,
+          "y": 680,
+          "width": 121,
+          "height": 16
+        }
+      }
+    }
+  },
+  "facts": {
+    "kbCrops": 340,
+    "notes": 25,
+    "gameRounds": 109,
+    "gameDomains": 4
+  }
+}
