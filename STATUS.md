@@ -9,6 +9,48 @@ true inside this repo.
 
 ---
 
+## 2026-09-29 - SEO batch 2: foraging and builds hubs, series nav, page-2 push
+
+Built on batch 1 (www redirect, berry CTR rescue, KB dedup, og:image), which merged earlier the
+same day. Branch `seo-batch-2`, one commit per item, merged to master.
+
+**Item 6, hubs.** `/foraging/` reads in start-here order: wild berry guide, then the monthly
+series oldest first, then mushroom safety and the sugar maple ID guide. `/builds/` lists all six
+build logs oldest first with a status stamp and a one-line outcome. Membership is a rule in
+`lib/hubs.ts`, so October joins the hub and the series chain the day `october-foraging` merges,
+with no code change. The outcome lines are hand-written and a test fails if a new build log lacks
+one. Every hub post now has its hub as the breadcrumb parent (visible and in BreadcrumbList
+JSON-LD) plus an in-body link; the hubs are also in the footer, on `/archive/`, and in the
+sitemap. Planting, pest and de-cloudify posts have no hub and still point at `/archive/`.
+
+**Item 7, series nav.** August and September end with previous/next, the full run with the
+current issue marked, and a link to `/foraging/`. September links back to August, verified in the
+built HTML and in a render test that covers every future issue. The October draft was not touched.
+
+**Item 8, page-2 push.** Sugar maple retitled "How to Identify a Sugar Maple, and Tell It From a
+Norway Maple" (sugar maple identification 590/mo, vs Norway maple 720/mo) with a 151-char meta;
+the hub is its first inbound internal link from anywhere. `/tools/caloric-security/` linked
+in-body from What to Plant in August, Fall Garden Planning and the Survival Index build log.
+Zone 10b's snippet read "last spring frost January 1 and first fall frost December 31", which
+looks broken; zones with a 355+ day season (10a, 10b) now get a heat-not-frost title and meta, the
+other twelve are byte-identical. Zone 4b gets links from the New York and Michigan rows of the
+state index, Kentucky from the state index prose and a new by-state line on the zone index.
+
+**Found, not fixed:** React hydration error #418 on `/archive/wild-berry-guide/` and
+`/archive/what-to-forage-september/`, present on production before this batch. Not in scope; the
+two pages that matter most for foraging traffic carry it.
+
+**Next concrete action:** chase the #418 on the berry guide and September (agent work). Then the
+measurement below.
+
+[non-production] Read the `/foraging/` and `/builds/` copy, including the six build outcome lines,
+which Claude wrote in the site voice.
+
+[non-production] On or after 2026-10-27, sync CrawlSEO GSC (browser login) and have Claude read
+the batch-2 URLs: sugar maple, zone 10b, zone 4b, Kentucky, caloric security.
+
+---
+
 ## 2026-09-20 - The reference tables became endpoints, and the license split that took
 
 **Live on master:** `/api/frost/{zone}/`, `/api/pests/`, `/api/pests/{cropId}/` join the existing
