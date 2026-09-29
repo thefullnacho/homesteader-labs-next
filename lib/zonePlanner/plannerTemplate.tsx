@@ -1,29 +1,11 @@
-import { Document, Page, Text, View, StyleSheet } from "@react-pdf/renderer";
+import { Document, Text, View, StyleSheet } from "@react-pdf/renderer";
 import type { PlannerData } from "./plannerData";
+import { paper as c, DISPLAY, MONO, MONO_BOLD, BODY_ITALIC, PageFrame as PaperFrame } from "@/lib/print/paper";
 
-// Paper field-notebook palette, matching app/globals.css. The older survival
-// plan PDF is on the retired dark palette; this one is light because it exists
-// to be printed and carried outside, and nobody prints a solid black page.
-const c = {
-  paper: "#f5f0e2",
-  kraft: "#e9ddc1",
-  manila: "#efe5cc",
-  ink: "#26221a",
-  soil: "#5a4630",
-  marker: "#e4571f",
-  moss: "#5c6b3c",
-  rust: "#a8442a",
-  slate: "#3f5d6b",
-};
-
-// @react-pdf ships Helvetica, Courier and Times only, and no font files are
-// vendored in this repo. Mapping the site's roles onto the built-ins avoids a
-// font-loading failure mode in a serverless render for a cosmetic gain.
-const DISPLAY = "Helvetica-Bold";
-const MONO = "Courier";
-const MONO_BOLD = "Courier-Bold";
-const BODY = "Times-Roman";
-const BODY_ITALIC = "Times-Italic";
+// The paper field-notebook palette and page frame come from lib/print/paper.
+// The older survival plan PDF is on the retired dark palette; this one is
+// light because it exists to be printed and carried outside, and nobody prints
+// a solid black page.
 
 // LETTER is 612pt wide, less 40pt page padding each side, less the wrapper's
 // 2pt border each side, leaves 528pt. 22 columns of 24pt fills it exactly, so
@@ -33,15 +15,6 @@ const GRID_COLS = 22;
 const GRID_ROWS = 18;
 
 const s = StyleSheet.create({
-  page: { backgroundColor: c.paper, color: c.ink, padding: 40, paddingBottom: 56, fontFamily: BODY, fontSize: 10 },
-
-  header: {
-    flexDirection: "row", justifyContent: "space-between", alignItems: "flex-end",
-    borderBottomWidth: 2, borderBottomColor: c.ink, paddingBottom: 6, marginBottom: 18,
-  },
-  headerLeft: { fontFamily: MONO_BOLD, fontSize: 8, textTransform: "uppercase", letterSpacing: 1 },
-  headerRight: { fontFamily: MONO, fontSize: 7, color: c.soil, textTransform: "uppercase" },
-
   zoneMega: { fontFamily: DISPLAY, fontSize: 68, color: c.ink, letterSpacing: -2 },
   title: { fontFamily: DISPLAY, fontSize: 20, textTransform: "uppercase", marginTop: 4 },
   deck: { fontFamily: BODY_ITALIC, fontSize: 11, color: c.soil, marginTop: 6, lineHeight: 1.4 },
@@ -85,13 +58,6 @@ const s = StyleSheet.create({
   gridWrap: { borderWidth: 2, borderColor: c.ink, marginTop: 8, alignSelf: "flex-start" },
   gridRow: { flexDirection: "row" },
   gridCell: { width: GRID_CELL, height: GRID_CELL, borderWidth: 0.5, borderColor: c.soil },
-
-  footer: {
-    position: "absolute", bottom: 28, left: 40, right: 40,
-    flexDirection: "row", justifyContent: "space-between",
-    borderTopWidth: 1, borderTopColor: c.ink, paddingTop: 5,
-  },
-  footerText: { fontFamily: MONO, fontSize: 6.5, color: c.soil, textTransform: "uppercase", letterSpacing: 0.5 },
 });
 
 function fmt(d: Date): string {
@@ -100,17 +66,9 @@ function fmt(d: Date): string {
 
 function PageFrame({ section, zone, children }: { section: string; zone: string; children: React.ReactNode }) {
   return (
-    <Page size="LETTER" style={s.page}>
-      <View style={s.header}>
-        <Text style={s.headerLeft}>{section}</Text>
-        <Text style={s.headerRight}>Zone {zone} / Homesteader Labs</Text>
-      </View>
+    <PaperFrame left={section} right={`Zone ${zone} / Homesteader Labs`}>
       {children}
-      <View style={s.footer} fixed>
-        <Text style={s.footerText}>homesteaderlabs.com</Text>
-        <Text style={s.footerText} render={({ pageNumber, totalPages }) => `${pageNumber} / ${totalPages}`} />
-      </View>
-    </Page>
+    </PaperFrame>
   );
 }
 
