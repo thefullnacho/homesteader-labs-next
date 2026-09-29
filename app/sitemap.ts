@@ -59,6 +59,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
       ? [{ url: `${SITE_URL}/survival-garden-plan/`, changeFrequency: "monthly" as const, priority: 0.9 }]
       : []),
     { url: `${SITE_URL}/archive/`, changeFrequency: "weekly", priority: 0.7 },
+    // Topic hubs over the archive; see lib/hubs.ts for membership.
+    { url: `${SITE_URL}/foraging/`, changeFrequency: "weekly", priority: 0.8 },
+    { url: `${SITE_URL}/builds/`, changeFrequency: "monthly", priority: 0.6 },
     { url: `${SITE_URL}/data/`, changeFrequency: "monthly", priority: 0.6 },
     // /requisition/ is the cart route — disallowed in robots.ts, so intentionally omitted here.
     { url: `${SITE_URL}/privacy/`, changeFrequency: "yearly", priority: 0.2 },

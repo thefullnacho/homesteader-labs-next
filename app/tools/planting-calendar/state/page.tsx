@@ -4,6 +4,20 @@ import { SectionHead, Stamp } from "@/components/field/kit";
 import JsonLd from "@/components/JsonLd";
 import { SITE_URL, siteRef, breadcrumbList, pageGraph } from "@/lib/schema";
 import { STATE_PAGES, getStatePageData } from "@/lib/tools/planting-calendar/statePages";
+import { isPageZone } from "@/lib/tools/planting-calendar/zonePages";
+
+/* A zone name, linked when the zone has a page. Florida's 11a does not. */
+function ZoneRef({ zone }: { zone: string }) {
+  if (!isPageZone(zone)) return <>{zone}</>;
+  return (
+    <Link
+      href={`/tools/planting-calendar/zone/${zone}/`}
+      className="underline decoration-ink/30 underline-offset-4 hover:text-marker hover:decoration-marker"
+    >
+      {zone}
+    </Link>
+  );
+}
 
 // Same reasoning as everything else under this tool: pure function of the
 // vendored tables, so it prerenders.
@@ -120,7 +134,8 @@ export default function StateIndexPage() {
                         </Link>
                       </td>
                       <td className="py-1.5 pr-3 text-ink/70">
-                        {s.bands[0].zone} to {s.bands[s.bands.length - 1].zone}
+                        <ZoneRef zone={s.bands[0].zone} /> to{" "}
+                        <ZoneRef zone={s.bands[s.bands.length - 1].zone} />
                       </td>
                       <td className="py-1.5 pr-3 text-right text-ink/70">{s.bands.length}</td>
                       <td className="py-1.5 pr-3 text-right text-marker">{s.spreadDays}d</td>
@@ -147,8 +162,21 @@ export default function StateIndexPage() {
           <p className="font-serif text-ink/75 max-w-2xl">
             Because a complete set of thin pages is worth less than a short set of substantial
             ones, and we have already proven that on this site the expensive way. These ten were
-            picked to span the range: Kentucky is effectively a single calendar with an edge case,
-            Texas contains seven genuinely different ones. If the shape holds across all three, the
+            picked to span the range:{" "}
+            <Link
+              href="/tools/planting-calendar/state/kentucky/"
+              className="underline decoration-marker decoration-2 underline-offset-4 hover:text-marker"
+            >
+              Kentucky
+            </Link>{" "}
+            is effectively a single calendar with an edge case,{" "}
+            <Link
+              href="/tools/planting-calendar/state/texas/"
+              className="underline decoration-marker decoration-2 underline-offset-4 hover:text-marker"
+            >
+              Texas
+            </Link>{" "}
+            contains seven genuinely different ones. If the shape holds across all three, the
             rest of the country follows. If it does not, no amount of coverage would have saved it.
           </p>
           <p className="font-serif text-ink/75 mt-4 max-w-2xl">

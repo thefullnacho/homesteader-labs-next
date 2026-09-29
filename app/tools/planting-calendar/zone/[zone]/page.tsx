@@ -10,6 +10,7 @@ import {
   getZonePageData,
   isPageZone,
   FALL_FACTOR_DAYS,
+  zoneMetadata,
   type PageZone,
 } from "@/lib/tools/planting-calendar/zonePages";
 import { statesForZone } from "@/lib/tools/planting-calendar/statePages";
@@ -40,13 +41,8 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
   const { zone } = await props.params;
   if (!isPageZone(zone)) return { title: "Zone not found" };
 
-  const d = getZonePageData(zone as PageZone);
   return {
-    title: `Zone ${zone} Planting Calendar: Frost Dates and Sowing Schedule`,
-    description:
-      `Zone ${zone} frost dates, last spring frost ${fmt(d.lastSpringFrost)} and first fall ` +
-      `frost ${fmt(d.firstFallFrost)}, a ${d.frostFreeDays}-day season. Sowing dates for ` +
-      `${d.rows.length} vegetables, ranked with calories per plant.`,
+    ...zoneMetadata(zone as PageZone),
     alternates: { canonical: `/tools/planting-calendar/zone/${zone}/` },
   };
 }

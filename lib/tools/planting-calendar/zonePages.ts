@@ -187,6 +187,37 @@ function seasonConstraint(frostFreeDays: number, zone: string): SeasonConstraint
 }
 
 /**
+ * A season this long means the normals have collapsed onto the ends of the
+ * calendar year (10a: Jan 5 to Dec 29, 10b: Jan 1 to Dec 31). Quoting those
+ * dates in a search snippet reads like broken data, and 10b sat at position 5
+ * with no clicks on exactly that snippet. 9b, at 352 days with a real January
+ * frost window, keeps the frost-date framing.
+ */
+export const RARE_FROST_SEASON_DAYS = 355;
+
+const fmtMeta = (d: Date) => d.toLocaleDateString("en-US", { month: "long", day: "numeric" });
+
+/** Title and meta description for a zone page. */
+export function zoneMetadata(zone: PageZone): { title: string; description: string } {
+  const d = getZonePageData(zone);
+  if (d.frostFreeDays >= RARE_FROST_SEASON_DAYS) {
+    return {
+      title: `Zone ${zone} Planting Schedule: What to Sow When Frost Is Rare`,
+      description:
+        `Zone ${zone} almost never frosts, so summer heat sets the calendar instead. ` +
+        `When to sow ${d.rows.length} vegetables, why fall is the main season, and calories per plant.`,
+    };
+  }
+  return {
+    title: `Zone ${zone} Planting Calendar: Frost Dates and Sowing Schedule`,
+    description:
+      `Zone ${zone} frost dates, last spring frost ${fmtMeta(d.lastSpringFrost)} and first fall ` +
+      `frost ${fmtMeta(d.firstFallFrost)}, a ${d.frostFreeDays}-day season. Sowing dates for ` +
+      `${d.rows.length} vegetables, ranked with calories per plant.`,
+  };
+}
+
+/**
  * Everything a zone page renders. Pure: same zone in, same page out, so these
  * prerender at build time and never drift between the tool and the page.
  */

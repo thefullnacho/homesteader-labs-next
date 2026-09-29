@@ -5,6 +5,8 @@ import { Stamp } from "@/components/field/kit";
 
 const indexLinks = [
   { href: "/archive/", label: "Field Notes" },
+  { href: "/foraging/", label: "Foraging" },
+  { href: "/builds/", label: "Build Logs" },
   { href: "/shop/", label: "Shop" },
   { href: "/tools/fabrication/", label: "Workshop" },
   { href: "/terms-of-fabrication/", label: "Terms" },

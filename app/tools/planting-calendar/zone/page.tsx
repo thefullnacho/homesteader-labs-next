@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { SectionHead, Stamp } from "@/components/field/kit";
 import { ZONE_PAGES, getZonePageData } from "@/lib/tools/planting-calendar/zonePages";
+import { STATE_PAGES, getStatePageData } from "@/lib/tools/planting-calendar/statePages";
 import JsonLd from "@/components/JsonLd";
 import { SITE_URL, siteRef, breadcrumbList, pageGraph } from "@/lib/schema";
 
@@ -115,6 +116,20 @@ export default function ZoneIndexPage() {
             , which is the easier question if you do not know your zone yet. No state is one
             growing region, so a state page&apos;s job is to show you which of its zones is yours
             and send you back here.
+          </p>
+          <p className="font-mono text-[0.7rem] uppercase tracking-wider text-ink/60 mb-6 max-w-2xl leading-relaxed">
+            By state:{" "}
+            {STATE_PAGES.map((slug, i) => (
+              <span key={slug}>
+                {i > 0 && " · "}
+                <Link
+                  href={`/tools/planting-calendar/state/${slug}/`}
+                  className="underline decoration-ink/30 underline-offset-4 hover:text-marker hover:decoration-marker"
+                >
+                  {getStatePageData(slug).name}
+                </Link>
+              </span>
+            ))}
           </p>
 
           <div className="card-paper grain overflow-hidden">

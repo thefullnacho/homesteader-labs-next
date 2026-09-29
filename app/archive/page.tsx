@@ -121,6 +121,24 @@ export default async function ArchivePage(props: { searchParams: Promise<{ tag?:
           </span>
         </div>
 
+        {/* Topic hubs: the reading-order view of two drawers */}
+        <p className="pt-5 font-mono text-[0.7rem] uppercase tracking-wider text-ink/65">
+          Reading order:{" "}
+          <Link
+            href="/foraging/"
+            className="underline decoration-marker decoration-2 underline-offset-4 hover:text-marker"
+          >
+            Foraging guides
+          </Link>
+          {" · "}
+          <Link
+            href="/builds/"
+            className="underline decoration-marker decoration-2 underline-offset-4 hover:text-marker"
+          >
+            Build logs
+          </Link>
+        </p>
+
         {/* Card wall: browsing surface, tilts allowed */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 pt-8">
           {posts.map((post, i) => (

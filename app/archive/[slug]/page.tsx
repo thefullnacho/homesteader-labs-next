@@ -3,6 +3,10 @@ import { getImageSize } from "@/lib/imageSize";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { PaperClip, SpecBox, Stamp } from "@/components/field/kit";
+import JsonLd from "@/components/JsonLd";
+import SeriesNav from "@/components/archive/SeriesNav";
+import { getForagingSeries, getHubForPost, isForagingSeriesPost } from "@/lib/hubs";
+import { breadcrumbList, pageGraph } from "@/lib/schema";
 
 interface PageProps {
   params: Promise<{
@@ -154,6 +158,16 @@ export default async function ArchivePostPage(props: PageProps) {
   const images = imageObjects(post.content);
   const howTo = howToJsonLd(post);
 
+  // The hub is this note's parent in the breadcrumb, visible and in JSON-LD,
+  // and gets a plain link in the body so every hub note points back at it.
+  const hub = getHubForPost(post);
+  const series = isForagingSeriesPost(post) ? getForagingSeries() : null;
+  const crumbs = [
+    { name: "Field Notes", path: "/archive/" },
+    ...(hub ? [{ name: hub.name, path: hub.path }] : []),
+    { name: post.title, path: `/archive/${slug}/` },
+  ];
+
   return (
     <article>
       {/* Article JSON-LD. The author is a real, named person on every note since
@@ -195,6 +209,8 @@ export default async function ArchivePostPage(props: PageProps) {
         />
       )}
 
+      <JsonLd data={pageGraph(breadcrumbList(crumbs))} />
+
       {/* Note header band */}
       <section className="bg-kraft grain border-b-2 border-ink torn-top relative">
         <div className="max-w-6xl mx-auto px-4 pt-10 pb-12 relative z-[2]">
@@ -203,7 +219,13 @@ export default async function ArchivePostPage(props: PageProps) {
               Field Notes
             </Link>
             <span>/</span>
-            <span className="bg-paper border border-ink/40 px-1.5 py-0.5">{post.category}</span>
+            {hub ? (
+              <Link href={hub.path} className="hover:text-marker underline underline-offset-4">
+                {hub.name}
+              </Link>
+            ) : (
+              <span className="bg-paper border border-ink/40 px-1.5 py-0.5">{post.category}</span>
+            )}
             <span>/</span>
             <span>No. {postNo}</span>
             <span className="ml-auto">
@@ -237,6 +259,25 @@ export default async function ArchivePostPage(props: PageProps) {
         <div className={hasSpecBox ? "grid lg:grid-cols-[1fr_320px] gap-10 items-start" : ""}>
           <div className="relative max-w-2xl">
             <MDXContent />
+
+            {/* A series issue gets prev/next and the whole run, which links the
+                hub itself; every other hub note gets the one-line pointer. */}
+            {series ? (
+              <SeriesNav current={post} series={series} />
+            ) : hub && (
+              <p className="mt-10 font-mono text-[0.72rem] uppercase tracking-wider text-ink/70 no-print">
+                Filed in{" "}
+                <Link
+                  href={hub.path}
+                  className="underline decoration-marker decoration-2 underline-offset-4 hover:text-marker"
+                >
+                  {hub.id === "foraging" ? "the foraging guides" : "the build logs"}
+                </Link>
+                {hub.id === "foraging"
+                  ? ": the berry guide first, then the monthly series."
+                  : ": every build in order, with how each one turned out."}
+              </p>
+            )}
 
             {/* Document footer */}
             <div className="mt-12 border-t-2 border-ink pt-4 flex flex-col sm:flex-row justify-between gap-4 font-mono text-[0.68rem] uppercase tracking-wider text-ink/60">
