@@ -105,10 +105,15 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     // guides rank against image-first result pages. Dimensions come from the
     // file header so the page stops reflowing as photographs load; when they
     // cannot be read the attributes are omitted rather than guessed.
+    //
+    // Block spans, not a div and a p: markdown puts a standalone image inside a
+    // paragraph, and a <p> cannot contain either. The browser's parser splits
+    // the paragraph around them, React hydrates against a different tree, and
+    // the page throws #418. Every note with a photograph did, until 2026-09-29.
     img: ({ src, alt }) => {
       const size = typeof src === 'string' ? getImageSize(src) : null;
       return (
-        <div className="my-6 text-center">
+        <span className="block my-6 text-center">
           <img
             src={src}
             alt={alt}
@@ -117,11 +122,11 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
             className="w-full h-auto border-2 border-ink inline-block"
           />
           {alt && (
-            <p className="text-xs mt-2 text-ink/60 font-mono uppercase tracking-widest">
+            <span className="block text-xs mt-2 text-ink/60 font-mono uppercase tracking-widest">
               {alt}
-            </p>
+            </span>
           )}
-        </div>
+        </span>
       );
     },
     // Self-hosted on purpose. A YouTube embed sets cookies on page load, which the
