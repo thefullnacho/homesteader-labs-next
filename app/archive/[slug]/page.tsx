@@ -1,4 +1,5 @@
-import { getAllSlugs, getPostBySlug, getAllPosts, getPostNo, getReadMinutes, getPostImages } from "@/lib/posts";
+import { getAllSlugs, getPostBySlug, getAllPosts, getPostNo, getReadMinutes, getPostImages, getPostShareImage, type Post } from "@/lib/posts";
+import { getImageSize } from "@/lib/imageSize";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { PaperClip, SpecBox, Stamp } from "@/components/field/kit";
@@ -27,6 +28,15 @@ export async function generateMetadata(props: PageProps) {
     };
   }
 
+  // Setting openGraph here replaces the root layout's whole openGraph object,
+  // site card included, so every note shipped with no og:image and a twitter
+  // card still carrying the homepage title. Both are set explicitly now.
+  const share = getPostShareImage(post.content);
+  const size = share ? getImageSize(share.src) : null;
+  const shareImage = share
+    ? { url: share.src, alt: share.alt || post.title, ...(size ?? {}) }
+    : { url: "/opengraph-image/", width: 1200, height: 630, alt: "Homesteader Labs" };
+
   return {
     title: post.title,
     description: post.description,
@@ -38,6 +48,13 @@ export async function generateMetadata(props: PageProps) {
       modifiedTime: post.updated ?? post.date,
       authors: [post.author],
       tags: post.tags,
+      images: [shareImage],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: post.title,
+      description: post.description,
+      images: [shareImage],
     },
   };
 }
@@ -63,6 +80,43 @@ function imageObjects(content: string) {
     contentUrl: `${SITE_URL}${image.src}`,
     ...(image.alt ? { caption: image.alt } : {}),
   }));
+}
+
+/**
+ * HowTo JSON-LD for the notes whose frontmatter declares one (see parseHowTo).
+ *
+ * Google stopped showing HowTo rich results in 2023, so this is not for a SERP
+ * feature. It is for the other machine readers of the page, agents and answer
+ * engines, which is the audience the /data/ endpoints already court.
+ */
+function howToJsonLd(post: Post) {
+  const howTo = post.howTo;
+  if (!howTo) return null;
+  const share = getPostShareImage(post.content);
+  return {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: howTo.name,
+    description: post.description,
+    ...(share ? { image: `${SITE_URL}${share.src}` } : {}),
+    ...(howTo.estimatedCost
+      ? {
+          estimatedCost: {
+            "@type": "MonetaryAmount",
+            currency: howTo.estimatedCost.currency,
+            value: howTo.estimatedCost.value,
+          },
+        }
+      : {}),
+    ...(howTo.supply ? { supply: howTo.supply.map((name) => ({ "@type": "HowToSupply", name })) } : {}),
+    ...(howTo.tool ? { tool: howTo.tool.map((name) => ({ "@type": "HowToTool", name })) } : {}),
+    step: howTo.steps.map((st, i) => ({
+      "@type": "HowToStep",
+      position: i + 1,
+      name: st.name,
+      text: st.text,
+    })),
+  };
 }
 
 export default async function ArchivePostPage(props: PageProps) {
@@ -98,6 +152,7 @@ export default async function ArchivePostPage(props: PageProps) {
     .slice(0, 2);
 
   const images = imageObjects(post.content);
+  const howTo = howToJsonLd(post);
 
   return (
     <article>
@@ -132,6 +187,13 @@ export default async function ArchivePostPage(props: PageProps) {
           }),
         }}
       />
+
+      {howTo && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(howTo) }}
+        />
+      )}
 
       {/* Note header band */}
       <section className="bg-kraft grain border-b-2 border-ink torn-top relative">

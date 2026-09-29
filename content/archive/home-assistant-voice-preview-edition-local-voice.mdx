@@ -12,6 +12,26 @@ gear: "Voice PE, a Home Assistant box, and honest expectations"
 pairsWith: "Google Assistant Shuts Down September 4, which is why you are here"
 stamp: "Runs in your house"
 excerpt: "Three people say they run a local voice assistant and mean three different things, only two of which are actually local. Here is the difference, what each one costs, and what you give up against the speaker it replaces."
+howTo:
+  name: "How to set up Home Assistant Voice Preview Edition for local voice"
+  estimatedCost:
+    currency: "USD"
+    value: 59
+  supply:
+    - "Home Assistant Voice Preview Edition"
+  tool:
+    - "A machine already running Home Assistant (a Raspberry Pi 4 for Speech-to-Phrase, a faster CPU or a GPU for Whisper)"
+  steps:
+    - name: "Get Home Assistant running first"
+      text: "Home Assistant, already running on something, is the real prerequisite. If you do not have it yet, set that up before the speaker."
+    - name: "Pick your speech-to-text tier"
+      text: "Cloud (Azure via HA Cloud) runs on anything. Local closed (Speech-to-Phrase) is fine on a Raspberry Pi 4. Local open (Whisper plus an optional language model) needs a real CPU or a GPU: Whisper takes roughly eight seconds on a Pi 4 and under one second on an Intel NUC."
+    - name: "Plug it in and onboard it"
+      text: "Power it over USB-C and it appears on your network for onboarding through the Home Assistant app. No soldering, no flashing, no serial console."
+    - name: "Assemble the voice pipeline"
+      text: "In Home Assistant's Voice Assistants settings, choose a wake word, speech to text, conversation agent, and text to speech, each from a dropdown. You can start on cloud and swap to local later without rebuilding anything."
+    - name: "Install the local add-ons"
+      text: "For Speech-to-Phrase, install its add-on and select it. For fully open local voice, install the Whisper and Piper add-ons and point the conversation agent at your local language model, such as an Ollama instance."
 ---
 
 Home Assistant Voice Preview Edition is a small white speaker, 84mm square, that listens for a wake word and does what you tell it. It costs about $59. The interesting part is where the thinking happens, which can be entirely inside your house, on hardware you own, with nothing leaving the building.

@@ -48,6 +48,8 @@ export default function OpengraphImage() {
         >
           <div
             style={{
+              display: "flex",
+              flexDirection: "column",
               fontSize: 84,
               lineHeight: 1.05,
               fontWeight: 700,
@@ -55,8 +57,7 @@ export default function OpengraphImage() {
               letterSpacing: "-0.02em",
             }}
           >
-            Tools for those who build
-            <br />
+            <span>Tools for those who build</span>
             <span style={{ color: "#ff7300" }}>their own world.</span>
           </div>
           <div
@@ -85,12 +86,15 @@ export default function OpengraphImage() {
           <span>homesteaderlabs.com</span>
         </div>
 
-        {/* Corner brackets */}
+        {/* Corner brackets. Per-side *Width keys, not the borderTop shorthand:
+            Satori parses a shorthand as a string, and a bare number made it
+            throw, so this route served a 0-byte PNG and every share card that
+            pointed here showed no image. */}
         {[
-          { top: 24, left: 24, borderTop: 4, borderLeft: 4 },
-          { top: 24, right: 24, borderTop: 4, borderRight: 4 },
-          { bottom: 24, left: 24, borderBottom: 4, borderLeft: 4 },
-          { bottom: 24, right: 24, borderBottom: 4, borderRight: 4 },
+          { top: 24, left: 24, borderTopWidth: 4, borderLeftWidth: 4 },
+          { top: 24, right: 24, borderTopWidth: 4, borderRightWidth: 4 },
+          { bottom: 24, left: 24, borderBottomWidth: 4, borderLeftWidth: 4 },
+          { bottom: 24, right: 24, borderBottomWidth: 4, borderRightWidth: 4 },
         ].map((pos, i) => (
           <div
             key={i}

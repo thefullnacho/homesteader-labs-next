@@ -28,6 +28,45 @@ export interface Post {
   gear?: string;
   pairsWith?: string;
   stamp?: string;
+  /** Step-by-step builds only; rendered as HowTo JSON-LD. See parseHowTo. */
+  howTo?: PostHowTo;
+}
+
+export interface PostHowTo {
+  name: string;
+  estimatedCost?: { currency: string; value: number };
+  supply?: string[];
+  tool?: string[];
+  steps: { name: string; text: string }[];
+}
+
+/**
+ * A note's `howTo` frontmatter, or undefined when it is missing or malformed.
+ *
+ * HowTo markup has to describe steps a reader can see on the page, so it goes
+ * only on notes that are genuinely a sequence of steps (a build, a setup), and
+ * each step restates a section of the prose rather than adding to it. A
+ * narrative build log gets Article only. Malformed blocks are dropped rather
+ * than half-rendered, since a HowTo with an empty step is worse than none.
+ */
+function parseHowTo(raw: unknown): PostHowTo | undefined {
+  if (!raw || typeof raw !== 'object') return undefined;
+  const h = raw as Record<string, unknown>;
+  const steps = Array.isArray(h.steps) ? h.steps : [];
+  const validSteps = steps.filter(
+    (st): st is { name: string; text: string } =>
+      !!st && typeof st.name === 'string' && st.name !== '' && typeof st.text === 'string' && st.text !== ''
+  );
+  if (typeof h.name !== 'string' || validSteps.length < 2 || validSteps.length !== steps.length) {
+    return undefined;
+  }
+  return {
+    name: h.name,
+    estimatedCost: h.estimatedCost as PostHowTo['estimatedCost'],
+    supply: h.supply as string[] | undefined,
+    tool: h.tool as string[] | undefined,
+    steps: validSteps,
+  };
 }
 
 /* Rough read time from word count; shown as "N min" on cards/spec boxes */
@@ -77,6 +116,20 @@ export function getPostImages(content: string): PostImage[] {
   }
 
   return images;
+}
+
+/**
+ * The image a note's share card shows: its first photograph, else the poster
+ * frame of its first video, else undefined and the caller uses the site card.
+ *
+ * A first-party photo beats a generic card in a feed, and the poster is the
+ * only still some build logs have (the drip post is a video with no photos).
+ */
+export function getPostShareImage(content: string): PostImage | undefined {
+  const [first] = getPostImages(content);
+  if (first) return first;
+  const poster = content.match(/<FieldVideo\b[^>]*\bposter="(\/images\/[^"]+)"/);
+  return poster ? { src: poster[1], alt: '' } : undefined;
 }
 
 /* The "Season · Skill · N min" line on archive cards */
@@ -130,6 +183,7 @@ export function getAllPosts(): Post[] {
         gear: data.gear,
         pairsWith: data.pairsWith,
         stamp: data.stamp,
+        howTo: parseHowTo(data.howTo),
       };
     });
 
@@ -178,6 +232,7 @@ export function getPostBySlug(slug: string): Post | null {
       gear: data.gear,
       pairsWith: data.pairsWith,
       stamp: data.stamp,
+      howTo: parseHowTo(data.howTo),
     };
   } catch {
     return null;

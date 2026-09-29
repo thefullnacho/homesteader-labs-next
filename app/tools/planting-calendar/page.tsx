@@ -419,9 +419,10 @@ export default function PlantingCalendarPage() {
           <div className="flex flex-wrap items-end justify-between gap-6">
             <div>
               <h1 className="font-display uppercase text-3xl sm:text-5xl leading-[0.98] text-balance">
-                Two frost dates. Everything else is arithmetic.
+                Planting Calendar by ZIP Code
               </h1>
               <p className="mt-4 text-lg md:text-xl max-w-2xl leading-relaxed text-ink/85 italic">
+                Two frost dates. Everything else is arithmetic.
                 Most calendars say &quot;plant in May.&quot; This one works backward
                 from <em>your</em>{" "}last frost, so every start, transplant, and
                 harvest date is yours, not a seed packet&apos;s average.

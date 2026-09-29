@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { getPostImages, getAllPosts } from './posts';
+import { getPostImages, getAllPosts, getPostBySlug, getPostShareImage } from './posts';
 
 /**
  * getPostImages feeds two things that are hard to eyeball once shipped: the
@@ -80,6 +80,51 @@ describe('against the real archive', () => {
       for (const image of getPostImages(post.content)) {
         expect(image.src.startsWith('/images/'), `${post.slug}: ${image.src}`).toBe(true);
       }
+    }
+  });
+});
+
+describe('getPostShareImage', () => {
+  it('prefers the first photograph', () => {
+    const content = `<FieldVideo src="/videos/a.mp4" poster="/images/poster.jpg" />\n\n![Photo](/images/one.jpg)`;
+    expect(getPostShareImage(content)).toEqual({ src: '/images/one.jpg', alt: 'Photo' });
+  });
+
+  it('falls back to a video poster when the note has no photographs', () => {
+    const content = `<FieldVideo src="/videos/a.mp4" poster="/images/poster.jpg" caption="c" />`;
+    expect(getPostShareImage(content)).toEqual({ src: '/images/poster.jpg', alt: '' });
+  });
+
+  it('returns undefined for a note with neither, so the site card is used', () => {
+    expect(getPostShareImage('Just prose.')).toBeUndefined();
+  });
+});
+
+/**
+ * HowTo markup must describe steps a reader can see. It is declared only on
+ * the notes that are a sequence of steps; the narrative build logs stay on
+ * Article alone.
+ */
+describe('howTo frontmatter', () => {
+  it('parses on the step-by-step notes', () => {
+    expect(getPostBySlug('diy-drip-irrigation-raised-beds')?.howTo?.steps).toHaveLength(7);
+    expect(getPostBySlug('home-assistant-voice-preview-edition-local-voice')?.howTo?.steps).toHaveLength(5);
+  });
+
+  it('is absent from the narrative build logs', () => {
+    expect(getPostBySlug('hestia-house-brain-build-log')?.howTo).toBeUndefined();
+    expect(getPostBySlug('forager-field-station-hackathon')?.howTo).toBeUndefined();
+  });
+
+  it('agrees between getAllPosts and getPostBySlug', () => {
+    for (const post of getAllPosts()) {
+      expect(getPostBySlug(post.slug)?.howTo, post.slug).toEqual(post.howTo);
+    }
+  });
+
+  it('carries no em dashes', () => {
+    for (const post of getAllPosts()) {
+      if (post.howTo) expect(JSON.stringify(post.howTo), post.slug).not.toContain('\u2014');
     }
   });
 });

@@ -1,4 +1,5 @@
 import kbData from '@/content/kb/crops.json';
+import retiredData from '@/content/kb/retired.json';
 
 /**
  * Knowledge Base crop entries.
@@ -41,8 +42,21 @@ export interface KbCrop {
   source: KbSource;
 }
 
+/**
+ * Retired duplicate slugs, mapped to the entry that replaces them.
+ *
+ * OpenFarm kept singular and plural copies of some crops (`pea` and `peas`,
+ * `cherry-tomato` and `cherry-tomatoes`) plus one reversed slug
+ * (`eggplant-black-beauty`). Each pair split its ranking signals between two
+ * pages and earned no clicks on either, so the weaker copy is dropped here and
+ * 301s to the survivor via `next.config.mjs`, which reads the same file.
+ * crops.json itself stays as recovered, so re-running the import cannot bring a
+ * duplicate back.
+ */
+export const KB_RETIRED: ReadonlyMap<string, string> = new Map(Object.entries(retiredData));
+
 const crops: KbCrop[] = (kbData as KbCrop[])
-  .slice()
+  .filter((c) => !KB_RETIRED.has(c.slug))
   .sort((a, b) => a.name.localeCompare(b.name));
 
 const bySlug = new Map(crops.map((c) => [c.slug, c]));
@@ -63,9 +77,11 @@ export function getKbSlugs(): string[] {
 export function getKbCompanions(slug: string): KbCrop[] {
   const crop = bySlug.get(slug);
   if (!crop?.companions) return [];
-  return crop.companions
-    .map((s) => bySlug.get(s))
+  const resolved = crop.companions
+    .map((s) => bySlug.get(KB_RETIRED.get(s) ?? s))
     .filter((c): c is KbCrop => c !== undefined && c.slug !== slug);
+  // A crop listing both halves of a retired pair would otherwise show the survivor twice.
+  return [...new Set(resolved)];
 }
 
 /**
