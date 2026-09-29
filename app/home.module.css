@@ -24,7 +24,14 @@
   font-size: clamp(32px, 3.9vw, 55px);
   line-height: 1.12;
 }
-.headline span { display: block; }
+.slogan {
+  font-family: var(--font-display), sans-serif;
+  font-size: clamp(20px, 1.75vw, 26px);
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  color: var(--soil);
+  margin-top: 14px;
+}
 .lede {
   font-size: clamp(19px, 1.65vw, 23px);
   line-height: 1.45;
@@ -107,6 +114,7 @@
 @media (max-width: 767px) {
   .hero { grid-template-columns: 1fr; padding-top: 28px; gap: 28px; }
   .headline { font-size: clamp(29px, 7.8vw, 50px); }
+  .slogan { font-size: 20px; margin-top: 12px; }
   .lede { margin-top: 18px; font-size: 20px; }
   .actions { gap: 8px 20px; margin-top: 20px; }
   .primary { font-size: 18px; }

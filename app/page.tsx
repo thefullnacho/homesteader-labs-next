@@ -45,10 +45,13 @@ export default function Home() {
       <section className={styles.hero} aria-labelledby="home-heading">
         <div className={styles.intro}>
           <h1 id="home-heading" className={styles.headline}>
+            Off-Grid Planning Tools &amp; Hardware for Homesteaders
+          </h1>
+          <p className={styles.slogan}>
             <span>Grow food.</span>{" "}
             <span>Know your land.</span>{" "}
             <span>Make things work.</span>
-          </h1>
+          </p>
           <p className={styles.lede}>
             Practical tools and field notes from a garden in progress.
             Plan your planting, check the weather, and learn from what happens outside.
