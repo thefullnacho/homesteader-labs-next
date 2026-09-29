@@ -4,7 +4,8 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { PaperClip, SpecBox, Stamp } from "@/components/field/kit";
 import JsonLd from "@/components/JsonLd";
-import { getHubForPost } from "@/lib/hubs";
+import SeriesNav from "@/components/archive/SeriesNav";
+import { getForagingSeries, getHubForPost, isForagingSeriesPost } from "@/lib/hubs";
 import { breadcrumbList, pageGraph } from "@/lib/schema";
 
 interface PageProps {
@@ -160,6 +161,7 @@ export default async function ArchivePostPage(props: PageProps) {
   // The hub is this note's parent in the breadcrumb, visible and in JSON-LD,
   // and gets a plain link in the body so every hub note points back at it.
   const hub = getHubForPost(post);
+  const series = isForagingSeriesPost(post) ? getForagingSeries() : null;
   const crumbs = [
     { name: "Field Notes", path: "/archive/" },
     ...(hub ? [{ name: hub.name, path: hub.path }] : []),
@@ -258,7 +260,11 @@ export default async function ArchivePostPage(props: PageProps) {
           <div className="relative max-w-2xl">
             <MDXContent />
 
-            {hub && (
+            {/* A series issue gets prev/next and the whole run, which links the
+                hub itself; every other hub note gets the one-line pointer. */}
+            {series ? (
+              <SeriesNav current={post} series={series} />
+            ) : hub && (
               <p className="mt-10 font-mono text-[0.72rem] uppercase tracking-wider text-ink/70 no-print">
                 Filed in{" "}
                 <Link
