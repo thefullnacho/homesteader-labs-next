@@ -5,6 +5,8 @@ import {
   isPageZone,
   caloriesPerPlant,
   FALL_FACTOR_DAYS,
+  RARE_FROST_SEASON_DAYS,
+  zoneMetadata,
 } from './zonePages';
 import { getAllCrops } from './cropLoader';
 
@@ -192,5 +194,34 @@ describe('caloriesPerPlant', () => {
 
   it('returns null rather than 0 when yield data is missing', () => {
     expect(caloriesPerPlant({ id: 'x', name: 'X' } as never)).toBeNull();
+  });
+});
+
+describe('zone page title and meta', () => {
+  it('drops the collapsed frost dates from the 10a and 10b snippets', () => {
+    // 10b sat at position 5 with no clicks on "last spring frost January 1 and
+    // first fall frost December 31", which reads like broken data.
+    for (const zone of ['10a', '10b'] as const) {
+      const meta = zoneMetadata(zone);
+      expect(meta.title).toBe(`Zone ${zone} Planting Schedule: What to Sow When Frost Is Rare`);
+      expect(meta.description).not.toMatch(/January|December/);
+      expect(meta.description).toContain('almost never frosts');
+    }
+  });
+
+  it('keeps the frost-date framing wherever the season is shorter', () => {
+    for (const zone of ZONE_PAGES) {
+      if (getZonePageData(zone).frostFreeDays >= RARE_FROST_SEASON_DAYS) continue;
+      const meta = zoneMetadata(zone);
+      expect(meta.title).toBe(`Zone ${zone} Planting Calendar: Frost Dates and Sowing Schedule`);
+      expect(meta.description).toMatch(/^Zone \S+ frost dates, last spring frost [A-Z][a-z]+ \d+/);
+    }
+    expect(zoneMetadata('9b').title).toContain('Frost Dates');
+  });
+
+  it('keeps every description inside a search snippet', () => {
+    for (const zone of ZONE_PAGES) {
+      expect(zoneMetadata(zone).description.length, zone).toBeLessThanOrEqual(175);
+    }
   });
 });
