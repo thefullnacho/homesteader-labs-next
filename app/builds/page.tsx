@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { SectionHead, Stamp } from "@/components/field/kit";
 import JsonLd from "@/components/JsonLd";
+import BuildsSignup from "@/components/archive/BuildsSignup";
 import { getBuildsHub } from "@/lib/hubs";
 import { SITE_URL, siteRef, orgRef, breadcrumbList, pageGraph } from "@/lib/schema";
 
@@ -124,6 +125,8 @@ export default function BuildsHubPage() {
             ))}
           </ol>
         </section>
+
+        <BuildsSignup />
 
         <p className="font-mono text-[0.62rem] uppercase tracking-[0.18em] text-ink/45 pt-16">
           Builds hub · {builds.length} logs · The forager models are open weights, Apache-2.0.

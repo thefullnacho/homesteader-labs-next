@@ -5,6 +5,7 @@ import Link from "next/link";
 import { PaperClip, SpecBox, Stamp } from "@/components/field/kit";
 import JsonLd from "@/components/JsonLd";
 import SeriesNav from "@/components/archive/SeriesNav";
+import BuildsSignup from "@/components/archive/BuildsSignup";
 import { getForagingSeries, getHubForPost, isForagingSeriesPost } from "@/lib/hubs";
 import { breadcrumbList, pageGraph } from "@/lib/schema";
 
@@ -295,6 +296,10 @@ export default async function ArchivePostPage(props: PageProps) {
             <SpecBox className="lg:sticky lg:top-6" rows={specRows} />
           )}
         </div>
+
+        {/* Build logs are where makers land; give them the list, tagged so
+            that side of the audience can be counted on its own. */}
+        {hub?.id === "builds" && <BuildsSignup />}
 
         {/* Filed next to this one: browsing cards, tilts allowed */}
         {related.length > 0 && (

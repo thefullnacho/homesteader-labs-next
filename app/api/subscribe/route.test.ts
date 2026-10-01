@@ -55,6 +55,52 @@ describe('POST /api/subscribe', () => {
     expect(res.status).toBe(500);
   });
 
+  it('returns 502 when Resend resolves with an error instead of throwing', async () => {
+    mockContactsCreate.mockResolvedValueOnce({
+      data: null,
+      error: { name: 'validation_error', message: 'nope' },
+    });
+    const res = await POST(makeRequest({ email: 'valid@example.com', type: 'newsletter' }));
+    expect(res.status).toBe(502);
+  });
+
+  it('tags builds signups with the source property', async () => {
+    mockContactsCreate.mockResolvedValueOnce({ data: { id: 'c1' }, error: null });
+    const res = await POST(makeRequest({ email: 'maker@example.com', type: 'newsletter', source: 'builds' }));
+    expect(res.status).toBe(200);
+    expect(mockContactsCreate).toHaveBeenCalledTimes(1);
+    expect(mockContactsCreate).toHaveBeenCalledWith({
+      email: 'maker@example.com',
+      audienceId: 'test-audience-id',
+      unsubscribed: false,
+      properties: { source: 'builds' },
+    });
+  });
+
+  it('retries untagged when the tagged create fails, keeping the address', async () => {
+    mockContactsCreate
+      .mockResolvedValueOnce({ data: null, error: { name: 'validation_error', message: 'property' } })
+      .mockResolvedValueOnce({ data: { id: 'c2' }, error: null });
+    const res = await POST(makeRequest({ email: 'maker@example.com', type: 'newsletter', source: 'builds' }));
+    expect(res.status).toBe(200);
+    expect(mockContactsCreate).toHaveBeenCalledTimes(2);
+    expect(mockContactsCreate).toHaveBeenLastCalledWith({
+      email: 'maker@example.com',
+      audienceId: 'test-audience-id',
+      unsubscribed: false,
+    });
+  });
+
+  it('does not tag unknown sources', async () => {
+    mockContactsCreate.mockResolvedValueOnce({ data: { id: 'c3' }, error: null });
+    await POST(makeRequest({ email: 'a@example.com', type: 'newsletter', source: 'anything' }));
+    expect(mockContactsCreate).toHaveBeenCalledWith({
+      email: 'a@example.com',
+      audienceId: 'test-audience-id',
+      unsubscribed: false,
+    });
+  });
+
   it('accepts all subscription types', async () => {
     mockContactsCreate.mockResolvedValue({ id: 'contact-123' });
     const types = ['newsletter', 'waitlist', 'planting-reminders', 'roi-unlock', 'companions-unlock', 'weekly', 'emergency'];
