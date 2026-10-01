@@ -40,6 +40,12 @@ myth-test arc: what it catches, gravity drip to the containers, then the pump as
 **Also.** Five security issues in Streaming-Rpi reported privately to its author by email; their
 GitHub private reporting is switched off.
 
+**Later the same evening.** A companion-pet idea (NFC care tokens feeding a cute character on the
+Hestia board, Gardagotchi first) got its own scan, pass 6: desk pet robots and virtual pet DIY are
+hot, plain ESP32 tamagotchis are filling up, and real needs plus printed tokens is the open gap.
+Hit and miss thresholds for the first clip, and what to set up before it ships, are in
+`docs/private/BUILD_LOOP.md`.
+
 **Next concrete action:** merge `build-loop` once Alex says go, then re-subscribe an address that
 is already on the list through `/builds/` on production to settle the Resend duplicate question
 (agent work, after the merge).
