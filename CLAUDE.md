@@ -91,7 +91,7 @@ MDX with gray-matter frontmatter. Required: `title`, `description`, `date`, `aut
 
 ### Affiliate links
 
-Live programmes: **Seeed Studio** (SenseCAP T1000-E), **Baofeng**, and **DripWorks** (`?ref=homesteaderlabs`, any dripworks.com path). Rokland pending.
+Live programmes: **Seeed Studio** (SenseCAP T1000-E), **Baofeng**, and **DripWorks** (`?ref=homesteaderlabs`, any dripworks.com path). **Botanical Interests** via Awin (approved 2026-10-05; tracking param `awinaffid=`; 15% commission, 45-day cookie, 50-day auto-validation, paid about 71 days after; no link placed yet, because no page recommends a seed source). Rokland pending.
 
 **Where they go:** inside content, at the end of a recommendation the article has earned. The
 buying table in `what-is-meshtastic.mdx` is the reference implementation. A gear page ("what we

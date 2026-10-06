@@ -9,7 +9,7 @@ import { getImageSize } from '@/lib/imageSize';
  *
  * Add a marker here when a new affiliate programme goes live.
  */
-const AFFILIATE_MARKERS = ['sensecap_affiliate=', 'ref=homesteaderlabs'];
+const AFFILIATE_MARKERS = ['sensecap_affiliate=', 'ref=homesteaderlabs', 'awinaffid='];
 
 function relFor(href: string | undefined): string | undefined {
   if (!href?.startsWith('http')) return undefined;
