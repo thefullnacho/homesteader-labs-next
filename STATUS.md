@@ -9,6 +9,32 @@ true inside this repo.
 
 ---
 
+## 2026-10-08 - Agent readiness shipped and verified on production
+
+Alex said merge and check production (the Vercel preview sits behind Vercel Authentication, and
+his Vercel login was mid-move to Bitwarden). PR #14 merged as c07dbe7 and deployed. A 38-check
+script against homesteaderlabs.com passed: browser and agent requests alternated twice on five
+URL types, through prerender and cache HIT, with no crossing. Also passing: `.md` URLs, markdown
+404s at three depths, the browser 404 still in HTML, llms files, robots, the three redirects, and
+the API staying JSON under a markdown Accept.
+
+**Rescan: 73/100, up from 62.** It now reads the site as "Docs & content". The stored report
+page still showed the old 62 snapshot afterwards (their save never finished), so the 73 is from
+watching the live run. What it still lists:
+- **Training crawlers blocked:** kept, by decision.
+- **Agent-friendly 404s:** still flagged, although its own documented curl test passes against
+  production. Likely cause: the scanner doesn't follow the trailing-slash 308 (text/plain), or it
+  tests a path with a file extension, which the proxy matcher skips on purpose. Not chased yet.
+- **Organization schema completeness:** wants a contactPoint and a PostalAddress. The address is
+  Alex's decision, since it's a home.
+- **Trust pages:** /about (Alex is writing it), /contact (doesn't exist), and /privacy, each
+  with at least 500 characters.
+
+**Next concrete action:** build /about from Alex's text, then decide on /contact and the schema
+address.
+
+---
+
 ## 2026-10-07 (night) - Agent readiness: markdown pages, a generated llms.txt, guessed paths
 
 Alex found good-css.com, a CSS opinion site packaged as an installable agent skill and scored
