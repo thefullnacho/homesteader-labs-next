@@ -57,6 +57,10 @@ test failed, so August 18 is either a real 15-hour run (about 13.5 inches on the
 would show as flooding or on the water bill) or a glitch. Outside the spike, August has only about
 11 drip-zone entries. That doesn't support "every morning" for August, so the claim rests on July
 alone until Alex sends the entry dates. Everything stays held; nothing published has changed.
+August 18 is probably a timer setting error: past 59 minutes, the B-hyve scroll wheel sometimes
+flips minutes to hours. If a drip-zone number is ever cited, use about 874 minutes with August 18
+excluded and said so. Never publish 1,774. On the teardown row: set Zone 4 to 10 minutes, stop it at
+2, and see whether the log records 2 or 10.
 
 **Next concrete action:** build /about from Alex's text, then decide on /contact and the schema
 address.
