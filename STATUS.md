@@ -52,6 +52,12 @@ runs together while the hub was offline. The test is a gap of about 14 days befo
 checking. Cite the August log only as "mostly 60-minute runs, a few 120". Emitter flow is still
 unsettled: Alex says about 0.65 gph, while the post and its supply list say 0.6.
 
+**Later still:** the purchase order confirms 0.6 GPH, so the post's flow maths stands. The gap
+test failed, so August 18 is either a real 15-hour run (about 13.5 inches on the beds, which
+would show as flooding or on the water bill) or a glitch. Outside the spike, August has only about
+11 drip-zone entries. That doesn't support "every morning" for August, so the claim rests on July
+alone until Alex sends the entry dates. Everything stays held; nothing published has changed.
+
 **Next concrete action:** build /about from Alex's text, then decide on /contact and the schema
 address.
 
