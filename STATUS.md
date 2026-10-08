@@ -33,6 +33,12 @@ the entries below.
 **Wiki:** the B-hyve zone 4 caution was ingested by the ~/me session (hestia page). This session
 added the agent-readiness second move to the site page (b4becc3).
 
+**Found at wrap, fixed and live (7e1231d):** the zone pages rendered "than zone 5ahas left" and "with
+14days added", because SWC drops the space after a JSX expression in some line-wrap shapes, the
+same bug as the inline-tag one from the redesign. The first sentence only shows once a zone's
+season has closed, so it went live with the October rebuild. Fixed with an explicit `{" "}` and
+checked on production.
+
 **Next concrete action:** the drip teardown on the next free morning: time it, photograph it, and
 run the three-way timer test. Then fill the draft's placeholders.
 
