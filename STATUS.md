@@ -9,6 +9,38 @@ true inside this repo.
 
 ---
 
+## 2026-10-07 (later) - Homepage shipped, and the October rollover fixed
+
+Alex approved the preview. `build-loop` and `homepage-logbook` merged to master (908b62a,
+c291818) and deployed; the logbook homepage is live. The rollover bug was then fixed on
+`fix/october-rollover` (353c595), merged as 4abd9fa.
+
+**The bug, as it reached production.** From October, frost lookups and zone normals roll to
+next year's dates so the spring schedule points ahead. Fall deadlines were counted back from
+that frost too. Zone pages are built per deploy, and the last one before today was Sep 29, so
+they were stale but in the right year. The homepage deploy rebuilt them in October, and zone 5a
+went live with "18 crops left", the first being "Sow by Jun 3: Parsnip": next year's date, no
+year shown. Same flaw in three more places: state pages and the zone planner (through
+`fallSowing`), the calendar's LAST CALL verdict (`canStillPlant`), and the resilience checklist's
+first-frost alert, which was silent in exactly the weeks it exists for.
+
+**Fix.** Fall deadlines and last calls count from the first frost of the current year; the spring
+schedule still rolls forward. Zone and state pages now revalidate daily, since "what you can
+still sow" is counted from the render date and went stale between deploys. Two regression tests
+pin the clock to Oct 7 2026, and a Jan 1 test date now parses as local time (UTC midnight is
+Dec 31 in US time zones). 1,176 tests pass, lint at the 19-warning baseline, and the build is
+clean. On the fixed build, 5a reads "Nothing... closed", 7a lists radishes by Oct 12, 9b lists 10
+crops from Oct 10, and North Carolina's bands agree.
+
+**Still open from build-loop:** re-subscribe an address already on the list through `/builds/`
+on production, to see whether Resend errors on duplicates. It needs a real address, so it needs
+Alex's OK on which one.
+
+**Next concrete action:** read Search Console on the homepage and zone pages 28 days after
+deploy (Nov 4).
+
+---
+
 ## 2026-10-07 - The logbook homepage
 
 Alex couldn't land on a homepage, so the problem got named before any layout work. The page
