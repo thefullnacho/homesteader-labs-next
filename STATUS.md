@@ -61,6 +61,11 @@ August 18 is probably a timer setting error: past 59 minutes, the B-hyve scroll 
 flips minutes to hours. If a drip-zone number is ever cited, use about 874 minutes with August 18
 excluded and said so. Never publish 1,774. On the teardown row: set Zone 4 to 10 minutes, stop it at
 2, and see whether the log records 2 or 10.
+A second B-hyve bug: a manual Zone 4 start over WiFi cuts the flow after about 30 seconds, while
+Bluetooth runs the cycle fully. Treat every logged minute as an upper bound on real water until
+the teardown-row test is done (10 minutes, started three ways: wheel, Bluetooth, WiFi). Alex
+agreed both bugs go in the winterizing post as "what broke". Flagged to ~/me for hestia: soil
+readings are meant to drive Zone 4 eventually, and Home Assistant starts zones over WiFi.
 
 **Next concrete action:** build /about from Alex's text, then decide on /contact and the schema
 address.
