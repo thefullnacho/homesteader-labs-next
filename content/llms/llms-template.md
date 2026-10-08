@@ -40,10 +40,7 @@ immutable at the CDN, so they are cheap to poll and fast to read.
   calories a plot can actually carry.
 - [Crop knowledge base](https://homesteaderlabs.com/kb/): 340+ public-domain crop entries.
 
-## Writing
-
-- [Field notes archive](https://homesteaderlabs.com/archive/): first-person build logs and guides,
-  including drip irrigation in raised beds, Meshtastic for property-scale comms, and growing garlic.
+<!-- generated: guides and markdown access go here, see lib/markdown/llms.ts -->
 
 ## Terms
 

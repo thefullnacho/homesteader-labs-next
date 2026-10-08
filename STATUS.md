@@ -9,6 +9,48 @@ true inside this repo.
 
 ---
 
+## 2026-10-07 (night) - Agent readiness: markdown pages, a generated llms.txt, guessed paths
+
+Alex found good-css.com, a CSS opinion site packaged as an installable agent skill and scored
+100/100 by is-agentic.com, Vercel's agent-readiness scanner. Our scan (2026-10-08 02:45 UTC):
+**62/100**. The one critical blocker is Cloudflare returning 403 to the AI training crawlers
+(GPTBot, ClaudeBot, CCBot, Bytespider, Amazonbot). The agents that fetch pages for a person all
+get 200: OAI-SearchBot, ChatGPT-User, Claude-User, Claude-SearchBot, PerplexityBot,
+Perplexity-User. **Alex decided to keep the training block**, so the scanner will keep marking it
+down. On packaging the site as a skill: "That feels inevitable." Direction agreed, not
+scheduled.
+
+**Branch `agent-markdown` (9b33c9f), pushed.** Items 1 to 3 from the scan:
+- **Markdown for every page.** A request that prefers `text/markdown` gets markdown at the page's
+  own URL: `proxy.ts` rewrites it to `app/md`, and its matcher only admits requests whose Accept
+  mentions markdown, so browser traffic never runs it. `/page.md` works too. The renderers in
+  `lib/markdown` work from the same data the pages use. They cover the posts, the hubs, the
+  homepage, the KB, the zone and state pages, and short summaries for the interactive tools.
+  Unknown paths get a markdown 404. 405 pages prerender and revalidate daily.
+- **Link headers** on those pages point to the markdown copy and to llms.txt.
+- **llms.txt** keeps its hand-written prose (`content/llms/llms-template.md`) and generates the
+  guide list from the posts, so the berry guide and the Assistant post are finally listed.
+  `llms-full.txt` holds every guide in one file.
+- **Redirects:** /field-notes, /workshop and /hardware go to the archive, the parts bin and the
+  shop. These are temporary (307) so real pages can take those paths later.
+
+Haiku subagents drafted the zone and state renderers and the KB and stub renderers, and I
+reviewed them. Fixes on review: thin KB entries render (their pages exist, they're just
+noindex); the full description replaces the 300-character meta one; and two claims that tools
+call our endpoints were cut, because I couldn't confirm them. 1,682 tests pass, lint is at the
+19-warning baseline, and the build is clean. I checked all eleven request types against a local
+production server.
+
+**Not done (scanner items 4 and 5, and the skill):** JSON errors for unknown /api paths, an MCP
+server over the three endpoints, and the published Homesteader Labs skill.
+
+**Next concrete action:** verify the Vercel preview, then merge `agent-markdown` on Alex's go.
+After the deploy, rescan with is-agentic.
+
+[non-production] Write the /about page text (morning, peak). Passed to ~/me.
+
+---
+
 ## 2026-10-07 (later) - Homepage shipped, and the October rollover fixed
 
 Alex approved the preview. `build-loop` and `homepage-logbook` merged to master (908b62a,
