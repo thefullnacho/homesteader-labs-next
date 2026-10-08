@@ -7,6 +7,7 @@ import {
   getForagingHub,
   getForagingSeries,
   getHubForPost,
+  getLastMeasured,
   seriesMonth,
 } from './hubs';
 import sitemap from '@/app/sitemap';
@@ -99,6 +100,26 @@ describe('builds hub', () => {
     const buildSlugs = new Set(builds.map((b) => b.post.slug));
     for (const slug of Object.keys(BUILD_OUTCOMES)) {
       expect(buildSlugs.has(slug), `${slug} is in BUILD_OUTCOMES but not a build`).toBe(true);
+    }
+  });
+});
+
+describe('homepage ledger', () => {
+  const measured = getLastMeasured();
+
+  it('fills all four cells from the build logs', () => {
+    expect(measured).toHaveLength(4);
+  });
+
+  it('leads with the newest build', () => {
+    const dates = measured.map((m) => m.post.date);
+    expect(dates).toEqual([...dates].sort().reverse());
+  });
+
+  it('keeps every figure short enough for display type, with no em dashes', () => {
+    for (const m of measured) {
+      expect(m.value.length, m.value).toBeLessThanOrEqual(5);
+      expect(m.what).not.toContain('—');
     }
   });
 });

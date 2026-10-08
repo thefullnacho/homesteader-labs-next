@@ -7,6 +7,7 @@ import { useCart } from "@/app/context/CartContext";
 import Link from "next/link";
 
 const navLinks = [
+  { href: "/builds/", label: "Builds" },
   { href: "/shop/", label: "Shop" },
   { href: "/archive/", label: "Field Notes" },
   { href: "/tools/weather/", label: "Weather" },
@@ -36,7 +37,7 @@ export default function Navigation() {
           </span>
           <span className="sm:hidden font-display uppercase text-xl tracking-tight">HL</span>
           <span className="hidden lg:inline font-mono text-[0.66rem] uppercase tracking-[0.2em] text-ink/60">
-            Field guides &amp; tools
+            The logbook of a half acre
           </span>
         </Link>
 
