@@ -9,6 +9,51 @@ true inside this repo.
 
 ---
 
+## 2026-10-08 (wrap) - Beds broken down, winterizing post drafted, session close
+
+**Shipped this session, all on master and live:** the logbook homepage, the October rollover fix
+for fall-sowing deadlines, and agent-readiness items 1 to 3 (is-agentic 62 to 73). Details are in
+the entries below.
+
+**In flight:**
+- **Winterizing post draft** on `post/winterize-drip` (28c34c5, pushed, not merged). "What broke"
+  holds both timer snags. Step 1 of the teardown is today's work: Alex broke down the beds,
+  chopped and dropped the biomass into them, and did the last cull, about three hours shown in
+  two timelapses (`~/Downloads/Bed-breakdown-timelapse1.MOV` 36 s and `timelapse2.MOV` 21 s,
+  portrait HEVC, no GPS tags; re-encode to H.264 MP4 and strip metadata before publishing). The
+  same footage serves the fall-practices post's chop-and-drop item. The 30-second cutoff
+  paragraph now carries a VERIFY: hestia's own Bluetooth test saw the same stop, so it may be zone
+  4, not WiFi.
+- **The drip line itself is still in.** Today went to the beds.
+- **Agent readiness left over:** the markdown-404 check (still flagged even though its own curl
+  test passes), Organization schema contactPoint and address, /about and /contact, JSON 404s for
+  unknown /api paths, an MCP server, and the published skill.
+- **Parked:** the yard almanac build (bench overloaded); see docs/private/BUILD_LOOP.md.
+
+**Wiki:** the B-hyve zone 4 caution was ingested by the ~/me session (hestia page). This session
+added the agent-readiness second move to the site page (b4becc3).
+
+**Next concrete action:** the drip teardown on the next free morning: time it, photograph it, and
+run the three-way timer test. Then fill the draft's placeholders.
+
+[non-production] Peak, after the teardown: fill the bracketed placeholders in the winterizing
+draft (cull contents, the close-call line, how the cutoff was found, whether the beds showed
+August 18, the schedule-vs-by-hand timer line, next spring, date and category).
+
+[non-production] 12:00 or 15:00: decide on a /contact page, and whether the Organization schema
+gets a postal address (it would be the home address).
+
+[non-production] 12:00 or 15:00, 1 min: name an email address for the /builds/ re-subscribe test
+of Resend's duplicate handling.
+
+[non-production] 12:00 or 15:00, 5 min: in the B-hyve app, list the dates of the August Zone 4
+runs. That decides whether "an hour every morning" needs a correction.
+
+[non-production] 12:00 or 15:00, 5 min: once the Bitwarden import is confirmed, delete
+`~/Downloads/passwords.csv` and move the recovery codes and Proton recovery files offline.
+
+---
+
 ## 2026-10-08 - Agent readiness shipped and verified on production
 
 Alex said merge and check production (the Vercel preview sits behind Vercel Authentication, and
