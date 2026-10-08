@@ -20,8 +20,8 @@ export default function Footer() {
         <div>
           <p className="font-display uppercase text-lg mb-2">Homesteader Labs</p>
           <p className="font-serif text-paper/70 text-[0.95rem] max-w-xs">
-            Field guides and plain-talk tools for people who build their own
-            world. No accounts. No ads.
+            The logbook of a half acre: what was built, what it cost, and what
+            it measured. No accounts. No ads.
           </p>
         </div>
 

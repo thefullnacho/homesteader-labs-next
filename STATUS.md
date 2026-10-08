@@ -9,6 +9,50 @@ true inside this repo.
 
 ---
 
+## 2026-10-07 - The logbook homepage
+
+Alex couldn't land on a homepage, so the problem got named before any layout work. The page
+carried eight different taglines and still described the July tools-first site, not the Sept 30
+build loop. Its H1 was a keyword phrase for a page with about one search impression a month,
+and the hero image was AI-generated (`seedlings_sprouting.png` carries the IPTC
+trainedAlgorithmicMedia tag), the only non-firsthand photo on the site. Three mocks, each
+starting from a different sentence, are in a private artifact
+(https://claude.ai/artifact/8yinzWYbZqa8iEwg1xKXP9). Alex picked **A, The Logbook**. He kept C's
+almanac as a one-line subheading and B's "What can you still plant this week?" as the tool
+section.
+
+**Branch `homepage-logbook` (2113e7b), pushed, not merged. Stacked on `build-loop`** (it uses that
+branch's NewsletterSignup copy props), so build-loop merges first or with it. Hero "One half acre.
+Every build measured." over the compost photo from the mole note. A ledger of measured numbers
+comes from a new `figures` field on BUILD_OUTCOMES, and an "On the bench" list from
+`ON_THE_BENCH` in lib/hubs.ts (hand-kept: delete an entry the day its log ships). The ink planting
+banner's ZIP box anchors the frost dates the calendar reads and opens it already set. The month
+line comes from lib/almanac.ts: October and November filled, other months show nothing, and the
+line corrects itself on hydration if the month turns between deploys. The masthead tag and footer
+now say "the logbook of a half acre", and Builds is in the nav. The `<title>` keeps its search
+wording. This reverses the Sept 29 keyword H1 on purpose.
+
+Verified: 22 hub and almanac tests, tsc, lint at the 19-warning baseline, production build, and a
+Playwright drive at 1366px and 390px. Neither width scrolls sideways, no glued inline tags, and
+the ZIP flow lands on the calendar anchored to 97202. A bad ZIP shows the error.
+
+**Found, not fixed here:** 4 planting tests fail on master code since Oct 1 (zonePages fall
+sowing x2, statePages purity, zonePlanner closed season). `targetYear()` in lib/frostNormals.ts
+rolls zone frost dates to next year from October, and the tests pass fixed 2026 dates. Zone and
+state pages may be showing October visitors next year's fall deadlines. Spun off as its own task.
+This is also why the homepage banner describes the four verdicts instead of computing one.
+
+**Idea:** Alex wants the almanac as a physical, hands-free thing in the yard, not a web page. A
+build-loop candidate, not started.
+
+**Next concrete action:** Alex reviews the Vercel preview of `homepage-logbook`, then merge
+`build-loop` and `homepage-logbook` on his go.
+
+[non-production] Review the homepage preview on phone and desktop (and a second look from your
+wife), then say go on merging `build-loop` and `homepage-logbook`.
+
+---
+
 ## 2026-09-30 - The build loop: makers as the audience, a builds signup, and a silent signup bug
 
 Started as a read of a stranger's repo (Streaming-Rpi, a Pi helmet-cam dashboard) and ended as

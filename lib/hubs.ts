@@ -91,6 +91,19 @@ export interface BuildOutcome {
   line: string;
   /** The live thing the build produced on this site, if there is one. */
   tool?: { href: string; label: string };
+  /**
+   * The measured numbers the homepage ledger shows, biggest claim first. Each
+   * one has to appear in the post itself; a build that measured nothing gets
+   * none rather than a made-up count.
+   */
+  figures?: BuildFigure[];
+}
+
+export interface BuildFigure {
+  /** Short enough to set in display type: "$539", "6×", "40M". */
+  value: string;
+  /** One sentence on what was measured. */
+  what: string;
 }
 
 /**
@@ -112,10 +125,14 @@ export const BUILD_OUTCOMES: Record<string, BuildOutcome> = {
   'forager-field-station-hackathon': {
     status: 'Shipped',
     line: 'Four small models, about 40 million parameters, that name wild food from a photo and refuse when unsure. Open weights.',
+    figures: [
+      { value: '40M', what: 'Parameters across four models that name wild food and refuse when unsure.' },
+    ],
   },
   'build-small-hackathon-results': {
     status: 'Lost',
     line: 'Won nothing. The forager is still live, the models are still open, and refuse-by-default stays the house rule.',
+    figures: [{ value: '0', what: 'Prizes at Build Small. The forager is still live.' }],
   },
   'hestia-house-brain-build-log': {
     status: 'Running',
@@ -124,8 +141,49 @@ export const BUILD_OUTCOMES: Record<string, BuildOutcome> = {
   'diy-drip-irrigation-raised-beds': {
     status: 'Working',
     line: 'Seven beds on one timer zone for $539. They needed an hour every morning, about six times the inch-a-week rule.',
+    figures: [
+      { value: '$539', what: 'Drip for seven raised beds, timer included.' },
+      { value: '6×', what: 'The inch-a-week rule. The beds wanted an hour every morning.' },
+    ],
   },
 };
+
+export interface MeasuredFigure extends BuildFigure {
+  post: Post;
+}
+
+/** The homepage ledger: measured numbers from the newest builds first. */
+export function getLastMeasured(limit = 4): MeasuredFigure[] {
+  return getBuildsHub()
+    .reverse()
+    .flatMap(({ post, outcome }) => (outcome?.figures ?? []).map((f) => ({ ...f, post })))
+    .slice(0, limit);
+}
+
+export interface BenchItem {
+  title: string;
+  /** One word for the stamp: what the build is doing right now. */
+  status: string;
+  /** The test or the number it is chasing, written before the result exists. */
+  line: string;
+}
+
+/**
+ * Builds started but not yet logged. Hand-kept: add one when a build starts,
+ * delete it the day its log ships, and the homepage shows nothing when empty.
+ */
+export const ON_THE_BENCH: BenchItem[] = [
+  {
+    title: 'Greenhouse door board',
+    status: 'Testing',
+    line: 'The test: the first cold night with the heater on, and how long the door can stand open.',
+  },
+  {
+    title: 'Rain barrel, part one',
+    status: 'Measuring',
+    line: 'What a roof actually catches, measured before the hard freeze.',
+  },
+];
 
 /** Every build log, oldest first, with its outcome line. */
 export function getBuildsHub(): BuildEntry[] {
