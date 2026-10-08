@@ -160,14 +160,14 @@ export default async function ZonePage(props: Props) {
           />
           {fall.length === 0 ? (
             <p className="font-serif text-ink/75 max-w-2xl">
-              Nothing. Every cool-season crop in the database now needs more days than zone {zone}
+              Nothing. Every cool-season crop in the database now needs more days than zone {zone}{" "}
               has left before {fmt(d.firstFallFrost)}. That is the honest answer: the sowing season
               has closed here, and the next window opens in spring.
             </p>
           ) : (
             <>
               <p className="font-serif text-ink/75 mb-5 max-w-2xl">
-                Counted back from first frost, with {FALL_FACTOR_DAYS} days added to each crop&apos;s
+                Counted back from first frost, with {FALL_FACTOR_DAYS}{" "}days added to each crop&apos;s
                 maturity because autumn growth is slower than the summer days those figures were
                 measured in. Sow by the date shown or it does not finish.
               </p>
