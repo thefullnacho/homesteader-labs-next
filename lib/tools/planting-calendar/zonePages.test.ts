@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import {
   ZONE_PAGES,
   getZonePageData,
@@ -143,12 +143,30 @@ describe('zones are genuinely distinct, not doorway pages', () => {
 });
 
 describe('fall sowing', () => {
+  it("counts autumn back from this year's frost after the October rollover", () => {
+    // From October getFrostDatesByZone hands back next year's normals, so the
+    // spring schedule points ahead. Fall deadlines must not follow them: on
+    // 2026-10-07 zone 5a listed 18 crops "left" with 2027 dates.
+    vi.useFakeTimers({ toFake: ['Date'] });
+    vi.setSystemTime(new Date(2026, 9, 7));
+    try {
+      const today = new Date(2026, 9, 7);
+      expect(getZonePageData('5a').fallSowing(today)).toHaveLength(0);
+      const warm = getZonePageData('9b').fallSowing(today);
+      expect(warm.length).toBeGreaterThan(0);
+      for (const r of warm) expect(r.sowBy.getFullYear()).toBe(2026);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
   it('derives the deadline as first frost minus maturity plus the fall factor', () => {
     const d = getZonePageData('6b');
-    const cabbage = d.fallSowing(new Date('2026-01-01')).find((r) => r.cropId === 'cabbage');
+    const cabbage = d.fallSowing(new Date(2026, 0, 1)).find((r) => r.cropId === 'cabbage');
     expect(cabbage).toBeDefined();
     expect(cabbage!.adjustedDays).toBe(cabbage!.daysToMaturity + FALL_FACTOR_DAYS);
-    const expected = new Date(d.firstFallFrost);
+    // The 2026 frost, since that is the autumn Jan 1 2026 sits ahead of.
+    const expected = new Date(2026, d.firstFallFrost.getMonth(), d.firstFallFrost.getDate());
     expected.setDate(expected.getDate() - cabbage!.adjustedDays);
     expect(cabbage!.sowBy.toDateString()).toBe(expected.toDateString());
   });
@@ -156,7 +174,7 @@ describe('fall sowing', () => {
   it('excludes warm-season crops whose maturity maths lies', () => {
     // A tomato "finishes" before frost on paper, but fruit set collapses as
     // nights cool. Peppers were leaking through on an id mismatch.
-    const ids = getZonePageData('9b').fallSowing(new Date('2026-01-01')).map((r) => r.cropId);
+    const ids = getZonePageData('9b').fallSowing(new Date(2026, 0, 1)).map((r) => r.cropId);
     for (const warm of ['tomato', 'pepper-bell', 'pepper-hot', 'eggplant', 'corn']) {
       expect(ids).not.toContain(warm);
     }
@@ -173,7 +191,7 @@ describe('fall sowing', () => {
   });
 
   it('orders by deadline so the most urgent sits first', () => {
-    const rows = getZonePageData('6b').fallSowing(new Date('2026-01-01'));
+    const rows = getZonePageData('6b').fallSowing(new Date(2026, 0, 1));
     const times = rows.map((r) => r.sowBy.getTime());
     expect(times).toEqual([...times].sort((a, b) => a - b));
   });

@@ -18,6 +18,9 @@ import { statesForZone } from "@/lib/tools/planting-calendar/statePages";
 // Static at build time: the schedule is a pure function of the zone's frost
 // normals, so there is nothing to compute per request.
 export const dynamic = "force-static";
+// "What you can still sow" is counted from the day the page renders, so a page
+// built once per deploy goes stale between deploys. Re-render it daily.
+export const revalidate = 86400;
 
 export function generateStaticParams() {
   return ZONE_PAGES.map((zone) => ({ zone }));
@@ -153,7 +156,7 @@ export default async function ZonePage(props: Props) {
           <SectionHead
             no="§2"
             title="What you can still sow"
-            right={<span className="font-mono text-[0.64rem]">{fall.length} crops left</span>}
+            right={<span className="font-mono text-[0.64rem]">{fall.length} crop{fall.length === 1 ? "" : "s"} left</span>}
           />
           {fall.length === 0 ? (
             <p className="font-serif text-ink/75 max-w-2xl">

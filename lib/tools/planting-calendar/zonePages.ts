@@ -281,9 +281,14 @@ export function getZonePageData(zone: PageZone): ZonePageData {
       !WARM_SEASON.has(c.id)
   );
 
-  const fallRows: FallSowRow[] = fallCandidates.map((crop) => {
+  // Fall deadlines race the first frost of the year `from` sits in, not the
+  // one getFrostDatesByZone returns. From October that rolls to next year so
+  // the spring schedule points at the coming spring, and counting autumn back
+  // from it reopened every closed season: 5a showed 18 crops "left" on Oct 7,
+  // each with next summer's date and no year printed.
+  const fallRowsFor = (year: number): FallSowRow[] => fallCandidates.map((crop) => {
     const adjustedDays = crop.daysToMaturity + FALL_FACTOR_DAYS;
-    const sowBy = new Date(frost.firstFallFrost);
+    const sowBy = new Date(year, frost.firstFallFrost.getMonth(), frost.firstFallFrost.getDate());
     sowBy.setDate(sowBy.getDate() - adjustedDays);
     return {
       cropId: crop.id,
@@ -304,7 +309,7 @@ export function getZonePageData(zone: PageZone): ZonePageData {
     frostFreeDays: frost.frostFreeDays,
     rows,
     fallSowing: (from = new Date()) =>
-      fallRows
+      fallRowsFor(from.getFullYear())
         .filter((r) => r.sowBy.getTime() >= from.getTime())
         .sort((a, b) => a.sowBy.getTime() - b.sowBy.getTime()),
     constraint: seasonConstraint(frost.frostFreeDays, zone),

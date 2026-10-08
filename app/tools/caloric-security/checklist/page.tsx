@@ -176,9 +176,11 @@ export default function ResilienceChecklist() {
 
   const firstFrostAlert = (() => {
     if (!frostDates) return null;
-    const diff = Math.ceil(
-      (frostDates.firstFallFrost.getTime() - now.getTime()) / 86400000
-    );
+    // This autumn's frost: looked-up dates roll to next year from October, and
+    // measuring against those would silence the alert in the weeks it is for.
+    const ff = frostDates.firstFallFrost;
+    const thisAutumn = new Date(now.getFullYear(), ff.getMonth(), ff.getDate());
+    const diff = Math.ceil((thisAutumn.getTime() - now.getTime()) / 86400000);
     if (diff > 0 && diff <= 21) return { type: 'first' as const, days: diff };
     return null;
   })();

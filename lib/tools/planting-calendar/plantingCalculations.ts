@@ -261,7 +261,11 @@ export function canStillPlant(
   frostDates: FrostDates,
   currentDate: Date = new Date()
 ): { canPlant: boolean; lastChance?: Date; message?: string } {
-  const firstFrost = new Date(frostDates.firstFallFrost);
+  // This season's frost, in the year of currentDate. Looked-up frost dates
+  // roll to next year from October so the spring schedule points ahead, and
+  // measuring against next autumn's frost would hide every door closing now.
+  const nominal = new Date(frostDates.firstFallFrost);
+  const firstFrost = new Date(currentDate.getFullYear(), nominal.getMonth(), nominal.getDate());
   const maturityDays = variety.daysToMaturity || crop.daysToMaturity;
   
   // Calculate latest possible planting date
