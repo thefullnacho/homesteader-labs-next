@@ -30,6 +30,11 @@ watching the live run. What it still lists:
 - **Trust pages:** /about (Alex is writing it), /contact (doesn't exist), and /privacy, each
   with at least 500 characters.
 
+**Decided the same day (relayed by the ~/me session):** the drip line comes out this week, not
+late November, because recent lows were close calls. Alex photographs the teardown for the
+winterizing post. This settles the Oct 31 vs late-November question from 2026-09-30. The Resend
+duplicate re-subscribe test stays on hold until Alex names an address.
+
 **Next concrete action:** build /about from Alex's text, then decide on /contact and the schema
 address.
 
