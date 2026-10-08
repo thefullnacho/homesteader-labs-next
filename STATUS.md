@@ -9,6 +9,67 @@ true inside this repo.
 
 ---
 
+## 2026-09-30 - The build loop: makers as the audience, a builds signup, and a silent signup bug
+
+Started as a read of a stranger's repo (Streaming-Rpi, a Pi helmet-cam dashboard) and ended as
+the direction for the cold season. Homesteader Labs is the record of building and maintaining the
+half acre: **makers are the audience, the garden is the subject.** Every build ships a measured
+number, a clip and a printable part. The loop, the log template, the demand evidence and the
+idea-finding method are in `docs/private/BUILD_LOOP.md` (gitignored).
+
+**Branch `build-loop` (6b3f8d1), pushed, not merged.** `/builds/` and every build-log post now end
+in the newsletter signup with builder copy, and those signups carry the Resend contact property
+`source = builds`, so the maker side of the list can be counted on its own. `/api/subscribe` had
+the silent-failure bug from the zone planner work: a try/catch around a call that resolves
+`{ data, error }`, so every form except the zone planner told people "you're on the list" when
+Resend had rejected them. It now reads `.error` (502), retries untagged if the tagged create
+fails, and the form says "couldn't add you just now" instead of blaming the email. Verified with 4
+new route tests (1,168 pass), the production build, and 12 Playwright checks with the subscribe
+call intercepted so no test contact reached Resend. **Not verified:** whether Resend errors on an
+address already on the list; if it does, those people now see the retry message.
+
+**Demand research.** Four YouTube scans (passes 3 to 5, plus Alex's pass 2) and a free
+autocomplete grid, `~/Downloads/build_demand_grid.py`. Rainwater is the biggest lane, container
+watering is big and open, greenhouse electronics is a small pond, and bird-feeder cams are crowded
+(31 of 37 top results uploaded this year, median 206 views). The rain barrel became a three-leg
+myth-test arc: what it catches, gravity drip to the containers, then the pump as the fix.
+
+**Cross-repo.** Test 1 of the loop is a greenhouse door board in hestia (branch
+`greenhouse-door`). Wiki updated.
+
+**Also.** Five security issues in Streaming-Rpi reported privately to its author by email; their
+GitHub private reporting is switched off.
+
+**Later the same evening.** A companion-pet idea (NFC care tokens feeding a cute character on the
+Hestia board, Gardagotchi first) got its own scan, pass 6: desk pet robots and virtual pet DIY are
+hot, plain ESP32 tamagotchis are filling up, and real needs plus printed tokens is the open gap.
+Hit and miss thresholds for the first clip, and what to set up before it ships, are in
+`docs/private/BUILD_LOOP.md`.
+
+**Next concrete action:** merge `build-loop` once Alex says go, then re-subscribe an address that
+is already on the list through `/builds/` on production to settle the Resend duplicate question
+(agent work, after the merge).
+
+[non-production] Say go on merging `build-loop` to master (and `greenhouse-door` in hestia).
+
+[non-production] Morning: build and mount the greenhouse door board. First cold night with the
+heater on: the 10-minute door test, then tell Claude within 10 days.
+
+[non-production] Morning: rain barrel measurements (roof footprint, barrel size, bucket
+calibration, inlet screen), before the hard freeze.
+
+[non-production] Paste the NUMBER lines from `docs/private/BUILD_LOOP.md` into the build log.
+
+[non-production] Before filming the Gardagotchi reaction shot, ask her parents about her face in
+a public clip.
+
+[non-production] Pick the drip teardown date: the build log says Oct 31, the queue row says late
+November.
+
+[non-production] From 2026-10-02: check email for the Streaming-Rpi author's reply.
+
+---
+
 ## 2026-09-29 - SEO batch 2: foraging and builds hubs, series nav, page-2 push
 
 Built on batch 1 (www redirect, berry CTR rescue, KB dedup, og:image), which merged earlier the
