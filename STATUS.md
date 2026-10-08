@@ -66,6 +66,12 @@ Bluetooth runs the cycle fully. Treat every logged minute as an upper bound on r
 the teardown-row test is done (10 minutes, started three ways: wheel, Bluetooth, WiFi). Alex
 agreed both bugs go in the winterizing post as "what broke". Flagged to ~/me for hestia: soil
 readings are meant to drive Zone 4 eventually, and Home Assistant starts zones over WiFi.
+**Winterizing post drafted** on branch `post/winterize-drip` (154a29f, pushed, not merged), as
+Alex asked: "What broke" carries both timer snags in full. Everything else is a bold-bracket
+placeholder: teardown steps and photos, the three-way log test, the held water number, next
+spring, the publish date and the category. Committed before Alex edits so he can diff his pass.
+Open question for him: the published drip post says "I run a schedule based timer", but this
+week's account is that he starts every run by hand.
 
 **Next concrete action:** build /about from Alex's text, then decide on /contact and the schema
 address.
