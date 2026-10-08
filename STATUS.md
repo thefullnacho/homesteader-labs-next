@@ -35,6 +35,15 @@ late November, because recent lows were close calls. Alex photographs the teardo
 winterizing post. This settles the Oct 31 vs late-November question from 2026-09-30. The Resend
 duplicate re-subscribe test stays on hold until Alex names an address.
 
+**Found in the B-hyve run log (relayed by ~/me): the drip post's "an hour every morning" is
+probably wrong.** Alex ran Zone 4 for two hours (the August 9 entry is 120 min), and August 18
+shows a ~900-minute anomaly he hasn't explained yet. The claim, and the "six times the inch-a-week
+rule" figure computed from one-hour runs, appear in four places: the drip post body, its HowTo
+step (structured data), the homepage "Last measured" 6× cell, and the /builds/ outcome line
+(`lib/hubs.ts`). The corrected wording is Alex's call. Fix all four in one change with an
+`updated` date. Zone 4 minutes stay unpublished until August 18 is settled. Details are in
+docs/private/BUILD_LOOP.md.
+
 **Next concrete action:** build /about from Alex's text, then decide on /contact and the schema
 address.
 
