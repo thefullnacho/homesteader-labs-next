@@ -196,7 +196,7 @@ export default async function StatePage(props: Props) {
           <SectionHead no="§2" title="Find your zone" />
           <p className="font-serif text-ink/75 mb-5 max-w-2xl">
             This is the only input that matters. It resolves against the USDA 2023 map rather than
-            asking you to read a colour off a picture, and it sends you to that zone&apos;s full
+            asking you to read a color off a picture, and it sends you to that zone&apos;s full
             schedule.
           </p>
           <StateZipResolver stateName={d.name} pageZones={ZONE_PAGES} fallCounts={fallCounts} />
