@@ -44,6 +44,14 @@ step (structured data), the homepage "Last measured" 6× cell, and the /builds/ 
 `updated` date. Zone 4 minutes stay unpublished until August 18 is settled. Details are in
 docs/private/BUILD_LOOP.md.
 
+**Superseded the same day: the claim most likely holds, and nothing published changes.** Alex
+paged through the log: mostly 60-minute runs, a few at 120. That matches the post's "an hour
+every morning, and a second hour on the hottest days". July, the month the post describes, isn't
+logged. August 18 (about 900 min in one session, roughly 15 one-hour runs) may be the app lumping
+runs together while the hub was offline. The test is a gap of about 14 days before it, and Alex is
+checking. Cite the August log only as "mostly 60-minute runs, a few 120". Emitter flow is still
+unsettled: Alex says about 0.65 gph, while the post and its supply list say 0.6.
+
 **Next concrete action:** build /about from Alex's text, then decide on /contact and the schema
 address.
 
