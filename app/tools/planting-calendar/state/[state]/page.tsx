@@ -16,6 +16,9 @@ import { stateBySlug } from "@/lib/tools/planting-calendar/stateTable";
 // Static at build time, same reasoning as the zone route: everything on the
 // page is a pure function of two vendored tables.
 export const dynamic = "force-static";
+// "What you can still sow" is counted from the day the page renders, so a page
+// built once per deploy goes stale between deploys. Re-render it daily.
+export const revalidate = 86400;
 
 export function generateStaticParams() {
   return STATE_PAGES.map((state) => ({ state }));

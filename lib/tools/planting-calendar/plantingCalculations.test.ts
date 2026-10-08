@@ -138,6 +138,20 @@ describe('plantingCalculations', () => {
       expect(result.canPlant).toBe(true);
       expect(result.message).toContain('Last chance!');
     });
+
+    it("measures against this autumn's frost when the looked-up dates have rolled to next year", () => {
+      // lookupFrostDates returns next year's dates from October on, so the
+      // spring schedule points ahead. A door closing this season must still show.
+      const rolled: FrostDates = {
+        ...mockFrostDates,
+        lastSpringFrost: new Date('2025-05-01T12:00:00Z'),
+        firstFallFrost: new Date('2025-10-15T12:00:00Z'),
+      };
+      const result = canStillPlant(mockCrop, mockVariety, rolled, new Date('2024-07-10T12:00:00Z'));
+      expect(result.canPlant).toBe(true);
+      expect(result.lastChance?.getFullYear()).toBe(2024);
+      expect(result.message).toContain('Last chance!');
+    });
   });
 });
 
