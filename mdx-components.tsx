@@ -46,8 +46,9 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
         {children}
       </ul>
     ),
-    ol: ({ children }) => (
-      <ol className="list-decimal list-outside pl-5 mb-4 space-y-2 text-ink/90">
+    // Pass `start` through: a numbered list split by a video or photo resumes at its own number.
+    ol: ({ children, start }) => (
+      <ol start={start} className="list-decimal list-outside pl-5 mb-4 space-y-2 text-ink/90">
         {children}
       </ol>
     ),

@@ -1,0 +1,86 @@
+---
+title: "How to Winterize Drip Irrigation in Raised Beds, and the Two Timer Bugs That Snagged Me"
+description: "Taking down a raised-bed drip system before the first hard freeze: flushing the line, what comes inside, blowing it out with a compressor, and the two B-hyve XD timer bugs that snagged me all season."
+date: "2026-10-09"
+author: "Alex de Brantes"
+tags: ["drip-irrigation", "raised-beds", "winterizing", "watering", "automation"]
+category: "growing"
+season: "Before the first hard freeze. Mine came out in early October because the lows got too close."
+skill: "Beginner. A compressor and a hose-thread adapter make the blow-out easy."
+region: "Anywhere the ground freezes."
+gear: "An air compressor you can turn down below 40 PSI, a hose-thread adapter for it, and somewhere dry for the timer, filter and regulator."
+pairsWith: "DIY Drip Irrigation for Raised Beds, the build this takes apart"
+stamp: "Two timer bugs"
+excerpt: "The drip line came out early because the lows got too close. Here is the teardown, and the two B-hyve XD timer bugs that snagged me all season: a scroll wheel that flips to hours, and a zone that quits a few seconds into a run."
+---
+
+The drip line came out in early October instead of late November. We dropped to 36 one night. My frost alerts didn't go off, but the morning was cold enough that I panicked, and I stopped trying to push the season as close to the frost date as I could.
+
+This is the teardown for [the system I built in June](/archive/diy-drip-irrigation-raised-beds/): seven raised beds on one zone of a B-hyve XD hose timer, about 140 feet of emitter line. The check valves that kept that line full all summer are the reason it has to come out. They hold water in it all winter too, and water that freezes in a fitting splits it.
+
+## Taking it down
+
+1. Clear the beds first. On October 8 that meant breaking down all the biomass, chopping it and dropping it back into the beds, and doing the last culling harvest. That took the whole day the line was supposed to come out: about three hours of work.
+
+   The cull: 15 tomato plants, 3 cucumber vines, 2 summer squash, 2 zucchini, 3 bell peppers, 3 jalapeños, 3 banana peppers, 2 red chilis and 3 basil. Left in the beds: two sweet potato vines and a spaghetti squash. One of each pepper variety got a second chance instead of the compost: roots trimmed, stems cut back, all into one planter in the greenhouse for the winter. It's my first time trying to overwinter peppers.
+
+<FieldVideo src="/videos/winterize-drip-bed-breakdown.mp4" poster="/images/winterize-drip-bed-breakdown-poster.jpg" caption="October 8: about three hours of bed breakdown in under a minute" />
+
+2. Flush the lines. Every end cap off, and water run until it came out clear in every bed. It took about five minutes.
+
+<FieldVideo src="/videos/winterize-drip-flush.mp4" poster="/images/winterize-drip-flush-poster.jpg" caption="End caps off, then clear water at six of the seven beds. I forgot to film one" />
+
+3. Pull the timer, the filter and the pressure regulator off the spigot and bring them inside.
+
+![The head of the drip line before the teardown: a Y filter, then a 30 PSI pressure regulator, screwed onto the timer's port above the white tubing adapter. Both come inside for the winter with the timer.](/images/winterize-drip-filter-regulator.jpg)
+
+4. Blow the line out with the compressor. I couldn't get a seal between the compressor and the tubing, so I held it on by hand for a few minutes. The pressure never built past about 10 PSI and fell off fast, but air came out the far end of every bed, and that's the test. With every end open the air leaves as fast as it goes in, and it takes the shortest way out, so the bed farthest from the spigot is the one to check.
+
+   Next year I'll use a hose-thread adapter instead of my hand, and that changes one thing. With a real seal the line can build pressure, so set the compressor's regulator below 40 PSI before you connect it. The fittings are rated to about 50. My hand leaked enough that it didn't matter this time.
+5. Pull the line and coil it. The coils spend the winter in the basement.
+
+<FieldVideo src="/videos/winterize-drip-pulling-line.mp4" poster="/images/winterize-drip-pulling-line-poster.jpg" caption="Sixteen minutes of pulling and coiling in 32 seconds" />
+
+6. Take the batteries out of the timer before it goes on a shelf.
+
+The teardown took about 40 minutes, from the first end cap to the batteries. Before it, I spent a few minutes trying to make the timer misbehave.
+
+## What broke
+
+Two things snagged me all season, and both of them are the timer.
+
+**The scroll wheel flips to hours.** The XD sets run time with a scroll wheel. Roll it past 59 minutes and it sometimes stops counting minutes and starts counting hours. Read the display before you walk away from it.
+
+**Zone 4 quits a few seconds in.** The app's Zone 4 history has ten runs between August 11 and September 23 that lasted 6 to 18 seconds. None of them were me stopping it: every one was set to run longer. Most come in bursts, one to three short runs and then a long one a few minutes later that held, on August 11 and September 7, 10 and 23. That's me starting it, watching it stop, and starting it again until it took.
+
+![The B-hyve app's Zone 4 history for September 7 and 8. On the 7th, runs of 18, 16, 10 and 9 seconds, then a 59-minute run at 2:40 PM that held. On the 8th, a 59-minute morning run, a 12-second run, and two 10-second runs that came from my own Bluetooth script. Every entry reads 0.0 gallons.](/images/winterize-drip-zone-4-short-runs.png)
+
+The log has two blind spots that matter here. It doesn't record how a run was started, and it can't tell a run that quit from one I stopped by hand.
+
+On September 8 my own Bluetooth script started Zone 4 twice: 10 seconds, then 60. The app logged both as 10 seconds, and the script read the zone as idle by 31 seconds into the 60. Five minutes later the same script ran Zone 3 for the full minute. So Zone 4 cut out when started over Bluetooth too, which takes WiFi off the suspect list.
+
+On teardown day I tried to make it happen: from the wheel at the manifold, from the app over Bluetooth, and from the app over WiFi, each left running about a minute. None of them cut out. The log's first run that day is 10 seconds, and that one was me: I went to water the new transplants on Zone 3 and started Zone 4 by mistake. The log can't tell a mistake from a fault either.
+
+Zone 3 is the control. Same timer, same batteries, a sprinkler I moved around the yard and restarted all morning. From August 29 to September 12, Zone 3 logged one short run in about 36 starts. Zone 4 logged seven in 14. Whatever this is, it lives on Zone 4.
+
+The batteries had been in since spring and read 1.25 volts each when they came out, so most of their charge was gone. Both zones share them, so tired batteries alone don't explain why only Zone 4 quits. Tired batteries plus a valve that takes more to open would.
+
+The plan from the build was to let the soil sensors drive Zone 4 on their own. A fault that comes and goes is the worst kind for that, because no test can clear it. The sensors can catch it, though: a real run moves the moisture reading, and a 10-second one doesn't.
+
+## What the season used
+
+From August 9 to September 24, the app logged about 1,000 minutes on Zone 4, a little under 17 hours, mostly as one-hour morning runs. Every entry reads 0.0 gallons, because there's no flow meter behind it, so minutes are all I've got.
+
+That total leaves one entry out. On August 18 at 5:17 PM, the log has Zone 4 running for 14 hours, 36 minutes. The next evening Zone 3 has one just like it: 5:37 PM, 13 hours, 20 minutes. Both are about as long as my usual 13 or 14 minute sprinkler run, counted in hours, which is what the scroll wheel bug would do.
+
+![The B-hyve app's Zone 3 history. On August 19 at 5:37 PM, a run logged at 13 hours, 20 minutes and 26 seconds. The next morning, August 20, ordinary 13 and 14 minute runs start at 5:44, 6:12, 6:27, 7:00, 7:22, 7:38 and 7:57 AM.](/images/winterize-drip-zone-3-overlap.png)
+
+Zone 3's can't be right as logged. Thirteen hours from 5:37 PM runs to about 7 the next morning, and the log has three ordinary Zone 3 runs starting at 5:44, 6:12 and 6:27, inside that window. One valve can't do both. Nothing overlaps the Zone 4 entry, so the log can't settle that one either way. If it really ran, that's about 1,200 gallons on seven beds, around 13 inches of water. I've left it out of the total.
+
+## Next spring
+
+This season the drip went in after the beds were already growing, so I fed line between established plants and made it work. Next spring the line goes in first, with runs exactly one foot apart. The emitters sit every 12 inches, so that's one emitter per square, and the lines double as the grid for a square foot layout.
+
+Before any of it waters on its own: fresh batteries, and the bed line moved off port 4, to see whether the short runs follow the valve.
+
+Anyone else running a B-hyve XD had one zone quit a few seconds into a run?
