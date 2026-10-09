@@ -9,37 +9,42 @@ true inside this repo.
 
 ---
 
-## 2026-10-09 - Greenhouse door board weatherproofed and powered
+## 2026-10-09 - Greenhouse door board weatherproofed, powered and measured for a box
 
 Build loop test 1 moved off the breadboard. The reed switch leads are soldered to jumpers (so the
-ESP32 stays swappable), heat-shrunk and run through cable glands; the probe connects by
-heat-shrunk jumpers at both ends. A cold joint was caught in a photo and reflowed. Powered on
-after the heatshrink: door and temperature both read in HA. Bench notes, the photo list and the
-open gland question are in `docs/private/BUILD_LOOP.md`; photos and a 20 s prep timelapse are in
-`~/Downloads/greenhouse-door-2026-10-09/`.
+ESP32 stays swappable), heat-shrunk and run through PG7 cable glands, reversed the same day so
+the sealing cap sits on the reed side; the probe connects by heat-shrunk jumpers at both ends. A
+cold joint was caught in a photo and reflowed. Powered on after the heatshrink: door and
+temperature both read in HA. Photos and a 20 s prep timelapse are in
+`~/Downloads/greenhouse-door-2026-10-09/`; bench notes and the photo list in
+`docs/private/BUILD_LOOP.md`.
 
-**Found:** the HA offline alert in hestia's README only triggers on `unavailable`. A probe that
-drops off a running board shows `unknown`, so a failed probe jumper would go unnoticed. The reed
-side fails safe: a broken lead reads as "open" and pages. A hestia session was offered to fix
-the README (trigger on both states).
+**The box will be printed** and is the build's printable part: OpenSCAD in hestia's `hardware/`
+beside the NFC stake, PETG. Calipers (SHARS) bought and used the same afternoon; the measurement
+table is in the build log. Placement settled: the board's probe takes the front third by the
+door. The heater's own thermostat probe already sits among the plants but is not in HA, so the
+door test logs the front third only; the box keeps a spare gland hole for a second DS18B20 on
+the same bus.
 
-**Next concrete action:** mount the board. After that the work is hands and waiting: the first
-cold night with the heater on runs the 10-minute door test, and the HA history has to be exported
-within 10 days of it.
+**Found:**
+- The HA offline alert in hestia's README only triggers on `unavailable`. A probe that drops off a
+  running board shows `unknown`, so a failed probe jumper would go unnoticed. The reed side fails
+  safe: a broken lead reads as "open" and pages. A hestia session is fixing the README.
+- The reed leads (2.63 mm with heatshrink) are too thin for the PG7 seal to grip (about 3 to 6.5).
+- The USB-C plug cannot pass a PG7, so power gets a slot and clamp.
+
+**Next concrete action:** draft the box model from the measurements (hestia session). Then
+print, mount, and wait for the first cold night with the heater on for the 10-minute door test;
+export the HA history within 10 days of it.
 
 [non-production] 12:00 or 15:00, 2 min: in HA, change the "Greenhouse board offline" trigger to
 `to: ["unavailable", "unknown"]`, then pull the probe's data jumper on the bench to watch it fire.
 
-[non-production] Peak: mount the greenhouse door board. Glands reversed the same day (cap on the
-reed side). No box yet: decide where the probe hangs first (plant height, away from door and
-heater), then a box within cable reach, glands on the sides or bottom, a drain hole at the low
-point, four entries (two reed leads, probe, power).
+[non-production] Peak, 5 min: build the reed leads up to about 4 mm where each gland's seal
+sits (tape wraps, or another layer of heatshrink), then tug test.
 
-The box will be printed: the enclosure is the build's printable part, OpenSCAD in hestia's
-`hardware/` beside the NFC stake. SHARS calipers bought.
-
-[non-production] Peak, when the calipers arrive, ~20 min: the seven measurements listed under
-"Enclosure measurements" in `docs/private/BUILD_LOOP.md`, then paste them to Claude.
+[non-production] Peak: print the box, then mount the board in the front third, entries pointing
+down, a drip loop on every cable.
 
 ## 2026-10-08 (wrap) - Beds broken down, winterizing post drafted, session close
 
