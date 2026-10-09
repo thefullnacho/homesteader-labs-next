@@ -9,6 +9,30 @@ true inside this repo.
 
 ---
 
+## 2026-10-09 - Greenhouse door board weatherproofed and powered
+
+Build loop test 1 moved off the breadboard. The reed switch leads are soldered to jumpers (so the
+ESP32 stays swappable), heat-shrunk and run through cable glands; the probe connects by
+heat-shrunk jumpers at both ends. A cold joint was caught in a photo and reflowed. Powered on
+after the heatshrink: door and temperature both read in HA. Bench notes, the photo list and the
+open gland question are in `docs/private/BUILD_LOOP.md`; photos and a 20 s prep timelapse are in
+`~/Downloads/greenhouse-door-2026-10-09/`.
+
+**Found:** the HA offline alert in hestia's README only triggers on `unavailable`. A probe that
+drops off a running board shows `unknown`, so a failed probe jumper would go unnoticed. The reed
+side fails safe: a broken lead reads as "open" and pages. A hestia session was offered to fix
+the README (trigger on both states).
+
+**Next concrete action:** mount the board. After that the work is hands and waiting: the first
+cold night with the heater on runs the 10-minute door test, and the HA history has to be exported
+within 10 days of it.
+
+[non-production] 12:00 or 15:00, 2 min: in HA, change the "Greenhouse board offline" trigger to
+`to: ["unavailable", "unknown"]`, then pull the probe's data jumper on the bench to watch it fire.
+
+[non-production] Peak: mount the greenhouse door board. Before it goes up, tug each gland's wire
+and check which end faces outside (the cap seals, the threaded end is open).
+
 ## 2026-10-08 (wrap) - Beds broken down, winterizing post drafted, session close
 
 **Shipped this session, all on master and live:** the logbook homepage, the October rollover fix
