@@ -39,8 +39,12 @@ bed cleared was settled later: air reached every bed. About 40 minutes from firs
 batteries out, by clip timestamps; the line was pulled and coiled. The three-way timer test ran
 each start path about a minute without a cutoff, but the Zone 4 history screenshots show nine runs
 of 6 to 18 s between Sept 7 and 23, mostly in bursts before a long run, plus hestia's own 60 s
-Bluetooth run logged as 10 s, so the cutoff is not WiFi. Open: batteries (same set since spring),
-zone 3's history as the control, and whether today's 2:47 PM 10 s run stopped itself. Draft post
+Bluetooth run logged as 10 s, so the cutoff is not WiFi. Zone 3's history settled where it lives:
+Aug 29 to Sep 12, one short run in about 36 zone 3 starts against seven in 14 on zone 4. Batteries
+read 1.25 V after a season. Today's 2:47 PM 10 s run was a wrong-zone start while watering the
+transplants. Zone 3 also logs a 13 h 20 min run on Aug 19 that overlaps its own next-morning
+runs, so the Orbit log can hold phantom long runs; Zone 4's Aug 18 needs the same overlap check.
+A Bonfire peach went into the ground and was mulched (photos 14:35 to 14:54, same folder). Draft post
 updated on `post/winterize-drip` (now 0e867e0); wiki hestia page corrected (9121391). Pepper varieties
 cut back and potted to overwinter in the greenhouse, a first. Photos and clips are coming over
 Tailscale.
