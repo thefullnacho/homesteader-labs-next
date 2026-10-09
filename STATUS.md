@@ -49,14 +49,21 @@ updated on `post/winterize-drip` (now 0e867e0); wiki hestia page corrected (9121
 cut back and potted to overwinter in the greenhouse, a first. Photos and clips are coming over
 Tailscale.
 
-**Winterizing post is review-ready** on `post/winterize-drip` (644e6ef): every placeholder resolved,
-three videos and three images in, category growing, dated 2026-10-09. Alex: "publish it as soon as I
-review". Preview (Vercel login): https://homesteader-labs-next-97s6u3ph2-alexandre-de-brantes-projects.vercel.app/archive/winterize-drip-irrigation-raised-beds/
-The branch also fixes `ol` in mdx-components to pass `start` through. On publish: merge to master,
-re-date if not today, and link the June drip post's closing line ("I will document that clean
-out...") to the new post.
+**Winterizing post PUBLISHED** (Alex: "Looks good across the board"): merged as 48a27ca, live at
+https://homesteaderlabs.com/archive/winterize-drip-irrigation-raised-beds/ and verified on
+production (200, videos and images load, list numbering resumes, in the sitemap). The June drip
+post's closing promise now links to it (f6ecb5f). The merge also brought the `ol` start fix in
+mdx-components. Category growing, dated 2026-10-09.
 
-**Next concrete action:** Alex reviews the preview; on his go, merge and verify it live. Then
+**Next concrete action:** none on the post until the water bill is in. Then add a gallons line
+(this season's quarter against last year's, when there was no system) and settle August 18 if the
+utility shows daily reads.
+
+[non-production] 12:00 or 15:00, 2 min: Search Console, request indexing for the winterizing post.
+
+[non-production] 12:00 or 15:00, 10 min: find the water bill. Two numbers: this summer's quarter
+against the same quarter last year, and whether the utility's online account shows daily or
+hourly use (that alone would settle August 18 and 19). Send both to Claude. Then
 print, mount, and wait for the first cold night with the heater on for the 10-minute door test;
 export the HA history within 10 days of it.
 
