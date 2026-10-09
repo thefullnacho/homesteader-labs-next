@@ -30,8 +30,10 @@ within 10 days of it.
 [non-production] 12:00 or 15:00, 2 min: in HA, change the "Greenhouse board offline" trigger to
 `to: ["unavailable", "unknown"]`, then pull the probe's data jumper on the bench to watch it fire.
 
-[non-production] Peak: mount the greenhouse door board. Before it goes up, tug each gland's wire
-and check which end faces outside (the cap seals, the threaded end is open).
+[non-production] Peak: mount the greenhouse door board. Glands reversed the same day (cap on the
+reed side). No box yet: decide where the probe hangs first (plant height, away from door and
+heater), then a box within cable reach, glands on the sides or bottom, a drain hole at the low
+point, four entries (two reed leads, probe, power).
 
 ## 2026-10-08 (wrap) - Beds broken down, winterizing post drafted, session close
 
