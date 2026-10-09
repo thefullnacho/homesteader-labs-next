@@ -49,7 +49,14 @@ updated on `post/winterize-drip` (now 0e867e0); wiki hestia page corrected (9121
 cut back and potted to overwinter in the greenhouse, a first. Photos and clips are coming over
 Tailscale.
 
-**Next concrete action:** fill the draft from the teardown photos once they land; the box model is being drawn in a hestia session. Then
+**Winterizing post is review-ready** on `post/winterize-drip` (644e6ef): every placeholder resolved,
+three videos and three images in, category growing, dated 2026-10-09. Alex: "publish it as soon as I
+review". Preview (Vercel login): https://homesteader-labs-next-97s6u3ph2-alexandre-de-brantes-projects.vercel.app/archive/winterize-drip-irrigation-raised-beds/
+The branch also fixes `ol` in mdx-components to pass `start` through. On publish: merge to master,
+re-date if not today, and link the June drip post's closing line ("I will document that clean
+out...") to the new post.
+
+**Next concrete action:** Alex reviews the preview; on his go, merge and verify it live. Then
 print, mount, and wait for the first cold night with the heater on for the 10-minute door test;
 export the HA history within 10 days of it.
 
