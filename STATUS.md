@@ -35,9 +35,13 @@ the same bus.
 
 **Drip teardown done (afternoon).** Lines flushed clear in every bed (filmed); timer, filter and
 regulator inside; blow-out held on by hand, about 10 PSI falling to near zero, so whether every
-bed cleared is open. The three-way timer test did not reproduce the 30-second cutoff on any start
-path; the log shows two earlier WiFi days with 20 to 40 second runs, logged as short. Draft post
-updated on `post/winterize-drip` (8bd4397); wiki hestia page updated (450d3dd). Pepper varieties
+bed cleared was settled later: air reached every bed. About 40 minutes from first end cap to
+batteries out, by clip timestamps; the line was pulled and coiled. The three-way timer test ran
+each start path about a minute without a cutoff, but the Zone 4 history screenshots show nine runs
+of 6 to 18 s between Sept 7 and 23, mostly in bursts before a long run, plus hestia's own 60 s
+Bluetooth run logged as 10 s, so the cutoff is not WiFi. Open: batteries (same set since spring),
+zone 3's history as the control, and whether today's 2:47 PM 10 s run stopped itself. Draft post
+updated on `post/winterize-drip` (now 0e867e0); wiki hestia page corrected (9121391). Pepper varieties
 cut back and potted to overwinter in the greenhouse, a first. Photos and clips are coming over
 Tailscale.
 
