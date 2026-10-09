@@ -11,7 +11,7 @@ region: "Anywhere the ground freezes."
 gear: "An air compressor you can turn down below 40 PSI, and somewhere dry for the timer, filter and regulator."
 pairsWith: "DIY Drip Irrigation for Raised Beds, the build this takes apart"
 stamp: "Two timer bugs"
-excerpt: "The drip line came out early because the lows got too close. Here is the teardown, and the two B-hyve XD timer bugs that snagged me all season: a scroll wheel that flips to hours, and WiFi starts that quit after 30 seconds."
+excerpt: "The drip line came out early because the lows got too close. Here is the teardown, and the two B-hyve XD timer bugs that snagged me all season: a scroll wheel that flips to hours, and runs that quit after about 30 seconds twice, then never once when I tried to make them."
 ---
 
 **[DRAFT, NOT FOR PUBLISHING. Everything in bold brackets is for Alex: teardown steps and photos after this week's teardown, the water-use number after the August 18 question and the log test, the publish date (frontmatter says Oct 12 as a placeholder), and the category (`growing` for now; `build-log` puts it on /builds/ and needs an outcome line).]**
@@ -24,10 +24,12 @@ This is the teardown for [the system I built in June](/archive/diy-drip-irrigati
 
 **[STEPS FROM THE TEARDOWN, WITH PHOTOS. This is the order planned in the build post. Confirm it against what you actually did.]**
 
-1. Clear the beds first. On October 8 that meant breaking down all the biomass, chopping it and dropping it back into the beds, and doing the last culling harvest. That took the whole day the line was supposed to come out: about three hours of work, which the timelapse squeezes into under a minute. **[TIMELAPSES: ~/Downloads/Bed-breakdown-timelapse1.MOV (36 s) and timelapse2.MOV (21 s), portrait, shot around 12:40 and 13:55. Before publishing: re-encode to H.264 MP4 with metadata stripped and pick a poster frame. ALEX: what came out in the cull.]**
-2. Flush the lines.
+1. Clear the beds first. On October 8 that meant breaking down all the biomass, chopping it and dropping it back into the beds, and doing the last culling harvest. That took the whole day the line was supposed to come out: about three hours of work, which the timelapse squeezes into under a minute. **[TIMELAPSES: ~/Downloads/Bed-breakdown-timelapse1.MOV (36 s) and timelapse2.MOV (21 s), portrait, shot around 12:40 and 13:55. Before publishing: re-encode to H.264 MP4 with metadata stripped and pick a poster frame.]**
+
+   The cull: 15 tomato plants, 3 cucumber vines, 2 summer squash, 2 zucchini, 3 bell peppers, 3 jalapeños, 3 banana peppers, 2 red chilis and 3 basil. Left in the beds: two sweet potato vines and a spaghetti squash. One of each pepper variety got a second chance instead of the compost: roots trimmed, stems cut back, all into one planter in the greenhouse for the winter. It's my first time trying to overwinter peppers.
+2. Flush the lines. Every end cap off, and water run until it came out clear in every bed. **[CLIPS: clear water at each bed, from the 2026-10-09 Tailscale batch.]**
 3. Pull the timer, the filter and the pressure regulator off the spigot and bring them inside.
-4. Blow the line out with the compressor, under 40 PSI.
+4. Blow the line out with the compressor, under 40 PSI. I couldn't get a seal between the compressor and the tubing, so I held it on by hand for a few minutes. The gauge got to about 10 PSI and fell to near zero. **[ALEX: did air reach the far end of every bed? With seven ends open, air takes the shortest way out, so the far beds get the least. If any bed only dribbled: a hose-thread adapter for the compressor, every end closed but one, and a second pass a bed at a time before the hard freeze. That fix is worth a line here either way. PHOTOS: the gauge.]**
 5. **[What happens to the line itself: left in the beds, or pulled and coiled?]**
 
 **[Teardown time: ___ minutes. The build log's NUMBER line asks for it.]**
@@ -38,18 +40,22 @@ Two things snagged me all season, and both of them are the timer.
 
 **The scroll wheel flips to hours.** The XD sets run time with a scroll wheel. Roll it past 59 minutes and it sometimes stops counting minutes and starts counting hours. On August 18 the app logged Zone 4, the raised beds, at nearly 900 minutes. That is fifteen hours, and the likeliest explanation is that wheel. **[ALEX: did the beds show it, or did you catch it? One line.]** Read the display before you walk away from it.
 
-**WiFi starts quit after 30 seconds.** Start Zone 4 from the app over WiFi and the manifold shuts the water off after about 30 seconds. Start it from close by over Bluetooth and it runs the whole cycle. **[ALEX: how you found it, and whether the app shows the run as stopped or as a full run.]** **[VERIFY BEFORE PUBLISHING: hestia's own Bluetooth test on 2026-09-08 also saw a stop at about 30 seconds on one zone, so the cutoff may be zone 4 itself, not WiFi. The three-way test settles which, and this paragraph changes if it is the zone. See the hestia page in the Forager wiki.]**
+**Some runs quit after about 30 seconds.** I found it in the app's watering log: two days, **[DATES]**, where a Zone 4 run started from the app over WiFi shut off after 20 to 40 seconds. The log recorded them as short runs, so at least the log was honest.
 
-The plan from the build was to let the soil sensors drive Zone 4 on their own, and anything driving it remotely goes over WiFi. Until I know which starts actually run, an automated watering is a guess.
+On teardown day I tried to make it happen again. I started Zone 4 from the wheel at the manifold, from the app over Bluetooth, and from the app over WiFi, and let each run about a minute. All three ran clean.
 
-**[LOG TEST RESULT: Zone 4 set to 10 minutes and started three ways (wheel, Bluetooth, WiFi). Real flow time against what the log says, for each. This decides whether the app logs what ran or what was set.]**
+My first guess was the network. But my own Bluetooth script, which never touches the WiFi, read one zone as idle about 30 seconds into a 60-second test on September 8. That was a status reading, not water I watched stop, so it proves little, but it makes WiFi a weaker suspect. **[VERIFY: that the September 8 early idle was zone 4. hestia's deploy/BHYVE.md says "one zone" without naming it.]**
+
+The plan from the build was to let the soil sensors drive Zone 4 on their own. A fault that showed up twice in a season and never on demand is the worst kind for that, because no test can clear it. The sensors can catch it, though: a real run moves the moisture reading, and a 30-second one doesn't.
+
+**[LOG TEST, 2026-10-09: wheel, Bluetooth and WiFi starts each ran about a minute with no cutoff; the planned 10-minute version was not run. "The log records what ran" rests on the two short runs it logged as short.]**
 
 ## What the season used
 
-**[HELD until the test above and the August 18 question are settled. Publish Zone 4 as about 874 minutes, August through early October, with August 18 excluded and the reason given. Minutes, not gallons. If the other zones appear, keep metered and estimated separate.]**
+**[HELD until August 18 is settled. The two short runs were logged as short, which suggests the log records what actually ran. If it does, August 18 may have been real water: fifteen hours at the zone's 84 GPH is about 1,260 gallons, and the beds would have shown it. If they did, that number belongs in the scroll wheel paragraph. Otherwise publish Zone 4 as about 874 minutes, August through early October, with August 18 excluded and the reason given. Minutes, not gallons. If the other zones appear, keep metered and estimated separate.]**
 
 ## Next spring
 
-**[ALEX: what changes. Candidates from the build post and this season: more line in the round beds, starting runs from the wheel or over Bluetooth only, and the sensors driving Zone 4 only after the start-method test passes.]**
+**[ALEX: what changes. Candidates from the build post and this season: more line in the round beds, starting runs from the wheel or over Bluetooth only, and the soil sensors as the check on every automated run, since a start method can no longer be cleared by testing it.]**
 
-Anyone else running a B-hyve XD seen the WiFi cutoff?
+Anyone else running a B-hyve XD had a run quit at 30 seconds?
