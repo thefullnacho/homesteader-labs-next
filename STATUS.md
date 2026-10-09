@@ -35,6 +35,12 @@ reed side). No box yet: decide where the probe hangs first (plant height, away f
 heater), then a box within cable reach, glands on the sides or bottom, a drain hole at the low
 point, four entries (two reed leads, probe, power).
 
+The box will be printed: the enclosure is the build's printable part, OpenSCAD in hestia's
+`hardware/` beside the NFC stake. SHARS calipers bought.
+
+[non-production] Peak, when the calipers arrive, ~20 min: the seven measurements listed under
+"Enclosure measurements" in `docs/private/BUILD_LOOP.md`, then paste them to Claude.
+
 ## 2026-10-08 (wrap) - Beds broken down, winterizing post drafted, session close
 
 **Shipped this session, all on master and live:** the logbook homepage, the October rollover fix
