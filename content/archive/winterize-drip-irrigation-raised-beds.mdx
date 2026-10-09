@@ -11,7 +11,7 @@ region: "Anywhere the ground freezes."
 gear: "An air compressor you can turn down below 40 PSI, and somewhere dry for the timer, filter and regulator."
 pairsWith: "DIY Drip Irrigation for Raised Beds, the build this takes apart"
 stamp: "Two timer bugs"
-excerpt: "The drip line came out early because the lows got too close. Here is the teardown, and the two B-hyve XD timer bugs that snagged me all season: a scroll wheel that flips to hours, and runs that quit after about 30 seconds twice, then never once when I tried to make them."
+excerpt: "The drip line came out early because the lows got too close. Here is the teardown, and the two B-hyve XD timer bugs that snagged me all season: a scroll wheel that flips to hours, and Zone 4 runs that sometimes quit a few seconds in, for reasons the log can't tell me."
 ---
 
 **[DRAFT, NOT FOR PUBLISHING. Everything in bold brackets is for Alex: teardown steps and photos after this week's teardown, the water-use number after the August 18 question and the log test, the publish date (frontmatter says Oct 12 as a placeholder), and the category (`growing` for now; `build-log` puts it on /builds/ and needs an outcome line).]**
@@ -27,12 +27,13 @@ This is the teardown for [the system I built in June](/archive/diy-drip-irrigati
 1. Clear the beds first. On October 8 that meant breaking down all the biomass, chopping it and dropping it back into the beds, and doing the last culling harvest. That took the whole day the line was supposed to come out: about three hours of work, which the timelapse squeezes into under a minute. **[TIMELAPSES: ~/Downloads/Bed-breakdown-timelapse1.MOV (36 s) and timelapse2.MOV (21 s), portrait, shot around 12:40 and 13:55. Before publishing: re-encode to H.264 MP4 with metadata stripped and pick a poster frame.]**
 
    The cull: 15 tomato plants, 3 cucumber vines, 2 summer squash, 2 zucchini, 3 bell peppers, 3 jalapeños, 3 banana peppers, 2 red chilis and 3 basil. Left in the beds: two sweet potato vines and a spaghetti squash. One of each pepper variety got a second chance instead of the compost: roots trimmed, stems cut back, all into one planter in the greenhouse for the winter. It's my first time trying to overwinter peppers.
-2. Flush the lines. Every end cap off, and water run until it came out clear in every bed. **[CLIPS: clear water at each bed, from the 2026-10-09 Tailscale batch.]**
+2. Flush the lines. Every end cap off, and water run until it came out clear in every bed. It took about five minutes. **[CLIPS: ~/Downloads/drip-teardown-2026-10-09/, End-cap-disconnect (15:11) and Bed-1 to Bed-6-clear (15:14 to 15:16). Six clips for seven beds: is one round bed on another's run, or is a clip missing?]**
 3. Pull the timer, the filter and the pressure regulator off the spigot and bring them inside.
-4. Blow the line out with the compressor, under 40 PSI. I couldn't get a seal between the compressor and the tubing, so I held it on by hand for a few minutes. The gauge got to about 10 PSI and fell to near zero. It was enough: air came out the far end of every bed. Low pressure is normal with every end open, since the air leaves as fast as it goes in. What matters is that it reaches the bed farthest from the spigot, because air takes the shortest way out. Next year I'll use a hose-thread adapter for the compressor instead of my hand. **[PHOTOS: the gauge.]**
-5. **[What happens to the line itself: left in the beds, or pulled and coiled?]**
+4. Blow the line out with the compressor, under 40 PSI. I couldn't get a seal between the compressor and the tubing, so I held it on by hand for a few minutes. The gauge got to about 10 PSI and fell to near zero. It was enough: air came out the far end of every bed. Low pressure is normal with every end open, since the air leaves as fast as it goes in. What matters is that it reaches the bed farthest from the spigot, because air takes the shortest way out. Next year I'll use a hose-thread adapter for the compressor instead of my hand. **[CHECK BEFORE USING THE PHOTO: in Blow-out.HEIC (15:25) both compressor gauges read about 150 PSI. If one is the regulated output, the regulator was never turned down, and the leaky hand seal is what kept the line at about 10. The photo cannot sit under "under 40 PSI", and with a sealed adapter next year, turning the regulator down while air flows becomes the step that matters.]**
+5. Pull the line and coil it. **[TIMELAPSE: Pulling-line-timelapse.MOV, 15:31 to about 15:47, 16 minutes in 32 s, landscape. ALEX: where the coils spend the winter.]**
+6. Batteries out of the timer before it goes on a shelf. **[CLIP: Manifold-battery-removal.MOV, 15:49.]**
 
-**[Teardown time: ___ minutes. The build log's NUMBER line asks for it.]**
+**[Teardown time: about 40 minutes, from the first end cap at 15:11 to the batteries at about 15:50, by the clip timestamps. The timer test before it took another 17 (14:47 to 15:04 in the log).]**
 
 ## What broke
 
@@ -40,22 +41,24 @@ Two things snagged me all season, and both of them are the timer.
 
 **The scroll wheel flips to hours.** The XD sets run time with a scroll wheel. Roll it past 59 minutes and it sometimes stops counting minutes and starts counting hours. On August 18 the app logged Zone 4, the raised beds, at nearly 900 minutes. That is fifteen hours, and the likeliest explanation is that wheel. **[ALEX: did the beds show it, or did you catch it? One line.]** Read the display before you walk away from it.
 
-**Some runs quit after about 30 seconds.** I found it in the app's watering log: between September 8 and 10, Zone 4 runs started from the app over WiFi shut off after 20 to 40 seconds. The log recorded them as short runs, so at least the log was honest.
+**Some Zone 4 runs quit a few seconds in.** The app's Zone 4 history has nine runs between September 7 and 23 that lasted 6 to 18 seconds. Most of them come in bursts: two or three short runs, then a long one a few minutes later that held, on September 7, 10 and 23. That's the shape of me starting it, watching it stop, and starting it again until it took. **[ALEX: confirm. Do you remember these stopping on their own, or stopping some yourself, say while fighting the wheel to land on 59 minutes?]**
 
-On teardown day I tried to make it happen again. I started Zone 4 from the wheel at the manifold, from the app over Bluetooth, and from the app over WiFi, and let each run about a minute. All three ran clean.
+The log has two blind spots that matter here. It doesn't record how a run was started, and it can't tell a run that quit from one I stopped by hand.
 
-My first guess was the network. But on September 8, inside the same three days, my own Bluetooth script started Zone 4 for 60 seconds and read it as idle at 31 seconds. Five minutes later the same script ran Zone 3 for the full minute. Bluetooth never touches the WiFi, so the common thread is Zone 4 in those three days, not how the run was started. The script's reading was a status, not water I watched stop, so it is a clue, not proof. **[BATTERIES: if the AAs that came out today are the September set, meter them. If they read low, or were swapped around September 10, that is the likeliest answer, and this paragraph gets it.]**
+On September 8 my own Bluetooth script started Zone 4 twice: 10 seconds, then 60. The app logged both as 10 seconds, and the script read the zone as idle by 31 seconds into the 60. Five minutes later the same script ran Zone 3 for the full minute. So Zone 4 cut out when started over Bluetooth too, which takes WiFi off the suspect list.
 
-The plan from the build was to let the soil sensors drive Zone 4 on their own. A fault that showed up twice in a season and never on demand is the worst kind for that, because no test can clear it. The sensors can catch it, though: a real run moves the moisture reading, and a 30-second one doesn't.
+On teardown day I tried to make it happen: from the wheel at the manifold, from the app over Bluetooth, and from the app over WiFi, each left running about a minute. **[ALEX: the log's first run that day, 2:47 PM, is 10 seconds. Did you stop it, or did it stop itself? If it stopped itself, the fault showed up again on the first start of the day.]** **[CONTROL: Zone 3's history for the same weeks. Short bursts there too means the timer; none means Zone 4's own valve.]** **[BATTERIES: same set since spring; meter reading pending.]**
 
-**[LOG TEST, 2026-10-09: wheel, Bluetooth and WiFi starts each ran about a minute with no cutoff; the planned 10-minute version was not run. "The log records what ran" rests on the two short runs it logged as short.]**
+The plan from the build was to let the soil sensors drive Zone 4 on their own. A fault that comes and goes is the worst kind for that, because no test can clear it. The sensors can catch it, though: a real run moves the moisture reading, and a 10-second one doesn't.
+
+**[LOG TEST, 2026-10-09: logged runs 2:47 PM 10 s, 2:58 PM 1 min 1 s, 3:01 PM 46 s, 3:02 PM 2 min 8 s. Screenshots: WiFi-water-log.PNG and Wifi-water-log-2.PNG. Every run logs 0.0 gal, so there is no flow meter behind it.]**
 
 ## What the season used
 
-**[HELD until August 18 is settled. The two short runs were logged as short, which suggests the log records what actually ran. If it does, August 18 may have been real water: fifteen hours at the zone's 84 GPH is about 1,260 gallons, and the beds would have shown it. If they did, that number belongs in the scroll wheel paragraph. Otherwise publish Zone 4 as about 874 minutes, August through early October, with August 18 excluded and the reason given. Minutes, not gallons. If the other zones appear, keep metered and estimated separate.]**
+**[HELD until August 18 is settled. Short runs are logged as short, so the log records at least when a run ended. If it does that faithfully, August 18 may have been real water: fifteen hours at the zone's 84 GPH is about 1,260 gallons, and the beds would have shown it. If they did, that number belongs in the scroll wheel paragraph. Otherwise publish Zone 4 as about 874 minutes, August through early October, with August 18 excluded and the reason given. Minutes, not gallons. If the other zones appear, keep metered and estimated separate.]**
 
 ## Next spring
 
 **[ALEX: what changes. Candidates from the build post and this season: more line in the round beds, starting runs from the wheel or over Bluetooth only, and the soil sensors as the check on every automated run, since a start method can no longer be cleared by testing it.]**
 
-Anyone else running a B-hyve XD had a run quit at 30 seconds?
+Anyone else running a B-hyve XD had one zone quit a few seconds into a run?
