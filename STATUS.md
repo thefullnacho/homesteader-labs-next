@@ -62,6 +62,21 @@ sits (tape wraps, or another layer of heatshrink), then tug test.
 [non-production] Peak: print the box, then mount the board in the front third, entries pointing
 down, a drip loop on every cable.
 
+The draft now carries Alex's close call (36 °F one night, no frost alert, teardown pulled
+forward) and next spring (lines laid first, one foot apart, one emitter per square for square
+foot gardening, plus an in-ground zone out front). hestia's frost alert fires on a forecast low
+<= 36 °F, so the yard ran colder than the forecast; a hestia session was offered to find the night
+and propose a margin.
+
+[non-production] Before the next cold night: set up the greenhouse heater (50 °F). The peppers are
+in there and the door board is not mounted yet, so nothing is watching it.
+
+[non-production] Before the first frost: dig the sweet potatoes (cold soil hurts them well above
+freezing), then a warm, humid week to cure.
+
+[non-production] 12:00 or 15:00, 2 min: B-hyve app, Zone 4 history around Aug 15 to 21, screenshot.
+It settles August 18 by the overlap check, the last thing holding the season-minutes number.
+
 ## 2026-10-08 (wrap) - Beds broken down, winterizing post drafted, session close
 
 **Shipped this session, all on master and live:** the logbook homepage, the October rollover fix
