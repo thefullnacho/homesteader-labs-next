@@ -47,7 +47,11 @@ The log has two blind spots that matter here. It doesn't record how a run was st
 
 On September 8 my own Bluetooth script started Zone 4 twice: 10 seconds, then 60. The app logged both as 10 seconds, and the script read the zone as idle by 31 seconds into the 60. Five minutes later the same script ran Zone 3 for the full minute. So Zone 4 cut out when started over Bluetooth too, which takes WiFi off the suspect list.
 
-On teardown day I tried to make it happen: from the wheel at the manifold, from the app over Bluetooth, and from the app over WiFi, each left running about a minute. **[ALEX: the log's first run that day, 2:47 PM, is 10 seconds. Did you stop it, or did it stop itself? If it stopped itself, the fault showed up again on the first start of the day.]** **[CONTROL: Zone 3's history for the same weeks. Short bursts there too means the timer; none means Zone 4's own valve.]** **[BATTERIES: same set since spring; meter reading pending.]**
+On teardown day I tried to make it happen: from the wheel at the manifold, from the app over Bluetooth, and from the app over WiFi, each left running about a minute. None of them cut out. The log's first run that day is 10 seconds, and that one was me: I went to water the new transplants on Zone 3 and started Zone 4 by mistake. The log can't tell a mistake from a fault either.
+
+Zone 3 is the control. Same timer, same batteries, a sprinkler I moved around the yard and restarted from the app all morning. From August 29 to September 12, Zone 3 logged one short run in about 36 starts. Zone 4 logged seven in 14. Whatever this is, it lives on Zone 4.
+
+The batteries had been in since spring and read 1.25 volts each when they came out, so most of their charge was gone. Both zones share them, so tired batteries alone don't explain why only Zone 4 quits. Tired batteries plus a valve that takes more to open would. **[VERIFY: 1.25 V per cell, not across the pair.]**
 
 The plan from the build was to let the soil sensors drive Zone 4 on their own. A fault that comes and goes is the worst kind for that, because no test can clear it. The sensors can catch it, though: a real run moves the moisture reading, and a 10-second one doesn't.
 
@@ -55,10 +59,12 @@ The plan from the build was to let the soil sensors drive Zone 4 on their own. A
 
 ## What the season used
 
+**[ZONE 3 HAS THE SAME KIND OF ENTRY: August 19, 5:37 PM, 13 hours 20 minutes 26 seconds. That would run until about 6:57 the next morning, but the log has three ordinary Zone 3 runs starting at 5:44, 6:12 and 6:27 that morning. One valve can't run twice at once, so the 13-hour entry isn't water: the log timed it until it noticed the run had ended. Run the same overlap check on Zone 4 around August 18 (screenshot needed). If it overlaps, August 18 is a phantom and drops out with the reason given.]**
+
 **[HELD until August 18 is settled. Short runs are logged as short, so the log records at least when a run ended. If it does that faithfully, August 18 may have been real water: fifteen hours at the zone's 84 GPH is about 1,260 gallons, and the beds would have shown it. If they did, that number belongs in the scroll wheel paragraph. Otherwise publish Zone 4 as about 874 minutes, August through early October, with August 18 excluded and the reason given. Minutes, not gallons. If the other zones appear, keep metered and estimated separate.]**
 
 ## Next spring
 
-**[ALEX: what changes. Candidates from the build post and this season: more line in the round beds, starting runs from the wheel or over Bluetooth only, and the soil sensors as the check on every automated run, since a start method can no longer be cleared by testing it.]**
+**[ALEX: what changes. Candidates from the build post and this season: more line in the round beds, starting runs from the wheel or over Bluetooth only, and the soil sensors as the check on every automated run, since a start method can no longer be cleared by testing it. The spring test that settles Zone 4: fresh batteries, and the bed line moved from port 4 to an unused port. If the short runs follow the port, it is the valve.]**
 
 Anyone else running a B-hyve XD had one zone quit a few seconds into a run?
