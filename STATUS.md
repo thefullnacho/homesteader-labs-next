@@ -33,7 +33,15 @@ the same bus.
 - The reed leads (2.63 mm with heatshrink) are too thin for the PG7 seal to grip (about 3 to 6.5).
 - The USB-C plug cannot pass a PG7, so power gets a slot and clamp.
 
-**Next concrete action:** draft the box model from the measurements (hestia session). Then
+**Drip teardown done (afternoon).** Lines flushed clear in every bed (filmed); timer, filter and
+regulator inside; blow-out held on by hand, about 10 PSI falling to near zero, so whether every
+bed cleared is open. The three-way timer test did not reproduce the 30-second cutoff on any start
+path; the log shows two earlier WiFi days with 20 to 40 second runs, logged as short. Draft post
+updated on `post/winterize-drip` (8bd4397); wiki hestia page updated (450d3dd). Pepper varieties
+cut back and potted to overwinter in the greenhouse, a first. Photos and clips are coming over
+Tailscale.
+
+**Next concrete action:** fill the draft from the teardown photos once they land; the box model is being drawn in a hestia session. Then
 print, mount, and wait for the first cold night with the heater on for the 10-minute door test;
 export the HA history within 10 days of it.
 
