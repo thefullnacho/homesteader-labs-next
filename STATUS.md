@@ -18,14 +18,14 @@ loops. Both box variants (plugged and soldered) are on hestia main under CC BY 4
 "print the box, then mount" row is done. Photos are in `~/Downloads/greenhouse-door-2026-10-09/`
 (Mounted-2026-10-10-wide and -close, no EXIF); notes in `docs/private/BUILD_LOOP.md`.
 
-From the photos only: the reed leads cross the door's top corner on their way to the switch, so
-check they can't catch when the door swings.
+The reed leads crossed the door's top corner, so Alex printed a blue PETG clip and fixed it to
+the header beam; they now run along the fixed frame (photo `Mounted-2026-10-10-lead-clip.jpg`).
 
 **Next concrete action:** waiting on the first cold night with the heater on for the 10-minute
 door test, then export the HA history within 10 days. No test numbers exist yet.
 
-[non-production] Hands, 5 min: clip the reed leads along the beam if the door can catch them;
-swap the lid's machine screws for the stainless self-tappers when they arrive.
+[non-production] Hands, 5 min: swap the lid's machine screws for the stainless self-tappers when
+they arrive.
 
 ## 2026-10-09 - Greenhouse door board weatherproofed, powered and measured for a box
 
