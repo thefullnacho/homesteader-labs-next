@@ -9,6 +9,24 @@ true inside this repo.
 
 ---
 
+## 2026-10-10 - Greenhouse door board mounted
+
+Build loop test 1 is in the greenhouse (Alex's report, relayed with two photos by the ~/me
+session). The blue PETG box from hestia's `hardware/greenhouse-door-box.scad` sits under the header
+beam beside the door, entries down; reed switch and magnet on the latch side; reed leads in drip
+loops. Both box variants (plugged and soldered) are on hestia main under CC BY 4.0. The 2026-10-09
+"print the box, then mount" row is done. Photos are in `~/Downloads/greenhouse-door-2026-10-09/`
+(Mounted-2026-10-10-wide and -close, no EXIF); notes in `docs/private/BUILD_LOOP.md`.
+
+From the photos only: the reed leads cross the door's top corner on their way to the switch, so
+check they can't catch when the door swings.
+
+**Next concrete action:** waiting on the first cold night with the heater on for the 10-minute
+door test, then export the HA history within 10 days. No test numbers exist yet.
+
+[non-production] Hands, 5 min: clip the reed leads along the beam if the door can catch them;
+swap the lid's machine screws for the stainless self-tappers when they arrive.
+
 ## 2026-10-09 - Greenhouse door board weatherproofed, powered and measured for a box
 
 Build loop test 1 moved off the breadboard. The reed switch leads are soldered to jumpers (so the
