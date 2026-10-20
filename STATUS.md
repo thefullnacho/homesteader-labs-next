@@ -9,6 +9,21 @@ true inside this repo.
 
 ---
 
+## 2026-10-20 - Greenhouse on power; door board logging in place
+
+Alex ran power to the greenhouse on 2026-10-19. The mounted door board has been running on it
+since that night: door state and the front-third temperature are both logging in HA, so the
+history for build loop test 1 now starts 2026-10-19. Before this the board had only run on the
+bench. No numbers pulled yet.
+
+**Next concrete action:** the 10-minute door test on the first cold night with the heater on,
+then export the HA history within 10 days. Whether the heater is on the new power, and whether
+last night already counts, is not yet known.
+
+[non-production] 12:00 or 15:00, 2 min: the "Greenhouse board offline" trigger fix (2026-10-09
+row) matters more now the board runs unattended: a dropped probe still reads `unknown` and
+nothing pages.
+
 ## 2026-10-10 - Greenhouse door board mounted
 
 Build loop test 1 is in the greenhouse (Alex's report, relayed with two photos by the ~/me
