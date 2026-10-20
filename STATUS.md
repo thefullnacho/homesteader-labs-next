@@ -28,8 +28,11 @@ history when convenient; it is the closed-door baseline the test gets compared a
 
 [non-production] Hands, 2 min, before tonight: lower the greenhouse heater setpoint to 50 °F.
 
-[non-production] 12:00 or 15:00, 5 min: HA history for 2026-10-19 overnight, temperature and
-door, screenshot or CSV. Confirms no door events and gives the baseline curve.
+**HA history in** (CSV saved to `docs/private/data/`, numbers in `docs/private/BUILD_LOOP.md`):
+no door events overnight, confirmed; six short opens 09:16 to 09:24 this morning. Front third
+cycled 54.3 to 58.4 °F all night (median 18 min per heater cycle, low 54.3 °F at 03:14), so the
+door end sits a few degrees below the heater's own probe. Afternoon peak 106.6 °F at 14:37 with
+the greenhouse shut. No dropouts or `unknown` readings in 20 hours.
 
 [non-production] 12:00 or 15:00, 2 min: the "Greenhouse board offline" trigger fix (2026-10-09
 row) matters more now the board runs unattended: a dropped probe still reads `unknown` and
