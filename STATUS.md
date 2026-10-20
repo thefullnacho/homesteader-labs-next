@@ -16,9 +16,20 @@ since that night: door state and the front-third temperature are both logging in
 history for build loop test 1 now starts 2026-10-19. Before this the board had only run on the
 bench. No numbers pulled yet.
 
-**Next concrete action:** the 10-minute door test on the first cold night with the heater on,
-then export the HA history within 10 days. Whether the heater is on the new power, and whether
-last night already counts, is not yet known.
+The heater ran on 2026-10-19 overnight, but held the greenhouse above 60 °F instead of the
+intended 50 °F, so its setpoint needs lowering. Alex does not recall the door opening overnight
+(to confirm from HA). That makes last night a closed-door, heater-on baseline at the wrong
+setpoint, not the door test. Every door ping Alex has had so far was the door genuinely left
+open: the failure the sensor was placed to catch, caught. That is the post's first real result.
+
+**Next concrete action:** set the heater to 50 °F, then run the 10-minute door test on a cold
+night and export the HA history within 10 days. Send last night's HA temperature and door
+history when convenient; it is the closed-door baseline the test gets compared against.
+
+[non-production] Hands, 2 min, before tonight: lower the greenhouse heater setpoint to 50 °F.
+
+[non-production] 12:00 or 15:00, 5 min: HA history for 2026-10-19 overnight, temperature and
+door, screenshot or CSV. Confirms no door events and gives the baseline curve.
 
 [non-production] 12:00 or 15:00, 2 min: the "Greenhouse board offline" trigger fix (2026-10-09
 row) matters more now the board runs unattended: a dropped probe still reads `unknown` and
