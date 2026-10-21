@@ -26,6 +26,14 @@ export const PROGRAMS: Record<string, Program> = {
       default: 'https://www.dripworks.com/?ref=homesteaderlabs',
     },
   },
+  // Awin. Product deep links come once the seed packets are bought.
+  'botanical-interests': {
+    items: {
+      default:
+        'https://www.awin1.com/cread.php?awinmid=88147&awinaffid=2920139&ued=https%3A%2F%2Fwww.botanicalinterests.com',
+    },
+    subId: 'clickref',
+  },
   seeed: {
     items: {
       t1000e:

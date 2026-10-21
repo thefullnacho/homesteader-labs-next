@@ -30,6 +30,11 @@ describe('resolveDestination', () => {
     expect(resolveDestination('constructor', undefined, 'site')).toBeNull();
     expect(resolveDestination('dripworks', 'toString', 'site')).toBeNull();
   });
+  it('tags Botanical Interests clicks with an Awin clickref', () => {
+    const url = new URL(resolveDestination('botanical-interests', undefined, 'reddit')!);
+    expect(url.searchParams.get('clickref')).toBe('reddit');
+    expect(url.searchParams.get('ued')).toBe('https://www.botanicalinterests.com');
+  });
   it('passes the channel as a sub-ID where the program takes one', () => {
     PROGRAMS.test = { items: { default: 'https://example.com/?a=1' }, subId: 'clickref' };
     try {
