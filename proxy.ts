@@ -22,7 +22,7 @@ export const config = {
     {
       // Pages only: not Next's own assets, the API, the markdown route itself,
       // media, the CMS, or anything that looks like a file.
-      source: "/((?!_next/|api/|md/|images/|videos/|keystatic)(?!.*\\.\\w+$).*)",
+      source: "/((?!_next/|api/|md/|go/|images/|videos/|keystatic)(?!.*\\.\\w+$).*)",
       has: [{ type: "header", key: "accept", value: ".*text/(x-)?markdown.*" }],
     },
   ],

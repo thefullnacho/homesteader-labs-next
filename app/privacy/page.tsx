@@ -23,7 +23,7 @@ export default function PrivacyPage() {
       sections={[
         {
           heading: "Data Collection",
-          body: "Homesteader Labs stores no cookies other than essential session data (cart, boot state). We do not sell your data because we do not collect it.",
+          body: "Homesteader Labs stores no cookies other than essential session data (cart, boot state). We do not sell your data because we do not collect it. We count clicks on our outbound /go/ links, by day and channel, nothing else.",
         },
         {
           heading: "Stay Safe",

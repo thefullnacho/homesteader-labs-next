@@ -7,11 +7,14 @@ import { getImageSize } from '@/lib/imageSize';
  * unqualified paid link passes PageRank and can earn a manual action, which on
  * an organic-search-funded site is the expensive kind of mistake.
  *
- * Add a marker here when a new affiliate programme goes live.
+ * Add a marker here when a new affiliate programme goes live. Prefer linking
+ * through /go/ (lib/affiliates.ts), which counts the click by channel; every
+ * /go/ link is paid by definition.
  */
 const AFFILIATE_MARKERS = ['sensecap_affiliate=', 'ref=homesteaderlabs'];
 
-function relFor(href: string | undefined): string | undefined {
+export function relFor(href: string | undefined): string | undefined {
+  if (href?.startsWith('/go/')) return 'sponsored nofollow noopener noreferrer';
   if (!href?.startsWith('http')) return undefined;
   const external = !href.includes('homesteaderlabs.com');
   if (!external) return undefined;
