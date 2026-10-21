@@ -93,6 +93,13 @@ MDX with gray-matter frontmatter. Required: `title`, `description`, `date`, `aut
 
 Live programmes: **Seeed Studio** (SenseCAP T1000-E), **Baofeng**, and **DripWorks** (`?ref=homesteaderlabs`, any dripworks.com path). Rokland pending.
 
+**Link through `/go/`.** Every paid link is `/go/<program>/<item>/?src=<channel>`
+(`lib/affiliates.ts` holds the only destinations; channels `site`, `reddit`, `x`, `youtube`,
+`facebook`, `printables`, anything else counts as `other`). The route counts the click per day,
+program and channel in Upstash (`lib/clicks.ts`, nothing personal stored) and 302s on. Read counts
+with `curl -H "Authorization: Bearer $GO_STATS_TOKEN" https://homesteaderlabs.com/api/go/stats/?days=28`.
+On-site links use `src=site`. MDX marks every `/go/` link sponsored automatically.
+
 **Where they go:** inside content, at the end of a recommendation the article has earned. The
 buying table in `what-is-meshtastic.mdx` is the reference implementation. A gear page ("what we
 actually use") is the other sanctioned shape.

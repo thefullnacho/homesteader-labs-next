@@ -12,7 +12,8 @@ export default function robots(): MetadataRoute.Robots {
       allow: ["/", "/api/zone/", "/api/frost/", "/api/pests/"],
       // /md/ is the markdown route's internal address; agents get the same
       // markdown at each page's own URL, which is the one to crawl.
-      disallow: ["/api/", "/requisition/", "/md/"],
+      // /go/ is the affiliate redirect; it is not a page.
+      disallow: ["/api/", "/requisition/", "/md/", "/go/"],
     },
     sitemap: `${SITE_URL}/sitemap.xml`,
   };
