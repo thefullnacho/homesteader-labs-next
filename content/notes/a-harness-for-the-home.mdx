@@ -1,0 +1,54 @@
+---
+title: "Most of a voice assistant fits on a Raspberry Pi 4 CPU, measured piece by piece"
+date: "2026-10-24"
+summary: "On a 4 GB Raspberry Pi 4 with no cloud and no GPU, EmbeddingGemma routes about 93% of commands to the right domain, Moonshine BASE transcribes at 1.8% word error on synthetic speech, and KittenTTS nano speaks faster than real time in 256 MB. The fine-tuned FunctionGemma 270M that makes the tool call gets about 79% of calls fully right on a GPU and has not run end to end on the Pi yet; it is the gate."
+story: "a-harness-for-the-home"
+repo: "https://github.com/thefullnacho/hestia"
+commit: "c9f7ea8817de9e0683728a4e2e394a1006311e5e"
+---
+
+**Short version.** Each piece of a voice assistant was measured on a 4 GB Raspberry Pi 4, CPU only, with nothing in the cloud. Routing, hearing and speaking fit: EmbeddingGemma picks the right domain 93% of the time, Moonshine BASE transcribes at 1.8% word error in about a second, and KittenTTS nano speaks faster than real time. The part that decides what to do, a fine-tuned FunctionGemma 270M, gets about 79% of calls fully right on a GPU and has not run end to end on the Pi. This is a report on how close it is, not a finished thing.
+
+Every number below is tagged **measured** (with its date and the results file it comes from) or **estimated** (with what it adds up and what is not measured). All files are on the `exp/small-router` branch of the public [hestia repo](https://github.com/thefullnacho/hestia/tree/c9f7ea8817de9e0683728a4e2e394a1006311e5e), linked here at commit `c9f7ea8` so the numbers cannot drift under the links. The branch is not merged.
+
+## Results
+
+| Piece | Number | Basis |
+|---|---|---|
+| Router, EmbeddingGemma | 93% right domain, 247 test cases | measured 2026-10-15, [small-router RESULTS](https://github.com/thefullnacho/hestia/blob/c9f7ea8817de9e0683728a4e2e394a1006311e5e/benchmarks/small-router/RESULTS.md) |
+| Router, ask instead of guess | asks on 19% of test lines, 1.1% end in a wrong action | measured 2026-10-15, small-router RESULTS |
+| Router, chit-chat | 0 of 30 chit-chat lines led to an action | measured 2026-10-15, small-router RESULTS |
+| Router, speed on the Pi | about 0.7 s per utterance | measured 2026-10-15 on the Pi, small-router RESULTS |
+| Caller, stock FunctionGemma 270M | 34% fully right | measured 2026-10-15, small-router RESULTS |
+| Caller, fine-tuned | 79.2% fully right, 94% right tool (mean of 5 seeds) | measured 2026-10-15 on a GPU, small-router RESULTS |
+| Caller, wrong actions that would execute | 29.6 of 235 per run, mean of 5 seeds | measured 2026-10-15 on a GPU, small-router RESULTS |
+| Caller, override gate | 16 wrong actions, asks on 20% of lines | measured 2026-10-15 on a GPU, small-router RESULTS |
+| Hearing, Moonshine BASE | 1.8% word error, 28 of 30 exact, 1.07 s median, 432 MB peak | measured 2026-10-24 on the Pi, synthetic speech, [lite-stt RESULTS](https://github.com/thefullnacho/hestia/blob/c9f7ea8817de9e0683728a4e2e394a1006311e5e/benchmarks/lite-stt/RESULTS.md) |
+| Speaking, KittenTTS nano int8 | real-time factor 0.58 to 0.63, 256 MB peak, 25 MB on disk | measured 2026-10-24 on the Pi, [lite-tts RESULTS](https://github.com/thefullnacho/hestia/blob/c9f7ea8817de9e0683728a4e2e394a1006311e5e/benchmarks/lite-tts/RESULTS.md) |
+| Spoken reply starts | under 1 s for a short confirmation (first sentence 0.95 s at the low end) | measured 2026-10-24 on the Pi, lite-tts RESULTS |
+| Speech side in memory | under 700 MB | estimate: measured 432 MB plus measured 256 MB, from two separate runs, not measured together |
+| Heat, bare board | 54 C to 70 to 76 C within a minute | measured 2026-10-24 on the Pi, lite-tts RESULTS |
+| Round trip, end of speech to start of reply | 3 to 4 s | estimate: measured 1.07 s plus 0.7 s plus about 1 s, the caller not yet timed on the Pi |
+| Router and caller memory on the Pi | not measured | no figure in any results file |
+
+**Hardware.** Raspberry Pi 4 Model B, 4 GB, no heatsink, CPU only, about 3.5 GB usable (lite-stt and lite-tts RESULTS headers). The story prices it as a $130 kit with heatsink, fan and case, plus a $5 USB mic, against a $79 Echo Dot; those are list prices, not bench numbers.
+
+## Method
+
+A voice assistant is four jobs in a row: speech to words, which kind of request, the exact tool call, and a spoken reply. Each was measured on its own. The Pi build stands alone and does not hand hard questions back to the desktop model ([STATUS.md, decided 2026-10-15](https://github.com/thefullnacho/hestia/blob/72cc465d5a2bb6792273632d4b7db99401a0af04/STATUS.md#L2186)).
+
+**Routing.** EmbeddingGemma picks a domain (lights, shopping list, reminders and so on, plus `none` for chit-chat), and only that domain's tools go to the caller. Training sentences serve as the examples. When the top two domains are closer than a similarity gap of 0.08, code asks "which of these two" instead of guessing; the gap was picked on the validation split, not the tests. The ask rate is 6% on validation and 19% on the tests, because template examples are cleaner than real speech. EmbeddingGemma's task prefixes are required: without them `none` cannot be told apart from real requests. Embeddings do not see negation, so "I already did the dishes" still misses.
+
+**The tool call.** FunctionGemma 270M, fine-tuned on 1,876 sentences and again on 3,737 (five seeds each). The two sets tie (79.2% and 78.0% fully right; run-to-run spread is about 4 points), so more data is not what it needs at this size. The misses left are judgment: negation, requests with no matching tool, things implied rather than said. A gate after the model refuses any value the person did not actually say ([commit 3a19f2f](https://github.com/thefullnacho/hestia/commit/3a19f2f)), which catches garbled copies, but schema-valid wrong calls still get through. An override gate that asks whenever the program had to correct the model brings wrong actions from 26 to 16 on one checkpoint, at the price of asking one time in five ([commit d6e176c](https://github.com/thefullnacho/hestia/commit/d6e176c)). Constrained decoding alone did not help ([commit 6b4125e](https://github.com/thefullnacho/hestia/commit/6b4125e)). Accuracy was scored on a GPU through transformers, because the Ollama build of the model ships without its chat template.
+
+**Hearing.** Five Moonshine models on 30 typical commands ([commit c9f7ea8](https://github.com/thefullnacho/hestia/commit/c9f7ea8)). BASE won; TINY was faster but at 11.6% word error. The clips were spoken by KittenTTS across its 8 voices, and clean synthetic speech flatters every recognizer. The streaming models were fed whole clips, so their real advantage was not tested.
+
+**Speaking.** Four KittenTTS models. Nano int8 was picked by a listening check for clear pronunciation ([commit 49f553c](https://github.com/thefullnacho/hestia/commit/49f553c)); it is also the smallest. Mini is slower than it speaks (real-time factor 1.39 to 1.50). None of the small models clone voices; zero-shot cloning is KittenTTS 2, about 1.7B parameters and 6 GB of RAM, so not this board ([commit 4ee629f](https://github.com/thefullnacho/hestia/commit/4ee629f)).
+
+## What is open
+
+- **The tool caller is the gate.** About one call in five not fully right is not good enough to trust with a house, and it has not run end to end on the Pi.
+- **Real voices are untested.** Next is about 20 real commands from each voice in the house, recorded at desk distance.
+- **Round trip is an estimate.** It needs the caller timed on the Pi.
+- **Memory total is incomplete.** Router and caller memory on the Pi are not measured, so there is no whole-system figure yet.
+- **Heat.** Every speech run set the Pi's soft temperature limit flag on the bare board. The numbers matched on a cooled rerun, but any enclosure needs a heatsink or airflow.

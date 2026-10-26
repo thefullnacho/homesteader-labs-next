@@ -1,0 +1,66 @@
+---
+title: "A Harness for the Home"
+description: "A voice assistant that runs on a 4 GB Raspberry Pi 4 CPU, with nothing leaving the house: what fits, what was measured, and the tool caller that still gets about 1 in 5 commands not fully right."
+date: "2026-10-26"
+author: "Alex de Brantes"
+tags: ["hestia", "voice", "raspberry-pi", "local-ai", "de-cloudify", "build-log"]
+category: "build-log"
+skill: "Advanced. Small models, a Pi, and patience with the parts that are not done"
+gear: "Raspberry Pi 4 kit (4 GB, heatsink, fan, case), a $5 USB mic, any speaker"
+pairsWith: "Home Assistant Voice Preview Edition: Local Voice, Honestly Explained"
+stamp: "On the bench"
+excerpt: "Most of a voice assistant now fits on a $130 Raspberry Pi 4 kit, on CPU, in under 4 GB of RAM. The router picks the right area 93% of the time. The tool caller is the gate."
+---
+
+## The idea
+
+I have been working on the idea of a harness for the home for about a year now. The hope was always simple: take something that requires GPUs, a pile of RAM, and a good processor, and compress it into a package small enough that anybody could get access to it.
+
+I have a gut feeling about where AI capital is moving. It is moving toward replacing knowledge workers, because enterprise contracts are what pay for advancing research, until the models get so good that anybody can use them. In the interim, that means nobody is building anything for the people in the middle right now.
+
+## Alexa got there first
+
+I have been an Alexa user for a long time, and the product just works. Say the name, you get a snappy response. The services work, your lights turn on and off, you can add connectors. They even did a skills thing at one point. It is a polished product, and it is really hard to compete against that. People who have tried have not really been able to replace Alexa for what Alexa is.
+
+But she has not caught up with the times. The app is clunky. The connections are clunky, the profiles are clunky, scenes and automations are clunky. It looks nice, but that does not mean it performs well.
+
+## The light version
+
+A couple of nights ago I was reading, and I had already been pushing down the path of a light home harness. I plan to build ESP32 style nodes that link into a system the way an Alexa links into a system, except instead of a dot on your counter you have an expressive face that reacts dynamically to updates.
+
+My dev version of Hestia runs on a GPU, CPU, and RAM, all of it. The light version runs on a single board computer, purely on CPU, with less than 4 gigabytes of RAM. That is an entirely different product. It is off the shelf compatible, from a price point perspective, with Amazon. You should not need a $1200 GPU, a $600 CPU, and another $700 in RAM before you can run a form of intelligence in your home. For comparison, an Echo Dot is $79. The Pi side is a $130 Raspberry Pi 4 kit with 4 gigabytes of RAM, plus a $5 USB mic, and you plug any speaker you already have into the board's aux out. The kit price includes a heatsink, fan, and case, and you need them: in testing, the bare board hit 72 to 76°C within a minute. So it is not cheaper than an Echo. It is in the same range, and nothing leaves your house.
+
+## Small models, misunderstood
+
+And what do I mean by a form of intelligence? If your experience with an LLM is frontier models, you know how capable and how smart they are, and how hands off they can be. With very little human intervention they can run autonomous tasks. It is wild to think about, and it is hard to duplicate at home. Generally, the smaller the model, the more wrangling you have to do.
+
+But small models can still be very performant, and that is the thing most people misunderstand about them. They still have an entire training corpus to draw from. They can still process a ton of information at once. They can still connect things and see patterns within the maze of documents and text messages and data sheets and inventory lists and tool lists. There are a lot of ways to use a small model advantageously, in ways that serve you, without leaving you dependent on it knowing what to do all the time.
+
+## Trust is the feature
+
+One of the challenges with the home is that it has to be reliable, and for me that matters a lot. I deal with short term and long term memory loss. If I send a command, or log a harvest, or do a specific task, I need to believe that Hestia actually did what it says it did. So I have an incredibly high threshold for what counts as acceptable accuracy, and for what counts as acceptable reclarifying to establish intent.
+
+That is the other thing I have learned with small models. A lot of the time its first choice is uncertain. On about 19 percent of lines, the router asks which of two things I meant, rather than guessing. There is a way for it to recover gracefully, and it still feels like care. You walk away from that follow up turn thinking it is really trying to make sure it gets this right. You have to be able to trust your sensors.
+
+## The stack falls into place
+
+Then I saw an advertisement for the full size KittenTTS model and its ability to zero shot a voice clone on CPU, from a very small clip. That is a big deal if you know anything about current voice pipelines. You can run some smaller stuff on CPU, speech detection, text to speech, but to get a good voice you generally need a GPU, and then you need a transcription service and a narrator. I have not tested that zero shot cloning claim on the full sized model.
+
+What I am actually running on the Pi is one of the default INT8 voices. I looked into the KittenTTS repo, saw the INT8 quantized voices, and ran a small battery on the Raspberry Pi to see how the voices sounded and performed with synthetic data. It went well. The voice was very clear.
+
+Then we tested EmbeddingGemma as a classifier and router. That worked well too, and it picks the right area 93 percent of the time. So the stack is Moonshine for speech recognition, at 1.8 percent word error on synthetic speech, EmbeddingGemma for routing, KittenTTS for voice, and FunctionGemma for tool calling. What am I missing? Memory can happen on device too, because memory is just a Python script. It reads the chat and extracts the durable bits it thinks might be relevant to you. This literally could run on a Pi 4, sub 4 gigabytes of RAM, with the speech side fitting under 700 megabytes and a spoken reply starting in under a second.
+
+## What breaks, what holds
+
+The latency is rough right now. You say something, and by my estimate 3 to 4 seconds pass before the thing happens. That is an estimate because FunctionGemma has not run on the Pi yet. But the pipeline came together on 10/24/26. It is the worst it will ever be.
+
+I am in the process of building out a dataset based on voice commands recorded through my own Home Assistant voice pipeline. I have been sitting and testing the lights, flipping things off, trying to chain commands together. That is one of the things where FunctionGemma starts to fall apart: in a multi turn scenario. Say you want the lights on and then you want it to look something up. It has to make one tool call to turn on the lights, a second to search for what you asked, and probably a third to review the results and put out a response. That third turn in the chain is where it struggles a bit.
+
+But Home Assistant commands are mostly single utterances. Turn this light off, turn that group on, set a reminder, save this recipe. They are generally not chained. Even so, the single ones do not all land yet: about 1 in 5 are not fully right, and that is the gate.
+
+That is the thing about Hestia. Once you separate what the model can do from what you can do with code, you start to realize that all of these deterministic things do not need a model in the loop. The model should be reserved exclusively for judgment, for inference across many things simultaneously, for looking things up and putting the pieces together.
+
+---
+
+Data and sources: [lab notes](/notes/a-harness-for-the-home/)
+
