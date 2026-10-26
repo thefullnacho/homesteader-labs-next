@@ -112,6 +112,11 @@ export interface BuildFigure {
  * post. No em dashes, US spelling.
  */
 export const BUILD_OUTCOMES: Record<string, BuildOutcome> = {
+  'a-harness-for-the-home': {
+    status: 'Testing',
+    line: 'Speech in, routing and a spoken reply all measured on a 4 GB Pi 4 CPU. The tool caller gets about 1 in 5 not fully right and has not run on the Pi yet.',
+    figures: [{ value: '93%', what: 'of commands routed to the right area by a small model on a Pi 4 CPU, no GPU.' }],
+  },
   'build-log-survival-index': {
     status: 'Shipped',
     line: 'Fire, livestock, solar and water scores from free Open-Meteo data, computed in the browser with no account.',

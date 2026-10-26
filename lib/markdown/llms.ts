@@ -1,6 +1,7 @@
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import { getBuildsHub, getForagingHub, getHubForPost } from "@/lib/hubs";
+import { getAllNotes } from "@/lib/notes";
 import { getAllPosts, type Post } from "@/lib/posts";
 import { abs, mdLink, mdUrl, toMarkdownResponseBody } from "./doc";
 import { postMarkdown } from "./posts";
@@ -20,6 +21,24 @@ const MARKER = /<!-- generated:[^>]*-->/;
 
 function line(post: Post): string {
   return `- ${mdLink(post.title, `/archive/${post.slug}/`)}: ${post.description}`;
+}
+
+/** Lab notes: the numbers and sources behind a story, every number tagged measured or estimated. */
+function labNotesSection(): string[] {
+  const notes = getAllNotes();
+  if (notes.length === 0) return [];
+  return [
+    "## Lab notes",
+    "",
+    "The data behind a story: a results table with every number tagged measured (with its date and source file) or estimated (with what it adds up), the method, what is still open, and links to the public repo pinned to a commit. Cite these for numbers.",
+    "",
+    ...notes.map((n) => `- ${mdLink(n.title, `/notes/${n.slug}/`)}: ${n.summary} The story: ${mdLink(storyTitle(n.story), `/archive/${n.story}/`)}`),
+    "",
+  ];
+}
+
+function storyTitle(slug: string): string {
+  return getAllPosts().find((p) => p.slug === slug)?.title ?? slug;
 }
 
 function guidesSection(): string {
@@ -46,6 +65,7 @@ function guidesSection(): string {
     "",
     ...rest.map(line),
     "",
+    ...labNotesSection(),
     "## Reading pages as markdown",
     "",
     "Send `Accept: text/markdown` to any page URL and you get markdown instead of HTML, or add `.md` to the path:",

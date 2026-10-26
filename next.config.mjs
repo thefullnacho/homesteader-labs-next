@@ -16,7 +16,7 @@ const nextConfig = {
   // The markdown route renders posts at request time when it revalidates, and
   // reads them from disk, so ship them with the function.
   outputFileTracingIncludes: {
-    '/md/**': ['./content/archive/**/*'],
+    '/md/**': ['./content/archive/**/*', './content/notes/**/*'],
   },
   async rewrites() {
     // "/page.md" serves the page's markdown (app/md). The same markdown is
@@ -93,6 +93,7 @@ const nextConfig = {
       ['/', '/index.md'],
       ['/archive/', '/archive.md'],
       ['/archive/:slug/', '/archive/:slug.md'],
+      ['/notes/:slug/', '/notes/:slug.md'],
       ['/builds/', '/builds.md'],
       ['/foraging/', '/foraging.md'],
       ['/kb/', '/kb.md'],

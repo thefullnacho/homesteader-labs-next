@@ -104,7 +104,7 @@ describe("Stub Page Renderers", () => {
   });
 
   describe("stub coverage per sitemap", () => {
-    it("has a stub for every sitemap URL except KB, archive, zone, state", () => {
+    it("has a stub for every sitemap URL except KB, archive, notes, zone, state", () => {
       const sitemapUrls = sitemap();
       const SITE_URL = "https://homesteaderlabs.com";
 
@@ -112,6 +112,7 @@ describe("Stub Page Renderers", () => {
       const excludedPrefixes = [
         "/kb/",
         "/archive/",
+        "/notes/",
         "/tools/planting-calendar/zone/",
         "/tools/planting-calendar/state/",
       ];

@@ -8,6 +8,7 @@ import {
   postMarkdown,
   postMarkdownPaths,
 } from "./posts";
+import { noteMarkdown, noteMarkdownPaths } from "./notes";
 import { stubMarkdown, stubPaths } from "./stubs";
 import {
   stateIndexMarkdown,
@@ -51,6 +52,8 @@ export function renderMarkdown(rawPath: string, today: Date = new Date()): Markd
 
   const slug = child(path, "/archive/");
   if (slug) return postMarkdown(slug);
+  const note = child(path, "/notes/");
+  if (note) return noteMarkdown(note);
   const crop = child(path, "/kb/");
   if (crop) return kbMarkdown(crop);
   const zone = child(path, ZONE);
@@ -64,6 +67,6 @@ export function renderMarkdown(rawPath: string, today: Date = new Date()): Markd
 /** Every path with a markdown version, for static generation and tests. */
 export function markdownPaths(): string[] {
   return Array.from(
-    new Set([...postMarkdownPaths(), ...kbMarkdownPaths(), ...zoneMarkdownPaths(), ...stubPaths()].map(normalizePath))
+    new Set([...postMarkdownPaths(), ...noteMarkdownPaths(), ...kbMarkdownPaths(), ...zoneMarkdownPaths(), ...stubPaths()].map(normalizePath))
   );
 }

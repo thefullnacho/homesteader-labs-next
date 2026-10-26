@@ -2,6 +2,7 @@ import { MetadataRoute } from "next";
 import { getAllProducts } from "@/lib/products";
 import { getAllPosts, getPostImages } from "@/lib/posts";
 import { getAllKbCrops, isKbCropIndexable } from "@/lib/kb";
+import { getAllNotes } from "@/lib/notes";
 import { isSurvivalPlanPublic } from "@/lib/survivalPlan/visibility";
 import { ZONE_PAGES } from "@/lib/tools/planting-calendar/zonePages";
 import { STATE_PAGES } from "@/lib/tools/planting-calendar/statePages";
@@ -89,6 +90,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     };
   });
 
+  const noteRoutes: MetadataRoute.Sitemap = getAllNotes().map((n) => ({
+    url: `${SITE_URL}/notes/${n.slug}/`,
+    changeFrequency: "monthly" as const,
+    priority: 0.5,
+  }));
+
   // Thin/near-empty KB entries are noindex; keep them out of the sitemap too.
   const kbRoutes: MetadataRoute.Sitemap = getAllKbCrops()
     .filter(isKbCropIndexable)
@@ -135,6 +142,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...staticRoutes,
     ...productRoutes,
     ...archiveRoutes,
+    ...noteRoutes,
     ...zoneRoutes,
     ...stateRoutes,
     ...kbRoutes,
