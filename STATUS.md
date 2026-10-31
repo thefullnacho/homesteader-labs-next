@@ -9,6 +9,60 @@ true inside this repo.
 
 ---
 
+## 2026-10-31 (wrap) - /go/ affiliate redirects, post 04 with lab notes, security upgrade, branch cleanup
+
+Session ran 2026-10-21 to 10-31, driven mostly by the ~/me hub toward the first $100 of
+affiliate revenue. Everything below is live on master and verified on production.
+
+- **`/go/<program>/<item>/?src=<channel>`** (merge a29503e): counts clicks per day, program and
+  channel in Upstash (nothing personal), then 302s from the `lib/affiliates.ts` allowlist.
+  Preview bots are not counted. Read with `/api/go/stats/` and a bearer `GO_STATS_TOKEN`. The
+  three site links (DripWorks, two Seeed) go through it with `src=site`. The privacy page gained
+  one line saying what is counted. Upstash and the token are set in Vercel; counting was verified
+  end to end by the hub (one `selftest` click, logged as `other`, to subtract).
+- **Botanical Interests** on `/go/botanical-interests/` (8231972), homepage link only, with the
+  channel passed as Awin `clickref`. The Awin marker branch merged with it.
+- **Security:** next 16.4.2, sharp 0.35.5, react 19.2.9 (287f63e). Audit had next 16.2.10 at
+  critical (image-optimization and next/og RCEs). Two GHSA IDs the hub relayed did not exist.
+- **Drip post:** timer about $79, not $98 (1f183c6).
+- **Post 04, "A Harness for the Home"** (f881906), Alex's Hestia Lite story verbatim, filed as
+  a build log. Its **lab notes** are the first at the new `/notes/<slug>/` route: results table
+  with every number tagged measured (date and file) or estimated, repo links pinned to hestia
+  `c9f7ea8`, in llms.txt, the sitemap and as markdown. `lib/notes.test.ts` checks the two-way
+  links, the tags and a privacy sweep. Heat corrected to 70 to 76 C (c98b06e). Linked from the
+  Google Assistant shutdown and Voice PE posts (f1fa76f). The story indexed on its own; Alex
+  requested indexing for the notes.
+- **Dawn's PR #16** merged (9c28bf7): nasturtium post, three recipe cards, `/recipes/` hub,
+  Amazon Associates marker. #15 closed as replaced.
+- **Week 1 drip Short** cut from the original HDR MOV to `~/Videos/drip-irrigation/shorts/`
+  (not in this repo).
+- **GSC read 2026-10-27** (09-01..09-28 vs 09-29..10-25): site 18 to 20 clicks, 2,748 to 3,400
+  impressions. Berry guide 67 to 679 impressions and 0 to 8 clicks, but the identification
+  queries sit at position 50 to 65 and "poisonous" barely shows. Zone 10b, 4b and Kentucky
+  gained impressions; sugar maple and caloric security flat. Google Assistant shutdown is the #2
+  page (4 clicks, 389 impressions, position 7.9). Numbers are in ~/me metrics.md.
+- **Branches:** 21 merged or superseded remote branches and 22 local ones deleted, `dev` and the
+  homepage-refresh worktree removed. Left: `master`, `october-foraging` (unshipped October draft),
+  `field-guide-pdf-prototype` (printable berry guide), both kept on purpose.
+
+**In flight:** nothing deployed is pending. Amazon links are direct, not through `/go/`, so
+they are not in the per-channel counts.
+
+**Post 04 is out of date on one number.** It and its lab notes say a 3-4 s round trip (an
+estimate). Hestia measured the whole path on 2026-10-26: 4.6 s median in 1.57 GB on the Pi 4,
+1.6 s on a Pi 5, real voice 13 of 16 actions (hestia `benchmarks/lite-e2e/RESULTS.md`). The lab
+notes need updating, and the matching story sentence flagged to Alex, not rewritten.
+
+**Next concrete action:** update post 04's lab notes with the measured round trip and put the
+story sentence to Alex. Then the GSC read on 2026-11-04 for the homepage and zone pages since the
+logbook homepage, then the berry guide reread around 2026-11-24. Small follow-up worth offering:
+Amazon as a `/go/` program.
+
+[non-production] December, with the seed purchase: send the site session the Botanical Interests
+product deep links, so each gets a `/go/botanical-interests/<seed>/` link for the germination log.
+
+---
+
 ## 2026-10-20 - Greenhouse on power; door board logging in place
 
 Alex ran power to the greenhouse on 2026-10-19. The mounted door board has been running on it
