@@ -7,6 +7,7 @@ import {
   homeMarkdown,
   postMarkdown,
   postMarkdownPaths,
+  recipesHubMarkdown,
 } from "./posts";
 import { noteMarkdown, noteMarkdownPaths } from "./notes";
 import { stubMarkdown, stubPaths } from "./stubs";
@@ -46,6 +47,7 @@ export function renderMarkdown(rawPath: string, today: Date = new Date()): Markd
   if (path === "/archive/") return archiveIndexMarkdown();
   if (path === "/builds/") return buildsHubMarkdown();
   if (path === "/foraging/") return foragingHubMarkdown();
+  if (path === "/recipes/") return recipesHubMarkdown();
   if (path === "/kb/") return kbIndexMarkdown();
   if (path === ZONE) return zoneIndexMarkdown();
   if (path === STATE) return stateIndexMarkdown();

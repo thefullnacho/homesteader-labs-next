@@ -272,11 +272,9 @@ export default async function ArchivePostPage(props: PageProps) {
                   href={hub.path}
                   className="underline decoration-marker decoration-2 underline-offset-4 hover:text-marker"
                 >
-                  {hub.id === "foraging" ? "the foraging guides" : "the build logs"}
+                  {hub.filedIn.link}
                 </Link>
-                {hub.id === "foraging"
-                  ? ": the berry guide first, then the monthly series."
-                  : ": every build in order, with how each one turned out."}
+                {hub.filedIn.rest}
               </p>
             )}
 

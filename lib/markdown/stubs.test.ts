@@ -116,7 +116,7 @@ describe("Stub Page Renderers", () => {
         "/tools/planting-calendar/zone/",
         "/tools/planting-calendar/state/",
       ];
-      const excludedExact = ["/", "/builds/", "/foraging/"];
+      const excludedExact = ["/", "/builds/", "/foraging/", "/recipes/"];
 
       const isExcluded = (path: string) => {
         return excludedExact.includes(path) || excludedPrefixes.some((prefix) => path.startsWith(prefix));

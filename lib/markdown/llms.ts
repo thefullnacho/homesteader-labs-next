@@ -1,6 +1,6 @@
 import { readFileSync } from "node:fs";
 import path from "node:path";
-import { getBuildsHub, getForagingHub, getHubForPost } from "@/lib/hubs";
+import { getBuildsHub, getForagingHub, getHubForPost, getRecipesHub } from "@/lib/hubs";
 import { getAllNotes } from "@/lib/notes";
 import { getAllPosts, type Post } from "@/lib/posts";
 import { abs, mdLink, mdUrl, toMarkdownResponseBody } from "./doc";
@@ -46,6 +46,7 @@ function guidesSection(): string {
   const { startHere, series, identification } = getForagingHub();
   const foraging = [...(startHere ? [startHere] : []), ...series, ...identification];
   const builds = getBuildsHub().map((b) => b.post);
+  const recipes = getRecipesHub().map((r) => r.post);
   const rest = posts.filter((p) => !getHubForPost(p));
 
   return [
@@ -60,6 +61,10 @@ function guidesSection(): string {
     `### Build logs (${mdLink("hub", "/builds/")}, oldest first)`,
     "",
     ...builds.map(line),
+    "",
+    `### Recipes (${mdLink("hub", "/recipes/")}, newest first)`,
+    "",
+    ...recipes.map(line),
     "",
     "### Planting, soil and the rest",
     "",
