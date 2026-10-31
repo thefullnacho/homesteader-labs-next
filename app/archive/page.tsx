@@ -14,6 +14,7 @@ const drawerBlurbs: Record<string, string> = {
   "build-log": "How the tools get built",
   "field-guide": "Tried outside, written down",
   foraging: "Wild food, identified whole",
+  kitchen: "Cooked from the yard",
 };
 
 export default async function ArchivePage(props: { searchParams: Promise<{ tag?: string; drawer?: string }> }) {
@@ -121,7 +122,7 @@ export default async function ArchivePage(props: { searchParams: Promise<{ tag?:
           </span>
         </div>
 
-        {/* Topic hubs: the reading-order view of two drawers */}
+        {/* Topic hubs: the reading-order view of three drawers */}
         <p className="pt-5 font-mono text-[0.7rem] uppercase tracking-wider text-ink/65">
           Reading order:{" "}
           <Link
@@ -136,6 +137,13 @@ export default async function ArchivePage(props: { searchParams: Promise<{ tag?:
             className="underline decoration-marker decoration-2 underline-offset-4 hover:text-marker"
           >
             Build logs
+          </Link>
+          {" · "}
+          <Link
+            href="/recipes/"
+            className="underline decoration-marker decoration-2 underline-offset-4 hover:text-marker"
+          >
+            Recipes
           </Link>
         </p>
 

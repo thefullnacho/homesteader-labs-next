@@ -8,8 +8,12 @@ import {
   getForagingSeries,
   getHubForPost,
   getLastMeasured,
+  getRecipesHub,
+  RECIPE_CARDS,
   seriesMonth,
 } from './hubs';
+import { existsSync } from 'fs';
+import path from 'path';
 import sitemap from '@/app/sitemap';
 
 /**
@@ -104,6 +108,33 @@ describe('builds hub', () => {
   });
 });
 
+describe('recipes hub', () => {
+  const recipes = getRecipesHub();
+
+  it('holds every kitchen note, newest first', () => {
+    const kitchen = posts.filter((p) => p.category === 'kitchen').map((p) => p.slug);
+    expect(recipes.map((r) => r.post.slug).sort()).toEqual([...kitchen].sort());
+    const dates = recipes.map((r) => r.post.date);
+    expect(dates).toEqual([...dates].sort().reverse());
+  });
+
+  it('carries the three nasturtium cards', () => {
+    const nasturtium = recipes.find((r) => r.post.slug === 'nasturtiums-every-part-edible');
+    expect(nasturtium?.cards).toHaveLength(3);
+  });
+
+  it('has cards only for kitchen notes, and every card file exists', () => {
+    const slugs = new Set(recipes.map((r) => r.post.slug));
+    for (const [slug, cards] of Object.entries(RECIPE_CARDS)) {
+      expect(slugs.has(slug), `${slug} has cards but is not a kitchen note`).toBe(true);
+      for (const card of cards) {
+        expect(existsSync(path.join(process.cwd(), 'public', card.src)), card.src).toBe(true);
+        expect(card.alt.length).toBeGreaterThan(0);
+      }
+    }
+  });
+});
+
 describe('homepage ledger', () => {
   const measured = getLastMeasured();
 
@@ -129,5 +160,6 @@ describe('hub routes', () => {
     const urls = sitemap().map((e) => e.url);
     expect(urls).toContain('https://homesteaderlabs.com/foraging/');
     expect(urls).toContain('https://homesteaderlabs.com/builds/');
+    expect(urls).toContain('https://homesteaderlabs.com/recipes/');
   });
 });

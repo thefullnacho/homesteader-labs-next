@@ -11,7 +11,7 @@ import { getImageSize } from '@/lib/imageSize';
  * through /go/ (lib/affiliates.ts), which counts the click by channel; every
  * /go/ link is paid by definition.
  */
-const AFFILIATE_MARKERS = ['sensecap_affiliate=', 'ref=homesteaderlabs', 'awinaffid='];
+const AFFILIATE_MARKERS = ['sensecap_affiliate=', 'ref=homesteaderlabs', 'awinaffid=', 'tag=homesteade0d4-20'];
 
 export function relFor(href: string | undefined): string | undefined {
   if (href?.startsWith('/go/')) return 'sponsored nofollow noopener noreferrer';

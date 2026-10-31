@@ -1,5 +1,13 @@
 import { getAlmanacMonth } from "@/lib/almanac";
-import { getBuildsHub, getForagingHub, getHubForPost, getLastMeasured, ON_THE_BENCH, seriesMonth } from "@/lib/hubs";
+import {
+  getBuildsHub,
+  getForagingHub,
+  getHubForPost,
+  getLastMeasured,
+  getRecipesHub,
+  ON_THE_BENCH,
+  seriesMonth,
+} from "@/lib/hubs";
 import { getAllPosts, getReadMinutes, type Post } from "@/lib/posts";
 import { getAllProducts } from "@/lib/products";
 import { abs, mdLink, mdTable, type MarkdownDoc } from "./doc";
@@ -120,6 +128,24 @@ export function foragingHubMarkdown(): MarkdownDoc {
   };
 }
 
+export function recipesHubMarkdown(): MarkdownDoc {
+  const entries = getRecipesHub();
+  return {
+    path: "/recipes/",
+    title: "Recipes From the Yard: What We Cooked From the Half Acre",
+    body: [
+      "# Recipes From the Yard: What We Cooked From the Half Acre",
+      "",
+      "Recipes made from what grew on the half acre, newest first. Each recipe has a card to save or print.",
+      "",
+      ...entries.flatMap(({ post, cards }) => [
+        postLine(post),
+        ...cards.map((card) => `  - ${card.alt} ${abs(card.src)}`),
+      ]),
+    ].join("\n"),
+  };
+}
+
 /** The homepage, in the order the page tells it. */
 export function homeMarkdown(today: Date = new Date()): MarkdownDoc {
   const posts = getAllPosts();
@@ -181,5 +207,5 @@ export function homeMarkdown(today: Date = new Date()): MarkdownDoc {
 
 /** Every path this module renders, for static generation. */
 export function postMarkdownPaths(): string[] {
-  return ["/", "/archive/", "/builds/", "/foraging/", ...getAllPosts().map((p) => `/archive/${p.slug}/`)];
+  return ["/", "/archive/", "/builds/", "/foraging/", "/recipes/", ...getAllPosts().map((p) => `/archive/${p.slug}/`)];
 }

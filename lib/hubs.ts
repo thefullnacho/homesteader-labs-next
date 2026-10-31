@@ -1,29 +1,47 @@
 import { getAllPosts, type Post } from './posts';
 
 /**
- * The two topic hubs, /foraging/ and /builds/, and which notes belong to each.
+ * The topic hubs, /foraging/, /builds/ and /recipes/, and which notes belong to each.
  *
  * Membership is a rule over frontmatter rather than a hand-kept list, so a new
  * monthly foraging post or a new build log lands in its hub the day it merges.
  * The one hand-kept part is the build outcome line, which has to be written by
  * someone who read the post; buildHubs.test.ts fails when a build log has none.
  *
- * A note belongs to at most one hub. Notes in neither (the planting and
+ * A note belongs to at most one hub. Notes in none (the planting and
  * de-cloudify pieces) have no hub page yet and link only to /archive/.
  */
 
-export type HubId = 'foraging' | 'builds';
+export type HubId = 'foraging' | 'builds' | 'recipes';
 
 export interface Hub {
   id: HubId;
   /** Short name, used in breadcrumbs and link text. */
   name: string;
   path: string;
+  /** Link text and the rest of the sentence for the "Filed in" line under a note. */
+  filedIn: { link: string; rest: string };
 }
 
 export const HUBS: Record<HubId, Hub> = {
-  foraging: { id: 'foraging', name: 'Foraging', path: '/foraging/' },
-  builds: { id: 'builds', name: 'Builds', path: '/builds/' },
+  foraging: {
+    id: 'foraging',
+    name: 'Foraging',
+    path: '/foraging/',
+    filedIn: { link: 'the foraging guides', rest: ': the berry guide first, then the monthly series.' },
+  },
+  builds: {
+    id: 'builds',
+    name: 'Builds',
+    path: '/builds/',
+    filedIn: { link: 'the build logs', rest: ': every build in order, with how each one turned out.' },
+  },
+  recipes: {
+    id: 'recipes',
+    name: 'Recipes',
+    path: '/recipes/',
+    filedIn: { link: 'the recipes', rest: ': what we cooked from the yard, each with a card to save.' },
+  },
 };
 
 /** The start-here note on the foraging hub: learn the poisonous ones first. */
@@ -45,9 +63,12 @@ const isForagingPost = (post: Post) =>
 const isBuildPost = (post: Post) =>
   post.category === 'build-log' || post.tags.includes('build-log');
 
+const isRecipePost = (post: Post) => post.category === 'kitchen';
+
 export function getHubForPost(post: Post): Hub | null {
   if (isForagingPost(post)) return HUBS.foraging;
   if (isBuildPost(post)) return HUBS.builds;
+  if (isRecipePost(post)) return HUBS.recipes;
   return null;
 }
 
@@ -196,4 +217,45 @@ export function getBuildsHub(): BuildEntry[] {
     .filter((p) => getHubForPost(p)?.id === 'builds')
     .sort(byDateAsc)
     .map((post) => ({ post, outcome: BUILD_OUTCOMES[post.slug] ?? null }));
+}
+
+export interface RecipeCard {
+  /** Under /public, like every archive image. */
+  src: string;
+  alt: string;
+}
+
+/**
+ * The saveable card for each recipe in a kitchen note, in the order the note
+ * gives them. Hand-kept like the build outcomes: the cards are designed, not
+ * generated. A kitchen note with none shows on the hub without pictures.
+ */
+export const RECIPE_CARDS: Record<string, RecipeCard[]> = {
+  'nasturtiums-every-part-edible': [
+    {
+      src: '/images/nasturtium-pesto-recipe-card.jpg',
+      alt: 'Recipe card: nasturtium pesto, with the ingredients and four steps.',
+    },
+    {
+      src: '/images/nasturtium-capers-recipe-card.jpg',
+      alt: "Recipe card: poor man's capers, pickled nasturtium seed pods.",
+    },
+    {
+      src: '/images/nasturtium-stuffed-flowers-recipe-card.jpg',
+      alt: 'Recipe card: stuffed nasturtium flowers.',
+    },
+  ],
+};
+
+export interface RecipeEntry {
+  post: Post;
+  cards: RecipeCard[];
+}
+
+/** Every kitchen note, newest first (the season you are in), with its cards. */
+export function getRecipesHub(): RecipeEntry[] {
+  return getAllPosts()
+    .filter((p) => getHubForPost(p)?.id === 'recipes')
+    .sort((a, b) => byDateAsc(b, a))
+    .map((post) => ({ post, cards: RECIPE_CARDS[post.slug] ?? [] }));
 }
