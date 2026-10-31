@@ -1,21 +1,23 @@
 ---
 title: "Most of a voice assistant fits on a Raspberry Pi 4 CPU, measured piece by piece"
 date: "2026-10-24"
-summary: "On a 4 GB Raspberry Pi 4 with no cloud and no GPU, EmbeddingGemma routes about 93% of commands to the right domain, Moonshine BASE transcribes at 1.8% word error on synthetic speech, and KittenTTS nano speaks faster than real time in 256 MB. The fine-tuned FunctionGemma 270M that makes the tool call gets about 79% of calls fully right on a GPU and has not run end to end on the Pi yet; it is the gate."
+summary: "On a 4 GB Raspberry Pi 4 with no cloud and no GPU, the whole voice path runs end to end in 4.6 s median from the end of speech to the reply, with every process together in 1.57 GB. The fine-tuned FunctionGemma 270M that makes the tool call still gets about 1 in 5 test calls not fully right; it is the gate."
 story: "a-harness-for-the-home"
 repo: "https://github.com/thefullnacho/hestia"
-commit: "c9f7ea8817de9e0683728a4e2e394a1006311e5e"
+commit: "707c65993fc8d7211b2cc0442cc8cc7174b38bda"
 ---
 
-**Short version.** Each piece of a voice assistant was measured on a 4 GB Raspberry Pi 4, CPU only, with nothing in the cloud. Routing, hearing and speaking fit: EmbeddingGemma picks the right domain 93% of the time, Moonshine BASE transcribes at 1.8% word error in about a second, and KittenTTS nano speaks faster than real time. The part that decides what to do, a fine-tuned FunctionGemma 270M, gets about 79% of calls fully right on a GPU and has not run end to end on the Pi. This is a report on how close it is, not a finished thing.
+**Short version.** Each piece of a voice assistant was measured on a 4 GB Raspberry Pi 4, CPU only, with nothing in the cloud. Routing, hearing and speaking fit: EmbeddingGemma picks the right domain 93% of the time, Moonshine BASE transcribes at 1.8% word error in about a second, and KittenTTS nano speaks faster than real time. The part that decides what to do, a fine-tuned FunctionGemma 270M, gets about 79% of calls fully right on a GPU. On 2026-10-26 the whole path ran end to end on the Pi 4: 4.6 s median from the end of speech to the reply, 1.57 GB with every process loaded, as a dry run (calls printed, not sent to Home Assistant). This is a report on how close it is, not a finished thing.
 
-Every number below is tagged **measured** (with its date and the results file it comes from) or **estimated** (with what it adds up and what is not measured). All files are on the `exp/small-router` branch of the public [hestia repo](https://github.com/thefullnacho/hestia/tree/c9f7ea8817de9e0683728a4e2e394a1006311e5e), linked here at commit `c9f7ea8` so the numbers cannot drift under the links. The branch is not merged.
+**Updated 2026-10-31.** The first version of these notes (2026-10-24) estimated the round trip at 3 to 4 s with the caller not yet timed on the Pi. Measured, it is 4.6 s on the Pi 4, so the estimate was low. The rows below replace it.
+
+Every number below is tagged **measured** (with its date and the results file it comes from) or **estimated** (with what it adds up and what is not measured). All files are on the `exp/small-router` branch of the public [hestia repo](https://github.com/thefullnacho/hestia/tree/707c65993fc8d7211b2cc0442cc8cc7174b38bda), linked here at commit `707c659` so the numbers cannot drift under the links. The branch is not merged.
 
 ## Results
 
 | Piece | Number | Basis |
 |---|---|---|
-| Router, EmbeddingGemma | 93% right domain, 247 test cases | measured 2026-10-15, [small-router RESULTS](https://github.com/thefullnacho/hestia/blob/c9f7ea8817de9e0683728a4e2e394a1006311e5e/benchmarks/small-router/RESULTS.md) |
+| Router, EmbeddingGemma | 93% right domain, 247 test cases | measured 2026-10-15, [small-router RESULTS](https://github.com/thefullnacho/hestia/blob/707c65993fc8d7211b2cc0442cc8cc7174b38bda/benchmarks/small-router/RESULTS.md) |
 | Router, ask instead of guess | asks on 19% of test lines, 1.1% end in a wrong action | measured 2026-10-15, small-router RESULTS |
 | Router, chit-chat | 0 of 30 chit-chat lines led to an action | measured 2026-10-15, small-router RESULTS |
 | Router, speed on the Pi | about 0.7 s per utterance | measured 2026-10-15 on the Pi, small-router RESULTS |
@@ -23,13 +25,16 @@ Every number below is tagged **measured** (with its date and the results file it
 | Caller, fine-tuned | 79.2% fully right, 94% right tool (mean of 5 seeds) | measured 2026-10-15 on a GPU, small-router RESULTS |
 | Caller, wrong actions that would execute | 29.6 of 235 per run, mean of 5 seeds | measured 2026-10-15 on a GPU, small-router RESULTS |
 | Caller, override gate | 16 wrong actions, asks on 20% of lines | measured 2026-10-15 on a GPU, small-router RESULTS |
-| Hearing, Moonshine BASE | 1.8% word error, 28 of 30 exact, 1.07 s median, 432 MB peak | measured 2026-10-24 on the Pi, synthetic speech, [lite-stt RESULTS](https://github.com/thefullnacho/hestia/blob/c9f7ea8817de9e0683728a4e2e394a1006311e5e/benchmarks/lite-stt/RESULTS.md) |
-| Speaking, KittenTTS nano int8 | real-time factor 0.58 to 0.63, 256 MB peak, 25 MB on disk | measured 2026-10-24 on the Pi, [lite-tts RESULTS](https://github.com/thefullnacho/hestia/blob/c9f7ea8817de9e0683728a4e2e394a1006311e5e/benchmarks/lite-tts/RESULTS.md) |
+| Hearing, Moonshine BASE | 1.8% word error, 28 of 30 exact, 1.07 s median, 432 MB peak | measured 2026-10-24 on the Pi, synthetic speech, [lite-stt RESULTS](https://github.com/thefullnacho/hestia/blob/707c65993fc8d7211b2cc0442cc8cc7174b38bda/benchmarks/lite-stt/RESULTS.md) |
+| Speaking, KittenTTS nano int8 | real-time factor 0.58 to 0.63, 256 MB peak, 25 MB on disk | measured 2026-10-24 on the Pi, [lite-tts RESULTS](https://github.com/thefullnacho/hestia/blob/707c65993fc8d7211b2cc0442cc8cc7174b38bda/benchmarks/lite-tts/RESULTS.md) |
 | Spoken reply starts | under 1 s for a short confirmation (first sentence 0.95 s at the low end) | measured 2026-10-24 on the Pi, lite-tts RESULTS |
-| Speech side in memory | under 700 MB | estimate: measured 432 MB plus measured 256 MB, from two separate runs, not measured together |
+| Speech side in memory | under 700 MB: 447 MB for speech to text, router and gate, plus 216 MB for the voice | measured together 2026-10-26 on the Pi 4, lite-e2e RESULTS (432 MB plus 256 MB when benchmarked alone) |
 | Heat, bare board | 54 C to 70 to 76 C within a minute | measured 2026-10-24 on the Pi, lite-tts RESULTS |
-| Round trip, end of speech to start of reply | 3 to 4 s | estimate: measured 1.07 s plus 0.7 s plus about 1 s, the caller not yet timed on the Pi |
-| Router and caller memory on the Pi | not measured | no figure in any results file |
+| End to end, end of speech to reply audio | 4.6 s median, 7.0 s worst, 16 actions | measured 2026-10-26 on the Pi 4, synthetic speech, dry run, [lite-e2e RESULTS](https://github.com/thefullnacho/hestia/blob/707c65993fc8d7211b2cc0442cc8cc7174b38bda/benchmarks/lite-e2e/RESULTS.md) |
+| End to end, actions right | 15 of 16, and 6 of 6 quiet turns right | measured 2026-10-26 on the Pi 4, synthetic speech, dry run, lite-e2e RESULTS |
+| Whole stack in memory | 1,567 MB, every process at once | measured 2026-10-26 on the Pi 4, lite-e2e RESULTS |
+| End to end on a Pi 5 | 1.58 s median, 2.50 s worst, 1,512 MB | measured 2026-10-26 on a Pi 5 (8 GB), synthetic speech, lite-e2e RESULTS |
+| Real voice, one speaker | 7.9% word error, 13 of 16 actions right, 1.62 s median | measured 2026-10-26 on a Pi 5, lite-e2e RESULTS |
 
 **Hardware.** Raspberry Pi 4 Model B, 4 GB, no heatsink, CPU only, about 3.5 GB usable (lite-stt and lite-tts RESULTS headers). The story prices it as a $130 kit with heatsink, fan and case, plus a $5 USB mic, against a $79 Echo Dot; those are list prices, not bench numbers.
 
@@ -43,12 +48,14 @@ A voice assistant is four jobs in a row: speech to words, which kind of request,
 
 **Hearing.** Five Moonshine models on 30 typical commands ([commit c9f7ea8](https://github.com/thefullnacho/hestia/commit/c9f7ea8)). BASE won; TINY was faster but at 11.6% word error. The clips were spoken by KittenTTS across its 8 voices, and clean synthetic speech flatters every recognizer. The streaming models were fed whole clips, so their real advantage was not tested.
 
+**End to end.** One Pi 4 runs every stage at once: Moonshine BASE, EmbeddingGemma routing, the fine-tuned caller with the said-words gate, a reply built by code from the call, and KittenTTS nano. Actions are a dry run: the call is printed, not sent to Home Assistant. Input is the same 30 synthetic clips. The first run took 7.1 s median because the caller re-read its whole tool prompt on every call. A cached prompt per domain in llama.cpp brought that to 5.2 s, and smaller memory settings plus 8-bit embeddings in llama.cpp brought it to 4.6 s and 1,567 MB, which fits a 2 GB board. The 16 actions here are a short run, not the 235-case caller test, so 15 of 16 does not replace the 79% figure. The real-voice run is one speaker reading the same 30 commands on a phone; both new misses started in speech to text ("we're" heard without its apostrophe, "hose" heard as "house").
+
 **Speaking.** Four KittenTTS models. Nano int8 was picked by a listening check for clear pronunciation ([commit 49f553c](https://github.com/thefullnacho/hestia/commit/49f553c)); it is also the smallest. Mini is slower than it speaks (real-time factor 1.39 to 1.50). None of the small models clone voices; zero-shot cloning is KittenTTS 2, about 1.7B parameters and 6 GB of RAM, so not this board ([commit 4ee629f](https://github.com/thefullnacho/hestia/commit/4ee629f)).
 
 ## What is open
 
-- **The tool caller is the gate.** About one call in five not fully right is not good enough to trust with a house, and it has not run end to end on the Pi.
-- **Real voices are untested.** Next is about 20 real commands from each voice in the house, recorded at desk distance.
-- **Round trip is an estimate.** It needs the caller timed on the Pi.
-- **Memory total is incomplete.** Router and caller memory on the Pi are not measured, so there is no whole-system figure yet.
-- **Heat.** Every speech run set the Pi's soft temperature limit flag on the bare board. The numbers matched on a cooled rerun, but any enclosure needs a heatsink or airflow.
+- **The tool caller is the gate.** About one call in five not fully right on the 235-case test is not good enough to trust with a house.
+- **Nothing is actuated yet.** End to end is a dry run; how the Pi reaches Home Assistant is undecided.
+- **Real voices are barely tested.** One speaker, 30 commands, on a Pi 5. Next is the rest of the household and the utterance log.
+- **4.6 s is slow** next to a commercial speaker. The Pi 5 does it in 1.6 s on the same card.
+- **Heat.** Every speech run set the Pi 4's soft temperature limit flag on the bare board, and end to end it ran at 71 to 75 C under load. The numbers matched on a cooled rerun, but any enclosure needs a heatsink or airflow. The Pi 5 with its active cooler peaked at 56 C and never throttled.
