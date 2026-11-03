@@ -9,6 +9,26 @@ true inside this repo.
 
 ---
 
+## 2026-11-03 (wrap) - Post 04 lab notes carry the measured round trip
+
+Live on master (7676fda), checked on production: the lab notes replace the 3-4 s estimate with
+hestia's measured end to end run (2026-10-26, Pi 4, dry run): 4.6 s median and 7.0 s worst to the
+reply audio, 15 of 16 actions, 1,567 MB with everything loaded. They also add the Pi 5 (1.58 s)
+and a one-speaker real-voice run (7.9% word error, 13 of 16), carry an "Updated 2026-10-31" note,
+and pin repo links to hestia `707c659`. The merged branch is deleted; branches left are `master`,
+`october-foraging` and `field-guide-pdf-prototype`.
+
+**In flight:** Alex's story still says "by my estimate 3 to 4 seconds ... FunctionGemma has not
+run on the Pi yet". Not edited; his call.
+
+**Next concrete action:** the GSC read on 2026-11-04 (homepage and zone pages since the logbook
+homepage), then the berry guide reread around 2026-11-24.
+
+[non-production] Off-peak, 5 min: decide post 04's round-trip sentence in the story (send a
+replacement line to the site session, or leave it; the lab notes already carry 4.6 s).
+
+---
+
 ## 2026-10-31 (wrap) - /go/ affiliate redirects, post 04 with lab notes, security upgrade, branch cleanup
 
 Session ran 2026-10-21 to 10-31, driven mostly by the ~/me hub toward the first $100 of
