@@ -35,6 +35,18 @@ describe('resolveDestination', () => {
     expect(url.searchParams.get('clickref')).toBe('reddit');
     expect(url.searchParams.get('ued')).toBe('https://www.botanicalinterests.com');
   });
+  it('builds Amazon links from a product ID', () => {
+    expect(resolveDestination('amazon', 'B002G51BZU', 'reddit')).toBe(
+      'https://www.amazon.com/dp/B002G51BZU?tag=homesteade0d4-20',
+    );
+  });
+  it('refuses anything on Amazon that is not a product ID', () => {
+    expect(resolveDestination('amazon', undefined, 'site')).toBeNull();
+    expect(resolveDestination('amazon', 'b002g51bzu', 'site')).toBeNull();
+    expect(resolveDestination('amazon', 'B002G51BZ', 'site')).toBeNull();
+    expect(resolveDestination('amazon', 'evil.com%2F', 'site')).toBeNull();
+    expect(resolveDestination('amazon', 'B002G51BZU?x=1', 'site')).toBeNull();
+  });
   it('passes the channel as a sub-ID where the program takes one', () => {
     PROGRAMS.test = { items: { default: 'https://example.com/?a=1' }, subId: 'clickref' };
     try {

@@ -6,6 +6,9 @@
  * redirect through our domain. An unknown program or item is a 404.
  *
  * Add a program here when it goes live, with its tracking already in the URL.
+ * A program with too many products to list (Amazon) builds the URL from the
+ * item instead, and only accepts items of a strict shape, so the host, path
+ * and tracking are still fixed here.
  * If the network can carry a sub-ID (Awin's `clickref`), set `subId` so the
  * channel reaches the network's reports and earnings split by channel too.
  */
@@ -18,9 +21,20 @@ interface Program {
   items: Record<string, string>;
   /** Query param the network reads a channel sub-ID from, if it has one. */
   subId?: string;
+  /** For items not in `items`: the URL for an item, or null to refuse it. */
+  build?: (item: string) => string | null;
 }
 
+/** Amazon product IDs are 10 characters, letters and digits. */
+const ASIN = /^[A-Z0-9]{10}$/;
+
 export const PROGRAMS: Record<string, Program> = {
+  // Amazon Associates: /go/amazon/<ASIN>/. Amazon has no per-link sub-ID on
+  // the standard tag, so the channel lives only in our own counts.
+  amazon: {
+    items: {},
+    build: (item) => (ASIN.test(item) ? `https://www.amazon.com/dp/${item}?tag=homesteade0d4-20` : null),
+  },
   dripworks: {
     items: {
       default: 'https://www.dripworks.com/?ref=homesteaderlabs',
@@ -58,8 +72,9 @@ export function resolveDestination(
   const p = Object.hasOwn(PROGRAMS, program) ? PROGRAMS[program] : undefined;
   if (!p) return null;
   const key = item ?? 'default';
-  if (!Object.hasOwn(p.items, key)) return null;
-  const url = new URL(p.items[key]);
+  const raw = Object.hasOwn(p.items, key) ? p.items[key] : item && p.build ? p.build(item) : null;
+  if (!raw) return null;
+  const url = new URL(raw);
   if (p.subId) url.searchParams.set(p.subId, channel);
   return url.toString();
 }
