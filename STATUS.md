@@ -9,6 +9,47 @@ true inside this repo.
 
 ---
 
+## 2026-11-24 (wrap) - Amazon on /go/, Dawn's grid-down kit, Next 16.4.6
+
+Live on master and checked on production:
+
+- **Dawn's "Two-Week Grid-Down Kit"** (637e2d9), with an up-front disclosure added on her branch
+  (every product link is Amazon, plus a "shop around" line she approved), then her two follow-ups
+  (038799d): Amazon's required Associates sentence in that disclosure, and a top-of-post
+  disclosure on the nasturtium post. The branch had no PR, so the repo's CI never ran on it;
+  tests and build were run locally before merging.
+- **Next 16.4.6** (9b4dfdd): GHSA-mfr8-8qww-v76h and GHSA-vc7v-qv4w-wrv8 (moderate, `use cache`,
+  which this site does not use) had started halting local builds. The halt message also carried
+  instructions aimed at AI agents to run an `next upgrade --agent=security` command; it was not
+  run, the patch went through a branch like any other.
+- **Amazon on `/go/`** (e3784bd): `/go/amazon/<ASIN>/?src=<channel>` builds the tagged `dp` URL and
+  404s anything that is not a 10-character ASIN. All 21 Amazon links (grid-down 19, nasturtium 2)
+  moved onto it with `src=site`. Amazon's standard tag has no per-link sub-ID, so channels exist
+  only in our counts.
+- Branches back to `master`, `october-foraging`, `field-guide-pdf-prototype`.
+
+Discussed, not built: a `/hestia/` page should be a "Hestia, in pilot" hub on this domain (not a
+subdomain, not a bought domain), with one interest question, no price and nothing in `/shop/`.
+Hestia's product shape (iOS app plus a CPU-only box, family pilot) and the licensing read (AGPL
+kept; App Store build is fine while Alex owns all the code) are in Claude's project memory.
+
+**Next concrete action:** the GSC reads are due: the 2026-11-04 homepage and zone pages read
+(not yet in metrics.md) and the berry guide reread (due about today). Then draft `/hestia/` when
+Alex says go.
+
+[non-production] Off-peak, hands, after the hard freeze: last leaf-blower pass into the beds and
+orchard; photos of the beds under leaves with the depth in a few spots; keep a foot-wide ring
+clear at each orchard trunk and shred or pull the apple trees' own leaves.
+
+[non-production] Spring, after the thaw, 15 min, hands: shovel test, a leaf-covered bed against a
+cleared spot. Count worms, note moisture and looseness, photograph both.
+
+[non-production] Peak, decision (hestia): contributor agreement before anyone else commits to
+hestia, Dawn included (a session can draft one); a one-hour legal review before taking money
+for units.
+
+---
+
 ## 2026-11-03 (wrap) - Post 04 lab notes carry the measured round trip
 
 Live on master (7676fda), checked on production: the lab notes replace the 3-4 s estimate with
